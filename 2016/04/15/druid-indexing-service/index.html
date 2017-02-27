@@ -1,0 +1,541 @@
+
+ <!DOCTYPE HTML>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+  
+    <title>Druid Indexing Service（索引服务） | Liexing&#39;s Blog</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1,user-scalable=no">
+    
+    <meta name="author" content="liexing">
+    
+
+    
+    <meta name="description" content="Indexing Service 是 Druid 的一个核心组件，用来对数据进行索引，控制Druid的段的产生以及销毁。">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Druid Indexing Service（索引服务）">
+<meta property="og:url" content="http://blog.liexing.me/2016/04/15/druid-indexing-service/index.html">
+<meta property="og:site_name" content="Liexing's Blog">
+<meta property="og:description" content="Indexing Service 是 Druid 的一个核心组件，用来对数据进行索引，控制Druid的段的产生以及销毁。">
+<meta property="og:image" content="http://7xl6z1.com1.z0.glb.clouddn.com/static/images/14605158741221.png">
+<meta property="og:updated_time" content="2017-02-27T11:34:45.000Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="Druid Indexing Service（索引服务）">
+<meta name="twitter:description" content="Indexing Service 是 Druid 的一个核心组件，用来对数据进行索引，控制Druid的段的产生以及销毁。">
+<meta name="twitter:image" content="http://7xl6z1.com1.z0.glb.clouddn.com/static/images/14605158741221.png">
+<meta name="twitter:creator" content="@scusjs">
+
+    
+    <link rel="alternative" href="/atom.xml" title="Liexing&#39;s Blog" type="application/atom+xml">
+    
+    
+    <link rel="icon" href="/img/favicon.ico">
+    
+    
+    <link rel="apple-touch-icon" href="/img/jacman.jpg">
+    <link rel="apple-touch-icon-precomposed" href="/img/jacman.jpg">
+    
+    <link rel="stylesheet" href="/css/style.css">
+</head>
+
+  <body>
+    <header>
+      
+<div>
+		
+			<div id="imglogo">
+				<a href="/"><img src="/img/logo.png" alt="Liexing&#39;s Blog" title="Liexing&#39;s Blog"/></a>
+			</div>
+			
+			<div id="textlogo">
+				<h1 class="site-name"><a href="/" title="Liexing&#39;s Blog">Liexing&#39;s Blog</a></h1>
+				<h2 class="blog-motto">不疯魔，不成佛</h2>
+			</div>
+			<div class="navbar"><a class="navbutton navmobile" href="#" title="菜单">
+			</a></div>
+			<nav class="animated">
+				<ul>
+					<ul>
+					 
+						<li><a href="/">主页 | Home</a></li>
+					
+						<li><a href="/archives">归档 | Archives</a></li>
+					
+						<li><a href="/about">简介 | About</a></li>
+					
+					<li>
+ 					
+					<form class="search" action="/search/index.html" method="get" accept-charset="utf-8">
+						<label>Search</label>
+						<input type="search" id="search" autocomplete="off" name="q" maxlength="20" placeholder="搜索" />
+					</form>
+					
+					</li>
+				</ul>
+			</nav>			
+</div>
+    </header>
+    <div id="container">
+      <div id="main" class="post" itemscope itemprop="blogPost">
+  
+	<article itemprop="articleBody"> 
+		<header class="article-info clearfix">
+  <h1 itemprop="name">
+    
+      <a href="/2016/04/15/druid-indexing-service/" title="Druid Indexing Service（索引服务）" itemprop="url">Druid Indexing Service（索引服务）</a>
+  </h1>
+  <p class="article-author">By
+       
+		<a href="/about" title="liexing" target="_blank" itemprop="author">liexing</a>
+		
+  <p class="article-time">
+    <time datetime="2016-04-15T02:47:47.000Z" itemprop="datePublished"> 发表于 2016-04-15</time>
+    
+  </p>
+</header>
+	<div class="article-content">
+		
+		<div id="toc" class="toc-article">
+			<strong class="toc-title">文章目录</strong>
+		
+			<ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#Overlord节点"><span class="toc-number">1.</span> <span class="toc-text">Overlord节点</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#Middle-Manger"><span class="toc-number">2.</span> <span class="toc-text">Middle Manger</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#Peon"><span class="toc-number">3.</span> <span class="toc-text">Peon</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#HTTP-端"><span class="toc-number">4.</span> <span class="toc-text">HTTP 端</span></a></li></ol>
+		
+		</div>
+		
+		<p>索引服务是一种用来运行索引相关任务的高可用、分布式的服务。索引服务任务创建或者销毁Druid的段。其架构类似主奴机制。</p>
+<p>索引服务由三个主要部件组成：peon运行单个的任务，Middle Manager组件管理peon，overlord组件控制任务向Middle Manager的分配。Middle Manager和Peon通常运行在同一个节点，Overlord和Middle Manager能运行在相同节点或者多个节点上。</p>
+<p>索引服务的示意图如下：</p>
+<img title="Druid" alt="Druid" src="http://7xl6z1.com1.z0.glb.clouddn.com/static/images/14605158741221.png">
+<h2 id="Overlord节点"><a href="#Overlord节点" class="headerlink" title="Overlord节点"></a>Overlord节点</h2><p>Overlord节点负责接收任务，负责任务的分配，对任务加锁，向调用者返回任务状态。Overlord有两种模式：本地模式或者远程模式。其中本地模式是默认模式。在本地模式下Overlord也负责创建Peon来执行任务，所有的Middle Manager和Peon的配置此时也应当被提供，这种模式一般用于普通的工作流。远程模式中，Overlord和Middle Manager运行在不同的进程中，也可以在不同服务器上运行，如果想让索引服务成为Druid索引的单一端点，推荐使用这种模式。</p>
+<p>可以通过向Overlor节点以POST请求提交JSON对象的方式提交任务：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">http://&lt;OVERLORD_IP&gt;:&lt;port&gt;/druid/indexer/v1/task</div></pre></td></tr></table></figure>
+<p>这将会返回提交的任务id。任务也能通过POST请求来关闭：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">http://&lt;OVERLORD_IP&gt;:&lt;port&gt;/druid/indexer/v1/task/&#123;taskId&#125;/status</div></pre></td></tr></table></figure>
+<p>或者通过GET请求来查询状态：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">http://&lt;OVERLORD_IP&gt;:&lt;port&gt;/druid/indexer/v1/task/&#123;taskId&#125;/segments</div></pre></td></tr></table></figure>
+<p>可以在浏览器中访问</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">http://&lt;OVERLORD_IP&gt;:&lt;port&gt;/console.html</div></pre></td></tr></table></figure>
+<p>来查看任务一些信息。</p>
+<h2 id="Middle-Manger"><a href="#Middle-Manger" class="headerlink" title="Middle Manger"></a>Middle Manger</h2><p>Middle Manger是执行提交任务的工作节点。Middle Manger向运行在独立JVM的Peon发送任务。独立开JVM是因为资源问题与日志隔离。每一个Peon一次只能执行一个任务。一个Middle Manger可以有多个Peon。</p>
+<p>通过<code>io.druid.cli.Main server middleManager</code>来启动Middle Manager。</p>
+<h2 id="Peon"><a href="#Peon" class="headerlink" title="Peon"></a>Peon</h2><p>Peon在独立的JVM中执行单个任务。MiddleManager负责创建Peon来执行任务。Peon很少单独运行。</p>
+<p>除了开发目的，很少独立的运行Peon。通过<code>io.druid.cli.Main internal peon &lt;task_file&gt; &lt;status_file&gt;</code>来独立执行。其中task_file包含了任务的JSON对象。status_file表示在那里输出任务的状态。</p>
+<h2 id="HTTP-端"><a href="#HTTP-端" class="headerlink" title="HTTP 端"></a>HTTP 端</h2><p>可以通过HTTP的GET请求<code>http://&lt;NODE_IP&gt;:&lt;port&gt;/status</code>来获取一些节点的信息，包括版本、载入的扩展、内存使用、总内存数等，比如：</p>
+<figure class="highlight json"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div></pre></td><td class="code"><pre><div class="line">&#123;</div><div class="line">    <span class="attr">"version"</span>: <span class="string">"0.9.0-rc3"</span>,</div><div class="line">    <span class="attr">"modules"</span>: [</div><div class="line">        &#123;</div><div class="line">            <span class="attr">"name"</span>: <span class="string">"io.druid.data.input.avro.AvroExtensionsModule"</span>,</div><div class="line">            <span class="attr">"artifact"</span>: <span class="string">"druid-avro-extensions"</span>,</div><div class="line">            <span class="attr">"version"</span>: <span class="string">"0.9.1-SNAPSHOT"</span></div><div class="line">        &#125;</div><div class="line">    ],</div><div class="line">    <span class="attr">"memory"</span>: &#123;</div><div class="line">        <span class="attr">"maxMemory"</span>: <span class="number">67108864</span>,</div><div class="line">        <span class="attr">"totalMemory"</span>: <span class="number">67108864</span>,</div><div class="line">        <span class="attr">"freeMemory"</span>: <span class="number">32278264</span>,</div><div class="line">        <span class="attr">"usedMemory"</span>: <span class="number">34830600</span></div><div class="line">    &#125;</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+  
+	</div>
+		<footer class="article-footer clearfix">
+<div class="article-catetags">
+
+<div class="article-categories">
+  <span></span>
+  <a class="article-category-link" href="/categories/Druid/">Druid</a>
+</div>
+
+
+  <div class="article-tags">
+  
+  <span></span> <a href="/tags/分布式/">分布式</a><a href="/tags/Druid/">Druid</a><a href="/tags/实时计算/">实时计算</a>
+  </div>
+
+</div>
+
+
+
+	<div class="article-share" id="share">
+	
+	  <div data-url="http://blog.liexing.me/2016/04/15/druid-indexing-service/" data-title="Druid Indexing Service（索引服务） | Liexing&#39;s Blog" data-tsina="1915625641" class="share clearfix">
+	  </div>
+	
+	</div>
+
+
+</footer>
+
+   	       
+	</article>
+	
+<nav class="article-nav clearfix">
+ 
+ <div class="prev" >
+ <a href="/2016/04/20/reindex-between-different-druid-use-and-metadatastorage/" title="使用不同Metadata Storage的Druid集群间转移DataSource">
+  <strong>上一篇：</strong><br/>
+  <span>
+  使用不同Metadata Storage的Druid集群间转移DataSource</span>
+</a>
+</div>
+
+
+<div class="next">
+<a href="/2016/03/28/druid-quickstart/"  title="Druid Quickstart">
+ <strong>下一篇：</strong><br/> 
+ <span>Druid Quickstart
+</span>
+</a>
+</div>
+
+</nav>
+
+	
+<section id="comments" class="comment">
+	<div class="ds-thread" data-thread-key="2016/04/15/druid-indexing-service/" data-title="Druid Indexing Service（索引服务）" data-url="http://blog.liexing.me/2016/04/15/druid-indexing-service/"></div>
+</section>
+
+
+</div>  
+      <div class="openaside"><a class="navbutton" href="#" title="显示侧边栏"></a></div>
+
+  <div id="toc" class="toc-aside">
+  <strong class="toc-title">文章目录</strong>
+ 
+ <ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#Overlord节点"><span class="toc-number">1.</span> <span class="toc-text">Overlord节点</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#Middle-Manger"><span class="toc-number">2.</span> <span class="toc-text">Middle Manger</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#Peon"><span class="toc-number">3.</span> <span class="toc-text">Peon</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#HTTP-端"><span class="toc-number">4.</span> <span class="toc-text">HTTP 端</span></a></li></ol>
+ 
+  </div>
+
+<div id="asidepart">
+<div class="closeaside"><a class="closebutton" href="#" title="隐藏侧边栏"></a></div>
+<aside class="clearfix">
+
+  
+<div class="github-card">
+<p class="asidetitle">Github 名片</p>
+<div class="github-card" data-github="scusjs" data-width="220" data-height="119" data-theme="medium">
+<script type="text/javascript" src="//cdn.jsdelivr.net/github-cards/latest/widget.js" ></script>
+</div>
+  </div>
+
+
+
+  
+<div class="categorieslist">
+    <p class="asidetitle">分类</p>
+        <ul>
+        
+          
+            <li><a href="/categories/Cassandra/" title="Cassandra">Cassandra<sup>2</sup></a></li>
+          
+        
+          
+            <li><a href="/categories/Druid/" title="Druid">Druid<sup>6</sup></a></li>
+          
+        
+          
+            <li><a href="/categories/建站相关/" title="建站相关">建站相关<sup>1</sup></a></li>
+          
+        
+          
+            <li><a href="/categories/笔记/" title="笔记">笔记<sup>1</sup></a></li>
+          
+        
+          
+            <li><a href="/categories/算法/" title="算法">算法<sup>1</sup></a></li>
+          
+        
+          
+            <li><a href="/categories/统计学习/" title="统计学习">统计学习<sup>5</sup></a></li>
+          
+        
+        </ul>
+</div>
+
+
+
+  <div class="linkslist">
+  <p class="asidetitle">友情链接</p>
+    <ul>
+        
+          <li>
+            
+            	<a href="http://yaccc.github.io" target="_blank" title="">浮生若梦</a>
+            
+          </li>
+        
+    </ul>
+</div>
+
+  <div class="rsspart">
+	<a href="/atom.xml" target="_blank" title="rss">RSS 订阅</a>
+</div>
+
+  
+  <div class="tagcloudlist">
+    <p class="asidetitle">标签云</p>
+    <div class="tagcloudlist clearfix">
+       <a href="/tags/Cassandra/" style="font-size: 12px;">Cassandra</a> <a href="/tags/Druid/" style="font-size: 16px;">Druid</a> <a href="/tags/LCS/" style="font-size: 10px;">LCS</a> <a href="/tags/NOSQL/" style="font-size: 12px;">NOSQL</a> <a href="/tags/algorithms/" style="font-size: 10px;">algorithms</a> <a href="/tags/bash/" style="font-size: 10px;">bash</a> <a href="/tags/dynamic-programming/" style="font-size: 10px;">dynamic programming</a> <a href="/tags/hexo/" style="font-size: 10px;">hexo</a> <a href="/tags/k-邻近法/" style="font-size: 12px;">k 邻近法</a> <a href="/tags/knn/" style="font-size: 12px;">knn</a> <a href="/tags/linux/" style="font-size: 10px;">linux</a> <a href="/tags/分布式/" style="font-size: 18px;">分布式</a> <a href="/tags/实时计算/" style="font-size: 16px;">实时计算</a> <a href="/tags/感知机/" style="font-size: 10px;">感知机</a> <a href="/tags/朴素贝叶斯/" style="font-size: 10px;">朴素贝叶斯</a> <a href="/tags/机器学习/" style="font-size: 14px;">机器学习</a> <a href="/tags/源码分析/" style="font-size: 10px;">源码分析</a> <a href="/tags/笔记/" style="font-size: 20px;">笔记</a> <a href="/tags/统计学习/" style="font-size: 14px;">统计学习</a>
+    </div>
+  </div>
+
+
+  <div class="weiboshow">
+  <p class="asidetitle">新浪微博</p>
+    <iframe width="100%" height="119" class="share_self"  frameborder="0" scrolling="no" src="http://widget.weibo.com/weiboshow/index.php?language=&width=0&height=119&fansRow=2&ptype=1&speed=0&skin=9&isTitle=1&noborder=1&isWeibo=0&isFans=0&uid=1915625641&verifier=00e07be0&dpc=1"></iframe>
+</div>
+
+
+</aside>
+</div>
+    </div>
+    <footer><div id="footer" >
+	
+	<div class="line">
+		<span></span>
+		<div class="author"></div>
+	</div>
+	
+	
+	<section class="info">
+		<p> Hello, I&#39;m Liexing in UCAS. <br/>
+			Stay hungry. Stay foolish.</p>
+	</section>
+	 
+	<div class="social-font" class="clearfix">
+		
+		<a href="http://weibo.com/scusjs" target="_blank" class="icon-weibo" title="微博"></a>
+		
+		
+		<a href="https://github.com/scusjs" target="_blank" class="icon-github" title="github"></a>
+		
+		
+		
+		<a href="https://twitter.com/scusjs" target="_blank" class="icon-twitter" title="twitter"></a>
+		
+		
+		
+		<a href="https://www.linkedin.com/in/shenjinsheng" target="_blank" class="icon-linkedin" title="linkedin"></a>
+		
+		
+		<a href="https://www.douban.com/people/58108093" target="_blank" class="icon-douban" title="豆瓣"></a>
+		
+		
+		<a href="http://www.zhihu.com/people/scusjs" target="_blank" class="icon-zhihu" title="知乎"></a>
+		
+		
+		
+		<a href="mailto:i@liexing.me" target="_blank" class="icon-email" title="Email Me"></a>
+		
+	</div>
+			
+		
+
+		<p class="copyright">
+		Powered by <a href="http://hexo.io" target="_blank" title="hexo">hexo</a> and Theme by <a href="https://github.com/wuchong/jacman" target="_blank" title="Jacman">Jacman</a> © 2017 
+		
+		<a href="/about" target="_blank" title="liexing">liexing</a>
+		
+		
+		</p>
+</div>
+</footer>
+    <script src="/js/jquery-2.0.3.min.js"></script>
+<script src="/js/jquery.imagesloaded.min.js"></script>
+<script src="/js/gallery.js"></script>
+<script src="/js/jquery.qrcode-0.12.0.min.js"></script>
+
+<script type="text/javascript">
+$(document).ready(function(){ 
+  $('.navbar').click(function(){
+    $('header nav').toggleClass('shownav');
+  });
+  var myWidth = 0;
+  function getSize(){
+    if( typeof( window.innerWidth ) == 'number' ) {
+      myWidth = window.innerWidth;
+    } else if( document.documentElement && document.documentElement.clientWidth) {
+      myWidth = document.documentElement.clientWidth;
+    };
+  };
+  var m = $('#main'),
+      a = $('#asidepart'),
+      c = $('.closeaside'),
+      o = $('.openaside');
+  c.click(function(){
+    a.addClass('fadeOut').css('display', 'none');
+    o.css('display', 'block').addClass('fadeIn');
+    m.addClass('moveMain');
+  });
+  o.click(function(){
+    o.css('display', 'none').removeClass('beforeFadeIn');
+    a.css('display', 'block').removeClass('fadeOut').addClass('fadeIn');      
+    m.removeClass('moveMain');
+  });
+  $(window).scroll(function(){
+    o.css("top",Math.max(80,260-$(this).scrollTop()));
+  });
+  
+  $(window).resize(function(){
+    getSize(); 
+    if (myWidth >= 1024) {
+      $('header nav').removeClass('shownav');
+    }else{
+      m.removeClass('moveMain');
+      a.css('display', 'block').removeClass('fadeOut');
+      o.css('display', 'none');
+      
+      $('#toc.toc-aside').css('display', 'none');
+        
+    }
+  });
+});
+</script>
+
+<script type="text/javascript">
+$(document).ready(function(){ 
+  var ai = $('.article-content>iframe'),
+      ae = $('.article-content>embed'),
+      t  = $('#toc'),
+      ta = $('#toc.toc-aside'),
+      o  = $('.openaside'),
+      c  = $('.closeaside');
+  if(ai.length>0){
+    ai.wrap('<div class="video-container" />');
+  };
+  if(ae.length>0){
+   ae.wrap('<div class="video-container" />');
+  };
+  c.click(function(){
+    ta.css('display', 'block').addClass('fadeIn');
+  });
+  o.click(function(){
+    ta.css('display', 'none');
+  });
+  $(window).scroll(function(){
+    ta.css("top",Math.max(140,320-$(this).scrollTop()));
+  });
+});
+</script>
+
+
+<script type="text/javascript">
+$(document).ready(function(){ 
+  var $this = $('.share'),
+      url = $this.attr('data-url'),
+      encodedUrl = encodeURIComponent(url),
+      title = $this.attr('data-title'),
+      tsina = $this.attr('data-tsina'),
+      description = $this.attr('description');
+  var html = [
+  '<div class="hoverqrcode clearfix"></div>',
+  '<a class="overlay" id="qrcode"></a>',
+  '<a href="https://www.facebook.com/sharer.php?u=' + encodedUrl + '" class="article-share-facebook" target="_blank" title="Facebook"></a>',
+  '<a href="https://twitter.com/intent/tweet?url=' + encodedUrl + '" class="article-share-twitter" target="_blank" title="Twitter"></a>',
+  '<a href="#qrcode" class="article-share-qrcode" title="微信"></a>',
+  '<a href="http://widget.renren.com/dialog/share?resourceUrl=' + encodedUrl + '&srcUrl=' + encodedUrl + '&title=' + title +'" class="article-share-renren" target="_blank" title="人人"></a>',
+  '<a href="http://service.weibo.com/share/share.php?title='+title+'&url='+encodedUrl +'&ralateUid='+ tsina +'&searchPic=true&style=number' +'" class="article-share-weibo" target="_blank" title="微博"></a>',
+  '<span title="Share to"></span>'
+  ].join('');
+  $this.append(html);
+
+  $('.hoverqrcode').hide();
+
+  var myWidth = 0;
+  function updatehoverqrcode(){
+    if( typeof( window.innerWidth ) == 'number' ) {
+      myWidth = window.innerWidth;
+    } else if( document.documentElement && document.documentElement.clientWidth) {
+      myWidth = document.documentElement.clientWidth;
+    };
+    var qrsize = myWidth > 1024 ? 200:100;
+    var options = {render: 'image', size: qrsize, fill: '#2ca6cb', text: url, radius: 0.5, quiet: 1};
+    var p = $('.article-share-qrcode').position();
+    $('.hoverqrcode').empty().css('width', qrsize).css('height', qrsize)
+                          .css('left', p.left-qrsize/2+20).css('top', p.top-qrsize-10)
+                          .qrcode(options);
+  };
+  $(window).resize(function(){
+    $('.hoverqrcode').hide();
+  });
+  $('.article-share-qrcode').click(function(){
+    updatehoverqrcode();
+    $('.hoverqrcode').toggle();
+  });
+  $('.article-share-qrcode').hover(function(){}, function(){
+      $('.hoverqrcode').hide();
+  });
+});   
+</script>
+
+
+
+<script type="text/javascript">
+  var duoshuoQuery = {short_name:"liexing"};
+  (function() {
+    var ds = document.createElement('script');
+    ds.type = 'text/javascript';ds.async = true;
+    ds.src = '//7xl6z1.com1.z0.glb.clouddn.com/embed_ua.js';
+    ds.charset = 'UTF-8';
+    (document.getElementsByTagName('head')[0] 
+    || document.getElementsByTagName('body')[0]).appendChild(ds);
+  })();
+</script> 
+
+
+
+
+
+
+
+<link rel="stylesheet" href="/fancybox/jquery.fancybox.css" media="screen" type="text/css">
+<script src="/fancybox/jquery.fancybox.pack.js"></script>
+<script type="text/javascript">
+$(document).ready(function(){ 
+  $('.article-content').each(function(i){
+    $(this).find('img').each(function(){
+      if ($(this).parent().hasClass('fancybox')) return;
+      var alt = this.alt;
+      if (alt) $(this).after('<span class="caption">' + alt + '</span>');
+      $(this).wrap('<a href="' + this.src + '" title="' + alt + '" class="fancybox"></a>');
+    });
+    $(this).find('.fancybox').each(function(){
+      $(this).attr('rel', 'article' + i);
+    });
+  });
+  if($.fancybox){
+    $('.fancybox').fancybox();
+  }
+}); 
+</script>
+
+
+
+<!-- Analytics Begin -->
+
+
+
+<script>
+var _hmt = _hmt || [];
+(function() {
+  var hm = document.createElement("script");
+  hm.src = "//hm.baidu.com/hm.js?e6d1f421bbc9962127a50488f9ed37d1";
+  var s = document.getElementsByTagName("script")[0]; 
+  s.parentNode.insertBefore(hm, s);
+})();
+</script>
+
+
+
+<span style="display:none"><script type="text/javascript">var cnzz_protocol = (("https:" == document.location.protocol) ? " https://" : " http://");document.write(unescape("%3Cspan id='cnzz_stat_icon_1256113107'%3E%3C/span%3E%3Cscript src='" + cnzz_protocol + "s23.cnzz.com/z_stat.php%3Fid%3D1256113107' type='text/javascript'%3E%3C/script%3E"));</script></span>
+
+
+<!-- Analytics End -->
+
+<!-- Totop Begin -->
+
+	<div id="totop">
+	<a title="返回顶部"><img src="/img/scrollup.png"/></a>
+	</div>
+	<script src="/js/totop.js"></script>
+
+<!-- Totop End -->
+
+<!-- MathJax Begin -->
+<!-- mathjax config similar to math.stackexchange -->
+
+
+<!-- MathJax End -->
+
+<!-- Tiny_search Begin -->
+
+<!-- Tiny_search End -->
+
+  </body>
+</html>

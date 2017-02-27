@@ -1,0 +1,1548 @@
+<?xml version="1.0" encoding="utf-8"?>
+<feed xmlns="http://www.w3.org/2005/Atom">
+  <title>Liexing&#39;s Blog</title>
+  <subtitle>不疯魔，不成佛</subtitle>
+  <link href="/atom.xml" rel="self"/>
+  
+  <link href="http://blog.liexing.me/"/>
+  <updated>2017-02-27T11:34:45.000Z</updated>
+  <id>http://blog.liexing.me/</id>
+  
+  <author>
+    <name>liexing</name>
+    
+  </author>
+  
+  <generator uri="http://hexo.io/">Hexo</generator>
+  
+  <entry>
+    <title>统计学习方法（笔记）-决策树</title>
+    <link href="http://blog.liexing.me/2016/11/07/statistical-learning-method-decision-tree/"/>
+    <id>http://blog.liexing.me/2016/11/07/statistical-learning-method-decision-tree/</id>
+    <published>2016-11-07T08:30:01.000Z</published>
+    <updated>2017-02-27T11:34:45.000Z</updated>
+    
+    <content type="html"><![CDATA[<p>决策树是一种基本的分类与回归方法。模型可读性强，分类速度快，可以认为是 if-then 规则的集合。</p>
+<h1 id="决策树模型与学习"><a href="#决策树模型与学习" class="headerlink" title="决策树模型与学习"></a>决策树模型与学习</h1><p>分类决策树模型是一种描述对实例进行分类的树形结构。内部节点表示特征或者属性，叶节点表示一个类。分类时，从根节点开始，对实例某一特征进行测试，根据测试结果分配到子节点，递归进行，直到到达叶节点，即为实例所属的类，如图：</p>
+<img title="决策树" alt="决策树" src="http://7xl6z1.com1.z0.glb.clouddn.com/static/images/statistical-learning-method/1478508855.jpg">
+<p>可以将决策树看做一个 if-then 规则的集合，并且其路径具有互斥且完备性质。如上图，最终的类别为 Yes 和 No 两类，假设存在数据$x={青少年,是学生}$，首先判断第一个特征，年龄，为青少年，跳转到最左边节点，判断是否是学生，则类别为 Yes。</p>
+<p>决策树还能表示给定特征条件下类的条件概率分布。</p>
+<p>决策树学习本质上是从训练数据集中归纳出一组分类规则。能对训练数据集进行正确分类的决策树可能有多个，也可能没有。需要选择一个与训练数据集矛盾小，有很好泛化能力的决策树。从另一个角度，把决策树学习看做训练数据集估计条件概率模型，基于特种空间划分的类的条件概率模型有无穷多个，我们选择的模型应该对训练数据有很好的拟合，对未知数据有很好的预测。</p>
+<p>决策树的学习损失函数通常是正则化的极大似然函数。从所有可能的决策树中选取最有决策树是 NP 完全问题，所以通常学习算法采用启发式方法，求得次最优的决策树。对于过拟合现象，采用自下而上的剪枝操作，将树变得更简单。决策树的生成只考虑局部最优，剪枝则考虑全局最优。学习常用算法有 ID3、C4.5和 CART。</p>
+<h1 id="特征选择"><a href="#特征选择" class="headerlink" title="特征选择"></a>特征选择</h1><p>特征选择的准则通常是信息增益或者信息增益比。</p>
+<p>熵是表示随机变量的不确定性的度量。设 X 是一个取有限个值的离散随机变量，其概率分布为：</p>
+<p>$$P(X=x_i)=p_i, \quad i=1,2,…,n$$</p>
+<p>随机变量 X 的熵定义为：</p>
+<p>$$H(X)=-\sum \limits_{i=1}^n p_i \log p_i$$</p>
+<p>上式中，若$p_i=0$，定义$0\log 0=0$。对数底可以为2或者 e，这时熵的单位分别为比特或纳特。由定义，熵只依赖于 X 的分布，与 X 的取值无关，所以也可以记为：</p>
+<p>$$H(p)=-\sum \limits_{i=1}^n p_i \log p_i$$</p>
+<p>熵越大，随机变量的不确定性越大，所以：$0 \le H(p) \le \log n$。</p>
+<p>对于随机变量 (X,Y)，其联合概率分布：</p>
+<p>$$P(X=x_i,Y=y_j)=P_{ij},\quad i=1,2,…,n;j=1,2,…,m$$</p>
+<p>条件熵表示在已知随机变量 X 的条件下，变量 Y 的不确定性，定义为 X 给定条件下 Y 的条件概率分布的熵对 X 的数学期望：</p>
+<p>$$H(Y|X)=\sum \limits_{i=1}^n p_iH(Y|X=X_i)$$</p>
+<p>这里$p_i=P(X=x_i), i=1,2,…,n$。</p>
+<p>信息增益表示得知特征 X 的信息而是类 Y 的信息的不确定性减少的程度，也称为互信息。</p>
+<p>特征 A 对训练数据集 D 的信息增益 g(D,A) 定义为集合 D 的经验熵 H(D) 与特征 A 给定条件下 D 的检验条件熵之差，即：</p>
+<p>$$g(D,A)=H(D)-H(D|A)$$</p>
+<p>因此，决策树特征选择的方法可以为：对训练集 D，计算其每个特征的信息增益，并比较它们的大小，选择信息增益最大的特征。</p>
+<p>但是，以信息增益作为划分的特征，可能存在偏向于选择取值较多的特征的问题，因此可以改为使用信息增益比：</p>
+<p>$$g_R(D,A)=\frac {g(D,A)}{H_A(D)}$$</p>
+<p>其中，$H_A(D)=-\sum \limits_{i=1}^n \frac {|D_i|}{|D|}\log_2 \frac {|D_i|}{|D|}$</p>
+<p>#决策树的生成</p>
+<h2 id="ID3-算法"><a href="#ID3-算法" class="headerlink" title="ID3 算法"></a>ID3 算法</h2><p>ID3 核心是在决策树的各个节点上应用信息增益准则选择特征，递归地构建决策树。从根节点开始，对节点计算所有可能的特征的信息增益，选择信息增益最大的特征作为节点的特征，由该特征的不同取值建立子节点。ID3相当于用极大似然法进行概率模型的选择。但是 ID3 算法只有树的生成，所以容易产生过拟合。</p>
+<h2 id="C4-5-算法"><a href="#C4-5-算法" class="headerlink" title="C4.5 算法"></a>C4.5 算法</h2><p>C4.5 与 ID3 类似，但是生成过程，使用的是信息增益比来选择特征。</p>
+<h1 id="决策树的剪枝"><a href="#决策树的剪枝" class="headerlink" title="决策树的剪枝"></a>决策树的剪枝</h1><p>决策树生成过程，可能会导致过拟合。可以使用剪枝对已生成的树进行简化。具体的，剪枝从已生成的树上裁掉一些子树或者叶节点，并将其根节点或父节点作为新的叶节点，从而简化分类树模型。</p>
+<p>决策树的剪枝往往通过极小化决策树整体的损失函数或代价函数来实现。</p>
+<p>设树 T 的叶节点个数为 |T|，t 是树 T 的叶节点，该叶节点有$N_t$个样本点，其中 k 类样本有$N_{tk}$个，$H_{t}(T)$为叶节点 t 上的经验熵，$\alpha \ge 0$为参数，则决策树学习的损失函数为：</p>
+<p>$$C_{\alpha}(T)=\sum \limits_{t=1}^{|T|}N_tH_t(T)+\alpha{T}$$</p>
+<p>其中经验熵：</p>
+<p>$$H_t(T)=-\sum_k \frac{N_{tk}}{N_t}\log \frac{N_{tk}}{N_t}$$</p>
+<p>将损失函数记为：</p>
+<p>$$C_{\alpha}(T)=C(T)+\alpha |T|$$</p>
+<p>其中第一项表示对训练数据的预测误差，|T|表示复杂度，参数$\alpha \ge 0$控制两者间的影响。</p>
+<p>剪枝时，计算每个节点的经验熵，然后递归地从树的叶节点往上回缩。如果一组叶节点回缩到其父节点之前与之后的整体树分别为$T_B$和$T_A$，如果$C_\alpha (T_A) \le C_\alpha(T_B)$则进行剪枝，将父节点变为新的叶节点。</p>
+<p>剪枝算法可以由动态规划算法实现。</p>
+<h1 id="CART-算法"><a href="#CART-算法" class="headerlink" title="CART 算法"></a>CART 算法</h1><p>CART，全称 classification and regression tree，即分类与回归树，既可以用于分类也能用于回归。CART 是在给定输入随机变量 X 条件下输出随机变量 Y 的条件概率分布的学习方法，其假设决策树是二叉树。</p>
+<h2 id="CART-生成"><a href="#CART-生成" class="headerlink" title="CART 生成"></a>CART 生成</h2><p>决策树的生成就是递归地构建儿茶决策树的过程。对回归树用平方误差最小准则，对分类树用基尼指数最小化准则，进行特征选择，生成二叉树。</p>
+<h3 id="回归树的生成"><a href="#回归树的生成" class="headerlink" title="回归树的生成"></a>回归树的生成</h3><p>假设将输入划分为 M 个单元$R_1,R_2,…,R_M$，并且在每个单元$R_m$上有一个固定输出值$c_m$，于是回归树模型可以表示为：</p>
+<p>$$f(x)=\sum_{m=1}^Mc_mI(x \in R_M)$$</p>
+<p>当输入空间划分确定时，可以用平方误差$\sum_\limits{x_i \in R_M}(y_i-f(x_i))^2$来表示回归树对于数据的预测误差，用平方误差最小准则求解每个单元上的最有输出值。采用启发式的方法划分输入空间。</p>
+<p>生成算法为：</p>
+<ol>
+<li><p>选择最优切分变量 j 和切分点 s，求解：</p>
+<p> $$\min \limits_{j,s}[\min \limits_{c_1} \sum_{x_i\in R_1(j,s)}(y_i-c_1)^2 + \min \limits_{c_2} \sum_{x_i\in R_2(j,s)}(y_i-c_2)^2]$$</p>
+<p> 遍历变量 j，对固定的切分变量 j 扫描切分点 s，选择使上式达到最小值的对 (j,s)。</p>
+</li>
+<li><p>对选用的对 (j,s) 换分区域并决定相应的输出值：</p>
+<p> $$R_1(j,s)={x|x^{(j)} \le s}, \quad R_2(j,s)={x|x^{(j)} \gt s}$$</p>
+<p> $$\hat{c_m}=\frac{1}{N_m}\sum_{x_i \in R_m(j,s)}y_i,\quad x\in R_m,\quad m=1,2$$</p>
+</li>
+<li><p>继续对子区域调用1、2步骤，直到满足停止条件。</p>
+</li>
+<li>将输入空间划分为 M 个区域，生成决策树：</li>
+</ol>
+<p>$$f(x)=\sum_{m=1}^{M}\hat{c_m}I(x\in R_m)$$</p>
+<h3 id="分类树的生成"><a href="#分类树的生成" class="headerlink" title="分类树的生成"></a>分类树的生成</h3><p>分类树使用基尼指数选择最优特征，同时决定该特征的最优二值切分点。假设有 K 个分类，样本点属于第 k 类的概率为$p_k$，则概率分布的基尼指数为：</p>
+<p>$$Gini(p)=\sum_{k=1}^{K}p_k(1-p_k)=1-\sum_{k=1}^{K}p_k^2$$</p>
+<p>对于二分类问题，如果样本属于第一类的概率是 p，则：</p>
+<p>$$Gini(p)=2p(1-p)$$</p>
+<p>如果样本 D 根据特征 A 是否取某一可能值$\alpha$被分割成$D_1$和$D_2$两部分，则在特征 A 的条件下，集合 D 的基尼指数为：</p>
+<p>$$Gini(D,A)=\frac{|D_1|}{D}Gini(D_1)+\frac{|D_2|}{D}Gini(D_2)$$</p>
+<p>基尼指数Gini(D,A)表示经 A=a 分割后集合 D 的不确定性。基尼指数值越大，样本集合的不确定性也就越大。</p>
+<p>CART 生成算法为：1. 计算现有特征对数据集 D 的基尼指数，对每一个特征 A，对可能的每个取值$\alpha$的测试为“是”或者“否”将 D 分割成两部分，计算$A=\alpha$ 时的基尼指数；2. 选择基尼指数最小的特征及其对应的且分店作为最优特征和最优切分点，将 D 分配到两个子节点，并递归调用1，2。停止计算的条件是节点中样本个数小雨预定阈值，或者样本集的基尼指数小雨预定阈值，或者没有更多特征。</p>
+<h2 id="CART-剪枝"><a href="#CART-剪枝" class="headerlink" title="CART 剪枝"></a>CART 剪枝</h2><p>对于生成的决策树$T_0$，进行 CART 剪枝：</p>
+<ol>
+<li>设 $k=0,T=T_0$</li>
+<li>设 $\alpha=+\infty$</li>
+<li><p>自下而上对各内部节点 t 计算$C(T_t),|T_t|$以及</p>
+<p> $$g(t)=\frac{C(t)-C(T_t)}{|T_t| - 1}$$</p>
+<p> $$\alpha=\min(\alpha,g(t))$$</p>
+<p> 这里，$T_t$表示以 t 为根节点的字数，$C(T_t)$是对训练数据的预测误差，$|T_t|$是$T_t$的叶节点数量</p>
+</li>
+<li><p>自上而下的访问内部节点 t，如果有$g(t)=\alpha$，进行剪枝，并对叶节点 t 以多数表决法决定其类，得到树 T</p>
+</li>
+<li>设$k=k+1,\alpha_k=\alpha,T_k=T$</li>
+<li>如果 T 不是由根节点单独构成的树，则回到步骤4</li>
+<li>采用交叉验证法在子树序列$T_0,T_1,…,T_n$中选取最优子树$T_\alpha$ </li>
+</ol>
+]]></content>
+    
+    <summary type="html">
+    
+      &lt;p&gt;决策树是一种基本的分类与回归方法。模型可读性强，分类速度快，可以认为是 if-then 规则的集合。&lt;/p&gt;
+&lt;h1 id=&quot;决策树模型与学习&quot;&gt;&lt;a href=&quot;#决策树模型与学习&quot; class=&quot;headerlink&quot; title=&quot;决策树模型与学习&quot;&gt;&lt;/a&gt;决策树模
+    
+    </summary>
+    
+      <category term="统计学习" scheme="http://blog.liexing.me/categories/%E7%BB%9F%E8%AE%A1%E5%AD%A6%E4%B9%A0/"/>
+    
+    
+      <category term="笔记" scheme="http://blog.liexing.me/tags/%E7%AC%94%E8%AE%B0/"/>
+    
+      <category term="统计学习" scheme="http://blog.liexing.me/tags/%E7%BB%9F%E8%AE%A1%E5%AD%A6%E4%B9%A0/"/>
+    
+      <category term="机器学习" scheme="http://blog.liexing.me/tags/%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0/"/>
+    
+      <category term="k 邻近法" scheme="http://blog.liexing.me/tags/k-%E9%82%BB%E8%BF%91%E6%B3%95/"/>
+    
+      <category term="knn" scheme="http://blog.liexing.me/tags/knn/"/>
+    
+  </entry>
+  
+  <entry>
+    <title>统计学习方法（笔记）-朴素贝叶斯法</title>
+    <link href="http://blog.liexing.me/2016/11/03/statistical-learning-method-naive-bayes/"/>
+    <id>http://blog.liexing.me/2016/11/03/statistical-learning-method-naive-bayes/</id>
+    <published>2016-11-03T12:52:47.000Z</published>
+    <updated>2017-02-27T11:34:45.000Z</updated>
+    
+    <content type="html"><![CDATA[<p>朴素贝叶斯（naïve Bayes）法是基于被也是定力与特征条件独立假设的分布方法。首先对于训练数据集，基于特征条件独立假设学习输入输出的联合概率分布，然后对于给定的输入，利用贝叶斯定理求出后验概率最大的输出。</p>
+<h1 id="朴素贝叶斯法的学习与分类"><a href="#朴素贝叶斯法的学习与分类" class="headerlink" title="朴素贝叶斯法的学习与分类"></a>朴素贝叶斯法的学习与分类</h1><p>朴素贝叶斯法是典型的生成学习方法。利用训练数据学习$P(X|Y)$和$P(Y)$的估计，得到联合概率分布</p>
+<p>$$P(X,Y) = P(X)P(X|Y)$$</p>
+<p>概率估计方法可以是极大似然估计或者贝叶斯估计。</p>
+<p>朴素贝叶斯法的基本假设使条件独立性。</p>
+<p>$$P(X=x|Y=c_k)=P(X^{(1)}=x^{(1)},…,X^{(n)}=x^{(n)}|Y=c_k)\\ =\prod \limits_{j=1}^nP(X^{(j)}=x^{(j)}|Y=c_k)$$</p>
+<p>条件独立假设使朴素贝叶斯法变得简单，但是有时候会牺牲一定的分类准确率。</p>
+<p>朴素贝叶斯法利用贝叶斯定理与学到的联合概率模型进行分类预测，将输入的 x 分到后验概率最大的类 y：</p>
+<p>$$y=\arg \max _{c_k}P(Y=c_k)\prod \limits_{j=1}^nP(X^{(j)}=x^{(j)}|Y=c_k)$$</p>
+<p>后验概率最大等价于0-1函数损失时的期望风险最小化。</p>
+<h1 id="朴素贝叶斯法的参数估计"><a href="#朴素贝叶斯法的参数估计" class="headerlink" title="朴素贝叶斯法的参数估计"></a>朴素贝叶斯法的参数估计</h1><p>在朴素贝叶斯法中，学习即估计$P(Y=c_k)$和$P(X^{(j)}=x^{(j)}|Y=c_k)$</p>
+<h2 id="极大似然估计"><a href="#极大似然估计" class="headerlink" title="极大似然估计"></a>极大似然估计</h2><p>先验概率$P(Y=c_k)$的极大似然估计是：</p>
+<p>$$P(Y=c_k)=\frac{\sum \limits_{i=1}^NI(y_i=c_k)}{N},\quad k=1,2,…,K$$</p>
+<p>设第 j 个特征$x^{(j)}$可能取值集合为${a_{j1},a_{j2},…,a_{jS_j} }$，则条件概率为：</p>
+<p>$$P(X^{(j)}=a_{jl}|Y=c_k)=\frac{\sum \limits_{i=1}^NI(x_i^{(j)}=a_{jl},y_i=c_k)}{\sum \limits_{i=1}^NI(y_i=c_k)}\ j=1,2,…,n;\quad l=1,2,…S;\quad k=1,2,…,K$$</p>
+<h2 id="贝叶斯估计"><a href="#贝叶斯估计" class="headerlink" title="贝叶斯估计"></a>贝叶斯估计</h2><p>极大似然估计可能会出现估计的概率值为 0 的情况，这会影响到后验概率的计算结果。可以使用贝叶斯估计来解决这一问题。贝叶斯估计即加入一个系数防止0情况出现。</p>
+<p>$$P_\lambda(Y=c_k)=\frac{\sum \limits_{i=1}^NI(y_i=c_k)+\lambda}{N+K\lambda},\quad k=1,2,…,K$$</p>
+<p>$$P_\lambda(X^{(j)}=a_{jl}|Y=c_k)=\frac{\sum \limits_{i=1}^NI(x_i^{(j)}=a_{jl},y_i=c_k)+\lambda}{\sum \limits_{i=1}^NI(y_i=c_k)+S_j\lambda}\ j=1,2,…,n;\quad l=1,2,…S;\quad k=1,2,…,K$$</p>
+<p>上面两式中，$\lambda\geq0$，当取1时，称为拉普拉斯平滑。</p>
+]]></content>
+    
+    <summary type="html">
+    
+      &lt;p&gt;朴素贝叶斯（naïve Bayes）法是基于被也是定力与特征条件独立假设的分布方法。首先对于训练数据集，基于特征条件独立假设学习输入输出的联合概率分布，然后对于给定的输入，利用贝叶斯定理求出后验概率最大的输出。&lt;/p&gt;
+&lt;h1 id=&quot;朴素贝叶斯法的学习与分类&quot;&gt;&lt;a hr
+    
+    </summary>
+    
+      <category term="统计学习" scheme="http://blog.liexing.me/categories/%E7%BB%9F%E8%AE%A1%E5%AD%A6%E4%B9%A0/"/>
+    
+    
+      <category term="笔记" scheme="http://blog.liexing.me/tags/%E7%AC%94%E8%AE%B0/"/>
+    
+      <category term="统计学习" scheme="http://blog.liexing.me/tags/%E7%BB%9F%E8%AE%A1%E5%AD%A6%E4%B9%A0/"/>
+    
+      <category term="机器学习" scheme="http://blog.liexing.me/tags/%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0/"/>
+    
+      <category term="朴素贝叶斯" scheme="http://blog.liexing.me/tags/%E6%9C%B4%E7%B4%A0%E8%B4%9D%E5%8F%B6%E6%96%AF/"/>
+    
+  </entry>
+  
+  <entry>
+    <title>统计学习方法（笔记）-k 近邻法</title>
+    <link href="http://blog.liexing.me/2016/11/02/statistical-learning-method-knn/"/>
+    <id>http://blog.liexing.me/2016/11/02/statistical-learning-method-knn/</id>
+    <published>2016-11-02T08:55:58.000Z</published>
+    <updated>2017-02-27T11:34:45.000Z</updated>
+    
+    <content type="html"><![CDATA[<p>k 近邻法（knn）是一种基本的分类与回归方法。这里只讨论分类问题。knn 分类可以简单理解为，找到距离输入实例最近的 k 个训练数据集中的实例点，其中多数属于某个类，则新输入的实例也属于某个类。</p>
+<h1 id="knn-算法"><a href="#knn-算法" class="headerlink" title="knn 算法"></a>knn 算法</h1><p>根据上述描述，其算法表示为：</p>
+<p>$$y=\arg \max \limits_{c_j} \sum \limits_{x_i \in N_{k}(x)} I(y_i = c_j),\quad i=1,2,…,N;j=1,2,…,K$$</p>
+<p>其中，$N_{k}(x)$表示涵盖训练集 T 中与 x 最邻近的 k 个点的邻域。I 为指示函数，当$y_i=c_j$时为1，否则为0。</p>
+<p>显然，k 近邻法没有显示的学习过程。</p>
+<h1 id="knn-模型"><a href="#knn-模型" class="headerlink" title="knn 模型"></a>knn 模型</h1><p>knn 实际使用的模型对应于对特征空间的划分。模型由三个要素——距离度量、k 值的选择和分类策略规则决定。当上面三要素与训练集确定后，对于任意输入实例，所属的类别唯一地确定。</p>
+<p>相当于在特征空间中划分一些子空间，判断新输入落入哪个子空间中即可。knn 中，k 为1叫做最近邻。这时候对每个训练集实例点划分一个区域（单元），如图：</p>
+<img title="k近邻法的模型对应特征空间的一个划分" alt="k近邻法的模型对应特征空间的一个划分" src="http://7xl6z1.com1.z0.glb.clouddn.com/static/images/statistical-learning-method/1478078547.jpg">
+<p>对于 knn，距离度量是一个比较关键的因素，一般使用欧式距离，也可能使用其他距离。对于两点$x_i,x_j\in \mathcal{X}$，其距离定义为：</p>
+<p>$$L_p(x_i,x_j)=(\sum \limits_{l=1}^n |x_i^{(l)}-x_j^{(l)}|^p)^{\frac{1}{p}}$$</p>
+<p>这里，$p\geq 1$，p=1 时叫做曼哈顿距离，p=2 时叫做欧式距离，$p=\infty$时，为求各个坐标距离的最大值：</p>
+<p>$$L_{\infty}(x_i,x_j)=\max \limits_l|x_i^{(l)}-x_j^{(l)}|$$</p>
+<p>不同的距离度量所确定的最近邻点是不同的。如图：</p>
+<img title="L_p距离间的关系" alt="L_p距离间的关系" src="http://7xl6z1.com1.z0.glb.clouddn.com/static/images/statistical-learning-method/1478081508.jpg">
+<p>其次，k 值的选择对结果影响也很大。k 较小时，近似误差小，但是估算误差大，噪声对其影响大，模型复杂，容易过拟合；k 较大时，可减小估算误差，但是近似误差大，模型变得简单。在应用时，取较小 k 的值，通过交叉验证来选取合适的值。</p>
+<p>knn 的分类策略往往是多数表决，其等价于经验风险最小化。</p>
+<h1 id="kd-树"><a href="#kd-树" class="headerlink" title="kd 树"></a>kd 树</h1><p>knn 最简单的实现是线性扫描，但是其开销巨大，不可取。</p>
+<p>kd 树是一种对 k 维空间中的实例点进行存储以便对其进行快速检索的二叉树形数据结构。</p>
+<p>构造 kd 树相当于不断地用垂直于坐标轴的超平面将 k 维空间切分，构成一系列的 k 维超矩形区域。kd 树的每个节点对应于一个 k 维超矩形区域。通常，一次选择坐标轴对空间切分，选择训练实例点在选定坐标轴的中位数为切分点，直到子区域没有实例点，这样得到的 kd 树是平衡的（搜索效率未必最优）。</p>
+<p>搜索时，从根开始，递归向下访问，如果目标点当前维的坐标小于切分点的坐标，则移动到左子树，否则移动到右子树，直到叶节点，这时候取当前叶节点为当前最近点。这时候递归向上回退，如果该节点比当前实例点距离目标点更近，则当前点为当前最近点；检查当前最近点另一个子节点对应的区域是否与目标点为球心、目标点与当前最近点为半径的超球体相交，如果相交则另一个子节点中可能存在更近的点，移动到另一子节点递归进行搜索，如果不想交则向上回退；直到会退到根节点，最后的当前最近点即为目标点的最近邻点。</p>
+<p>如果实例点是随机分布的，则搜索的平均复杂度为$O(\log N)$，kd 树更适合训练实例点远大于空间维数时的 k 近邻搜索。当空间位数接近训练实例数时，效率会迅速下降，几乎接近线性扫描。</p>
+]]></content>
+    
+    <summary type="html">
+    
+      &lt;p&gt;k 近邻法（knn）是一种基本的分类与回归方法。这里只讨论分类问题。knn 分类可以简单理解为，找到距离输入实例最近的 k 个训练数据集中的实例点，其中多数属于某个类，则新输入的实例也属于某个类。&lt;/p&gt;
+&lt;h1 id=&quot;knn-算法&quot;&gt;&lt;a href=&quot;#knn-算法&quot; 
+    
+    </summary>
+    
+      <category term="统计学习" scheme="http://blog.liexing.me/categories/%E7%BB%9F%E8%AE%A1%E5%AD%A6%E4%B9%A0/"/>
+    
+    
+      <category term="笔记" scheme="http://blog.liexing.me/tags/%E7%AC%94%E8%AE%B0/"/>
+    
+      <category term="统计学习" scheme="http://blog.liexing.me/tags/%E7%BB%9F%E8%AE%A1%E5%AD%A6%E4%B9%A0/"/>
+    
+      <category term="机器学习" scheme="http://blog.liexing.me/tags/%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0/"/>
+    
+      <category term="k 邻近法" scheme="http://blog.liexing.me/tags/k-%E9%82%BB%E8%BF%91%E6%B3%95/"/>
+    
+      <category term="knn" scheme="http://blog.liexing.me/tags/knn/"/>
+    
+  </entry>
+  
+  <entry>
+    <title>统计学习方法（笔记）-感知机</title>
+    <link href="http://blog.liexing.me/2016/11/01/statistical-learning-method-perceptron/"/>
+    <id>http://blog.liexing.me/2016/11/01/statistical-learning-method-perceptron/</id>
+    <published>2016-11-01T01:54:35.000Z</published>
+    <updated>2017-02-27T11:34:45.000Z</updated>
+    
+    <content type="html"><![CDATA[<p>感知机是二分类的线性分类模型，对应于输入空间中将实例划分为正负两类的分离超平面，属于判别模型。</p>
+<h1 id="感知机模型"><a href="#感知机模型" class="headerlink" title="感知机模型"></a>感知机模型</h1><p>$$f(x)=sign(w·x+b)$$</p>
+<p>其中，w 和 b 为感知机模型参数，$w \in R^n$称为权指或者权指向量，$b \in R$称为偏置，$w·x$表示 w 和 x 的内积。sign 是符号函数，定义为：</p>
+<p>$$sign(x)= \begin {cases} +1,x\geq 0\\ -1,x\lt 0\end {cases}$$</p>
+<p>其中，$f(x)=w·x+b$叫做线性分类器，线性方程$f(x)=0$对应于特征空间中$R^n$的一个超平面 S，其中 w 是其法向量，b 是截距。S 将空间划分为两部分，位于两部分的点被分为正负两类，如图：</p>
+<img alt="感知机模型" src="http://7xl6z1.com1.z0.glb.clouddn.com/static/images/statistical-learning-method/1477967448.jpg">
+<h1 id="感知机学习策略"><a href="#感知机学习策略" class="headerlink" title="感知机学习策略"></a>感知机学习策略</h1><p>能够将数据集的正实例和负实例点完全正确的划分到超平面的两侧，则数据集为线性可分数据集，否则为线性不可分。感知机学习目标是求得一个能够将数据集正实例点和负实例点完全正确分开的分离超平面。</p>
+<p>损失函数选择能对参数 w 和 b 连续可导的函数，即误分类点到 S 的总距离。</p>
+<p>点$(x_0,y_0)$到 S 的距离为：</p>
+<p>$$\frac{1}{||w||}|w·x_0+b|$$</p>
+<p>又，对于误分类点$(x_i,y_i)$来说，$-y_i(w·x_i+b)\gt 0$，因此，对于所有的误分类点集合 M，到超平面总距离为：</p>
+<p>$$-\frac{1}{||w||}\sum_{x_i \in M} y_i(w·x_i+b)$$</p>
+<p>不考虑$\frac{1}{||w||}$，得到感知机学习的损失函数：</p>
+<p>$$L(w,b)=-\sum_{x_i \in M} y_i(w·x_i+b)$$</p>
+<h1 id="感知机学习算法"><a href="#感知机学习算法" class="headerlink" title="感知机学习算法"></a>感知机学习算法</h1><p>感知机学习算法是误分类驱动的，最小化损失函数即可：$\min \limits_{w,b} L(w,b)$，采用梯度下降法求取 w 和 b。</p>
+<p>随机选出误分类点$(x_i,y_i)$，对 w，b 进行更新:</p>
+<p>$$\begin{cases} w \leftarrow w+\eta y_i x_i \\ b \leftarrow b+\eta y_i\end{cases}$$</p>
+<p>式中$\eta (0\lt \eta \le 1)$是步长，也叫学习率。通过迭代使 L(w,b) 不断减小，直至为0。</p>
+<p>可以证明，误分类次数 k 是有上界的，经过有限次搜索可以找到将训练数据完全分开的分离超平面，即如果训练数据集线性可分，则感知机学习算法原始形式迭代是收敛的。</p>
+<h1 id="感知机学习算法的对偶形式"><a href="#感知机学习算法的对偶形式" class="headerlink" title="感知机学习算法的对偶形式"></a>感知机学习算法的对偶形式</h1><p>上述更新 w 和 b 的过程，设修改 n 次，则 w，b 关于$(x_i,y_i)$的增量分别是$\alpha_{i} y_i x_i$和$\alpha_{i} y_i$，这里$\alpha_{i}=n_i\eta$，假设$w_0$和$b_0$均取0，则：</p>
+<p>$$\begin{cases} w = \sum \limits_{i=1}^N \alpha_{i} y_i x_i \\ b = \sum \limits_{i=1}^N \alpha_{i} y_i\end{cases}$$</p>
+<p>这时，如果误分类，即：$y_i(\sum \limits_{j=1}^N \alpha_{j}y_jx_j+b)\leq 0$，则更新：</p>
+<p>$$\begin{cases} \alpha_{i} \leftarrow \alpha_{i} + \eta \\ b \leftarrow b + \eta y_i \end{cases}$$</p>
+<h1 id="算法特点"><a href="#算法特点" class="headerlink" title="算法特点"></a>算法特点</h1><p>当训练数据集线性可分时，感知机学习算法存在无穷多个解，其解由于不同的初始值或不同的迭代顺序而有可能不同。</p>
+<p>样本集线性可分的充要条件是正实例点集所构成的凸壳和负实例点集所构成的凸壳互不相交。</p>
+]]></content>
+    
+    <summary type="html">
+    
+      &lt;p&gt;感知机是二分类的线性分类模型，对应于输入空间中将实例划分为正负两类的分离超平面，属于判别模型。&lt;/p&gt;
+&lt;h1 id=&quot;感知机模型&quot;&gt;&lt;a href=&quot;#感知机模型&quot; class=&quot;headerlink&quot; title=&quot;感知机模型&quot;&gt;&lt;/a&gt;感知机模型&lt;/h1&gt;&lt;p&gt;$$f
+    
+    </summary>
+    
+      <category term="统计学习" scheme="http://blog.liexing.me/categories/%E7%BB%9F%E8%AE%A1%E5%AD%A6%E4%B9%A0/"/>
+    
+    
+      <category term="笔记" scheme="http://blog.liexing.me/tags/%E7%AC%94%E8%AE%B0/"/>
+    
+      <category term="统计学习" scheme="http://blog.liexing.me/tags/%E7%BB%9F%E8%AE%A1%E5%AD%A6%E4%B9%A0/"/>
+    
+      <category term="机器学习" scheme="http://blog.liexing.me/tags/%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0/"/>
+    
+      <category term="感知机" scheme="http://blog.liexing.me/tags/%E6%84%9F%E7%9F%A5%E6%9C%BA/"/>
+    
+  </entry>
+  
+  <entry>
+    <title>统计学习方法（笔记）-概论</title>
+    <link href="http://blog.liexing.me/2016/10/30/statistical-learning-method-intro/"/>
+    <id>http://blog.liexing.me/2016/10/30/statistical-learning-method-intro/</id>
+    <published>2016-10-30T14:54:07.000Z</published>
+    <updated>2017-02-27T11:34:45.000Z</updated>
+    
+    <content type="html"><![CDATA[<h1 id="统计学习"><a href="#统计学习" class="headerlink" title="统计学习"></a>统计学习</h1><p>统计学习是关于计算机基于数据构建概率统计模型并运用模型对数据进行预测与分析的一门学科，也称为统计机器学习。即<code>数据--&gt;模型--&gt;预测</code>。</p>
+<p>统计学习的对象是数据。从数据出发，提取数据的特征，抽象出数据的模型，发现数据中的知识，又回到对数据的分析和预测中。其目的是对数据的预测与分析。</p>
+<p>统计学习分为：监督学习（supervised learning）、非监督学习（unsupervised learning）、半监督学习（semi-supervised learning）和强化学习（reinforcement learning）等。</p>
+<p>统计学习方法三要素：模型（model）、策略（strategy）和算法（algorithm）。</p>
+<h1 id="监督学习"><a href="#监督学习" class="headerlink" title="监督学习"></a>监督学习</h1><p>即使用已有类别的数据训练模型。<code>训练数据--&gt;模型--&gt;测试数据</code></p>
+<p>统计学习假设数据存在一定的统计规律，X 和 Y 具有联合概率分布的假设就是监督学习关于数据的基本假设。</p>
+<p>监督学习的目的在于学习一个由输入到输出的映射。</p>
+<img alt="监督学习问题" src="http://7xl6z1.com1.z0.glb.clouddn.com/static/images/statistical-learning-method/1477841307.png">
+<h1 id="统计学习的三要素"><a href="#统计学习的三要素" class="headerlink" title="统计学习的三要素"></a>统计学习的三要素</h1><h2 id="模型"><a href="#模型" class="headerlink" title="模型"></a>模型</h2><p>模型就是所有学习的条件概率分布或决策函数。</p>
+<p>假设空间可以定义为参数向量决定的函数族：<br>$$F=\lbrace f|Y=f_\theta(X),\theta \in R^n\rbrace$$</p>
+<p>也可以表示未参数向量决定的条件概率分布族：<br>$$F=\lbrace P|P_\theta(Y|X), \theta \in R^n \rbrace$$</p>
+<h2 id="策略"><a href="#策略" class="headerlink" title="策略"></a>策略</h2><p>即怎么从假设空间中选择最优模型。</p>
+<p>损失函数度量模型一次预测的好坏，风险函数度量平均意义下模型预测的好坏。</p>
+<p>常用的损失函数：</p>
+<ol>
+<li>0-1损失函数：</li>
+</ol>
+<p>$$L(Y,f(X))= \begin {cases}&amp;1, Y \neq f(X) \\&amp;0, Y = f(X)\end {cases}$$</p>
+<ol>
+<li>平方损失函数</li>
+</ol>
+<p>$$L(Y,f(X))=(Y-f(X))^2$$</p>
+<ol>
+<li>绝对损失函数</li>
+</ol>
+<p>$$L(Y,f(X))=|Y-f(X)|$$</p>
+<ol>
+<li>对数损失函数</li>
+</ol>
+<p>$$L(Y,f(X))=-\log P(Y|X)$$</p>
+<p>损失函数越小，模型就越好。损失函数的期望：</p>
+<p>$$R_{exp}(f)=E_p[L(Y,f(X))]=\int_{\mathcal{X}\times \mathcal{Y}}L(y,f(x))P(x,y){\rm d}x{\rm d}y$$</p>
+<p>但是$R_{exp}(f)$一般不能直接计算，所以一般取 f(X)关于训练集的平均损失成为经验风险或者经验损失：</p>
+<p>$$R_{emp}(f)=\frac{1}{N}\sum_{i=1}^{N}L(y_i,f(x_i))$$</p>
+<p>当 N 趋近于无穷时，经验风向趋于期望风险。所以经验风险最小的模型就是最优的模型。但是样本容量很小时，可能导致过拟合。这时需要使用结构风险，结构风险最小化等价于正则化，其实质是在经验风险上加上表示模型复杂度的正则化项或罚项，其定义：</p>
+<p>$$R_{srm}(f)=\frac{1}{N}\sum_{i=1}^{N}L(y_i,f(x_i)) + \lambda J(f)$$</p>
+<p>其中J(F)为模型复杂度。结构风险最小化策略认为结构风险最小的模型就是最优模型。</p>
+<h2 id="算法"><a href="#算法" class="headerlink" title="算法"></a>算法</h2><p>算法是学习模型的具体计算方法。统计学习问题归结为最优化问题，统计学习的算法成为求解最优化问题的算法。</p>
+<h1 id="模型评估与模型选择"><a href="#模型评估与模型选择" class="headerlink" title="模型评估与模型选择"></a>模型评估与模型选择</h1><p>统计学习的目的是使学到的模型不仅对已知数据而且对位置数据都有很好的预测能力。当损失函数给定时，基于损失函数的模型的训练误差和测试误差就成为学习方法评估的标准。<code>注意：统计学习方法具体采用的损失函数未必是评估时使用的损失函数。</code>。测试误差小的方法具有更好的预测性。将学习方法对未知数据的预测能力称为泛化能力。</p>
+<p>过拟合通常是因为参数过多导致的。即模型越复杂，越容易发生过拟合。过拟合对训练样本的误差小，但是对测试样本的误差大。</p>
+<img title="训练误差与测试误差和模型复杂度的关系" alt="训练误差与测试误差和模型复杂度的关系" src="http://7xl6z1.com1.z0.glb.clouddn.com/static/images/statistical-learning-method/1477882667.jpg">
+<h1 id="正则化"><a href="#正则化" class="headerlink" title="正则化"></a>正则化</h1><p>正则化有如下形式：</p>
+<p>$$\min_{\mathcal{f\in F}} \frac {1}{N}\sum_{i=1}^N L(y_i,f(x_i)) + \lambda J(f)$$</p>
+<p>其中第一项为经验风险，第二项为正则化项。正则化项可以取不同的形式，如 $L_1$ 范数或者 $L_2$ 范数。</p>
+<h1 id="泛化能力"><a href="#泛化能力" class="headerlink" title="泛化能力"></a>泛化能力</h1><p>泛化误差就是学习到的模型的期望风险。可以通过比较两种学习方法的泛化误差上界的大小来比较它们的优劣。</p>
+<p>泛化误差上界具有如下性质：它是样本容量的函数，当样本容量增加时，泛化上界趋于0；它是假设空间容量的函数，假设空间容量越大，模型越难学，泛化误差上界越大。</p>
+<h1 id="生成模型与判别模型"><a href="#生成模型与判别模型" class="headerlink" title="生成模型与判别模型"></a>生成模型与判别模型</h1><p>生成方法由数据学习联合概率分布$P(X,Y)$，然后求出条件概率分布$P(Y|X)$作为预测的模型，即生成模型：</p>
+<p>$$P(Y|X)=\frac{P(X,Y)}{P(X)}$$</p>
+<p>典型的生成模型有：朴素贝叶斯法和隐马尔可夫模型。生成方法可以还原出联合概率分布$P(X,Y)$，而判别方法不能；生成方法的学习收敛速度更快；当存在隐变量时，仍可以用生成方法学习。</p>
+<p>判别方法由数据直接学习策略函数$f(X)$或者条件概率分布$P(Y|X)$作为预测的模型，即判别模型。典型的判别方法由：k 近邻法、感知机、决策树、逻辑斯特回归模型、最大熵模型、支持向量机、提升方法和条件随机场。判别方法直接学习的是条件概率$P(Y|X)$或决策函数$f(x)$，直接面对预测，往往学习的准确率更高；由于直接学习$P(Y|X)$或$f(x)$，可以对数据进行各种程度上的抽象、定义特征并使用特征，所以可以简化学习问题。</p>
+<h1 id="分类问题"><a href="#分类问题" class="headerlink" title="分类问题"></a>分类问题</h1><p>TP——将正类预测为正类数；<br>FN——将正类预测为负类数；<br>FP——将负类预测为正类数；<br>TN——将负类预测为负类数；</p>
+<p>精确率、召回率：</p>
+<p>$$\begin {cases} &amp;P=\frac{TP}{TP + FP} \\ &amp;R=\frac{TP}{TP+FN} \end {cases}$$</p>
+<p>$F_1$值是精确率和召回率的调和均值：</p>
+<p>$$\begin {cases} \frac{2}{F_1} = \frac{1}{P} + \frac{1}{R} \\ F_1=\frac{2TP}{2TP+FP+FN} \end {cases}$$</p>
+<h1 id="标注问题"><a href="#标注问题" class="headerlink" title="标注问题"></a>标注问题</h1><p>标注问题可以认为是分类问题的一个推广，也是更复杂的结构预测问题的一个简单形式。其输入是一个观测序列，输出是一个标记序列或者状态序列。</p>
+<h1 id="回归问题"><a href="#回归问题" class="headerlink" title="回归问题"></a>回归问题</h1><p>回归问题用于预测输入变量和输出变量之间的关系。分类的输出变量是离散的，回归的输出变量是连续的。</p>
+]]></content>
+    
+    <summary type="html">
+    
+      &lt;h1 id=&quot;统计学习&quot;&gt;&lt;a href=&quot;#统计学习&quot; class=&quot;headerlink&quot; title=&quot;统计学习&quot;&gt;&lt;/a&gt;统计学习&lt;/h1&gt;&lt;p&gt;统计学习是关于计算机基于数据构建概率统计模型并运用模型对数据进行预测与分析的一门学科，也称为统计机器学习。即&lt;code&gt;数据
+    
+    </summary>
+    
+      <category term="统计学习" scheme="http://blog.liexing.me/categories/%E7%BB%9F%E8%AE%A1%E5%AD%A6%E4%B9%A0/"/>
+    
+    
+      <category term="笔记" scheme="http://blog.liexing.me/tags/%E7%AC%94%E8%AE%B0/"/>
+    
+      <category term="统计学习" scheme="http://blog.liexing.me/tags/%E7%BB%9F%E8%AE%A1%E5%AD%A6%E4%B9%A0/"/>
+    
+      <category term="机器学习" scheme="http://blog.liexing.me/tags/%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0/"/>
+    
+  </entry>
+  
+  <entry>
+    <title>Cassandra 架构</title>
+    <link href="http://blog.liexing.me/2016/09/08/cassandra-architecture/"/>
+    <id>http://blog.liexing.me/2016/09/08/cassandra-architecture/</id>
+    <published>2016-09-08T07:54:29.000Z</published>
+    <updated>2017-02-27T11:34:45.000Z</updated>
+    
+    <content type="html"><![CDATA[<h1 id="架构"><a href="#架构" class="headerlink" title="架构"></a>架构</h1><h2 id="关键词"><a href="#关键词" class="headerlink" title="关键词"></a>关键词</h2><p>首先有几个关键词：</p>
+<table>
+<thead>
+<tr>
+<th>KeyWord</th>
+<th>Explain</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Gossip</td>
+<td>集群中节点相互交换信息的通信协议</td>
+</tr>
+<tr>
+<td>Partitioner</td>
+<td>决定在哪儿放置第一个副本</td>
+</tr>
+<tr>
+<td>Snitch</td>
+<td>定义了复制策略用来放置副本和路由请求所使用的拓扑信息</td>
+</tr>
+<tr>
+<td>Virtual nodes</td>
+<td>虚拟节点，用来避免热点以及提高宕机时数据转移效率</td>
+</tr>
+<tr>
+<td>Token Ring</td>
+<td>令牌环</td>
+</tr>
+</tbody>
+</table>
+<h2 id="Gossip"><a href="#Gossip" class="headerlink" title="Gossip"></a>Gossip</h2><p>Gossip用于在集群中节点间交换位置和状态信息。名字和“八卦”一样，大体上就是A告诉B自己的情况和自己知道的别人的情况，B转而告诉别人A告诉自己的情况与自己的情况，并以此进行下去。</p>
+<p>Gossip每秒钟运行一次，与至多3个节点交换信息，这样所有节点可很快了解集群中的所有节点的信息。每个节点都会保存集群中的所有其他节点信息，这样随便连到哪一个节点，都能知道集群中的所有其他节点，因此客户端请求可以连接到集群中任意一节点。</p>
+<p>通过Gossip还可检测节点是否正常以及性能，避免将请求路由至不可达或者性能差（需配置Dynamic Snitch）的节点。</p>
+<h2 id="一致性HASH"><a href="#一致性HASH" class="headerlink" title="一致性HASH"></a>一致性HASH</h2><p>为了将数据放入指定节点，并且避免热点问题，引入了一致性HASH。如图：</p>
+<img title="一致性hash" alt="一致性hash" src="http://7xl6z1.com1.z0.glb.clouddn.com/static/images/14733212957185/14733913102676.jpg">
+<p>Hash的值空间$0\sim2^{32}$形成一个环，称为HASH空间环。对每一个节点计算其HASH值，可以用其ip地址或者其他机器信息，这将唯一确定其在HASH空间环上的位置。之后将数据key通过函数计算出其HASH值，并在圆环上唯一确定位置，在此位置沿着顺时针遇到的第一个节点就是该数据需要被放入的位置。</p>
+<p>在节点很多时，这能够保证数据分布均匀，但是如果节点很少，可能因为节点分布不均导致数据倾斜，因此在一致性HASH的技术上引入虚拟节点（vnode)概念。</p>
+<p>把每个节点分为v个虚拟节点，然后再对每一个虚拟节点进行上面所述的HASH并分配到HASH空间环上。</p>
+<h2 id="vnode"><a href="#vnode" class="headerlink" title="vnode"></a>vnode</h2><img title="vnode" alt="vnode" src="http://7xl6z1.com1.z0.glb.clouddn.com/static/images/14733212957185/14734072658090.jpg">
+<p>如图上半部分所示，是没有虚拟节点的情况。这时候如果某个节点挂掉了，只能从很少的几个节点中交换数据，将会造成节点负载太高，如图：</p>
+<img src="http://7xl6z1.com1.z0.glb.clouddn.com/static/images/14733212957185/14734075656982.jpg?imageView2/2/w/418">
+<p>但是如果将节点拆分成许多虚拟节点，如下半部分所示，某一个节点挂了，能够从其他很多节点那里去获取副本，将大大降低负载：</p>
+<img src="http://7xl6z1.com1.z0.glb.clouddn.com/static/images/14733212957185/14734078747157.jpg?imageView2/2/w/411">
+<h2 id="数据复制"><a href="#数据复制" class="headerlink" title="数据复制"></a>数据复制</h2><p>目前Cassandra提供了两种复制策略：</p>
+<blockquote>
+<p>SimpleStrategy：用于单数据中心，第一个副本放在某个节点，其他副本放在HASH中顺时针的近邻节点。<br>NetworkTopologyStrategy：用于多数据中心，可以指定每个数据中心存放多少个副本。</p>
+</blockquote>
+<p>在创建keyspace时需要指定复制策略：</p>
+<figure class="highlight sql"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">CREATE</span> KEYSPACE Excelsior <span class="keyword">WITH</span> <span class="keyword">REPLICATION</span> = &#123; <span class="string">'class'</span> : <span class="string">'SimpleStrategy'</span>,<span class="string">'replication_factor'</span> : <span class="number">3</span> &#125;;  </div><div class="line"><span class="keyword">CREATE</span> KEYSPACE Excalibur <span class="keyword">WITH</span> <span class="keyword">REPLICATION</span> = &#123;<span class="string">'class'</span> :<span class="string">'NetworkTopologyStrategy'</span>, <span class="string">'dc1'</span> : <span class="number">3</span>, <span class="string">'dc2'</span> : <span class="number">2</span>&#125;;</div></pre></td></tr></table></figure>
+<p>其中数据中心名需要与snitch中配置吻合。</p>
+<h2 id="Partitioners"><a href="#Partitioners" class="headerlink" title="Partitioners"></a>Partitioners</h2><p>Cassandra中每一行由唯一的主键标识，partitioner相当于用来计算主键token的hash函数。Cassandra依据这个token值在集群中放置对应的行。目前有三种partitioner：</p>
+<blockquote>
+<p>Murmur3Partitioner：当前的默认值，依据MurmurHash哈希值在集群中均匀分布数据。（推荐使用）<br>RandomPartitioner：依据MD5哈希值在集群中均匀分布数据。<br>ByteOrderedPartitioner：依据行key的字节从字面上在集群中顺序分布数据。（不推荐使用）</p>
+</blockquote>
+<p>注意：若使用虚拟节点(vnodes)则无需手工计算tokens。若不使用虚拟节点则必须手工计算tokens将所得的值指派给cassandra.ymal主配置文件中的initial_token参数。</p>
+<h2 id="Snitches"><a href="#Snitches" class="headerlink" title="Snitches"></a>Snitches</h2><p>snitch决定了节点属于哪个数据中心或者机架。提供网络拓扑信息，用以确定向/从哪个数据中心或者网架写入/读取数据。</p>
+<p>注意：</p>
+<ol>
+<li>所有节点需用相同的snitch;</li>
+<li>集群中已插入数据后由更改了snitch则需运行一次fullrepair。</li>
+</ol>
+<p>几种常用的snitch：</p>
+<blockquote>
+<p>Dynamic snitching：监控从不同副本读操作的性能，选择性能最好的副本。dynamic snitch默认开启，所有其他snitch会默认使用dynamic snitch 层。<br>SimpleSnitch：默认值，用于单数据中心部署，不使用数据中心和网架信息。使用该值时keyspace复制策略中唯一需指定的是replication factor<br>RackInferringSnitch：根据数据中心和网架确定节点位置，而数据中心及网架信息又由节点的IP地址隐含指示。<br>PropertyFileSnitch：根据数据中心和网架确定节点位置，而网络拓扑信息又由用户定义的配置文件cassandra-topology.properties 获取。在节点IP地址格式不统一无法隐含指示数据中心及网架信息或者复杂的复制组中使用该值。<br>GossipingPropertyFileSnitch：产品中推荐使用。通过cassandra-rackdc.properties中信息确定本机机架和数据中心，并且使用Gossip通知其他节点。为了方便从PropertyFileSnitch迁移，优先使用<br>cassandra-topology.properties中配置，迁移完成后记得删除。</p>
+</blockquote>
+<h1 id="写流程"><a href="#写流程" class="headerlink" title="写流程"></a>写流程</h1><h2 id="单节点写示例"><a href="#单节点写示例" class="headerlink" title="单节点写示例"></a>单节点写示例</h2><img src="http://7xl6z1.com1.z0.glb.clouddn.com/static/images/14733212957185/14733849232892.jpg">
+<p>如果所示是一个对单数据中心的写数据。副本因子为3，表示每一行数据有3个副本，放在三个不同的机器上。一致性设置为ONE，表示查询的时候有一个节点副本返回即可。</p>
+<p>首先客户端向集群中任意一个节点发送查询命令，这个节点充当客户端和读写节点间的协调者（coordinator）。Coordinator根据集群配置决定请求分发到环中具体哪些节点上。由于副本因子为3，所以有三个节点保存副本，假设为1、3、6。数据分发到三个节点并写入，因为一致性为ONE，所以任何一个节点写入完成则返回，其他节点在后台继续写入直到完成。</p>
+<h2 id="多数据中心的写实例"><a href="#多数据中心的写实例" class="headerlink" title="多数据中心的写实例"></a>多数据中心的写实例</h2><img src="http://7xl6z1.com1.z0.glb.clouddn.com/static/images/14733212957185/14734127912685.jpg">
+<p>同上，但是多数据中心时，请求的数据中心的Coordinator将请求分发到其他数据中心的Coordinator执行操作。</p>
+<h1 id="读流程"><a href="#读流程" class="headerlink" title="读流程"></a>读流程</h1><img src="http://7xl6z1.com1.z0.glb.clouddn.com/static/images/14733212957185/14734131292169.jpg">
+<p>读请求可分为两个步骤进行，一个是读数据返回客户端，一个是后台自动校验数据的一致性。协调者首先与一致性级别确定的所有副本联系，被联系的节点返回请求的数据，若多个节点被联系，则来自各replica的row会在内存中作比较，若不一致，则协调者使用含最新数据的副本向客户端返回结果。同时，协调者在后台联系和比较来自其余拥有对应row的副本的数据，若不一致，会向过时的副本发写请求用最新的数据进行更新。这一过程叫read repair。</p>
+<h1 id="内部实现"><a href="#内部实现" class="headerlink" title="内部实现"></a>内部实现</h1><h2 id="数据结构"><a href="#数据结构" class="headerlink" title="数据结构"></a>数据结构</h2><p>内部使用了LSM树结构，LSM树的设计思想非常朴素：将对数据的修改增量保持在内存中，达到指定的大小限制后将这些修改操作批量写入磁盘。因此，LSM树有个很大的好处，就是避免询盘开销，大大提高的写入性能。基于LSM树实现的HBase的写性能比Mysql高了一个数量级，读性能低了一个数量级。</p>
+<h2 id="写操作"><a href="#写操作" class="headerlink" title="写操作"></a>写操作</h2><p>通过在多个同级节点创建数据的多个副本保证可靠性和容错。表是非关系型的，无需过多额外工作来维护关联的表的完整性，因此写操作较关系型数据库快很多。</p>
+<img src="http://7xl6z1.com1.z0.glb.clouddn.com/static/images/14733212957185/14735649834122.jpg">
+<p>先将数据写进内存中的数据结构memtable，同时追加到磁盘中的commitlog中。表使用的越多，对应的memtable应越大，cassandra动态的为memtable分配内存，也可自己手工指定。memtable内容超出指定容量后memtable数据（包括索引）被放进将被刷入磁盘的队列，可通过memtable_flush_queue_size配置队列长度。若将被刷入磁盘的数据超出了队列长度，cassandra会锁定写。memtable表中的数据由连续的I/O刷进磁盘中的SSTable，之后commit log被清空。每个表有独立的memtable和SSTable。</p>
+<h2 id="更新"><a href="#更新" class="headerlink" title="更新"></a>更新</h2><img src="http://7xl6z1.com1.z0.glb.clouddn.com/static/images/14733212957185/14735652254246.jpg">
+<img src="http://7xl6z1.com1.z0.glb.clouddn.com/static/images/14733212957185/14735651935180.jpg">
+<p>不直接在磁盘中原地更新而是先在memtable进行所有的更新。最后更新内容被刷入磁盘存储在新的SSTable中，仅当column的时间戳比既存的column更新时才覆盖原来的数据。</p>
+<h2 id="删除"><a href="#删除" class="headerlink" title="删除"></a>删除</h2><p>删除操作不会理解从硬盘上删除数据，而是会被tombstone标记以指定其状态，它会存在一定的时间（由gc_grace_seconds指定），超出该时间后compaction进程永久删除该column。</p>
+<p>若删除期间节点down掉，被标记为tombstone的column会发送信号给Cassandra使其重发删除请求给该replica节点。若replica在gc_grace_seconds期间复活，会最终受到删除请求，若replica在gc_grace_seconds之后复活，节点可能错过删除请求，而在节点恢复后立即删除数据。需定期执行节点修复操作来避免删除数据重现。</p>
+<h2 id="hinted-handoff-writes"><a href="#hinted-handoff-writes" class="headerlink" title="hinted handoff writes"></a>hinted handoff writes</h2><p>在不要求一致性时确保写的高可用，在cassandra.yaml中开启该功能。执行write操作时若拥有对应row的replica down掉了或者无回应，则协调者会在本地的system.hints表中存储一个hint，指示该写操作需在不可用的replica恢复后重新执行。默认hints保存3小时，可通过max_hint_window_in_ms改变该值。提示的write不计入consistencylevel中的ONE，QUORUM或ALL，但计入ANY。ANY一致性级别可确保cassandra在所有replica不可用时仍可接受write，并且在适当的replica可用且收到hint重放后该write操作可读。移除节点后节点对应的hints自动移除，删除表后对应的hints也会被移除。仍需定期执行repair（避免硬件故障造成的数据丢失）</p>
+<h2 id="读数据"><a href="#读数据" class="headerlink" title="读数据"></a>读数据</h2><p>Cassandra推荐使用SSD，以partition key读/写，消除了关系型数据库中复杂的查询。</p>
+<img src="http://7xl6z1.com1.z0.glb.clouddn.com/static/images/14733212957185/14736459048469.jpg">
+<p>首先检查Bloom filter，每个SSTable都有一个Bloomfilter，用以在进行任何磁盘I/O前检查请求的partition key对应的数据在SSTable中存在的可能性。若数据很可能存在，则检查Partition key cache(Cassandra表partition index的缓存)，之后根据index条目是否在cache中找到而执行不同步骤：</p>
+<ol>
+<li>找到。从compression offset map中查找拥有对应数据的压缩块。从磁盘取出压缩的数据，返回结果集。</li>
+<li>未找到。搜索Partition summary（partition index的样本集）确定index条目在磁盘中的近似位置。从磁盘中SSTable内取出index条目。从compression offset map中查找拥有对应数据的压缩块。从磁盘取出压缩的数据，返回结果集。</li>
+</ol>
+<img src="http://7xl6z1.com1.z0.glb.clouddn.com/static/images/14733212957185/14736460775048.jpg">
+<p>由insert/update过程可知，read请求到达某一节点后，必须结合所有包含请求的row中的column的SSTable以及memtable来产生请求的数据。</p>
+<img src="http://7xl6z1.com1.z0.glb.clouddn.com/static/images/14733212957185/14736461515400.jpg">
+<p>例如，要更新包含用户数据的某个row中的email 列，cassandra并不重写整个row到新的数据文件，而仅仅将新的email写进新的数据文件，username等仍处于旧的数据文件中。上图中红线表示Cassandra需要整合的row的片段用以产生用户请求的结果。为节省CPU和磁盘I/O，Cassandra会缓存合并后的结果，且可直接在该cache中更新row而不用重新合并。</p>
+<blockquote>
+<p>参考：<a href="http://zqhxuyuan.github.io/2015/08/25/2015-08-25-Cassandra-Architecture" target="_blank" rel="external">Apache Cassandra架构理解</a>、<a href="http://blog.csdn.net/zyz511919766/article/details/38683219" target="_blank" rel="external">Cassandra研究报告</a></p>
+</blockquote>
+]]></content>
+    
+    <summary type="html">
+    
+      描述Cassandra的主要技术架构，以及读写的流程和内部实现方式。
+    
+    </summary>
+    
+      <category term="Cassandra" scheme="http://blog.liexing.me/categories/Cassandra/"/>
+    
+    
+      <category term="Cassandra" scheme="http://blog.liexing.me/tags/Cassandra/"/>
+    
+      <category term="笔记" scheme="http://blog.liexing.me/tags/%E7%AC%94%E8%AE%B0/"/>
+    
+      <category term="分布式" scheme="http://blog.liexing.me/tags/%E5%88%86%E5%B8%83%E5%BC%8F/"/>
+    
+      <category term="NOSQL" scheme="http://blog.liexing.me/tags/NOSQL/"/>
+    
+  </entry>
+  
+  <entry>
+    <title>Cassandra 架构简述</title>
+    <link href="http://blog.liexing.me/2016/08/25/cassandra-architecture-in-brief/"/>
+    <id>http://blog.liexing.me/2016/08/25/cassandra-architecture-in-brief/</id>
+    <published>2016-08-25T13:25:01.000Z</published>
+    <updated>2017-02-27T11:34:45.000Z</updated>
+    
+    <content type="html"><![CDATA[<p>Cassandra被设计来在多个节点中处理大量的数据负载，并且没有单点故障。它的架构建立在认为系统能够并且可能发生故障的基础上。</p>
+<p>节点使用<a href="http://www.cs.cornell.edu/home/rvr/papers/flowgossip.pdf" target="_blank" rel="external">gossip</a>这个点对点的算法来在集群中交换自身和其他节点的状态信息。</p>
+<p>每个节点上，顺序追加的commit log文件，捕获节点的写入动作来确保数据的持续性。数据在叫做memtable的内存结构中索引和写入，这个结构类似于回写式缓存。每当内存数据结构写满时，数据被写到硬盘上的SSTables文件中。所有的写入都自动分区并在集群中复制。Cassandra会定期使用<a href="http://docs.datastax.com/en/cql/3.3/cql/cql_reference/tabProp.html#tabProp__moreCompaction" target="_blank" rel="external">compaction</a>合并SSTables，并且丢弃使用tombstone标记的过时数据。许多<a href="http://docs.datastax.com/en/cassandra/3.x/cassandra/operations/opsRepairNodesTOC.html" target="_blank" rel="external">repair</a>机制用来确保集群中所有数据的一致性。所有的数据最先被写入commit log，在所有的数据存放到SSTable之后，commit log才能够被读取、删除或者回收。SSTable（sorted string table）只能够被追加并且顺序存放在磁盘上，用来维护所有的Cassandra表。</p>
+<p>Cassandra是分区的行存储数据库，数据库中的每一行都有一个必须的主键。Cassandra的架构允许任何授权的用户使用CQL语言来连接到任何数据中心的任何节点和访问数据。开发者可以通过cqlsh或者应用的语言驱动来使用CQL。通常，集群中每一个应用由一个keyspace管理多个表。</p>
+<p>分区（partitioner）用来确定哪些节点接收一块数据的第一个副本，怎样在集群的节点间分发其他副本。每一行数据都由主键唯一标示，有可能和分区键（partition key）相同，也可能包含其他一些集群键（clustering column）。分区通过对主键进行hash提取出token，然后根据token决定集群中哪个节点接收数据副本。默认的分区策略为Murmur3Partitioner。</p>
+<p>重复因素（Replication factor）表示集群间的副本总数。重复因素大小通常大于1但是小于集群节点数量。其值表示每行数据在多少个不同的节点上有副本。</p>
+<p>snitch定义复制策略使用数据中心和机架（拓扑）中的计算机组中哪一个节点来存放副本。当创建集群的时候必须指定snitch，所有的snitch都使用动态snitch层来监控性能和选择读取副本。默认的SimpleSnitch不能识别数据中心和机架，用来在单个数据中心和单区公共云上部署。在生产环境中推荐使用GossipingPropertyFileSnitch，它定义了节点的数据中心和机架，并使用gossip来向其他节点传播这些信息。</p>
+]]></content>
+    
+    <summary type="html">
+    
+      &lt;p&gt;Cassandra被设计来在多个节点中处理大量的数据负载，并且没有单点故障。它的架构建立在认为系统能够并且可能发生故障的基础上。&lt;/p&gt;
+&lt;p&gt;节点使用&lt;a href=&quot;http://www.cs.cornell.edu/home/rvr/papers/flowgossip
+    
+    </summary>
+    
+      <category term="Cassandra" scheme="http://blog.liexing.me/categories/Cassandra/"/>
+    
+    
+      <category term="Cassandra" scheme="http://blog.liexing.me/tags/Cassandra/"/>
+    
+      <category term="笔记" scheme="http://blog.liexing.me/tags/%E7%AC%94%E8%AE%B0/"/>
+    
+      <category term="分布式" scheme="http://blog.liexing.me/tags/%E5%88%86%E5%B8%83%E5%BC%8F/"/>
+    
+      <category term="NOSQL" scheme="http://blog.liexing.me/tags/NOSQL/"/>
+    
+  </entry>
+  
+  <entry>
+    <title>Druid Command Line Hadoop Indexer启动流程</title>
+    <link href="http://blog.liexing.me/2016/06/16/druid-command-line-hadoop-indexer/"/>
+    <id>http://blog.liexing.me/2016/06/16/druid-command-line-hadoop-indexer/</id>
+    <published>2016-06-16T09:23:16.000Z</published>
+    <updated>2017-02-27T11:34:45.000Z</updated>
+    
+    <content type="html"><![CDATA[<p>首先找到启动的主类<code>io.druid.cli.Main</code>。在Main中，使用<a href="https://github.com/airlift/airline" target="_blank" rel="external">Airline</a>包来解析命令。</p>
+<p>如图，可知Druid接收的启动命令分为五组，分别是server、example、tools、index、internal。</p>
+<img title="Druid启动命令分组" alt="Druid启动命令分组" src="http://7xl6z1.com1.z0.glb.clouddn.com/static/images/14660495146766.jpg">
+<p>这里分析index命令组，详细用法可见<a href="http://druid.io/docs/latest/ingestion/command-line-hadoop-indexer.html" target="_blank" rel="external">官方文档</a>。由代码81行可知该命令组调用了CliHadoopIndexer类。</p>
+<p>该类接收参数：<br><img title="Druid_CliHadoopIndexer" alt="Druid_CliHadoopIndexer" src="http://7xl6z1.com1.z0.glb.clouddn.com/static/images/14660552155689.jpg"></p>
+<p>官方文档中启动命令为：<br><figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">java -Xmx256m -Duser.timezone=UTC -Dfile.encoding=UTF-8 -classpath lib/*:&lt;hadoop_config_dir&gt; io.druid.cli.Main index hadoop &lt;spec_file&gt;</div></pre></td></tr></table></figure></p>
+<p>其中<code>spec_file</code>即为argumentSpec。</p>
+<p>接着程序执行run方法。先设定Hadoop版本，然后通过注入的<code>extensionsConfig</code>设置扩展信息。接着将所有的需要的驱动包路径放入driverURLs，不含Hadoop的包位置放入nonHadoopURLS，扩展包的路径放入extensionURLs:<br><img title="extensionURLs" alt="extensionURLs" src="http://7xl6z1.com1.z0.glb.clouddn.com/static/images/14660645246444.jpg"></p>
+<p>然后借助URLClassLoader来载入driverURLs：</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">final</span> URLClassLoader loader = <span class="keyword">new</span> URLClassLoader(driverURLs.toArray(<span class="keyword">new</span> URL[driverURLs.size()]), <span class="keyword">null</span>);</div><div class="line">Thread.currentThread().setContextClassLoader(loader);</div></pre></td></tr></table></figure>
+<p>之后将nonHadoopURLs和extensionURLs合并为jobUrls，并且设置为<code>druid.hadoop.internal.classpath</code>属性：<br><img title="jobUrls" alt="jobUrls" src="http://7xl6z1.com1.z0.glb.clouddn.com/static/images/14660646182984.jpg"></p>
+<p>之后，重新调用main方法，并设置执行internal命令组的hadoop-indexer命令，即<code>CliInternalHadoopIndexer</code>类，并提交job到Hadoop。</p>
+<img title="recall_main" alt="recall_main" src="http://7xl6z1.com1.z0.glb.clouddn.com/static/images/14660703876691.jpg">
+]]></content>
+    
+    <summary type="html">
+    
+      使用Hadoop往Druid读入数据时，可以不用开启Indexing服务，而且执行一个单独的hadoop indexer命令行命令即可。这个命令调用了io.druid.cli.Main类的main方法，并且通过Ariline解析命令。
+    
+    </summary>
+    
+      <category term="Druid" scheme="http://blog.liexing.me/categories/Druid/"/>
+    
+    
+      <category term="分布式" scheme="http://blog.liexing.me/tags/%E5%88%86%E5%B8%83%E5%BC%8F/"/>
+    
+      <category term="Druid" scheme="http://blog.liexing.me/tags/Druid/"/>
+    
+      <category term="实时计算" scheme="http://blog.liexing.me/tags/%E5%AE%9E%E6%97%B6%E8%AE%A1%E7%AE%97/"/>
+    
+  </entry>
+  
+  <entry>
+    <title>Druid Indexing Service过程分析</title>
+    <link href="http://blog.liexing.me/2016/05/19/druid-indexing-service-process-analysis/"/>
+    <id>http://blog.liexing.me/2016/05/19/druid-indexing-service-process-analysis/</id>
+    <published>2016-05-19T10:21:48.000Z</published>
+    <updated>2017-02-27T11:34:45.000Z</updated>
+    
+    <content type="html"><![CDATA[<p>Indexing Task提交到Overlord节点后，首先创建Task对象：<br><figure class="highlight java"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">Task indexTask = <span class="keyword">new</span> io.druid.indexing.common.task.IndexTask(...);</div></pre></td></tr></table></figure></p>
+<p>之后通过<code>TaskStorageQueryAdapter</code>的<code>getStatus</code>方法查看刚才创建的任务是否已经存在与任务队列里面：</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">final</span> Optional&lt;TaskStatus&gt; preRunTaskStatus = tsqa.getStatus(indexTask.getId());</div></pre></td></tr></table></figure>
+<p>其中，tsqa为<code>TaskStorageQueryAdapter</code>的一个实例，<code>getStatus()</code>的返回为任务的状态，由<code>com.google.common.base.Optional</code>封装，其状态有三种类型，RUNNING，SUCCESS和FAILED。如果队列里面没有这个任务，则<code>preRunTaskStatus.isPresent()==false</code>。</p>
+<p>接着往<code>taskQueue</code>中加入任务。<code>taskQueue</code>是<code>io.druid.indexing.overlord.TaskQueue</code>一个实例，用来维护队列列表。首先检查任务队列是否启动状态，如果不是活动状态则启动它，之后向队列中添加任务：</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">if</span> (!taskQueue.isActive()) &#123;</div><div class="line">    taskQueue.start();</div><div class="line">&#125;</div><div class="line">taskQueue.add(indexTask);</div></pre></td></tr></table></figure>
+<p>加入到taskQueue队列中的任务按照FIFO顺序由<code>io.druid.indexing.overlord.TaskRunner</code>执行（除非下一个任务没有准备好，则跳过）。其中<code>TaskRunner</code>接口有三种实现方式：</p>
+<blockquote>
+<p>io.druid.indexing.overlord.ForkingTaskRunner<br>io.druid.indexing.overlord.RemoteTaskRunner<br>io.druid.indexing.overlord.ThreadPoolTaskRunner</p>
+</blockquote>
+<p><code>ForkingTaskRunner</code>为使用“internal peon”方式的时候执行任务的形式，在独立的进程中执行任务。<br><code>RemoteTaskRunner</code>在工作节点上执行任务，使用Zookeeper来管理和分配任务，使用HTTP来进行IPC通信。<br><code>ThreadPoolTaskRunner</code>则是通过线程池执行，使用ExecutorService在一个JVM线程中执行任务。</p>
+<p>任务执行后，返回<code>ListenableFuture&lt;TaskStatus&gt;</code>。通过：</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">taskStorage.getStatus(indexTask.getId()).get()</div></pre></td></tr></table></figure>
+<p>获取任务的状态，其中<code>taskStorage</code>是<code>io.druid.indexing.overlord.TaskStorage</code>一个实例，用于保存任务的状态。</p>
+]]></content>
+    
+    <summary type="html">
+    
+      对Indexing Task提交到Overlord后的执行过程进行简单的源码分析
+    
+    </summary>
+    
+      <category term="Druid" scheme="http://blog.liexing.me/categories/Druid/"/>
+    
+    
+      <category term="分布式" scheme="http://blog.liexing.me/tags/%E5%88%86%E5%B8%83%E5%BC%8F/"/>
+    
+      <category term="Druid" scheme="http://blog.liexing.me/tags/Druid/"/>
+    
+      <category term="实时计算" scheme="http://blog.liexing.me/tags/%E5%AE%9E%E6%97%B6%E8%AE%A1%E7%AE%97/"/>
+    
+      <category term="源码分析" scheme="http://blog.liexing.me/tags/%E6%BA%90%E7%A0%81%E5%88%86%E6%9E%90/"/>
+    
+  </entry>
+  
+  <entry>
+    <title>Druid Querying</title>
+    <link href="http://blog.liexing.me/2016/04/25/druid-querying/"/>
+    <id>http://blog.liexing.me/2016/04/25/druid-querying/</id>
+    <published>2016-04-25T08:42:33.000Z</published>
+    <updated>2017-02-27T11:34:45.000Z</updated>
+    
+    <content type="html"><![CDATA[<p>Druid的查询都通过向可查询节点（Broker、Historcal或者Realtime）发送HTTP REST风格的请求来获得结果。请求使用JSON格式，通常发送到Broker节点。</p>
+<p>Druid的查询分为三类：</p>
+<ul>
+<li>聚合查询（Aggregation Queries）</li>
+</ul>
+<blockquote>
+<p><a href="http://druid.io/docs/0.8.3/querying/timeseriesquery.html" target="_blank" rel="external">Timeseries</a><br><a href="http://druid.io/docs/0.8.3/querying/topnquery.html" target="_blank" rel="external">TopN</a><br><a href="http://druid.io/docs/0.8.3/querying/groupbyquery.html" target="_blank" rel="external">GroupBy</a></p>
+</blockquote>
+<p>聚合查询中，尽量使用Timeseries和TopN，因为GroupBy虽然最灵活，但是性能最差。</p>
+<ul>
+<li>元查询（Metadata Queries）</li>
+</ul>
+<blockquote>
+<p><a href="http://druid.io/docs/0.8.3/querying/timeboundaryquery.html" target="_blank" rel="external">Time Boundary</a><br><a href="http://druid.io/docs/0.8.3/querying/segmentmetadataquery.html" target="_blank" rel="external">Segment Metadata</a><br><a href="http://druid.io/docs/0.8.3/querying/datasourcemetadataquery.html" target="_blank" rel="external">Datasource Metadata</a></p>
+</blockquote>
+<ul>
+<li>搜索查询（Search Queries）</li>
+</ul>
+<blockquote>
+<p>[Search] (<a href="http://druid.io/docs/0.8.3/querying/searchquery.html" target="_blank" rel="external">http://druid.io/docs/0.8.3/querying/searchquery.html</a>)</p>
+</blockquote>
+<p>Druid的查询可以通过Query的唯一标识取消：</p>
+<pre><code>DELETE /druid/v2/{queryId}
+</code></pre><h2 id="Timeseries-queries"><a href="#Timeseries-queries" class="headerlink" title="Timeseries queries"></a>Timeseries queries</h2><p>这类查询使用时间序列查询对象，获得JSON对象数组，每个JSON对象表示一个时间序列查询的结果。</p>
+<p>每一个时间序列查询有七个主要的部分组成：</p>
+<table>
+<thead>
+<tr>
+<th>属性</th>
+<th>描述</th>
+<th>是否必须</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>queryType</td>
+<td>这类查询中都为：timeseries，Druid首先检查这个字段来决定如何处理查询语句</td>
+<td>是</td>
+</tr>
+<tr>
+<td>dataSource</td>
+<td>描述数据源的字符串或者对象</td>
+<td>是</td>
+</tr>
+<tr>
+<td>intervals</td>
+<td>一个描述ISO-8601时间间隔的JSON对象，定义查询的时间区间</td>
+<td>是</td>
+</tr>
+<tr>
+<td>granularity</td>
+<td>定义查询结果的时间粒度</td>
+<td>是</td>
+</tr>
+<tr>
+<td>filter</td>
+<td>一个说明哪些字段参与查询的JSON对象，类似SQL中的where语句</td>
+<td>否</td>
+</tr>
+<tr>
+<td>aggregations</td>
+<td>定义汇总查询哪些指标</td>
+<td>是</td>
+</tr>
+<tr>
+<td>postAggregations</td>
+<td>定义汇总数据执行哪些操作</td>
+<td>否</td>
+</tr>
+<tr>
+<td>context</td>
+<td>定义查询配置参数</td>
+<td>否</td>
+</tr>
+</tbody>
+</table>
+<p>一个时间序列查询对象的示例：</p>
+<figure class="highlight json"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div><div class="line">30</div><div class="line">31</div><div class="line">32</div><div class="line">33</div></pre></td><td class="code"><pre><div class="line">&#123;</div><div class="line">	<span class="attr">"queryType"</span>: <span class="string">"timeseries"</span>,</div><div class="line">	<span class="attr">"dataSource"</span>: <span class="string">"sample_datasource"</span>,</div><div class="line">	<span class="attr">"granularity"</span>: <span class="string">"day"</span>,</div><div class="line">	<span class="attr">"filter"</span>: &#123;</div><div class="line">		<span class="attr">"type"</span>: <span class="string">"and"</span>,</div><div class="line">  		<span class="attr">"fields"</span>: [</div><div class="line">     		&#123; <span class="attr">"type"</span>: <span class="string">"selector"</span>, <span class="attr">"dimension"</span>: <span class="string">"sample_dimension1"</span>, <span class="attr">"value"</span>: <span class="string">"sample_value1"</span> &#125;,</div><div class="line">     		&#123; <span class="attr">"type"</span>: <span class="string">"or"</span>,</div><div class="line">     		  <span class="attr">"fields"</span>: [</div><div class="line">					&#123; <span class="attr">"type"</span>: <span class="string">"selector"</span>, <span class="attr">"dimension"</span>: <span class="string">"sample_dimension2"</span>, <span class="attr">"value"</span>: <span class="string">"sample_value2"</span> &#125;,</div><div class="line">					&#123; <span class="attr">"type"</span>: <span class="string">"selector"</span>, <span class="attr">"dimension"</span>: <span class="string">"sample_dimension3"</span>, <span class="attr">"value"</span>: <span class="string">"sample_value3"</span> &#125;</div><div class="line">     		  ]</div><div class="line">     		&#125;</div><div class="line">  		]</div><div class="line">  	&#125;,</div><div class="line">	<span class="attr">"aggregations"</span>: [</div><div class="line">			&#123; <span class="attr">"type"</span>: <span class="string">"longSum"</span>, <span class="attr">"name"</span>: <span class="string">"sample_name1"</span>, <span class="attr">"fieldName"</span>: <span class="string">"sample_fieldName1"</span> &#125;,</div><div class="line">			&#123; <span class="attr">"type"</span>: <span class="string">"doubleSum"</span>, <span class="attr">"name"</span>: <span class="string">"sample_name2"</span>, <span class="attr">"fieldName"</span>: <span class="string">"sample_fieldName2"</span> &#125;</div><div class="line">	],</div><div class="line">	<span class="attr">"postAggregations"</span>: [</div><div class="line">		&#123; </div><div class="line">			<span class="attr">"type"</span>: <span class="string">"arithmetic"</span>,</div><div class="line">			<span class="attr">"name"</span>: <span class="string">"sample_divide"</span>,</div><div class="line">			<span class="attr">"fn"</span>: <span class="string">"/"</span>,</div><div class="line">			<span class="attr">"fields"</span>: [</div><div class="line">				&#123;<span class="attr">"type"</span>: <span class="string">"fieldAccess"</span>, <span class="attr">"name"</span>: <span class="string">"sample_name1"</span>, <span class="attr">"fieldName"</span>: <span class="string">"sample_fieldName1"</span> &#125;,</div><div class="line">				&#123;<span class="attr">"type"</span>: <span class="string">"fieldAccess"</span>, <span class="attr">"name"</span>: <span class="string">"sample_name2"</span>, <span class="attr">"fieldName"</span>: <span class="string">"sample_fieldName2"</span> &#125;</div><div class="line">			]</div><div class="line">		&#125;</div><div class="line">	],</div><div class="line">	<span class="attr">"intervals"</span>: [ <span class="string">"2012-01-01T00:00:00.000/2012-01-03T00:00:00.000"</span> ]</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<p>这个查询执行后，返回数据如下：</p>
+<figure class="highlight json"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div></pre></td><td class="code"><pre><div class="line">[</div><div class="line">	&#123;</div><div class="line">    	<span class="attr">"timestamp"</span>: <span class="string">"2012-01-01T00:00:00.000Z"</span>,</div><div class="line">    	<span class="attr">"result"</span>: &#123; <span class="attr">"sample_name1"</span>: &lt;some_value&gt;, <span class="attr">"sample_name2"</span>: &lt;some_value&gt;, <span class="attr">"sample_divide"</span>: &lt;some_value&gt; &#125; </div><div class="line">	&#125;,</div><div class="line">	&#123;</div><div class="line">		<span class="attr">"timestamp"</span>: <span class="string">"2012-01-02T00:00:00.000Z"</span>,</div><div class="line">		<span class="attr">"result"</span>: &#123; <span class="attr">"sample_name1"</span>: &lt;some_value&gt;, <span class="attr">"sample_name2"</span>: &lt;some_value&gt;, 		<span class="attr">"sample_divide"</span>: &lt;some_value&gt; &#125;</div><div class="line">	&#125;</div><div class="line">]</div></pre></td></tr></table></figure>
+<p>数据以粒度为天进行处理，返回两个结果，每个代表一天。如果某一天没有数据，则该处<some_value>为0。可以在context中设置<code>&quot;skipEmptyBuckets&quot;: &quot;true&quot;</code>，则不返回空数据的结果。</some_value></p>
+<h2 id="TopN-queries"><a href="#TopN-queries" class="headerlink" title="TopN queries"></a>TopN queries</h2><p>TopN查询返回一个指定维度上有序的结果数组。在单一维度上，和GroupBy与Ordering的组合效果类似，但是TopN效率更高。</p>
+<p>TopN查询内部近似为每个节点对内部数据排序并返回最大的K个结果到broker。<code>K=max(1000, threshold)</code>。</p>
+<p>topN查询由以下11部分组成：</p>
+<table>
+<thead>
+<tr>
+<th>属性</th>
+<th>描述</th>
+<th>是否必须</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>queryType</td>
+<td>总是topN</td>
+<td>是</td>
+</tr>
+<tr>
+<td>dataSource</td>
+<td>描述数据源的字符串或者对象</td>
+<td>是</td>
+</tr>
+<tr>
+<td>intervals</td>
+<td>一个描述ISO-8601时间间隔的JSON对象，定义查询的时间区间</td>
+<td>是</td>
+</tr>
+<tr>
+<td>granularity</td>
+<td>定义查询结果的时间粒度</td>
+<td>是</td>
+</tr>
+<tr>
+<td>filter</td>
+<td>一个说明哪些字段参与查询的JSON对象，类似SQL中的where语句</td>
+<td>否</td>
+</tr>
+<tr>
+<td>aggregations</td>
+<td>定义汇总查询哪些指标</td>
+<td>是</td>
+</tr>
+<tr>
+<td>postAggregations</td>
+<td>定义汇总数据执行哪些操作</td>
+<td>否</td>
+</tr>
+<tr>
+<td>dimension</td>
+<td>用来描述进行top操作选择字段的字符串或对象</td>
+<td>是</td>
+</tr>
+<tr>
+<td>threshold</td>
+<td>阈值，控制topN中N</td>
+<td>是</td>
+</tr>
+<tr>
+<td>metric</td>
+<td>用来描述在top列表中排序的字段的字符串或者对象</td>
+<td>是</td>
+</tr>
+<tr>
+<td>context</td>
+<td>定义查询配置参数</td>
+<td>否</td>
+</tr>
+</tbody>
+</table>
+<p>例如：</p>
+<figure class="highlight json"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div><div class="line">30</div><div class="line">31</div><div class="line">32</div><div class="line">33</div><div class="line">34</div><div class="line">35</div><div class="line">36</div><div class="line">37</div><div class="line">38</div><div class="line">39</div><div class="line">40</div><div class="line">41</div><div class="line">42</div><div class="line">43</div><div class="line">44</div><div class="line">45</div><div class="line">46</div><div class="line">47</div><div class="line">48</div><div class="line">49</div><div class="line">50</div><div class="line">51</div><div class="line">52</div><div class="line">53</div><div class="line">54</div><div class="line">55</div><div class="line">56</div><div class="line">57</div></pre></td><td class="code"><pre><div class="line">&#123;</div><div class="line">	<span class="attr">"queryType"</span>: <span class="string">"topN"</span>,</div><div class="line">	<span class="attr">"dataSource"</span>: <span class="string">"sample_data"</span>,</div><div class="line">	<span class="attr">"dimension"</span>: <span class="string">"sample_dim"</span>,</div><div class="line">	<span class="attr">"threshold"</span>: <span class="number">5</span>,</div><div class="line">	<span class="attr">"metric"</span>: <span class="string">"count"</span>,</div><div class="line">	<span class="attr">"granularity"</span>: <span class="string">"all"</span>,</div><div class="line">	<span class="attr">"filter"</span>: &#123;</div><div class="line">		<span class="attr">"type"</span>: <span class="string">"and"</span>,</div><div class="line">		<span class="attr">"fields"</span>: [</div><div class="line">			&#123;</div><div class="line">     			<span class="attr">"type"</span>: <span class="string">"selector"</span>,</div><div class="line">     			<span class="attr">"dimension"</span>: <span class="string">"dim1"</span>,</div><div class="line">     			<span class="attr">"value"</span>: <span class="string">"some_value"</span></div><div class="line">			&#125;,</div><div class="line">			&#123;</div><div class="line">     			<span class="attr">"type"</span>: <span class="string">"selector"</span>,</div><div class="line">     			<span class="attr">"dimension"</span>: <span class="string">"dim2"</span>,</div><div class="line">     			<span class="attr">"value"</span>: <span class="string">"some_other_val"</span></div><div class="line">			&#125;</div><div class="line">  		]</div><div class="line">  &#125;,</div><div class="line">	<span class="attr">"aggregations"</span>: [</div><div class="line">		&#123;</div><div class="line">			<span class="attr">"type"</span>: <span class="string">"longSum"</span>,</div><div class="line">			<span class="attr">"name"</span>: <span class="string">"count"</span>,</div><div class="line">			<span class="attr">"fieldName"</span>: <span class="string">"count"</span></div><div class="line">		&#125;,</div><div class="line">		&#123;</div><div class="line">			<span class="attr">"type"</span>: <span class="string">"doubleSum"</span>,</div><div class="line">			<span class="attr">"name"</span>: <span class="string">"some_metric"</span>,</div><div class="line">			<span class="attr">"fieldName"</span>: <span class="string">"some_metric"</span></div><div class="line">		&#125;</div><div class="line">	],</div><div class="line">	<span class="attr">"postAggregations"</span>: [</div><div class="line">		&#123;</div><div class="line">			<span class="attr">"type"</span>: <span class="string">"arithmetic"</span>,</div><div class="line">			<span class="attr">"name"</span>: <span class="string">"sample_divide"</span>,</div><div class="line">			<span class="attr">"fn"</span>: <span class="string">"/"</span>,</div><div class="line">			<span class="attr">"fields"</span>: [</div><div class="line">				&#123;</div><div class="line">					<span class="attr">"type"</span>: <span class="string">"fieldAccess"</span>,</div><div class="line">					<span class="attr">"name"</span>: <span class="string">"some_metric"</span>,</div><div class="line">					<span class="attr">"fieldName"</span>: <span class="string">"some_metric"</span></div><div class="line">        		&#125;,</div><div class="line">        		&#123;</div><div class="line">					<span class="attr">"type"</span>: <span class="string">"fieldAccess"</span>,</div><div class="line">					<span class="attr">"name"</span>: <span class="string">"count"</span>,</div><div class="line">					<span class="attr">"fieldName"</span>: <span class="string">"count"</span></div><div class="line">        		&#125;</div><div class="line">      	]</div><div class="line">    	&#125;</div><div class="line">	],</div><div class="line">	<span class="attr">"intervals"</span>: [</div><div class="line">		<span class="string">"2013-08-31T00:00:00.000/2013-09-03T00:00:00.000"</span></div><div class="line">	]</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<p>返回数据示例：</p>
+<figure class="highlight json"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div><div class="line">30</div><div class="line">31</div><div class="line">32</div><div class="line">33</div><div class="line">34</div><div class="line">35</div><div class="line">36</div><div class="line">37</div></pre></td><td class="code"><pre><div class="line">[</div><div class="line">	&#123;</div><div class="line">		<span class="attr">"timestamp"</span>: <span class="string">"2013-08-31T00:00:00.000Z"</span>,</div><div class="line">		<span class="attr">"result"</span>: [</div><div class="line">			&#123;</div><div class="line">				<span class="attr">"dim1"</span>: <span class="string">"dim1_val"</span>,</div><div class="line">				<span class="attr">"count"</span>: <span class="number">111</span>,</div><div class="line">				<span class="attr">"some_metrics"</span>: <span class="number">10669</span>,</div><div class="line">				<span class="attr">"average"</span>: <span class="number">96.11711711711712</span></div><div class="line">			&#125;,</div><div class="line">			&#123;</div><div class="line">				<span class="attr">"dim1"</span>: <span class="string">"another_dim1_val"</span>,</div><div class="line">				<span class="attr">"count"</span>: <span class="number">88</span>,</div><div class="line">				<span class="attr">"some_metrics"</span>: <span class="number">28344</span>,</div><div class="line">				<span class="attr">"average"</span>: <span class="number">322.09090909090907</span></div><div class="line">			&#125;,</div><div class="line">			&#123;</div><div class="line">				<span class="attr">"dim1"</span>: <span class="string">"dim1_val3"</span>,</div><div class="line">				<span class="attr">"count"</span>: <span class="number">70</span>,</div><div class="line">				<span class="attr">"some_metrics"</span>: <span class="number">871</span>,</div><div class="line">				<span class="attr">"average"</span>: <span class="number">12.442857142857143</span></div><div class="line">			&#125;,</div><div class="line">			&#123;</div><div class="line">				<span class="attr">"dim1"</span>: <span class="string">"dim1_val4"</span>,</div><div class="line">				<span class="attr">"count"</span>: <span class="number">62</span>,</div><div class="line">				<span class="attr">"some_metrics"</span>: <span class="number">815</span>,</div><div class="line">				<span class="attr">"average"</span>: <span class="number">13.14516129032258</span></div><div class="line">			&#125;,</div><div class="line">			&#123;</div><div class="line">				<span class="attr">"dim1"</span>: <span class="string">"dim1_val5"</span>,</div><div class="line">				<span class="attr">"count"</span>: <span class="number">60</span>,</div><div class="line">				<span class="attr">"some_metrics"</span>: <span class="number">2787</span>,</div><div class="line">				<span class="attr">"average"</span>: <span class="number">46.45</span></div><div class="line">			&#125;</div><div class="line">		]</div><div class="line">	&#125;</div><div class="line">]</div></pre></td></tr></table></figure>
+<p>由前面描述，topN是取每个节点的topK汇总，因此这个算法得到的排名和结果在数据维度大于1000时都是近似值，维度小于1000的时候得到的是准确的值。</p>
+<p>通过服务器参数<code>druid.query.topN.minTopNThreshold</code>可以更改这个K阈值。</p>
+<p>但是这样的处理过程可能会导致部分数据缺失。但是想要获得准确的topN需要更多的性能，可以考虑通过两次topN来获取。</p>
+<h2 id="groupBy-Queries"><a href="#groupBy-Queries" class="headerlink" title="groupBy Queries"></a>groupBy Queries</h2><blockquote>
+<p>Note: 如果只是想要获取一段时间范围内的简单的统计，使用更佳性能的Timeseries更好。如果是需要对一个维度进行有序的分组，使用topN更好。</p>
+</blockquote>
+<p>groupBy查询语句有11部分组成：</p>
+<table>
+<thead>
+<tr>
+<th>属性</th>
+<th>描述</th>
+<th>是否必须</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>queryType</td>
+<td>总是topN</td>
+<td>是</td>
+</tr>
+<tr>
+<td>dataSource</td>
+<td>描述数据源的字符串或者对象</td>
+<td>是</td>
+</tr>
+<tr>
+<td>dimensions</td>
+<td>需要分组的维度列表</td>
+<td>是</td>
+</tr>
+<tr>
+<td>limitSpec</td>
+<td>分组结果的数量限制</td>
+<td>否</td>
+</tr>
+<tr>
+<td>having</td>
+<td>分组语句中判断一个数据项是否被返回的条件</td>
+<td>否</td>
+</tr>
+<tr>
+<td>granularity</td>
+<td>定义查询结果的时间粒度</td>
+<td>是</td>
+</tr>
+<tr>
+<td>filter</td>
+<td>一个说明哪些字段参与查询的JSON对象，类似SQL中的where语句</td>
+<td>否</td>
+</tr>
+<tr>
+<td>aggregations</td>
+<td>定义汇总查询哪些指标</td>
+<td>是</td>
+</tr>
+<tr>
+<td>postAggregations</td>
+<td>定义汇总数据执行哪些操作</td>
+<td>否</td>
+</tr>
+<tr>
+<td>intervals</td>
+<td>一个描述ISO-8601时间间隔的JSON对象，定义查询的时间区间</td>
+<td>是</td>
+</tr>
+<tr>
+<td>context</td>
+<td>定义查询配置参数</td>
+<td>否</td>
+</tr>
+</tbody>
+</table>
+<p>比如：</p>
+<figure class="highlight json"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div><div class="line">30</div><div class="line">31</div><div class="line">32</div><div class="line">33</div><div class="line">34</div><div class="line">35</div><div class="line">36</div><div class="line">37</div><div class="line">38</div><div class="line">39</div></pre></td><td class="code"><pre><div class="line">&#123;</div><div class="line">  <span class="attr">"queryType"</span>: <span class="string">"groupBy"</span>,</div><div class="line">  <span class="attr">"dataSource"</span>: <span class="string">"sample_datasource"</span>,</div><div class="line">  <span class="attr">"granularity"</span>: <span class="string">"day"</span>,</div><div class="line">  <span class="attr">"dimensions"</span>: [<span class="string">"country"</span>, <span class="string">"device"</span>],</div><div class="line">  <span class="attr">"limitSpec"</span>: &#123; <span class="attr">"type"</span>: <span class="string">"default"</span>, <span class="attr">"limit"</span>: <span class="number">5000</span>, <span class="attr">"columns"</span>: [<span class="string">"country"</span>, <span class="string">"data_transfer"</span>] &#125;,</div><div class="line">  <span class="attr">"filter"</span>: &#123;</div><div class="line">    <span class="attr">"type"</span>: <span class="string">"and"</span>,</div><div class="line">    <span class="attr">"fields"</span>: [</div><div class="line">      &#123; <span class="attr">"type"</span>: <span class="string">"selector"</span>, <span class="attr">"dimension"</span>: <span class="string">"carrier"</span>, <span class="attr">"value"</span>: <span class="string">"AT&amp;T"</span> &#125;,</div><div class="line">      &#123; <span class="attr">"type"</span>: <span class="string">"or"</span>, </div><div class="line">        <span class="attr">"fields"</span>: [</div><div class="line">          &#123; <span class="attr">"type"</span>: <span class="string">"selector"</span>, <span class="attr">"dimension"</span>: <span class="string">"make"</span>, <span class="attr">"value"</span>: <span class="string">"Apple"</span> &#125;,</div><div class="line">          &#123; <span class="attr">"type"</span>: <span class="string">"selector"</span>, <span class="attr">"dimension"</span>: <span class="string">"make"</span>, <span class="attr">"value"</span>: <span class="string">"Samsung"</span> &#125;</div><div class="line">        ]</div><div class="line">      &#125;</div><div class="line">    ]</div><div class="line">  &#125;,</div><div class="line">  <span class="attr">"aggregations"</span>: [</div><div class="line">    &#123; <span class="attr">"type"</span>: <span class="string">"longSum"</span>, <span class="attr">"name"</span>: <span class="string">"total_usage"</span>, <span class="attr">"fieldName"</span>: <span class="string">"user_count"</span> &#125;,</div><div class="line">    &#123; <span class="attr">"type"</span>: <span class="string">"doubleSum"</span>, <span class="attr">"name"</span>: <span class="string">"data_transfer"</span>, <span class="attr">"fieldName"</span>: <span class="string">"data_transfer"</span> &#125;</div><div class="line">  ],</div><div class="line">  <span class="attr">"postAggregations"</span>: [</div><div class="line">    &#123; <span class="attr">"type"</span>: <span class="string">"arithmetic"</span>,</div><div class="line">      <span class="attr">"name"</span>: <span class="string">"avg_usage"</span>,</div><div class="line">      <span class="attr">"fn"</span>: <span class="string">"/"</span>,</div><div class="line">      <span class="attr">"fields"</span>: [</div><div class="line">        &#123; <span class="attr">"type"</span>: <span class="string">"fieldAccess"</span>, <span class="attr">"fieldName"</span>: <span class="string">"data_transfer"</span> &#125;,</div><div class="line">        &#123; <span class="attr">"type"</span>: <span class="string">"fieldAccess"</span>, <span class="attr">"fieldName"</span>: <span class="string">"total_usage"</span> &#125;</div><div class="line">      ]</div><div class="line">    &#125;</div><div class="line">  ],</div><div class="line">  <span class="attr">"intervals"</span>: [ <span class="string">"2012-01-01T00:00:00.000/2012-01-03T00:00:00.000"</span> ],</div><div class="line">  <span class="attr">"having"</span>: &#123;</div><div class="line">    <span class="attr">"type"</span>: <span class="string">"greaterThan"</span>,</div><div class="line">    <span class="attr">"aggregation"</span>: <span class="string">"total_usage"</span>,</div><div class="line">    <span class="attr">"value"</span>: <span class="number">100</span></div><div class="line">  &#125;</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<p>这个查询将会返回时间段内每一天中，<code>m*n</code>个数据，最多是5000个。n表示<code>country</code>的基数，m表示<code>device</code>的基数。返回数据如下：</p>
+<figure class="highlight json"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div></pre></td><td class="code"><pre><div class="line">[ </div><div class="line">  &#123;</div><div class="line">    <span class="attr">"version"</span> : <span class="string">"v1"</span>,</div><div class="line">    <span class="attr">"timestamp"</span> : <span class="string">"2012-01-01T00:00:00.000Z"</span>,</div><div class="line">    <span class="attr">"event"</span> : &#123;</div><div class="line">      <span class="attr">"country"</span> : &lt;some_dim_value_one&gt;,</div><div class="line">      <span class="attr">"device"</span> : &lt;some_dim_value_two&gt;,</div><div class="line">      <span class="attr">"total_usage"</span> : &lt;some_value_one&gt;,</div><div class="line">      <span class="attr">"data_transfer"</span> :&lt;some_value_two&gt;,</div><div class="line">      <span class="attr">"avg_usage"</span> : &lt;some_avg_usage_value&gt;</div><div class="line">    &#125;</div><div class="line">  &#125;, </div><div class="line">  &#123;</div><div class="line">    <span class="attr">"version"</span> : <span class="string">"v1"</span>,</div><div class="line">    <span class="attr">"timestamp"</span> : <span class="string">"2012-01-01T00:00:12.000Z"</span>,</div><div class="line">    <span class="attr">"event"</span> : &#123;</div><div class="line">      <span class="attr">"dim1"</span> : &lt;some_other_dim_value_one&gt;,</div><div class="line">      <span class="attr">"dim2"</span> : &lt;some_other_dim_value_two&gt;,</div><div class="line">      <span class="attr">"sample_name1"</span> : &lt;some_other_value_one&gt;,</div><div class="line">      <span class="attr">"sample_name2"</span> :&lt;some_other_value_two&gt;,</div><div class="line">      <span class="attr">"avg_usage"</span> : &lt;some_other_avg_usage_value&gt;</div><div class="line">    &#125;</div><div class="line">  &#125;,</div><div class="line">...</div><div class="line">]</div></pre></td></tr></table></figure>
+<h2 id="Time-Boundary-Queries"><a href="#Time-Boundary-Queries" class="headerlink" title="Time Boundary Queries"></a>Time Boundary Queries</h2><p>时间界限查询。该查询实例如下：</p>
+<figure class="highlight"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div></pre></td><td class="code"><pre><div class="line">&#123;</div><div class="line">    "queryType" : "timeBoundary",</div><div class="line">    "dataSource": "sample_datasource",</div><div class="line">    "bound"     : &lt; "maxTime" | "minTime" &gt; # optional, defaults to returning both timestamps if not set </div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<p>返回的数据如下：</p>
+<figure class="highlight json"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div></pre></td><td class="code"><pre><div class="line">[ &#123;</div><div class="line">  <span class="attr">"timestamp"</span> : <span class="string">"2013-05-09T18:24:00.000Z"</span>,</div><div class="line">  <span class="attr">"result"</span> : &#123;</div><div class="line">    <span class="attr">"minTime"</span> : <span class="string">"2013-05-09T18:24:00.000Z"</span>,</div><div class="line">    <span class="attr">"maxTime"</span> : <span class="string">"2013-05-09T18:37:00.000Z"</span></div><div class="line">  &#125;</div><div class="line">&#125; ]</div></pre></td></tr></table></figure>
+<h2 id="Search-Queries"><a href="#Search-Queries" class="headerlink" title="Search Queries"></a>Search Queries</h2><p>搜索查询包含以下部分：</p>
+<table>
+<thead>
+<tr>
+<th>属性</th>
+<th>描述</th>
+<th>是否必须</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>queryType</td>
+<td>总是search</td>
+<td>是</td>
+</tr>
+<tr>
+<td>dataSource</td>
+<td>描述数据源的字符串或者对象</td>
+<td>是</td>
+</tr>
+<tr>
+<td>granularity</td>
+<td>定义查询结果的时间粒度</td>
+<td>是</td>
+</tr>
+<tr>
+<td>filter</td>
+<td>一个说明哪些字段参与查询的JSON对象，类似SQL中的where语句</td>
+<td>否</td>
+</tr>
+<tr>
+<td>intervals</td>
+<td>一个描述ISO-8601时间间隔的JSON对象，定义查询的时间区间</td>
+<td>是</td>
+</tr>
+<tr>
+<td>searchDimensions</td>
+<td>进行搜索查询的维度。如果不存在这个参数则表示在所有参数上进行</td>
+<td>否</td>
+</tr>
+<tr>
+<td>query</td>
+<td>定义怎么匹配，有InsensitiveContainsSearchQuerySpec和FragmentSearchQuerySpec两种方式</td>
+<td>是</td>
+</tr>
+<tr>
+<td>sort</td>
+<td>指定结果的排序方式。有lexicographic（默认）和strlen两种方式</td>
+<td>否</td>
+</tr>
+<tr>
+<td>context</td>
+<td>定义查询配置参数</td>
+<td>否</td>
+</tr>
+</tbody>
+</table>
+<p>查询示例如下：</p>
+<figure class="highlight json"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div></pre></td><td class="code"><pre><div class="line">&#123;</div><div class="line">  <span class="attr">"queryType"</span>: <span class="string">"search"</span>,</div><div class="line">  <span class="attr">"dataSource"</span>: <span class="string">"sample_datasource"</span>,</div><div class="line">  <span class="attr">"granularity"</span>: <span class="string">"day"</span>,</div><div class="line">  <span class="attr">"searchDimensions"</span>: [</div><div class="line">    <span class="string">"dim1"</span>,</div><div class="line">    <span class="string">"dim2"</span></div><div class="line">  ],</div><div class="line">  <span class="attr">"query"</span>: &#123;</div><div class="line">    <span class="attr">"type"</span>: <span class="string">"insensitive_contains"</span>,</div><div class="line">    <span class="attr">"value"</span>: <span class="string">"Ke"</span></div><div class="line">  &#125;,</div><div class="line">  <span class="attr">"sort"</span> : &#123;</div><div class="line">    <span class="attr">"type"</span>: <span class="string">"lexicographic"</span></div><div class="line">  &#125;,</div><div class="line">  <span class="attr">"intervals"</span>: [</div><div class="line">    <span class="string">"2013-01-01T00:00:00.000/2013-01-03T00:00:00.000"</span></div><div class="line">  ]</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<p>返回数据如下：</p>
+<figure class="highlight json"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div></pre></td><td class="code"><pre><div class="line">[</div><div class="line">  &#123;</div><div class="line">    <span class="attr">"timestamp"</span>: <span class="string">"2012-01-01T00:00:00.000Z"</span>,</div><div class="line">    <span class="attr">"result"</span>: [</div><div class="line">      &#123;</div><div class="line">        <span class="attr">"dimension"</span>: <span class="string">"dim1"</span>,</div><div class="line">        <span class="attr">"value"</span>: <span class="string">"Ke$ha"</span></div><div class="line">      &#125;,</div><div class="line">      &#123;</div><div class="line">        <span class="attr">"dimension"</span>: <span class="string">"dim2"</span>,</div><div class="line">        <span class="attr">"value"</span>: <span class="string">"Ke$haForPresident"</span></div><div class="line">      &#125;</div><div class="line">    ]</div><div class="line">  &#125;,</div><div class="line">  &#123;</div><div class="line">    <span class="attr">"timestamp"</span>: <span class="string">"2012-01-02T00:00:00.000Z"</span>,</div><div class="line">    <span class="attr">"result"</span>: [</div><div class="line">      &#123;</div><div class="line">        <span class="attr">"dimension"</span>: <span class="string">"dim1"</span>,</div><div class="line">        <span class="attr">"value"</span>: <span class="string">"SomethingThatContainsKe"</span></div><div class="line">      &#125;,</div><div class="line">      &#123;</div><div class="line">        <span class="attr">"dimension"</span>: <span class="string">"dim2"</span>,</div><div class="line">        <span class="attr">"value"</span>: <span class="string">"SomethingElseThatContainsKe"</span></div><div class="line">      &#125;</div><div class="line">    ]</div><div class="line">  &#125;</div><div class="line">]</div></pre></td></tr></table></figure>
+]]></content>
+    
+    <summary type="html">
+    
+      &lt;p&gt;Druid的查询都通过向可查询节点（Broker、Historcal或者Realtime）发送HTTP REST风格的请求来获得结果。请求使用JSON格式，通常发送到Broker节点。&lt;/p&gt;
+&lt;p&gt;Druid的查询分为三类：&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;聚合查询（Aggre
+    
+    </summary>
+    
+      <category term="Druid" scheme="http://blog.liexing.me/categories/Druid/"/>
+    
+    
+      <category term="笔记" scheme="http://blog.liexing.me/tags/%E7%AC%94%E8%AE%B0/"/>
+    
+      <category term="分布式" scheme="http://blog.liexing.me/tags/%E5%88%86%E5%B8%83%E5%BC%8F/"/>
+    
+      <category term="Druid" scheme="http://blog.liexing.me/tags/Druid/"/>
+    
+      <category term="实时计算" scheme="http://blog.liexing.me/tags/%E5%AE%9E%E6%97%B6%E8%AE%A1%E7%AE%97/"/>
+    
+  </entry>
+  
+  <entry>
+    <title>SSH 自动连接脚本</title>
+    <link href="http://blog.liexing.me/2016/04/21/auto-ssh-to-server/"/>
+    <id>http://blog.liexing.me/2016/04/21/auto-ssh-to-server/</id>
+    <published>2016-04-21T07:50:30.000Z</published>
+    <updated>2017-02-27T11:34:45.000Z</updated>
+    
+    <content type="html"><![CDATA[<p>公司开发跳转机不支持免密登录，各个主机自动生成的密码忒恶心~所以使用expect进行跳转登录，做了个伪自动的脚本。但是这个方法目前<strong>需要把密码保存在本地</strong>。</p>
+<p>使用awk读取配置信息，expect登录主机。</p>
+<p>主机配置hostlist：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line">hostalias	user@hostname	password</div><div class="line">testhost	root@ip	hostpassword</div></pre></td></tr></table></figure>
+<p>跳转脚本jump.sh:</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div></pre></td><td class="code"><pre><div class="line"><span class="meta">#!/bin/bash</span></div><div class="line">HOSTALIAS=<span class="variable">$1</span></div><div class="line">host=`awk -v hostalias=<span class="variable">$HOSTALIAS</span> <span class="string">'$1==hostalias&#123;printf $2&#125;'</span> hostlist`</div><div class="line">password=`awk -v hostalias=<span class="variable">$HOSTALIAS</span> <span class="string">'$1==hostalias&#123;printf $3&#125;'</span> hostlist`</div><div class="line">./exp.sh <span class="variable">$host</span> <span class="variable">$password</span></div></pre></td></tr></table></figure>
+<p>expect登录脚本：</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div></pre></td><td class="code"><pre><div class="line"><span class="comment">#!/usr/bin/expect -f</span></div><div class="line"><span class="built_in">set</span> host [lindex <span class="variable">$argv</span> 0]</div><div class="line"><span class="built_in">set</span> password [lindex <span class="variable">$argv</span> 1]</div><div class="line">spawn ssh <span class="variable">$host</span></div><div class="line">expect <span class="string">"password:"</span></div><div class="line">send <span class="string">"<span class="variable">$password</span>\r"</span></div><div class="line">interact</div></pre></td></tr></table></figure>
+<p>可以将jump.sh脚本加入PATH。</p>
+]]></content>
+    
+    <summary type="html">
+    
+      在不支持免密登录的跳转机上通过expect自动连接主机
+    
+    </summary>
+    
+      <category term="笔记" scheme="http://blog.liexing.me/categories/%E7%AC%94%E8%AE%B0/"/>
+    
+    
+      <category term="笔记" scheme="http://blog.liexing.me/tags/%E7%AC%94%E8%AE%B0/"/>
+    
+      <category term="linux" scheme="http://blog.liexing.me/tags/linux/"/>
+    
+      <category term="bash" scheme="http://blog.liexing.me/tags/bash/"/>
+    
+  </entry>
+  
+  <entry>
+    <title>使用不同Metadata Storage的Druid集群间转移DataSource</title>
+    <link href="http://blog.liexing.me/2016/04/20/reindex-between-different-druid-use-and-metadatastorage/"/>
+    <id>http://blog.liexing.me/2016/04/20/reindex-between-different-druid-use-and-metadatastorage/</id>
+    <published>2016-04-20T10:19:58.000Z</published>
+    <updated>2017-02-27T11:34:45.000Z</updated>
+    
+    <content type="html"><![CDATA[<p>在Druid中读取已有的数据比较简单，有很多方法可以使用，<a href="http://druid.io/docs/0.9.0/ingestion/update-existing-data.html" target="_blank" rel="external">详见这里</a>。但是如果不同的Druid集群使用了不同的Metadata Storage，迁移任务首先回去找datasource下的segments，但是由于旧的Druid集群把相关信息保存在其他地方，这将会导致找不到Segments。</p>
+<p>因此考虑将旧集群中需要转移的datasource的metadata转到新集群的Metadata Storage。假设两个集群均使用MySQL作为Metadata Storage。</p>
+<p>首先将满足条件的segments数据导出：</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">mysql -uroot -p <span class="_">-e</span> <span class="string">'select * from druid.druid_segments where datasource="datasourcename";'</span> &gt; ./segments.metadata.sql</div></pre></td></tr></table></figure>
+<p>然后在新集群的MySQL终端中执行下面语句将数据导入：</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">load data <span class="built_in">local</span> infile <span class="string">'path_to_sql/segments.metadata.sql'</span> INTO TABLE druid.druid_segments FIELDS TERMINATED BY <span class="string">'\t'</span>;</div></pre></td></tr></table></figure>
+<p>然后执行Hadoop Index任务即可，部分配置如下：</p>
+<figure class="highlight"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div></pre></td><td class="code"><pre><div class="line">&#123;</div><div class="line">  "type" : "index_hadoop",</div><div class="line">  "spec" : &#123;</div><div class="line">    "ioConfig" : &#123;</div><div class="line">      "type" : "hadoop",</div><div class="line">      "inputSpec" : &#123;</div><div class="line">        "type" : "dataSource",</div><div class="line">        "ingestionSpec" : &#123;</div><div class="line">          "dataSource" : "datasourcename",</div><div class="line">          "interval" : "2016-04-09T00:00:00+08:00/P1D"</div><div class="line">        &#125;</div><div class="line">      &#125;</div><div class="line">    &#125;,</div><div class="line">    ...</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<p>向overlord提交任务：</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">curl -X <span class="string">'POST'</span> -H <span class="string">'Content-Type:application/json'</span> <span class="_">-d</span> @task_config.json &lt;overlord_host&gt;:&lt;port&gt;/druid/indexer/v1/task</div></pre></td></tr></table></figure>
+<blockquote>
+<p>注：此方法适用于两个集群使用相同的Deep Storage，否则还需要迁移Deep Storage中存储的Segments。</p>
+</blockquote>
+]]></content>
+    
+    <summary type="html">
+    
+      &lt;p&gt;在Druid中读取已有的数据比较简单，有很多方法可以使用，&lt;a href=&quot;http://druid.io/docs/0.9.0/ingestion/update-existing-data.html&quot; target=&quot;_blank&quot; rel=&quot;external&quot;&gt;详见这里
+    
+    </summary>
+    
+      <category term="Druid" scheme="http://blog.liexing.me/categories/Druid/"/>
+    
+    
+      <category term="分布式" scheme="http://blog.liexing.me/tags/%E5%88%86%E5%B8%83%E5%BC%8F/"/>
+    
+      <category term="Druid" scheme="http://blog.liexing.me/tags/Druid/"/>
+    
+      <category term="实时计算" scheme="http://blog.liexing.me/tags/%E5%AE%9E%E6%97%B6%E8%AE%A1%E7%AE%97/"/>
+    
+  </entry>
+  
+  <entry>
+    <title>Druid Indexing Service（索引服务）</title>
+    <link href="http://blog.liexing.me/2016/04/15/druid-indexing-service/"/>
+    <id>http://blog.liexing.me/2016/04/15/druid-indexing-service/</id>
+    <published>2016-04-15T02:47:47.000Z</published>
+    <updated>2017-02-27T11:34:45.000Z</updated>
+    
+    <content type="html"><![CDATA[<p>索引服务是一种用来运行索引相关任务的高可用、分布式的服务。索引服务任务创建或者销毁Druid的段。其架构类似主奴机制。</p>
+<p>索引服务由三个主要部件组成：peon运行单个的任务，Middle Manager组件管理peon，overlord组件控制任务向Middle Manager的分配。Middle Manager和Peon通常运行在同一个节点，Overlord和Middle Manager能运行在相同节点或者多个节点上。</p>
+<p>索引服务的示意图如下：</p>
+<img title="Druid" alt="Druid" src="http://7xl6z1.com1.z0.glb.clouddn.com/static/images/14605158741221.png">
+<h2 id="Overlord节点"><a href="#Overlord节点" class="headerlink" title="Overlord节点"></a>Overlord节点</h2><p>Overlord节点负责接收任务，负责任务的分配，对任务加锁，向调用者返回任务状态。Overlord有两种模式：本地模式或者远程模式。其中本地模式是默认模式。在本地模式下Overlord也负责创建Peon来执行任务，所有的Middle Manager和Peon的配置此时也应当被提供，这种模式一般用于普通的工作流。远程模式中，Overlord和Middle Manager运行在不同的进程中，也可以在不同服务器上运行，如果想让索引服务成为Druid索引的单一端点，推荐使用这种模式。</p>
+<p>可以通过向Overlor节点以POST请求提交JSON对象的方式提交任务：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">http://&lt;OVERLORD_IP&gt;:&lt;port&gt;/druid/indexer/v1/task</div></pre></td></tr></table></figure>
+<p>这将会返回提交的任务id。任务也能通过POST请求来关闭：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">http://&lt;OVERLORD_IP&gt;:&lt;port&gt;/druid/indexer/v1/task/&#123;taskId&#125;/status</div></pre></td></tr></table></figure>
+<p>或者通过GET请求来查询状态：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">http://&lt;OVERLORD_IP&gt;:&lt;port&gt;/druid/indexer/v1/task/&#123;taskId&#125;/segments</div></pre></td></tr></table></figure>
+<p>可以在浏览器中访问</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">http://&lt;OVERLORD_IP&gt;:&lt;port&gt;/console.html</div></pre></td></tr></table></figure>
+<p>来查看任务一些信息。</p>
+<h2 id="Middle-Manger"><a href="#Middle-Manger" class="headerlink" title="Middle Manger"></a>Middle Manger</h2><p>Middle Manger是执行提交任务的工作节点。Middle Manger向运行在独立JVM的Peon发送任务。独立开JVM是因为资源问题与日志隔离。每一个Peon一次只能执行一个任务。一个Middle Manger可以有多个Peon。</p>
+<p>通过<code>io.druid.cli.Main server middleManager</code>来启动Middle Manager。</p>
+<h2 id="Peon"><a href="#Peon" class="headerlink" title="Peon"></a>Peon</h2><p>Peon在独立的JVM中执行单个任务。MiddleManager负责创建Peon来执行任务。Peon很少单独运行。</p>
+<p>除了开发目的，很少独立的运行Peon。通过<code>io.druid.cli.Main internal peon &lt;task_file&gt; &lt;status_file&gt;</code>来独立执行。其中task_file包含了任务的JSON对象。status_file表示在那里输出任务的状态。</p>
+<h2 id="HTTP-端"><a href="#HTTP-端" class="headerlink" title="HTTP 端"></a>HTTP 端</h2><p>可以通过HTTP的GET请求<code>http://&lt;NODE_IP&gt;:&lt;port&gt;/status</code>来获取一些节点的信息，包括版本、载入的扩展、内存使用、总内存数等，比如：</p>
+<figure class="highlight json"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div></pre></td><td class="code"><pre><div class="line">&#123;</div><div class="line">    <span class="attr">"version"</span>: <span class="string">"0.9.0-rc3"</span>,</div><div class="line">    <span class="attr">"modules"</span>: [</div><div class="line">        &#123;</div><div class="line">            <span class="attr">"name"</span>: <span class="string">"io.druid.data.input.avro.AvroExtensionsModule"</span>,</div><div class="line">            <span class="attr">"artifact"</span>: <span class="string">"druid-avro-extensions"</span>,</div><div class="line">            <span class="attr">"version"</span>: <span class="string">"0.9.1-SNAPSHOT"</span></div><div class="line">        &#125;</div><div class="line">    ],</div><div class="line">    <span class="attr">"memory"</span>: &#123;</div><div class="line">        <span class="attr">"maxMemory"</span>: <span class="number">67108864</span>,</div><div class="line">        <span class="attr">"totalMemory"</span>: <span class="number">67108864</span>,</div><div class="line">        <span class="attr">"freeMemory"</span>: <span class="number">32278264</span>,</div><div class="line">        <span class="attr">"usedMemory"</span>: <span class="number">34830600</span></div><div class="line">    &#125;</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+]]></content>
+    
+    <summary type="html">
+    
+      Indexing Service 是 Druid 的一个核心组件，用来对数据进行索引，控制Druid的段的产生以及销毁。
+    
+    </summary>
+    
+      <category term="Druid" scheme="http://blog.liexing.me/categories/Druid/"/>
+    
+    
+      <category term="分布式" scheme="http://blog.liexing.me/tags/%E5%88%86%E5%B8%83%E5%BC%8F/"/>
+    
+      <category term="Druid" scheme="http://blog.liexing.me/tags/Druid/"/>
+    
+      <category term="实时计算" scheme="http://blog.liexing.me/tags/%E5%AE%9E%E6%97%B6%E8%AE%A1%E7%AE%97/"/>
+    
+  </entry>
+  
+  <entry>
+    <title>Druid Quickstart</title>
+    <link href="http://blog.liexing.me/2016/03/28/druid-quickstart/"/>
+    <id>http://blog.liexing.me/2016/03/28/druid-quickstart/</id>
+    <published>2016-03-28T10:14:36.000Z</published>
+    <updated>2017-02-27T11:34:45.000Z</updated>
+    
+    <content type="html"><![CDATA[<p><a href="http://druid.io" target="_blank" rel="external">Druid</a>是一个用于大数据实时查询和分析的高容错、高性能开源分布式系统，旨在快速处理大规模的数据，并能够实现快速查询和分析。</p>
+<h2 id="Druid-简单架构"><a href="#Druid-简单架构" class="headerlink" title="Druid 简单架构"></a>Druid 简单架构</h2><h3 id="节点类型与容错"><a href="#节点类型与容错" class="headerlink" title="节点类型与容错"></a>节点类型与容错</h3><ul>
+<li>Historical，对非实时数据进行处理存储和查询。从deep storage下载段（segment），并对基于段的查询请求作出响应，并且把结果返回给broker节点。它们通过Zookeeper向它们自己和段宣布提供服务，并且通过Zookeeper监视装载和删除新段的信号。如果一个Historical节点失效，其他的Historical节点将会替代它，不会导致数据损失。</li>
+<li>Coordinator，监视Historical组，来确保数据是可用的、可复制的，并且处于通常“最优”的配置。它们通过读取元数据存储（metadata storage）中的段元数据信息来决定哪些段应该被集群装载，利用Zookeeper来确定存在哪些Historical节点，并且创建Zookeeper项来告诉Historical节点装载或者删除段。能通过热故障转移配置运行。如果没有Coordinator在运行，将不会发生数据拓扑的变化，但是系统任然能继续运行。</li>
+<li>Broker，从外部客户端接收查询语句并且分发给Realtime或者Historical节点。当Broker接收到结果后，合并结果并且返回给调用者。对于已知拓扑，Broker通过Zookeeper来判断存在哪些Realtime节点和Historical节点。能够平行的运行或者热故障转移。</li>
+<li>Indexing Service，形成一个获取批量数据和实时数据到系统中的工作集群，也允许更改系统中数据的存储方式。工作节点的摄入任务可以复制运行，协调片可热故障转移。</li>
+<li>Realtime，也是装载实时数据进入系统。比建立Indexing Service更加简单，作为生产环境使用的限制代价也更小。不同的节点能够平行的运行并且摄入相同的数据流。它们向磁盘定期写入检查点并且最终都推向Deep Storage。如果这是唯一的向系统输入数据的方式，并且Realtime不能访问本地磁盘，则会导致数据丢失。</li>
+</ul>
+<blockquote>
+<p>早期的Druid有读立的Realtime节点，它们从Kafka或者Rabbit拉回数据，本地索引这些数据，并且周期性的分为数据段再发送给Historical节点。这种方式相当简单并且易于扩展。但是这将导致让Kafka有高可用性变得相当困难，因为高层的消费者没有提供扩展复制者组的功能，也会导致当有很多节点时管理相当困难，因为每一个节点都需要独立的配置文件。因此使用replication，从kafka拉回数据，并且推送到druid。<a href="https://groups.google.com/forum/#!searchin/druid-development/fangjin$20yang$20%22thoughts%22/druid-development/aRMmNHQGdhI/muBGl0Xi_wgJ" target="_blank" rel="external">参考这里</a></p>
+</blockquote>
+<p>druid简单的架构图如下，该图展示了查询、数据流是如何通过Druid的：<br><img title="Druid架构图" alt="Druid架构图" src="http://7xl6z1.com1.z0.glb.clouddn.com/static/images/14591361559273.jpg"><br>所有的节点都以对等无共享集群或者热插拔故障转移节点的方式运行，来保证高可用性。此外，这个系统还包含三个依赖组件：</p>
+<ul>
+<li>ZooKeeper集群，负责集群服务发现和维持当前数据拓扑</li>
+<li>元数据存储实例（metadata storage instance），用于对应用于系统的数据段的元数据维护</li>
+<li>Deep Storage LOB（Large Object）存储/文件系统，存储数据段</li>
+</ul>
+<p>下图演示集群的管理层，表示了某些节点和依赖组件是怎么通过追踪和交换元数据来帮助管理集群的。<br><img title="Druid管理层" alt="Druid管理层" src="http://7xl6z1.com1.z0.glb.clouddn.com/static/images/14591373994615.jpg"></p>
+<h2 id="环境要求"><a href="#环境要求" class="headerlink" title="环境要求"></a>环境要求</h2><ul>
+<li>Java 7 or higher</li>
+<li>Linux, Mac OS X, or other Unix-like OS (Windows is not supported)</li>
+<li>8G of RAM</li>
+<li>2 vCPUs</li>
+</ul>
+<h2 id="运行"><a href="#运行" class="headerlink" title="运行"></a>运行</h2><h3 id="运行Druid"><a href="#运行Druid" class="headerlink" title="运行Druid"></a>运行Druid</h3><p>首先下载Druid:</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div></pre></td><td class="code"><pre><div class="line">curl -O http://static.druid.io/artifacts/releases/druid-0.9.0-rc3-bin.tar.gz</div><div class="line">mkdir druid-0.9.0</div><div class="line">tar -xzf druid-0.9.0-rc3-bin.tar.gz -C druid-0.9.0 --strip-components=1</div><div class="line"><span class="built_in">cd</span> druid-0.9.0</div></pre></td></tr></table></figure>
+<p>目录结构如下：</p>
+<ul>
+<li><code>LICENSE</code> - 许可文件</li>
+<li><code>bin/</code> - 一些对quickstart有用的脚本</li>
+<li><code>conf/*</code> - 集群配置文件</li>
+<li><code>conf-quickstart/*</code> - quickstart的配置文件</li>
+<li><code>extensions/*</code> - 所有的Druid扩展</li>
+<li><code>hadoop-dependencies/*</code> - Druid的Hadoop依赖</li>
+<li><code>lib/*</code> - 所有的Druid核心软件包</li>
+<li><code>quickstart/*</code> - 一些对quickstart有用的文件</li>
+</ul>
+<p>然后下载并启动Zookeeper：</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div></pre></td><td class="code"><pre><div class="line">curl http://www.gtlib.gatech.edu/pub/apache/zookeeper/zookeeper-3.4.6/zookeeper-3.4.6.tar.gz -o zookeeper-3.4.6.tar.gz</div><div class="line">tar -xzf zookeeper-3.4.6.tar.gz</div><div class="line"><span class="built_in">cd</span> zookeeper-3.4.6</div><div class="line">cp conf/zoo_sample.cfg conf/zoo.cfg</div><div class="line">./bin/zkServer.sh start</div></pre></td></tr></table></figure>
+<p>Zookeper启动后，回到druid目录下，并且执行：</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">bin/init</div></pre></td></tr></table></figure>
+<p>上面命令将会生成一些目录，然后在不同的终端下执行：</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div></pre></td><td class="code"><pre><div class="line">java `cat conf-quickstart/druid/historical/jvm.config | xargs` -cp conf-quickstart/druid/_common:conf-quickstart/druid/historical:lib/* io.druid.cli.Main server historical</div><div class="line">java `cat conf-quickstart/druid/broker/jvm.config | xargs` -cp conf-quickstart/druid/_common:conf-quickstart/druid/broker:lib/* io.druid.cli.Main server broker</div><div class="line">java `cat conf-quickstart/druid/coordinator/jvm.config | xargs` -cp conf-quickstart/druid/_common:conf-quickstart/druid/coordinator:lib/* io.druid.cli.Main server coordinator</div><div class="line">java `cat conf-quickstart/druid/overlord/jvm.config | xargs` -cp conf-quickstart/druid/_common:conf-quickstart/druid/overlord:lib/* io.druid.cli.Main server overlord</div><div class="line">java `cat conf-quickstart/druid/middleManager/jvm.config | xargs` -cp conf-quickstart/druid/_common:conf-quickstart/druid/middleManager:lib/* io.druid.cli.Main server middleManager</div></pre></td></tr></table></figure>
+<p>对于装载批量数据，上面运行的程序已经足够了。</p>
+<h3 id="装载批量数据"><a href="#装载批量数据" class="headerlink" title="装载批量数据"></a>装载批量数据</h3><p>首先通过摄入任务将<code>wikiticker-2015-09-12-sampled.json</code>文件装载。提交摄入任务通过向Druid提交POST请求：</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">curl -X <span class="string">'POST'</span> -H <span class="string">'Content-Type:application/json'</span> <span class="_">-d</span> @quickstart/wikiticker-index.json localhost:8090/druid/indexer/v1/task</div></pre></td></tr></table></figure>
+<p>返回任务的ID表示提交成功：</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">&#123;<span class="string">"task"</span>:<span class="string">"index_hadoop_wikipedia_2016-03-28T17:24:21.802Z"</span>&#125;</div></pre></td></tr></table></figure>
+<p>可以通过访问<code>http://localhost:8090/console.html</code>查看提交任务的状态。</p>
+<h3 id="装载数据流"><a href="#装载数据流" class="headerlink" title="装载数据流"></a>装载数据流</h3><p>要使Druid装载数据流，需要借助<a href="https://github.com/druid-io/tranquility" target="_blank" rel="external">Tranquility</a>：</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line">curl -O http://static.druid.io/tranquility/releases/tranquility-distribution-0.7.4.tgz</div><div class="line">tar -xzf tranquility-distribution-0.7.4.tgz</div><div class="line"><span class="built_in">cd</span> tranquility-distribution-0.7.4</div></pre></td></tr></table></figure>
+<p>在Druid的<code>conf-quickstart/tranquility/</code>目录下已经有配置的例子，运行即可：</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line">bin/tranquility server -configFile &lt;path_to_druid_distro&gt;/conf-quickstart/tranquility/server.json</div><div class="line">bin/generate-example-metrics | curl -XPOST -H<span class="string">'Content-Type: application/json'</span> --data-binary @- http://localhost:8200/v1/post/metrics</div></pre></td></tr></table></figure>
+<p>如果需要使用Kafka来搭配Druid使用，则调用：</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">bin/tranquility kafka -configFile &lt;path_to_druid_distro&gt;/conf-quickstart/tranquility/kafka.json</div></pre></td></tr></table></figure>
+<p>Kafka配置示例：</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div><div class="line">30</div><div class="line">31</div><div class="line">32</div><div class="line">33</div><div class="line">34</div><div class="line">35</div><div class="line">36</div><div class="line">37</div><div class="line">38</div><div class="line">39</div><div class="line">40</div><div class="line">41</div><div class="line">42</div><div class="line">43</div><div class="line">44</div><div class="line">45</div><div class="line">46</div><div class="line">47</div><div class="line">48</div><div class="line">49</div><div class="line">50</div><div class="line">51</div><div class="line">52</div><div class="line">53</div><div class="line">54</div><div class="line">55</div><div class="line">56</div><div class="line">57</div><div class="line">58</div><div class="line">59</div><div class="line">60</div><div class="line">61</div><div class="line">62</div><div class="line">63</div><div class="line">64</div></pre></td><td class="code"><pre><div class="line">&#123;</div><div class="line">    <span class="string">"dataSources"</span>: [</div><div class="line">        &#123;</div><div class="line">            <span class="string">"spec"</span>: &#123;</div><div class="line">                <span class="string">"dataSchema"</span>: &#123;</div><div class="line">                    <span class="string">"parser"</span>: &#123;</div><div class="line">                        <span class="string">"type"</span>: <span class="string">"string"</span>,</div><div class="line">                        <span class="string">"parseSpec"</span>: &#123;</div><div class="line">                            <span class="string">"timestampSpec"</span>: &#123;</div><div class="line">                                <span class="string">"format"</span>: <span class="string">"auto"</span>,</div><div class="line">                                <span class="string">"column"</span>: <span class="string">"timestamp"</span></div><div class="line">                            &#125;,</div><div class="line">                            <span class="string">"dimensionsSpec"</span>: &#123;</div><div class="line">                                <span class="string">"dimensions"</span>: [</div><div class="line">                                    <span class="string">"url"</span>,</div><div class="line">                                    <span class="string">"user"</span></div><div class="line">                                ]</div><div class="line">                            &#125;,</div><div class="line">                            <span class="string">"format"</span>: <span class="string">"json"</span></div><div class="line">                        &#125;</div><div class="line">                    &#125;,</div><div class="line">                    <span class="string">"dataSource"</span>: <span class="string">"pageviews"</span>,</div><div class="line">                    <span class="string">"granularitySpec"</span>: &#123;</div><div class="line">                        <span class="string">"segmentGranularity"</span>: <span class="string">"hour"</span>,</div><div class="line">                        <span class="string">"type"</span>: <span class="string">"uniform"</span>,</div><div class="line">                        <span class="string">"queryGranularity"</span>: <span class="string">"none"</span></div><div class="line">                    &#125;,</div><div class="line">                    <span class="string">"metricsSpec"</span>: [</div><div class="line">                        &#123;</div><div class="line">                            <span class="string">"type"</span>: <span class="string">"count"</span>,</div><div class="line">                            <span class="string">"name"</span>: <span class="string">"views"</span></div><div class="line">                        &#125;,</div><div class="line">                        &#123;</div><div class="line">                            <span class="string">"fieldName"</span>: <span class="string">"latencyMs"</span>,</div><div class="line">                            <span class="string">"type"</span>: <span class="string">"doubleSum"</span>,</div><div class="line">                            <span class="string">"name"</span>: <span class="string">"latencyMs"</span></div><div class="line">                        &#125;</div><div class="line">                    ]</div><div class="line">                &#125;,</div><div class="line">                <span class="string">"tuningConfig"</span>: &#123;</div><div class="line">                    <span class="string">"maxRowsInMemory"</span>: <span class="string">"100000"</span>,</div><div class="line">                    <span class="string">"type"</span>: <span class="string">"realtime"</span>,</div><div class="line">                    <span class="string">"windowPeriod"</span>: <span class="string">"PT5M"</span>,</div><div class="line">                    <span class="string">"intermediatePersistPeriod"</span>: <span class="string">"PT5M"</span></div><div class="line">                &#125;</div><div class="line">            &#125;,</div><div class="line">            <span class="string">"properties"</span>: &#123;</div><div class="line">                <span class="string">"topicPattern.priority"</span>: <span class="string">"1"</span>,</div><div class="line">                <span class="string">"topicPattern"</span>: <span class="string">"pageviews"</span></div><div class="line">            &#125;</div><div class="line">        &#125;</div><div class="line">    ],</div><div class="line">    <span class="string">"properties"</span>: &#123;</div><div class="line">        <span class="string">"zookeeper.connect"</span>: <span class="string">"localhost:2181"</span>,</div><div class="line">        <span class="string">"zookeeper.timeout"</span>: <span class="string">"PT20S"</span>,</div><div class="line">        <span class="string">"druid.selectors.indexing.serviceName"</span>: <span class="string">"druid/overlord"</span>,</div><div class="line">        <span class="string">"druid.discovery.curator.path"</span>: <span class="string">"/druid/discovery"</span>,</div><div class="line">        <span class="string">"kafka.zookeeper.connect"</span>: <span class="string">"localhost:2181"</span>,</div><div class="line">        <span class="string">"kafka.group.id"</span>: <span class="string">"tranquility-kafka"</span>,</div><div class="line">        <span class="string">"consumer.numThreads"</span>: <span class="string">"2"</span>,</div><div class="line">        <span class="string">"commit.periodMillis"</span>: <span class="string">"15000"</span>,</div><div class="line">        <span class="string">"reportDropsAsExceptions"</span>: <span class="string">"false"</span></div><div class="line">    &#125;</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+]]></content>
+    
+    <summary type="html">
+    
+      Druid Quickstart笔记。Druid是一个用于大数据实时查询和分析的高容错、高性能开源分布式系统，旨在快速处理大规模的数据，并能够实现快速查询和分析。
+    
+    </summary>
+    
+      <category term="Druid" scheme="http://blog.liexing.me/categories/Druid/"/>
+    
+    
+      <category term="分布式" scheme="http://blog.liexing.me/tags/%E5%88%86%E5%B8%83%E5%BC%8F/"/>
+    
+      <category term="Druid" scheme="http://blog.liexing.me/tags/Druid/"/>
+    
+      <category term="实时计算" scheme="http://blog.liexing.me/tags/%E5%AE%9E%E6%97%B6%E8%AE%A1%E7%AE%97/"/>
+    
+  </entry>
+  
+  <entry>
+    <title>最长公共子序列问题</title>
+    <link href="http://blog.liexing.me/2016/01/05/longest-common-subsequence/"/>
+    <id>http://blog.liexing.me/2016/01/05/longest-common-subsequence/</id>
+    <published>2016-01-05T09:35:23.000Z</published>
+    <updated>2017-02-27T11:34:45.000Z</updated>
+    
+    <content type="html"><![CDATA[<p>首先定义子序列，形式化定义为：给定一个序列$X=\{x_1,x_2,…,x_m\}$，另一个序列$Z=\{z_1,z_2,…,z_k\}$满足如下条件时称为X的子序列，即存在一个严格递增的X的下标序列$\{i_1,i_2,…,i_k\}$，对所有$j=1,2,…,k$，满足，$x_{i_j} = z_j$例如，$Z=\{B,C,D,B\}$是$X=\{A,B,C,B,D,A,B\}$的子序列，对应的下标序列为$\{2,3,5,7\}$。</p>
+<p>给定两个序列 X 和 Y，如果 Z 既是 X 的子序列，也是 Y 的子序列，则称它是 X 和 Y 的公共子序列。</p>
+<p>求两个序列的最长公共子序列，可以使用动态规划求解。</p>
+<h2 id="刻画最长公共子序列特征"><a href="#刻画最长公共子序列特征" class="headerlink" title="刻画最长公共子序列特征"></a>刻画最长公共子序列特征</h2><p>（LCS 的最优子结构）令$X=\{x_1,x_2,…,x_m\}$和$Y=\{y_1,y_2,…,y_n\}$为两个序列，$Z=\{z_1,z_2,…,z_k\}$为 X 和 Y 的任意 LCS。</p>
+<ol>
+<li>如果$x_m = y_n$，则$z_k=x_m=y_n$，且$Z_{k-1}$是$X_{m-1}$和$Y_{n-1}$的一个 LCS；</li>
+<li>如果$x_m \neq y_n$，那么$z_k \neq x_m$意味着 Z 是$X_{m-1}$和 Y 的一个 LCS；</li>
+<li>如果$x_m \neq y_n$，那么$z_k \neq y_n$意味着 Z 是$Y_{n-1}$和 Y 的一个 LCS。</li>
+</ol>
+<h2 id="一个递归解"><a href="#一个递归解" class="headerlink" title="一个递归解"></a>一个递归解</h2><p>定义$c[i,j]$表示$X_i$和$Y_j$的 LCS 长度，根据最优子结构性质易得：<br>$\begin{equation}\label{Dirichlet}<br>c[i,j]=\begin{cases}<br>0, &amp; \text{ 若 } i=1或i=0\\<br>c[i-1,j-1] + 1, &amp; \text{ 若 } i,j >0且x_i = y_j\\<br>max(c[i-1,j], c[i,j-1]), &amp; \text{ 若 } i,j >0且x_i \neq y_j<br>\end{cases}\end{equation}$</p>
+<h2 id="计算-LCS-的长度"><a href="#计算-LCS-的长度" class="headerlink" title="计算 LCS 的长度"></a>计算 LCS 的长度</h2><p>由上式可以很容易写出一个指数时间的递归算法来计算。但是 LCS 问题只有$\Theta (mn)$个子问题，可以使用动态规划自底向上计算。运行时间为$\Theta (mn)$。</p>
+<p>假设一个表格C，c[i,j]表示$A_i$和$B_j$的最长 LCS。</p>
+<p>C++实现代码如下：</p>
+<pre><code>#include &lt;iostream&gt;
+#include &lt;vector&gt;
+
+using namespace std;
+
+void get_lcs(string x, string y, vector&lt;vector&lt;int&gt;&gt; &amp;c) {
+    for (int i = 0; i &lt; x.size(); ++i)
+        for (int j = 0; j &lt; y.size(); ++j) {
+            if (x[i] == y[j])
+                c[i + 1][j + 1] = c[i][j] + 1;
+            else
+                c[i + 1][j + 1] = c[i][j + 1] &gt; c[i + 1][j] ? c[i][j + 1] : c[i + 1][j];
+        }
+}
+
+void print_lcs(string x, vector&lt;vector&lt;int&gt;&gt; c) {
+    int i = c.size() - 1;
+    int j = c[0].size() -1;
+    string result = &quot;&quot;;
+    while (i &gt; 0 &amp;&amp; j &gt; 0) {
+        if (c[i][j] &gt; c[i - 1][j] &amp;&amp; c[i][j] &gt; c[i][j - 1]) {
+            i--;
+            j--;
+            result = result + x[i];
+        }
+        else if (c[i][j] &gt; c[i - 1][j]) {
+            j--;
+        }
+        else
+            i--;
+    }
+    cout &lt;&lt; result;
+}
+
+int main() {
+    string x = &quot;10010101&quot;;
+    string y = &quot;010110110&quot;;
+    vector&lt;vector&lt;int&gt;&gt; c;
+    for (int i = 0; i &lt;= x.size(); ++i) {
+        vector&lt;int&gt; tmp;
+        tmp.resize(y.size() + 1);
+        c.push_back(tmp);
+    }
+    get_lcs(x, y, c);
+    print_lcs(x, c);
+    return 0;
+}
+</code></pre><h2 id="构造-LCS"><a href="#构造-LCS" class="headerlink" title="构造 LCS"></a>构造 LCS</h2><p>上面代码 print_lcs()函数构造 LCS。从 i，j 取最大值开始，由于每个c[i,j]只依赖于其他三项，c[i-1,j]，c[i,j-1]，c[i-1,j-1]，所以可以在$O(1)$的时间内判断出来使用了哪一项。</p>
+]]></content>
+    
+    <summary type="html">
+    
+      通过给定序列求最长公共子序列。使用动态规划求解。
+    
+    </summary>
+    
+      <category term="算法" scheme="http://blog.liexing.me/categories/%E7%AE%97%E6%B3%95/"/>
+    
+    
+      <category term="algorithms" scheme="http://blog.liexing.me/tags/algorithms/"/>
+    
+      <category term="LCS" scheme="http://blog.liexing.me/tags/LCS/"/>
+    
+      <category term="dynamic programming" scheme="http://blog.liexing.me/tags/dynamic-programming/"/>
+    
+  </entry>
+  
+  <entry>
+    <title>Oh My Hexo</title>
+    <link href="http://blog.liexing.me/2015/09/01/oh-my-hexo/"/>
+    <id>http://blog.liexing.me/2015/09/01/oh-my-hexo/</id>
+    <published>2015-08-31T17:04:30.000Z</published>
+    <updated>2017-02-27T11:34:45.000Z</updated>
+    
+    <content type="html"><![CDATA[<p>之前一直用着默认终端跑着 bash shell，直到遇到了 zsh，用着 oh-my-zsh，简直见到新天地。Hexo 也给了我一样的感觉，之前博客用过 wp，用过 emlog，也折腾过各种各样的三方博客，要么太死要么折腾起来没完，最后改代码发现写博客反而没太大意思的节奏=。=。</p>
+<p>出自<a href="http://twitter.com/tommy351" target="_blank" rel="external">tommy351</a>之手的 Hexo 简直第一感觉就是高逼格，而且很炫酷，查了下作者。。。丫蛋又是同龄人，再一次感受到了人和狗的区别，汪汪。tommy 在<a href="http://zespia.tw/blog/2012/10/11/hexo-debut/" target="_blank" rel="external">自己博客</a>中曾经描述过开发 Hexo 的起因以及吐槽 Octopress。嗯看来是时候开始好好撸代码有点产出了，没事就去造造轮子啥的。</p>
+<p>对了，这句话很喜欢，算是 Hexo 的哲学吧：</p>
+<ul>
+<li>如果你对默认配置满意，只需几个命令便可秒搭一个 Hexo。</li>
+<li>如果你跟我一样喜欢折腾下，30分钟也足够个性化。</li>
+<li>如果你过于喜欢折腾，可以折腾个把星期，尽情的玩。</li>
+</ul>
+<p>废话不多说了，开始这个博客第一篇吧（之前的坑太 low 就全扔了吧，重新做人😂）。</p>
+<h2 id="软件安装"><a href="#软件安装" class="headerlink" title="软件安装"></a>软件安装</h2><h3 id="安装-Node"><a href="#安装-Node" class="headerlink" title="安装 Node"></a>安装 Node</h3><p>在 <a href="https://nodejs.org/" target="_blank" rel="external">Node.js</a> 官网下载一路安装，如果是 MAC 可通过 Homebrew 安装:</p>
+<pre><code>brew install node
+</code></pre><p>不过需要提前安装好 Homebrew：</p>
+<pre><code>ruby -e &quot;$(curl -fsSL https://raw.github.com/Homebrew/homebrew/go/install)&quot;
+</code></pre><p>通过以下命令验证是否安装成功：</p>
+<pre><code>node -v
+npm -v
+</code></pre><h3 id="安装-Git"><a href="#安装-Git" class="headerlink" title="安装 Git"></a>安装 Git</h3><p>Windows 用户可以安装 <a href="https://tortoisegit.org/" target="_blank" rel="external">TortoiseGit</a>，Mac 直接 brew 安装：</p>
+<pre><code>brew install git
+</code></pre><h3 id="配置-SSH-Key"><a href="#配置-SSH-Key" class="headerlink" title="配置 SSH-Key"></a>配置 SSH-Key</h3><p>首先设置 git 的用户名和邮箱：</p>
+<pre><code>git config --global user.name &quot;你的名字&quot;
+git config --global user.email &quot;你的邮箱&quot;
+</code></pre><p>SSH-Key 用来保证通信安全。终端下到 ~/.ssh 目录下：</p>
+<pre><code>mkdir ~/.ssh 如果没有~/.ssh目录则新建这个目录
+cd ~/.ssh
+</code></pre><p>通过 ls 查看是否已有文件，如果为空则生成：</p>
+<pre><code>ssh-keygen -t rsa -C &quot;你的邮箱地址&quot; #一路回车，Enter passphrase 时一般不用输入密码
+</code></pre><p>如果 ls 不为空则查看 id_rsa.pub 文件内容，可使用 cat id_rsa.pub 命令查看，复制下来。</p>
+<p>更多git相关操作请转<a href="http://git-scm.com/book/zh/v2" target="_blank" rel="external">这里</a>。ps. 如果是程序员别告诉我你不会git，每次带新生绝对很早就要他们熟悉git，这是码农基本技能。</p>
+<h3 id="Hexo-安装"><a href="#Hexo-安装" class="headerlink" title="Hexo 安装"></a>Hexo 安装</h3><p>在 Node 和 Git 装好后，通过 npm 安装 Hexo：</p>
+<pre><code>npm install -g hexo
+</code></pre><h2 id="环境准备"><a href="#环境准备" class="headerlink" title="环境准备"></a>环境准备</h2><h3 id="Hexo-准备"><a href="#Hexo-准备" class="headerlink" title="Hexo 准备"></a>Hexo 准备</h3><p>安装好 Hexo 后，初始化 Hexo 到一个你指定的目录：</p>
+<pre><code>hexo init &lt;folder&gt;
+</code></pre><p>或者在目录下执行 hexo init 即可。</p>
+<p>这时 cd 到 init 的目录，执行命令生成静态页面到 <folder>/public/ 下面：</folder></p>
+<pre><code>hexo generate #或者 hexo g
+</code></pre><p>执行如下命令可在本地启动服务，并进行预览：</p>
+<pre><code>hexo server #或者 hexo s
+</code></pre><p>默认地址为：<a href="http://0.0.0.0:4000，可通过配置更改改地址。" target="_blank" rel="external">http://0.0.0.0:4000，可通过配置更改改地址。</a></p>
+<h3 id="GitHub或者其他提供类似服务的厂商"><a href="#GitHub或者其他提供类似服务的厂商" class="headerlink" title="GitHub或者其他提供类似服务的厂商"></a>GitHub或者其他提供类似服务的厂商</h3><p>将前面复制的 id_rsa.pub 文件内容填入相关服务商个人页面，如 GitHub 是在 <a href="https://github.com/settings/ssh" target="_blank" rel="external">https://github.com/settings/ssh</a>,具体参加各服务商帮助文档：</p>
+<blockquote>
+<p><a href="https://help.github.com/articles/generating-ssh-keys/" target="_blank" rel="external">https://help.github.com/articles/generating-ssh-keys/</a><br><a href="https://help.gitcafe.com/manuals/help/ssh-key#4-添加-ssh-公钥到-gitcafe" target="_blank" rel="external">https://help.gitcafe.com/manuals/help/ssh-key#4-添加-ssh-公钥到-gitcafe</a></p>
+</blockquote>
+<p>然后创建 <a href="https://pages.github.com/" target="_blank" rel="external">GithubPages</a>，或者 <a href="https://help.gitcafe.com/manuals/help/pages-services" target="_blank" rel="external">GitCafe Pages</a>。我这里两个都用到了，习惯 Github，但是 GitCafe 国内访问流畅一些，后面配置中可以同时 git push 到两边。</p>
+<h2 id="写文章"><a href="#写文章" class="headerlink" title="写文章"></a>写文章</h2><p>在前面的初始化 Hexo 的目录下，执行如下命令，将自动生成文章到 ./source/_post/ 目录下：</p>
+<pre><code>hexo new [layout] &quot;postName&quot;
+</code></pre><p>其中 layout 为可选参数，默认值为 post，即使用 ./scaffolds 目录下的 post.md 为模板创建新文章，你也可以创建自己的模板；new 可以缩写为 n。查看刚才生成的文件：./source/_post/postName.md：</p>
+<pre><code>title: &quot;postName&quot; #页面上显示的标题，可以更改
+date: 2015-09-01 02:22:16 #生成时间
+categories: #文章分类，如果为空需要留空格
+description: #文章描述
+tags: #标签，多个标签按照[tag1,tag2,tag3]格式
+---
+这里是博文的正文
+</code></pre><blockquote>
+<p>注意所有的冒号后面都有空格</p>
+</blockquote>
+<p>关于 Markdown 更多语法戳<a href="http://www.appinn.com/markdown/" target="_blank" rel="external">这里</a></p>
+<blockquote>
+<p>markdown 头部加上 layout: false，则 hexo 不会自动处理你的文件</p>
+<p>markdown 头部加上 description 将会覆盖全局配置文件中的描述内容</p>
+<p>在正文部分通过如下代码自动分割摘要和正文：</p>
+</blockquote>
+<pre><code>这是摘要
+&lt;!--more--&gt;
+这是余下全文
+</code></pre><h2 id="主题安装"><a href="#主题安装" class="headerlink" title="主题安装"></a>主题安装</h2><p>Hexo 有很多主题可供选择，这是主题列表：<a href="https://github.com/hexojs/hexo/wiki/Themes" target="_blank" rel="external">Hexo Themes</a>。</p>
+<p>之前选择过 pacman 主题，但是发现很久没有维护，而且在读取底部作者图片的时候存在一个 bug，读取目录级数错误，并且配置项参数没有怎么分离，因此最终使用了一个长得差不多的主题 <a href="https://github.com/wuchong/jacman" target="_blank" rel="external">jacman</a>，在博客目录下这样安装：</p>
+<pre><code>git clone https://github.com/wuchong/jacman.git themes/jacman
+</code></pre><p>并且在博客目录下的 _config.yml 中将主题 theme 配置成 jacman 即可。</p>
+<p>到主题目录下， git pull 即可更新主题（更新之前备份好自己主题的 _config.yml 配置文件）：</p>
+<pre><code>cd themes/jacman
+git pull origin master
+</code></pre><p>可以参考<a href="http://wuchong.me/blog/2014/11/20/how-to-use-jacman/" target="_blank" rel="external">这里</a>修改主题配置文件。</p>
+<h2 id="评论框"><a href="#评论框" class="headerlink" title="评论框"></a>评论框</h2><p>Hexo 自带了 <a href="https://disqus.com/" target="_blank" rel="external">Disqus</a>，但是国内慢到生活不能自理，所以一般使用<a href="http://duoshuo.com/" target="_blank" rel="external">多说</a>评论框。在主题配置文件中 shortname 填入多说的<strong>基本设置-&gt;域名</strong>即可。</p>
+<p>但是多说默认的评论框不是太好看，这里修改一下 CSS，在多说后台管理中，点击<strong>设置-&gt;基本设置</strong>，在自定义 CSS 中，加入如下代码实现评论头像的旋转：</p>
+<pre><code>/*Head Start*/
+#ds-thread #ds-reset ul.ds-comments-tabs li.ds-tab a.ds-current {
+    border: 0px;
+    color: #6D6D6B;
+    text-shadow: none;
+    background: #F3F3F3;
+}
+
+#ds-thread #ds-reset .ds-highlight {
+    font-family: Microsoft YaHei, &quot;Helvetica Neue&quot;, Helvetica, Arial, Sans-serif;
+    font-size: 100%;
+    color: #6D6D6B !important;
+}
+
+#ds-thread #ds-reset ul.ds-comments-tabs li.ds-tab a.ds-current:hover {
+    color: #696a52;
+    background: #F2F2F2;
+}
+
+#ds-thread #ds-reset a.ds-highlight:hover {
+    color: #696a52 !important;
+}
+
+#ds-thread {
+    padding-left: 30px;
+}
+
+#ds-thread #ds-reset li.ds-post,#ds-thread #ds-reset #ds-hot-posts     {
+    overflow: visible;
+}
+
+#ds-thread #ds-reset .ds-post-self {
+    padding: 10px 0 10px 10px;
+}
+
+#ds-thread #ds-reset li.ds-post,#ds-thread #ds-reset .ds-post-self     {
+    border: 0 !important;
+}
+
+#ds-reset .ds-avatar, #ds-thread #ds-reset ul.ds-children .ds-avatar {
+    top: 15px;
+    left: -20px;
+    padding: 5px;
+    width: 36px;
+    height: 36px;
+    box-shadow: -1px 0 1px rgba(0,0,0,.15) inset;
+    border-radius: 46px;
+    background: #FAFAFA;
+}
+
+#ds-thread .ds-avatar a {
+    display: inline-block;
+    padding: 1px;
+    width: 32px;
+    height: 32px;
+    border: 1px solid #b9baa6;
+    border-radius: 50%;
+    background-color: #fff !important;
+}
+
+#ds-thread .ds-avatar a:hover {
+}
+
+#ds-thread .ds-avatar &gt; img {
+    margin: 2px 0 0 2px;
+}
+
+#ds-thread #ds-reset .ds-replybox {
+    box-shadow: none;
+}
+
+#ds-thread #ds-reset ul.ds-children .ds-replybox.ds-inline-replybox a.ds-avatar,
+#ds-reset .ds-replybox.ds-inline-replybox a.ds-avatar {
+    left: 0;
+    top: 0;
+    padding: 0;
+    width: 32px !important;
+    height: 32px !important;
+    background: none;
+    box-shadow: none;
+}
+
+#ds-reset .ds-replybox.ds-inline-replybox a.ds-avatar img {
+    width: 32px !important;
+    height: 32px !important;
+    border-radius: 50%;
+}
+
+#ds-reset .ds-replybox a.ds-avatar,
+#ds-reset .ds-replybox .ds-avatar img {
+    padding: 0;
+    width: 50px !important;
+    height: 50px !important;
+    border-radius: 5px;
+}
+
+#ds-reset .ds-avatar img {
+    width: 32px !important;
+    height: 32px !important;
+    border-radius: 32px;
+    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.22);
+    -webkit-transition: .8s all ease-in-out;
+    -moz-transition: .4s all ease-in-out;
+    -o-transition: .4s all ease-in-out;
+    -ms-transition: .4s all ease-in-out;
+    transition: .4s all ease-in-out;
+}
+
+.ds-post-self:hover .ds-avatar img {
+    -webkit-transform: rotateX(360deg);
+    -moz-transform: rotate(360deg);
+    -o-transform: rotate(360deg);
+    -ms-transform: rotate(360deg);
+    transform: rotate(360deg);
+}
+
+#ds-thread #ds-reset .ds-comment-body {
+    -webkit-transition-delay: initial;
+    -webkit-transition-duration: 0.4s;
+    -webkit-transition-property: all;
+    -webkit-transition-timing-function: initial;
+    background: #F7F7F7;
+    padding: 15px 15px 15px 47px;
+    border-radius: 5px;
+    box-shadow: #B8B9B9 0 1px 3px;
+    border: white 1px solid;
+}
+
+#ds-thread #ds-reset ul.ds-children .ds-comment-body {
+    padding-left: 15px;
+}
+
+#ds-thread #ds-reset .ds-comment-body p {
+    color: #787968;
+}
+
+#ds-thread #ds-reset .ds-comments {
+    border-bottom: 0px;
+}
+
+#ds-thread #ds-reset .ds-powered-by {
+    display: none;
+}
+
+#ds-thread #ds-reset .ds-comments a.ds-user-name {
+    font-weight: normal;
+    color: #3D3D3D !important;
+}
+
+#ds-thread #ds-reset .ds-comments a.ds-user-name:hover {
+    color: #D32 !important;
+}
+
+#ds-thread #ds-reset #ds-bubble {
+    display: none !important;
+}
+
+#ds-thread #ds-reset #ds-hot-posts {
+    border: 0;
+}
+
+#ds-reset #ds-hot-posts .ds-gradient-bg {
+    background: none;
+}
+
+#ds-thread #ds-reset .ds-comment-body:hover {
+    background-color: #F1F1F1;
+    -webkit-transition-delay: initial;
+    -webkit-transition-duration: 0.4s;
+    -webkit-transition-property: all;
+    -webkit-transition-timing-function: initial;
+}
+/*Head End*/
+</code></pre><p>点击<a href="http://dev.duoshuo.com/docs/4ff1cfd0397309552c000017" target="_blank" rel="external">这里</a>查看修改 CSS 的官方文档。</p>
+<p>然后是让评论框显示 UA(User Agent)。具体查看<a href="http://myhloli.com/duoshuo-ua-and-admin-tab.html" target="_blank" rel="external">这里</a>进行修改，将修改后的 js 代码上传到 github 或者七牛等平台，然后修改主题下 <strong>./layout/_partial/after_footer.ejs</strong> 文件，将</p>
+<pre><code>ds.src = &apos;//static.duoshuo.com/embed.js&apos;;
+</code></pre><p>切换成你自己的 js 地址。最后再次修改前面的那个 CSS 配置，让获取到的 UA 信息显示出来。</p>
+<h2 id="自定义页面"><a href="#自定义页面" class="headerlink" title="自定义页面"></a>自定义页面</h2><p>执行 new page 命令：</p>
+<pre><code>hexo new page &quot;about&quot;
+</code></pre><p>将会在 ./source/ 下面生成 about 目录，下面的 index.md 可以直接编辑。当然也可以手动生成这个目录并且添加这个文件。然后在主题的 _config.yml 文件中添加这个页面。</p>
+<h2 id="图床"><a href="#图床" class="headerlink" title="图床"></a>图床</h2><p>如果使用 Github Pages 架设博客，遇到大图国内访问将会比较慢，这时候图床就是很必要的了。我使用的是七牛作为图床，你可以使用我的<a href="https://portal.qiniu.com/signup?code=3lg7fvw1idhzm" target="_blank" rel="external">邀请链接</a>。</p>
+<p>使用 <a href="https://github.com/gyk001/hexo-qiniu-sync" target="_blank" rel="external">hexo-qiniu-sync</a> 工具可以方便的整合七牛和 Hexo。通过如下命令安装：</p>
+<pre><code>npm install hexo-qiniu-sync --save
+</code></pre><p>然后在主配置文件 _config.yml 中启用插件：</p>
+<pre><code>plugins:
+    - hexo-qiniu-sync
+</code></pre><p>并且将配置项添加到后面即可。</p>
+<blockquote>
+<p>注意，现在七牛已经不能使用 qiniudn.com 的外链域名，直接使用 z0.glb.clouddn.com 这样的域名即可。</p>
+</blockquote>
+<h2 id="Hexo-公式渲染"><a href="#Hexo-公式渲染" class="headerlink" title="Hexo 公式渲染"></a>Hexo 公式渲染</h2><p>在头部添加<code>mathjax: true</code>即可开启公式渲染。可以在模板文件中添加。</p>
+<h3 id="公式下标失效"><a href="#公式下标失效" class="headerlink" title="公式下标失效"></a>公式下标失效</h3><p>公式中<code>_</code>下标可能失效，原因是其也是 markdown 的内置语法，会被渲染成<em>标签，因此修改 marked.js 文件，其位于<code>./node_modules/marked/lib/</code>下，修改459行和490行代码，删掉关于<code>_</code>的正则匹配：</em></p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line">// em: /^\b_((?:[^_]|__)+?)_\b|^\*((?:\*\*|[\s\S])+?)\*(?!\*)/,</div><div class="line">em: /^\*((?:\*\*|[\s\S])+?)\*(?!\*)/,</div></pre></td></tr></table></figure>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line">// em: /^_(?=\S)([\s\S]*?\S)_(?!_)|^\*(?=\S)([\s\S]*?\S)\*(?!\*)/</div><div class="line">em: /^\*(?=\S)([\s\S]*?\S)\*(?!\*)/</div></pre></td></tr></table></figure>
+<h3 id="多行公式换行"><a href="#多行公式换行" class="headerlink" title="多行公式换行"></a>多行公式换行</h3><p>将换行符<code>\\</code>改写成<code>\\\</code>。</p>
+<h3 id="连续大括号渲染错误"><a href="#连续大括号渲染错误" class="headerlink" title="连续大括号渲染错误"></a>连续大括号渲染错误</h3><p>当渲染连续的大括号时，会提示<code>Template render error: (unknown path) expected variable end</code>。可使用<code>\lbrace</code>和<code>\rbrace</code>替换大括号，或者两个括号中间加空格。</p>
+<h2 id="部署到Git服务器"><a href="#部署到Git服务器" class="headerlink" title="部署到Git服务器"></a>部署到Git服务器</h2><p>安装 hexo-deployer-git：</p>
+<pre><code>npm install hexo-deployer-git --save
+</code></pre><p>Git Pages托管服务创建好后，在主配置文件 _config.yml 中，添加如下配置：</p>
+<pre><code>deploy:
+    type: git
+    repo: &lt;repository url&gt;
+    branch: [branch]
+    message: [message]
+</code></pre><p>也可同时部署到多个Git Pages：</p>
+<pre><code>deploy:
+    type: git
+    repo:
+        github: &lt;repository url&gt;,[branch]
+        gitcafe: &lt;repository url&gt;,[branch]
+</code></pre><p>配置好后，hexo deploy 即可。</p>
+<h2 id="其他"><a href="#其他" class="headerlink" title="其他"></a>其他</h2><h3 id="npm-命令卡住"><a href="#npm-命令卡住" class="headerlink" title="npm 命令卡住"></a>npm 命令卡住</h3><p>由于大家都懂的原因，国内 npm 命令经常卡成狗，这时可以修改 ~/.npmrc 文件，添加代理，或者使用国内 npm 镜像，比如 <a href="http://npm.taobao.org/" target="_blank" rel="external">cnpm</a>。</p>
+<h3 id="常用命令"><a href="#常用命令" class="headerlink" title="常用命令"></a>常用命令</h3><pre><code>hexo new &quot;postName&quot;
+hexo new page &quot;postName&quot;
+hexo clean
+hexo generate #生成静态页面到public目录
+hexo server
+hexo deploy
+</code></pre><h3 id="页面统计"><a href="#页面统计" class="headerlink" title="页面统计"></a>页面统计</h3><p>页面统计可以使用 Google Analytics 或者百度统计或者 CNZZ 的，但是他们很喜欢生成一个丑哭了的图片放在网站地步，其实只要在统计代码外层包上如下代码即可</p>
+<pre><code>&lt;span style=&quot;display:none&quot;&gt;...统计代码...&lt;/span&gt;
+</code></pre><p>统计代码一般在 ./themes/you_themes/layout/_partial/ 下，一般在  after_footer.ejs 或者 analytics.ejs 里面。</p>
+<h3 id="编译错误"><a href="#编译错误" class="headerlink" title="编译错误"></a>编译错误</h3><p>遇到过生成页面后出现一堆代码，或者是 CSS 错误，或者类似 URIError: URI malformed 这样的错误，查了半天，发现是 vim 修改了 ejs 文件后，自动生成了带 ~ 后缀的备份文件，这将导致 Hexo 生成的时候一起包含进去出错。删掉所有的备份文件即可。</p>
+]]></content>
+    
+    <summary type="html">
+    
+      &lt;p&gt;之前一直用着默认终端跑着 bash shell，直到遇到了 zsh，用着 oh-my-zsh，简直见到新天地。Hexo 也给了我一样的感觉，之前博客用过 wp，用过 emlog，也折腾过各种各样的三方博客，要么太死要么折腾起来没完，最后改代码发现写博客反而没太大意思的节奏=
+    
+    </summary>
+    
+      <category term="建站相关" scheme="http://blog.liexing.me/categories/%E5%BB%BA%E7%AB%99%E7%9B%B8%E5%85%B3/"/>
+    
+    
+      <category term="hexo" scheme="http://blog.liexing.me/tags/hexo/"/>
+    
+  </entry>
+  
+</feed>

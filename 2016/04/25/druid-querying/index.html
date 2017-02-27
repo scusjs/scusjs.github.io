@@ -1,0 +1,839 @@
+
+ <!DOCTYPE HTML>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+  
+    <title>Druid Querying | Liexing&#39;s Blog</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1,user-scalable=no">
+    
+    <meta name="author" content="liexing">
+    
+
+    
+    <meta name="description" content="Druid的查询都通过向可查询节点（Broker、Historcal或者Realtime）发送HTTP REST风格的请求来获得结果。请求使用JSON格式，通常发送到Broker节点。
+Druid的查询分为三类：
+
+聚合查询（Aggregation Queries）
+
+
+TimeseriesTopNGroupBy
+
+聚合查询中，尽量使用Timeseries和TopN，因为GroupBy虽然最灵活，">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Druid Querying">
+<meta property="og:url" content="http://blog.liexing.me/2016/04/25/druid-querying/index.html">
+<meta property="og:site_name" content="Liexing's Blog">
+<meta property="og:description" content="Druid的查询都通过向可查询节点（Broker、Historcal或者Realtime）发送HTTP REST风格的请求来获得结果。请求使用JSON格式，通常发送到Broker节点。
+Druid的查询分为三类：
+
+聚合查询（Aggregation Queries）
+
+
+TimeseriesTopNGroupBy
+
+聚合查询中，尽量使用Timeseries和TopN，因为GroupBy虽然最灵活，">
+<meta property="og:updated_time" content="2017-02-27T11:34:45.000Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="Druid Querying">
+<meta name="twitter:description" content="Druid的查询都通过向可查询节点（Broker、Historcal或者Realtime）发送HTTP REST风格的请求来获得结果。请求使用JSON格式，通常发送到Broker节点。
+Druid的查询分为三类：
+
+聚合查询（Aggregation Queries）
+
+
+TimeseriesTopNGroupBy
+
+聚合查询中，尽量使用Timeseries和TopN，因为GroupBy虽然最灵活，">
+<meta name="twitter:creator" content="@scusjs">
+
+    
+    <link rel="alternative" href="/atom.xml" title="Liexing&#39;s Blog" type="application/atom+xml">
+    
+    
+    <link rel="icon" href="/img/favicon.ico">
+    
+    
+    <link rel="apple-touch-icon" href="/img/jacman.jpg">
+    <link rel="apple-touch-icon-precomposed" href="/img/jacman.jpg">
+    
+    <link rel="stylesheet" href="/css/style.css">
+</head>
+
+  <body>
+    <header>
+      
+<div>
+		
+			<div id="imglogo">
+				<a href="/"><img src="/img/logo.png" alt="Liexing&#39;s Blog" title="Liexing&#39;s Blog"/></a>
+			</div>
+			
+			<div id="textlogo">
+				<h1 class="site-name"><a href="/" title="Liexing&#39;s Blog">Liexing&#39;s Blog</a></h1>
+				<h2 class="blog-motto">不疯魔，不成佛</h2>
+			</div>
+			<div class="navbar"><a class="navbutton navmobile" href="#" title="菜单">
+			</a></div>
+			<nav class="animated">
+				<ul>
+					<ul>
+					 
+						<li><a href="/">主页 | Home</a></li>
+					
+						<li><a href="/archives">归档 | Archives</a></li>
+					
+						<li><a href="/about">简介 | About</a></li>
+					
+					<li>
+ 					
+					<form class="search" action="/search/index.html" method="get" accept-charset="utf-8">
+						<label>Search</label>
+						<input type="search" id="search" autocomplete="off" name="q" maxlength="20" placeholder="搜索" />
+					</form>
+					
+					</li>
+				</ul>
+			</nav>			
+</div>
+    </header>
+    <div id="container">
+      <div id="main" class="post" itemscope itemprop="blogPost">
+  
+	<article itemprop="articleBody"> 
+		<header class="article-info clearfix">
+  <h1 itemprop="name">
+    
+      <a href="/2016/04/25/druid-querying/" title="Druid Querying" itemprop="url">Druid Querying</a>
+  </h1>
+  <p class="article-author">By
+       
+		<a href="/about" title="liexing" target="_blank" itemprop="author">liexing</a>
+		
+  <p class="article-time">
+    <time datetime="2016-04-25T08:42:33.000Z" itemprop="datePublished"> 发表于 2016-04-25</time>
+    
+  </p>
+</header>
+	<div class="article-content">
+		
+		<div id="toc" class="toc-article">
+			<strong class="toc-title">文章目录</strong>
+		
+			<ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#Timeseries-queries"><span class="toc-number">1.</span> <span class="toc-text">Timeseries queries</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#TopN-queries"><span class="toc-number">2.</span> <span class="toc-text">TopN queries</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#groupBy-Queries"><span class="toc-number">3.</span> <span class="toc-text">groupBy Queries</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#Time-Boundary-Queries"><span class="toc-number">4.</span> <span class="toc-text">Time Boundary Queries</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#Search-Queries"><span class="toc-number">5.</span> <span class="toc-text">Search Queries</span></a></li></ol>
+		
+		</div>
+		
+		<p>Druid的查询都通过向可查询节点（Broker、Historcal或者Realtime）发送HTTP REST风格的请求来获得结果。请求使用JSON格式，通常发送到Broker节点。</p>
+<p>Druid的查询分为三类：</p>
+<ul>
+<li>聚合查询（Aggregation Queries）</li>
+</ul>
+<blockquote>
+<p><a href="http://druid.io/docs/0.8.3/querying/timeseriesquery.html" target="_blank" rel="external">Timeseries</a><br><a href="http://druid.io/docs/0.8.3/querying/topnquery.html" target="_blank" rel="external">TopN</a><br><a href="http://druid.io/docs/0.8.3/querying/groupbyquery.html" target="_blank" rel="external">GroupBy</a></p>
+</blockquote>
+<p>聚合查询中，尽量使用Timeseries和TopN，因为GroupBy虽然最灵活，但是性能最差。</p>
+<ul>
+<li>元查询（Metadata Queries）</li>
+</ul>
+<blockquote>
+<p><a href="http://druid.io/docs/0.8.3/querying/timeboundaryquery.html" target="_blank" rel="external">Time Boundary</a><br><a href="http://druid.io/docs/0.8.3/querying/segmentmetadataquery.html" target="_blank" rel="external">Segment Metadata</a><br><a href="http://druid.io/docs/0.8.3/querying/datasourcemetadataquery.html" target="_blank" rel="external">Datasource Metadata</a></p>
+</blockquote>
+<ul>
+<li>搜索查询（Search Queries）</li>
+</ul>
+<blockquote>
+<p>[Search] (<a href="http://druid.io/docs/0.8.3/querying/searchquery.html" target="_blank" rel="external">http://druid.io/docs/0.8.3/querying/searchquery.html</a>)</p>
+</blockquote>
+<p>Druid的查询可以通过Query的唯一标识取消：</p>
+<pre><code>DELETE /druid/v2/{queryId}
+</code></pre><h2 id="Timeseries-queries"><a href="#Timeseries-queries" class="headerlink" title="Timeseries queries"></a>Timeseries queries</h2><p>这类查询使用时间序列查询对象，获得JSON对象数组，每个JSON对象表示一个时间序列查询的结果。</p>
+<p>每一个时间序列查询有七个主要的部分组成：</p>
+<table>
+<thead>
+<tr>
+<th>属性</th>
+<th>描述</th>
+<th>是否必须</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>queryType</td>
+<td>这类查询中都为：timeseries，Druid首先检查这个字段来决定如何处理查询语句</td>
+<td>是</td>
+</tr>
+<tr>
+<td>dataSource</td>
+<td>描述数据源的字符串或者对象</td>
+<td>是</td>
+</tr>
+<tr>
+<td>intervals</td>
+<td>一个描述ISO-8601时间间隔的JSON对象，定义查询的时间区间</td>
+<td>是</td>
+</tr>
+<tr>
+<td>granularity</td>
+<td>定义查询结果的时间粒度</td>
+<td>是</td>
+</tr>
+<tr>
+<td>filter</td>
+<td>一个说明哪些字段参与查询的JSON对象，类似SQL中的where语句</td>
+<td>否</td>
+</tr>
+<tr>
+<td>aggregations</td>
+<td>定义汇总查询哪些指标</td>
+<td>是</td>
+</tr>
+<tr>
+<td>postAggregations</td>
+<td>定义汇总数据执行哪些操作</td>
+<td>否</td>
+</tr>
+<tr>
+<td>context</td>
+<td>定义查询配置参数</td>
+<td>否</td>
+</tr>
+</tbody>
+</table>
+<p>一个时间序列查询对象的示例：</p>
+<figure class="highlight json"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div><div class="line">30</div><div class="line">31</div><div class="line">32</div><div class="line">33</div></pre></td><td class="code"><pre><div class="line">&#123;</div><div class="line">	<span class="attr">"queryType"</span>: <span class="string">"timeseries"</span>,</div><div class="line">	<span class="attr">"dataSource"</span>: <span class="string">"sample_datasource"</span>,</div><div class="line">	<span class="attr">"granularity"</span>: <span class="string">"day"</span>,</div><div class="line">	<span class="attr">"filter"</span>: &#123;</div><div class="line">		<span class="attr">"type"</span>: <span class="string">"and"</span>,</div><div class="line">  		<span class="attr">"fields"</span>: [</div><div class="line">     		&#123; <span class="attr">"type"</span>: <span class="string">"selector"</span>, <span class="attr">"dimension"</span>: <span class="string">"sample_dimension1"</span>, <span class="attr">"value"</span>: <span class="string">"sample_value1"</span> &#125;,</div><div class="line">     		&#123; <span class="attr">"type"</span>: <span class="string">"or"</span>,</div><div class="line">     		  <span class="attr">"fields"</span>: [</div><div class="line">					&#123; <span class="attr">"type"</span>: <span class="string">"selector"</span>, <span class="attr">"dimension"</span>: <span class="string">"sample_dimension2"</span>, <span class="attr">"value"</span>: <span class="string">"sample_value2"</span> &#125;,</div><div class="line">					&#123; <span class="attr">"type"</span>: <span class="string">"selector"</span>, <span class="attr">"dimension"</span>: <span class="string">"sample_dimension3"</span>, <span class="attr">"value"</span>: <span class="string">"sample_value3"</span> &#125;</div><div class="line">     		  ]</div><div class="line">     		&#125;</div><div class="line">  		]</div><div class="line">  	&#125;,</div><div class="line">	<span class="attr">"aggregations"</span>: [</div><div class="line">			&#123; <span class="attr">"type"</span>: <span class="string">"longSum"</span>, <span class="attr">"name"</span>: <span class="string">"sample_name1"</span>, <span class="attr">"fieldName"</span>: <span class="string">"sample_fieldName1"</span> &#125;,</div><div class="line">			&#123; <span class="attr">"type"</span>: <span class="string">"doubleSum"</span>, <span class="attr">"name"</span>: <span class="string">"sample_name2"</span>, <span class="attr">"fieldName"</span>: <span class="string">"sample_fieldName2"</span> &#125;</div><div class="line">	],</div><div class="line">	<span class="attr">"postAggregations"</span>: [</div><div class="line">		&#123; </div><div class="line">			<span class="attr">"type"</span>: <span class="string">"arithmetic"</span>,</div><div class="line">			<span class="attr">"name"</span>: <span class="string">"sample_divide"</span>,</div><div class="line">			<span class="attr">"fn"</span>: <span class="string">"/"</span>,</div><div class="line">			<span class="attr">"fields"</span>: [</div><div class="line">				&#123;<span class="attr">"type"</span>: <span class="string">"fieldAccess"</span>, <span class="attr">"name"</span>: <span class="string">"sample_name1"</span>, <span class="attr">"fieldName"</span>: <span class="string">"sample_fieldName1"</span> &#125;,</div><div class="line">				&#123;<span class="attr">"type"</span>: <span class="string">"fieldAccess"</span>, <span class="attr">"name"</span>: <span class="string">"sample_name2"</span>, <span class="attr">"fieldName"</span>: <span class="string">"sample_fieldName2"</span> &#125;</div><div class="line">			]</div><div class="line">		&#125;</div><div class="line">	],</div><div class="line">	<span class="attr">"intervals"</span>: [ <span class="string">"2012-01-01T00:00:00.000/2012-01-03T00:00:00.000"</span> ]</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<p>这个查询执行后，返回数据如下：</p>
+<figure class="highlight json"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div></pre></td><td class="code"><pre><div class="line">[</div><div class="line">	&#123;</div><div class="line">    	<span class="attr">"timestamp"</span>: <span class="string">"2012-01-01T00:00:00.000Z"</span>,</div><div class="line">    	<span class="attr">"result"</span>: &#123; <span class="attr">"sample_name1"</span>: &lt;some_value&gt;, <span class="attr">"sample_name2"</span>: &lt;some_value&gt;, <span class="attr">"sample_divide"</span>: &lt;some_value&gt; &#125; </div><div class="line">	&#125;,</div><div class="line">	&#123;</div><div class="line">		<span class="attr">"timestamp"</span>: <span class="string">"2012-01-02T00:00:00.000Z"</span>,</div><div class="line">		<span class="attr">"result"</span>: &#123; <span class="attr">"sample_name1"</span>: &lt;some_value&gt;, <span class="attr">"sample_name2"</span>: &lt;some_value&gt;, 		<span class="attr">"sample_divide"</span>: &lt;some_value&gt; &#125;</div><div class="line">	&#125;</div><div class="line">]</div></pre></td></tr></table></figure>
+<p>数据以粒度为天进行处理，返回两个结果，每个代表一天。如果某一天没有数据，则该处<some_value>为0。可以在context中设置<code>&quot;skipEmptyBuckets&quot;: &quot;true&quot;</code>，则不返回空数据的结果。</some_value></p>
+<h2 id="TopN-queries"><a href="#TopN-queries" class="headerlink" title="TopN queries"></a>TopN queries</h2><p>TopN查询返回一个指定维度上有序的结果数组。在单一维度上，和GroupBy与Ordering的组合效果类似，但是TopN效率更高。</p>
+<p>TopN查询内部近似为每个节点对内部数据排序并返回最大的K个结果到broker。<code>K=max(1000, threshold)</code>。</p>
+<p>topN查询由以下11部分组成：</p>
+<table>
+<thead>
+<tr>
+<th>属性</th>
+<th>描述</th>
+<th>是否必须</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>queryType</td>
+<td>总是topN</td>
+<td>是</td>
+</tr>
+<tr>
+<td>dataSource</td>
+<td>描述数据源的字符串或者对象</td>
+<td>是</td>
+</tr>
+<tr>
+<td>intervals</td>
+<td>一个描述ISO-8601时间间隔的JSON对象，定义查询的时间区间</td>
+<td>是</td>
+</tr>
+<tr>
+<td>granularity</td>
+<td>定义查询结果的时间粒度</td>
+<td>是</td>
+</tr>
+<tr>
+<td>filter</td>
+<td>一个说明哪些字段参与查询的JSON对象，类似SQL中的where语句</td>
+<td>否</td>
+</tr>
+<tr>
+<td>aggregations</td>
+<td>定义汇总查询哪些指标</td>
+<td>是</td>
+</tr>
+<tr>
+<td>postAggregations</td>
+<td>定义汇总数据执行哪些操作</td>
+<td>否</td>
+</tr>
+<tr>
+<td>dimension</td>
+<td>用来描述进行top操作选择字段的字符串或对象</td>
+<td>是</td>
+</tr>
+<tr>
+<td>threshold</td>
+<td>阈值，控制topN中N</td>
+<td>是</td>
+</tr>
+<tr>
+<td>metric</td>
+<td>用来描述在top列表中排序的字段的字符串或者对象</td>
+<td>是</td>
+</tr>
+<tr>
+<td>context</td>
+<td>定义查询配置参数</td>
+<td>否</td>
+</tr>
+</tbody>
+</table>
+<p>例如：</p>
+<figure class="highlight json"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div><div class="line">30</div><div class="line">31</div><div class="line">32</div><div class="line">33</div><div class="line">34</div><div class="line">35</div><div class="line">36</div><div class="line">37</div><div class="line">38</div><div class="line">39</div><div class="line">40</div><div class="line">41</div><div class="line">42</div><div class="line">43</div><div class="line">44</div><div class="line">45</div><div class="line">46</div><div class="line">47</div><div class="line">48</div><div class="line">49</div><div class="line">50</div><div class="line">51</div><div class="line">52</div><div class="line">53</div><div class="line">54</div><div class="line">55</div><div class="line">56</div><div class="line">57</div></pre></td><td class="code"><pre><div class="line">&#123;</div><div class="line">	<span class="attr">"queryType"</span>: <span class="string">"topN"</span>,</div><div class="line">	<span class="attr">"dataSource"</span>: <span class="string">"sample_data"</span>,</div><div class="line">	<span class="attr">"dimension"</span>: <span class="string">"sample_dim"</span>,</div><div class="line">	<span class="attr">"threshold"</span>: <span class="number">5</span>,</div><div class="line">	<span class="attr">"metric"</span>: <span class="string">"count"</span>,</div><div class="line">	<span class="attr">"granularity"</span>: <span class="string">"all"</span>,</div><div class="line">	<span class="attr">"filter"</span>: &#123;</div><div class="line">		<span class="attr">"type"</span>: <span class="string">"and"</span>,</div><div class="line">		<span class="attr">"fields"</span>: [</div><div class="line">			&#123;</div><div class="line">     			<span class="attr">"type"</span>: <span class="string">"selector"</span>,</div><div class="line">     			<span class="attr">"dimension"</span>: <span class="string">"dim1"</span>,</div><div class="line">     			<span class="attr">"value"</span>: <span class="string">"some_value"</span></div><div class="line">			&#125;,</div><div class="line">			&#123;</div><div class="line">     			<span class="attr">"type"</span>: <span class="string">"selector"</span>,</div><div class="line">     			<span class="attr">"dimension"</span>: <span class="string">"dim2"</span>,</div><div class="line">     			<span class="attr">"value"</span>: <span class="string">"some_other_val"</span></div><div class="line">			&#125;</div><div class="line">  		]</div><div class="line">  &#125;,</div><div class="line">	<span class="attr">"aggregations"</span>: [</div><div class="line">		&#123;</div><div class="line">			<span class="attr">"type"</span>: <span class="string">"longSum"</span>,</div><div class="line">			<span class="attr">"name"</span>: <span class="string">"count"</span>,</div><div class="line">			<span class="attr">"fieldName"</span>: <span class="string">"count"</span></div><div class="line">		&#125;,</div><div class="line">		&#123;</div><div class="line">			<span class="attr">"type"</span>: <span class="string">"doubleSum"</span>,</div><div class="line">			<span class="attr">"name"</span>: <span class="string">"some_metric"</span>,</div><div class="line">			<span class="attr">"fieldName"</span>: <span class="string">"some_metric"</span></div><div class="line">		&#125;</div><div class="line">	],</div><div class="line">	<span class="attr">"postAggregations"</span>: [</div><div class="line">		&#123;</div><div class="line">			<span class="attr">"type"</span>: <span class="string">"arithmetic"</span>,</div><div class="line">			<span class="attr">"name"</span>: <span class="string">"sample_divide"</span>,</div><div class="line">			<span class="attr">"fn"</span>: <span class="string">"/"</span>,</div><div class="line">			<span class="attr">"fields"</span>: [</div><div class="line">				&#123;</div><div class="line">					<span class="attr">"type"</span>: <span class="string">"fieldAccess"</span>,</div><div class="line">					<span class="attr">"name"</span>: <span class="string">"some_metric"</span>,</div><div class="line">					<span class="attr">"fieldName"</span>: <span class="string">"some_metric"</span></div><div class="line">        		&#125;,</div><div class="line">        		&#123;</div><div class="line">					<span class="attr">"type"</span>: <span class="string">"fieldAccess"</span>,</div><div class="line">					<span class="attr">"name"</span>: <span class="string">"count"</span>,</div><div class="line">					<span class="attr">"fieldName"</span>: <span class="string">"count"</span></div><div class="line">        		&#125;</div><div class="line">      	]</div><div class="line">    	&#125;</div><div class="line">	],</div><div class="line">	<span class="attr">"intervals"</span>: [</div><div class="line">		<span class="string">"2013-08-31T00:00:00.000/2013-09-03T00:00:00.000"</span></div><div class="line">	]</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<p>返回数据示例：</p>
+<figure class="highlight json"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div><div class="line">30</div><div class="line">31</div><div class="line">32</div><div class="line">33</div><div class="line">34</div><div class="line">35</div><div class="line">36</div><div class="line">37</div></pre></td><td class="code"><pre><div class="line">[</div><div class="line">	&#123;</div><div class="line">		<span class="attr">"timestamp"</span>: <span class="string">"2013-08-31T00:00:00.000Z"</span>,</div><div class="line">		<span class="attr">"result"</span>: [</div><div class="line">			&#123;</div><div class="line">				<span class="attr">"dim1"</span>: <span class="string">"dim1_val"</span>,</div><div class="line">				<span class="attr">"count"</span>: <span class="number">111</span>,</div><div class="line">				<span class="attr">"some_metrics"</span>: <span class="number">10669</span>,</div><div class="line">				<span class="attr">"average"</span>: <span class="number">96.11711711711712</span></div><div class="line">			&#125;,</div><div class="line">			&#123;</div><div class="line">				<span class="attr">"dim1"</span>: <span class="string">"another_dim1_val"</span>,</div><div class="line">				<span class="attr">"count"</span>: <span class="number">88</span>,</div><div class="line">				<span class="attr">"some_metrics"</span>: <span class="number">28344</span>,</div><div class="line">				<span class="attr">"average"</span>: <span class="number">322.09090909090907</span></div><div class="line">			&#125;,</div><div class="line">			&#123;</div><div class="line">				<span class="attr">"dim1"</span>: <span class="string">"dim1_val3"</span>,</div><div class="line">				<span class="attr">"count"</span>: <span class="number">70</span>,</div><div class="line">				<span class="attr">"some_metrics"</span>: <span class="number">871</span>,</div><div class="line">				<span class="attr">"average"</span>: <span class="number">12.442857142857143</span></div><div class="line">			&#125;,</div><div class="line">			&#123;</div><div class="line">				<span class="attr">"dim1"</span>: <span class="string">"dim1_val4"</span>,</div><div class="line">				<span class="attr">"count"</span>: <span class="number">62</span>,</div><div class="line">				<span class="attr">"some_metrics"</span>: <span class="number">815</span>,</div><div class="line">				<span class="attr">"average"</span>: <span class="number">13.14516129032258</span></div><div class="line">			&#125;,</div><div class="line">			&#123;</div><div class="line">				<span class="attr">"dim1"</span>: <span class="string">"dim1_val5"</span>,</div><div class="line">				<span class="attr">"count"</span>: <span class="number">60</span>,</div><div class="line">				<span class="attr">"some_metrics"</span>: <span class="number">2787</span>,</div><div class="line">				<span class="attr">"average"</span>: <span class="number">46.45</span></div><div class="line">			&#125;</div><div class="line">		]</div><div class="line">	&#125;</div><div class="line">]</div></pre></td></tr></table></figure>
+<p>由前面描述，topN是取每个节点的topK汇总，因此这个算法得到的排名和结果在数据维度大于1000时都是近似值，维度小于1000的时候得到的是准确的值。</p>
+<p>通过服务器参数<code>druid.query.topN.minTopNThreshold</code>可以更改这个K阈值。</p>
+<p>但是这样的处理过程可能会导致部分数据缺失。但是想要获得准确的topN需要更多的性能，可以考虑通过两次topN来获取。</p>
+<h2 id="groupBy-Queries"><a href="#groupBy-Queries" class="headerlink" title="groupBy Queries"></a>groupBy Queries</h2><blockquote>
+<p>Note: 如果只是想要获取一段时间范围内的简单的统计，使用更佳性能的Timeseries更好。如果是需要对一个维度进行有序的分组，使用topN更好。</p>
+</blockquote>
+<p>groupBy查询语句有11部分组成：</p>
+<table>
+<thead>
+<tr>
+<th>属性</th>
+<th>描述</th>
+<th>是否必须</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>queryType</td>
+<td>总是topN</td>
+<td>是</td>
+</tr>
+<tr>
+<td>dataSource</td>
+<td>描述数据源的字符串或者对象</td>
+<td>是</td>
+</tr>
+<tr>
+<td>dimensions</td>
+<td>需要分组的维度列表</td>
+<td>是</td>
+</tr>
+<tr>
+<td>limitSpec</td>
+<td>分组结果的数量限制</td>
+<td>否</td>
+</tr>
+<tr>
+<td>having</td>
+<td>分组语句中判断一个数据项是否被返回的条件</td>
+<td>否</td>
+</tr>
+<tr>
+<td>granularity</td>
+<td>定义查询结果的时间粒度</td>
+<td>是</td>
+</tr>
+<tr>
+<td>filter</td>
+<td>一个说明哪些字段参与查询的JSON对象，类似SQL中的where语句</td>
+<td>否</td>
+</tr>
+<tr>
+<td>aggregations</td>
+<td>定义汇总查询哪些指标</td>
+<td>是</td>
+</tr>
+<tr>
+<td>postAggregations</td>
+<td>定义汇总数据执行哪些操作</td>
+<td>否</td>
+</tr>
+<tr>
+<td>intervals</td>
+<td>一个描述ISO-8601时间间隔的JSON对象，定义查询的时间区间</td>
+<td>是</td>
+</tr>
+<tr>
+<td>context</td>
+<td>定义查询配置参数</td>
+<td>否</td>
+</tr>
+</tbody>
+</table>
+<p>比如：</p>
+<figure class="highlight json"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div><div class="line">30</div><div class="line">31</div><div class="line">32</div><div class="line">33</div><div class="line">34</div><div class="line">35</div><div class="line">36</div><div class="line">37</div><div class="line">38</div><div class="line">39</div></pre></td><td class="code"><pre><div class="line">&#123;</div><div class="line">  <span class="attr">"queryType"</span>: <span class="string">"groupBy"</span>,</div><div class="line">  <span class="attr">"dataSource"</span>: <span class="string">"sample_datasource"</span>,</div><div class="line">  <span class="attr">"granularity"</span>: <span class="string">"day"</span>,</div><div class="line">  <span class="attr">"dimensions"</span>: [<span class="string">"country"</span>, <span class="string">"device"</span>],</div><div class="line">  <span class="attr">"limitSpec"</span>: &#123; <span class="attr">"type"</span>: <span class="string">"default"</span>, <span class="attr">"limit"</span>: <span class="number">5000</span>, <span class="attr">"columns"</span>: [<span class="string">"country"</span>, <span class="string">"data_transfer"</span>] &#125;,</div><div class="line">  <span class="attr">"filter"</span>: &#123;</div><div class="line">    <span class="attr">"type"</span>: <span class="string">"and"</span>,</div><div class="line">    <span class="attr">"fields"</span>: [</div><div class="line">      &#123; <span class="attr">"type"</span>: <span class="string">"selector"</span>, <span class="attr">"dimension"</span>: <span class="string">"carrier"</span>, <span class="attr">"value"</span>: <span class="string">"AT&amp;T"</span> &#125;,</div><div class="line">      &#123; <span class="attr">"type"</span>: <span class="string">"or"</span>, </div><div class="line">        <span class="attr">"fields"</span>: [</div><div class="line">          &#123; <span class="attr">"type"</span>: <span class="string">"selector"</span>, <span class="attr">"dimension"</span>: <span class="string">"make"</span>, <span class="attr">"value"</span>: <span class="string">"Apple"</span> &#125;,</div><div class="line">          &#123; <span class="attr">"type"</span>: <span class="string">"selector"</span>, <span class="attr">"dimension"</span>: <span class="string">"make"</span>, <span class="attr">"value"</span>: <span class="string">"Samsung"</span> &#125;</div><div class="line">        ]</div><div class="line">      &#125;</div><div class="line">    ]</div><div class="line">  &#125;,</div><div class="line">  <span class="attr">"aggregations"</span>: [</div><div class="line">    &#123; <span class="attr">"type"</span>: <span class="string">"longSum"</span>, <span class="attr">"name"</span>: <span class="string">"total_usage"</span>, <span class="attr">"fieldName"</span>: <span class="string">"user_count"</span> &#125;,</div><div class="line">    &#123; <span class="attr">"type"</span>: <span class="string">"doubleSum"</span>, <span class="attr">"name"</span>: <span class="string">"data_transfer"</span>, <span class="attr">"fieldName"</span>: <span class="string">"data_transfer"</span> &#125;</div><div class="line">  ],</div><div class="line">  <span class="attr">"postAggregations"</span>: [</div><div class="line">    &#123; <span class="attr">"type"</span>: <span class="string">"arithmetic"</span>,</div><div class="line">      <span class="attr">"name"</span>: <span class="string">"avg_usage"</span>,</div><div class="line">      <span class="attr">"fn"</span>: <span class="string">"/"</span>,</div><div class="line">      <span class="attr">"fields"</span>: [</div><div class="line">        &#123; <span class="attr">"type"</span>: <span class="string">"fieldAccess"</span>, <span class="attr">"fieldName"</span>: <span class="string">"data_transfer"</span> &#125;,</div><div class="line">        &#123; <span class="attr">"type"</span>: <span class="string">"fieldAccess"</span>, <span class="attr">"fieldName"</span>: <span class="string">"total_usage"</span> &#125;</div><div class="line">      ]</div><div class="line">    &#125;</div><div class="line">  ],</div><div class="line">  <span class="attr">"intervals"</span>: [ <span class="string">"2012-01-01T00:00:00.000/2012-01-03T00:00:00.000"</span> ],</div><div class="line">  <span class="attr">"having"</span>: &#123;</div><div class="line">    <span class="attr">"type"</span>: <span class="string">"greaterThan"</span>,</div><div class="line">    <span class="attr">"aggregation"</span>: <span class="string">"total_usage"</span>,</div><div class="line">    <span class="attr">"value"</span>: <span class="number">100</span></div><div class="line">  &#125;</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<p>这个查询将会返回时间段内每一天中，<code>m*n</code>个数据，最多是5000个。n表示<code>country</code>的基数，m表示<code>device</code>的基数。返回数据如下：</p>
+<figure class="highlight json"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div></pre></td><td class="code"><pre><div class="line">[ </div><div class="line">  &#123;</div><div class="line">    <span class="attr">"version"</span> : <span class="string">"v1"</span>,</div><div class="line">    <span class="attr">"timestamp"</span> : <span class="string">"2012-01-01T00:00:00.000Z"</span>,</div><div class="line">    <span class="attr">"event"</span> : &#123;</div><div class="line">      <span class="attr">"country"</span> : &lt;some_dim_value_one&gt;,</div><div class="line">      <span class="attr">"device"</span> : &lt;some_dim_value_two&gt;,</div><div class="line">      <span class="attr">"total_usage"</span> : &lt;some_value_one&gt;,</div><div class="line">      <span class="attr">"data_transfer"</span> :&lt;some_value_two&gt;,</div><div class="line">      <span class="attr">"avg_usage"</span> : &lt;some_avg_usage_value&gt;</div><div class="line">    &#125;</div><div class="line">  &#125;, </div><div class="line">  &#123;</div><div class="line">    <span class="attr">"version"</span> : <span class="string">"v1"</span>,</div><div class="line">    <span class="attr">"timestamp"</span> : <span class="string">"2012-01-01T00:00:12.000Z"</span>,</div><div class="line">    <span class="attr">"event"</span> : &#123;</div><div class="line">      <span class="attr">"dim1"</span> : &lt;some_other_dim_value_one&gt;,</div><div class="line">      <span class="attr">"dim2"</span> : &lt;some_other_dim_value_two&gt;,</div><div class="line">      <span class="attr">"sample_name1"</span> : &lt;some_other_value_one&gt;,</div><div class="line">      <span class="attr">"sample_name2"</span> :&lt;some_other_value_two&gt;,</div><div class="line">      <span class="attr">"avg_usage"</span> : &lt;some_other_avg_usage_value&gt;</div><div class="line">    &#125;</div><div class="line">  &#125;,</div><div class="line">...</div><div class="line">]</div></pre></td></tr></table></figure>
+<h2 id="Time-Boundary-Queries"><a href="#Time-Boundary-Queries" class="headerlink" title="Time Boundary Queries"></a>Time Boundary Queries</h2><p>时间界限查询。该查询实例如下：</p>
+<figure class="highlight"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div></pre></td><td class="code"><pre><div class="line">&#123;</div><div class="line">    "queryType" : "timeBoundary",</div><div class="line">    "dataSource": "sample_datasource",</div><div class="line">    "bound"     : &lt; "maxTime" | "minTime" &gt; # optional, defaults to returning both timestamps if not set </div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<p>返回的数据如下：</p>
+<figure class="highlight json"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div></pre></td><td class="code"><pre><div class="line">[ &#123;</div><div class="line">  <span class="attr">"timestamp"</span> : <span class="string">"2013-05-09T18:24:00.000Z"</span>,</div><div class="line">  <span class="attr">"result"</span> : &#123;</div><div class="line">    <span class="attr">"minTime"</span> : <span class="string">"2013-05-09T18:24:00.000Z"</span>,</div><div class="line">    <span class="attr">"maxTime"</span> : <span class="string">"2013-05-09T18:37:00.000Z"</span></div><div class="line">  &#125;</div><div class="line">&#125; ]</div></pre></td></tr></table></figure>
+<h2 id="Search-Queries"><a href="#Search-Queries" class="headerlink" title="Search Queries"></a>Search Queries</h2><p>搜索查询包含以下部分：</p>
+<table>
+<thead>
+<tr>
+<th>属性</th>
+<th>描述</th>
+<th>是否必须</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>queryType</td>
+<td>总是search</td>
+<td>是</td>
+</tr>
+<tr>
+<td>dataSource</td>
+<td>描述数据源的字符串或者对象</td>
+<td>是</td>
+</tr>
+<tr>
+<td>granularity</td>
+<td>定义查询结果的时间粒度</td>
+<td>是</td>
+</tr>
+<tr>
+<td>filter</td>
+<td>一个说明哪些字段参与查询的JSON对象，类似SQL中的where语句</td>
+<td>否</td>
+</tr>
+<tr>
+<td>intervals</td>
+<td>一个描述ISO-8601时间间隔的JSON对象，定义查询的时间区间</td>
+<td>是</td>
+</tr>
+<tr>
+<td>searchDimensions</td>
+<td>进行搜索查询的维度。如果不存在这个参数则表示在所有参数上进行</td>
+<td>否</td>
+</tr>
+<tr>
+<td>query</td>
+<td>定义怎么匹配，有InsensitiveContainsSearchQuerySpec和FragmentSearchQuerySpec两种方式</td>
+<td>是</td>
+</tr>
+<tr>
+<td>sort</td>
+<td>指定结果的排序方式。有lexicographic（默认）和strlen两种方式</td>
+<td>否</td>
+</tr>
+<tr>
+<td>context</td>
+<td>定义查询配置参数</td>
+<td>否</td>
+</tr>
+</tbody>
+</table>
+<p>查询示例如下：</p>
+<figure class="highlight json"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div></pre></td><td class="code"><pre><div class="line">&#123;</div><div class="line">  <span class="attr">"queryType"</span>: <span class="string">"search"</span>,</div><div class="line">  <span class="attr">"dataSource"</span>: <span class="string">"sample_datasource"</span>,</div><div class="line">  <span class="attr">"granularity"</span>: <span class="string">"day"</span>,</div><div class="line">  <span class="attr">"searchDimensions"</span>: [</div><div class="line">    <span class="string">"dim1"</span>,</div><div class="line">    <span class="string">"dim2"</span></div><div class="line">  ],</div><div class="line">  <span class="attr">"query"</span>: &#123;</div><div class="line">    <span class="attr">"type"</span>: <span class="string">"insensitive_contains"</span>,</div><div class="line">    <span class="attr">"value"</span>: <span class="string">"Ke"</span></div><div class="line">  &#125;,</div><div class="line">  <span class="attr">"sort"</span> : &#123;</div><div class="line">    <span class="attr">"type"</span>: <span class="string">"lexicographic"</span></div><div class="line">  &#125;,</div><div class="line">  <span class="attr">"intervals"</span>: [</div><div class="line">    <span class="string">"2013-01-01T00:00:00.000/2013-01-03T00:00:00.000"</span></div><div class="line">  ]</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<p>返回数据如下：</p>
+<figure class="highlight json"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div></pre></td><td class="code"><pre><div class="line">[</div><div class="line">  &#123;</div><div class="line">    <span class="attr">"timestamp"</span>: <span class="string">"2012-01-01T00:00:00.000Z"</span>,</div><div class="line">    <span class="attr">"result"</span>: [</div><div class="line">      &#123;</div><div class="line">        <span class="attr">"dimension"</span>: <span class="string">"dim1"</span>,</div><div class="line">        <span class="attr">"value"</span>: <span class="string">"Ke$ha"</span></div><div class="line">      &#125;,</div><div class="line">      &#123;</div><div class="line">        <span class="attr">"dimension"</span>: <span class="string">"dim2"</span>,</div><div class="line">        <span class="attr">"value"</span>: <span class="string">"Ke$haForPresident"</span></div><div class="line">      &#125;</div><div class="line">    ]</div><div class="line">  &#125;,</div><div class="line">  &#123;</div><div class="line">    <span class="attr">"timestamp"</span>: <span class="string">"2012-01-02T00:00:00.000Z"</span>,</div><div class="line">    <span class="attr">"result"</span>: [</div><div class="line">      &#123;</div><div class="line">        <span class="attr">"dimension"</span>: <span class="string">"dim1"</span>,</div><div class="line">        <span class="attr">"value"</span>: <span class="string">"SomethingThatContainsKe"</span></div><div class="line">      &#125;,</div><div class="line">      &#123;</div><div class="line">        <span class="attr">"dimension"</span>: <span class="string">"dim2"</span>,</div><div class="line">        <span class="attr">"value"</span>: <span class="string">"SomethingElseThatContainsKe"</span></div><div class="line">      &#125;</div><div class="line">    ]</div><div class="line">  &#125;</div><div class="line">]</div></pre></td></tr></table></figure>
+  
+	</div>
+		<footer class="article-footer clearfix">
+<div class="article-catetags">
+
+<div class="article-categories">
+  <span></span>
+  <a class="article-category-link" href="/categories/Druid/">Druid</a>
+</div>
+
+
+  <div class="article-tags">
+  
+  <span></span> <a href="/tags/笔记/">笔记</a><a href="/tags/分布式/">分布式</a><a href="/tags/Druid/">Druid</a><a href="/tags/实时计算/">实时计算</a>
+  </div>
+
+</div>
+
+
+
+	<div class="article-share" id="share">
+	
+	  <div data-url="http://blog.liexing.me/2016/04/25/druid-querying/" data-title="Druid Querying | Liexing&#39;s Blog" data-tsina="1915625641" class="share clearfix">
+	  </div>
+	
+	</div>
+
+
+</footer>
+
+   	       
+	</article>
+	
+<nav class="article-nav clearfix">
+ 
+ <div class="prev" >
+ <a href="/2016/05/19/druid-indexing-service-process-analysis/" title="Druid Indexing Service过程分析">
+  <strong>上一篇：</strong><br/>
+  <span>
+  Druid Indexing Service过程分析</span>
+</a>
+</div>
+
+
+<div class="next">
+<a href="/2016/04/21/auto-ssh-to-server/"  title="SSH 自动连接脚本">
+ <strong>下一篇：</strong><br/> 
+ <span>SSH 自动连接脚本
+</span>
+</a>
+</div>
+
+</nav>
+
+	
+<section id="comments" class="comment">
+	<div class="ds-thread" data-thread-key="2016/04/25/druid-querying/" data-title="Druid Querying" data-url="http://blog.liexing.me/2016/04/25/druid-querying/"></div>
+</section>
+
+
+</div>  
+      <div class="openaside"><a class="navbutton" href="#" title="显示侧边栏"></a></div>
+
+  <div id="toc" class="toc-aside">
+  <strong class="toc-title">文章目录</strong>
+ 
+ <ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#Timeseries-queries"><span class="toc-number">1.</span> <span class="toc-text">Timeseries queries</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#TopN-queries"><span class="toc-number">2.</span> <span class="toc-text">TopN queries</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#groupBy-Queries"><span class="toc-number">3.</span> <span class="toc-text">groupBy Queries</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#Time-Boundary-Queries"><span class="toc-number">4.</span> <span class="toc-text">Time Boundary Queries</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#Search-Queries"><span class="toc-number">5.</span> <span class="toc-text">Search Queries</span></a></li></ol>
+ 
+  </div>
+
+<div id="asidepart">
+<div class="closeaside"><a class="closebutton" href="#" title="隐藏侧边栏"></a></div>
+<aside class="clearfix">
+
+  
+<div class="github-card">
+<p class="asidetitle">Github 名片</p>
+<div class="github-card" data-github="scusjs" data-width="220" data-height="119" data-theme="medium">
+<script type="text/javascript" src="//cdn.jsdelivr.net/github-cards/latest/widget.js" ></script>
+</div>
+  </div>
+
+
+
+  
+<div class="categorieslist">
+    <p class="asidetitle">分类</p>
+        <ul>
+        
+          
+            <li><a href="/categories/Cassandra/" title="Cassandra">Cassandra<sup>2</sup></a></li>
+          
+        
+          
+            <li><a href="/categories/Druid/" title="Druid">Druid<sup>6</sup></a></li>
+          
+        
+          
+            <li><a href="/categories/建站相关/" title="建站相关">建站相关<sup>1</sup></a></li>
+          
+        
+          
+            <li><a href="/categories/笔记/" title="笔记">笔记<sup>1</sup></a></li>
+          
+        
+          
+            <li><a href="/categories/算法/" title="算法">算法<sup>1</sup></a></li>
+          
+        
+          
+            <li><a href="/categories/统计学习/" title="统计学习">统计学习<sup>5</sup></a></li>
+          
+        
+        </ul>
+</div>
+
+
+
+  <div class="linkslist">
+  <p class="asidetitle">友情链接</p>
+    <ul>
+        
+          <li>
+            
+            	<a href="http://yaccc.github.io" target="_blank" title="">浮生若梦</a>
+            
+          </li>
+        
+    </ul>
+</div>
+
+  <div class="rsspart">
+	<a href="/atom.xml" target="_blank" title="rss">RSS 订阅</a>
+</div>
+
+  
+  <div class="tagcloudlist">
+    <p class="asidetitle">标签云</p>
+    <div class="tagcloudlist clearfix">
+       <a href="/tags/Cassandra/" style="font-size: 12px;">Cassandra</a> <a href="/tags/Druid/" style="font-size: 16px;">Druid</a> <a href="/tags/LCS/" style="font-size: 10px;">LCS</a> <a href="/tags/NOSQL/" style="font-size: 12px;">NOSQL</a> <a href="/tags/algorithms/" style="font-size: 10px;">algorithms</a> <a href="/tags/bash/" style="font-size: 10px;">bash</a> <a href="/tags/dynamic-programming/" style="font-size: 10px;">dynamic programming</a> <a href="/tags/hexo/" style="font-size: 10px;">hexo</a> <a href="/tags/k-邻近法/" style="font-size: 12px;">k 邻近法</a> <a href="/tags/knn/" style="font-size: 12px;">knn</a> <a href="/tags/linux/" style="font-size: 10px;">linux</a> <a href="/tags/分布式/" style="font-size: 18px;">分布式</a> <a href="/tags/实时计算/" style="font-size: 16px;">实时计算</a> <a href="/tags/感知机/" style="font-size: 10px;">感知机</a> <a href="/tags/朴素贝叶斯/" style="font-size: 10px;">朴素贝叶斯</a> <a href="/tags/机器学习/" style="font-size: 14px;">机器学习</a> <a href="/tags/源码分析/" style="font-size: 10px;">源码分析</a> <a href="/tags/笔记/" style="font-size: 20px;">笔记</a> <a href="/tags/统计学习/" style="font-size: 14px;">统计学习</a>
+    </div>
+  </div>
+
+
+  <div class="weiboshow">
+  <p class="asidetitle">新浪微博</p>
+    <iframe width="100%" height="119" class="share_self"  frameborder="0" scrolling="no" src="http://widget.weibo.com/weiboshow/index.php?language=&width=0&height=119&fansRow=2&ptype=1&speed=0&skin=9&isTitle=1&noborder=1&isWeibo=0&isFans=0&uid=1915625641&verifier=00e07be0&dpc=1"></iframe>
+</div>
+
+
+</aside>
+</div>
+    </div>
+    <footer><div id="footer" >
+	
+	<div class="line">
+		<span></span>
+		<div class="author"></div>
+	</div>
+	
+	
+	<section class="info">
+		<p> Hello, I&#39;m Liexing in UCAS. <br/>
+			Stay hungry. Stay foolish.</p>
+	</section>
+	 
+	<div class="social-font" class="clearfix">
+		
+		<a href="http://weibo.com/scusjs" target="_blank" class="icon-weibo" title="微博"></a>
+		
+		
+		<a href="https://github.com/scusjs" target="_blank" class="icon-github" title="github"></a>
+		
+		
+		
+		<a href="https://twitter.com/scusjs" target="_blank" class="icon-twitter" title="twitter"></a>
+		
+		
+		
+		<a href="https://www.linkedin.com/in/shenjinsheng" target="_blank" class="icon-linkedin" title="linkedin"></a>
+		
+		
+		<a href="https://www.douban.com/people/58108093" target="_blank" class="icon-douban" title="豆瓣"></a>
+		
+		
+		<a href="http://www.zhihu.com/people/scusjs" target="_blank" class="icon-zhihu" title="知乎"></a>
+		
+		
+		
+		<a href="mailto:i@liexing.me" target="_blank" class="icon-email" title="Email Me"></a>
+		
+	</div>
+			
+		
+
+		<p class="copyright">
+		Powered by <a href="http://hexo.io" target="_blank" title="hexo">hexo</a> and Theme by <a href="https://github.com/wuchong/jacman" target="_blank" title="Jacman">Jacman</a> © 2017 
+		
+		<a href="/about" target="_blank" title="liexing">liexing</a>
+		
+		
+		</p>
+</div>
+</footer>
+    <script src="/js/jquery-2.0.3.min.js"></script>
+<script src="/js/jquery.imagesloaded.min.js"></script>
+<script src="/js/gallery.js"></script>
+<script src="/js/jquery.qrcode-0.12.0.min.js"></script>
+
+<script type="text/javascript">
+$(document).ready(function(){ 
+  $('.navbar').click(function(){
+    $('header nav').toggleClass('shownav');
+  });
+  var myWidth = 0;
+  function getSize(){
+    if( typeof( window.innerWidth ) == 'number' ) {
+      myWidth = window.innerWidth;
+    } else if( document.documentElement && document.documentElement.clientWidth) {
+      myWidth = document.documentElement.clientWidth;
+    };
+  };
+  var m = $('#main'),
+      a = $('#asidepart'),
+      c = $('.closeaside'),
+      o = $('.openaside');
+  c.click(function(){
+    a.addClass('fadeOut').css('display', 'none');
+    o.css('display', 'block').addClass('fadeIn');
+    m.addClass('moveMain');
+  });
+  o.click(function(){
+    o.css('display', 'none').removeClass('beforeFadeIn');
+    a.css('display', 'block').removeClass('fadeOut').addClass('fadeIn');      
+    m.removeClass('moveMain');
+  });
+  $(window).scroll(function(){
+    o.css("top",Math.max(80,260-$(this).scrollTop()));
+  });
+  
+  $(window).resize(function(){
+    getSize(); 
+    if (myWidth >= 1024) {
+      $('header nav').removeClass('shownav');
+    }else{
+      m.removeClass('moveMain');
+      a.css('display', 'block').removeClass('fadeOut');
+      o.css('display', 'none');
+      
+      $('#toc.toc-aside').css('display', 'none');
+        
+    }
+  });
+});
+</script>
+
+<script type="text/javascript">
+$(document).ready(function(){ 
+  var ai = $('.article-content>iframe'),
+      ae = $('.article-content>embed'),
+      t  = $('#toc'),
+      ta = $('#toc.toc-aside'),
+      o  = $('.openaside'),
+      c  = $('.closeaside');
+  if(ai.length>0){
+    ai.wrap('<div class="video-container" />');
+  };
+  if(ae.length>0){
+   ae.wrap('<div class="video-container" />');
+  };
+  c.click(function(){
+    ta.css('display', 'block').addClass('fadeIn');
+  });
+  o.click(function(){
+    ta.css('display', 'none');
+  });
+  $(window).scroll(function(){
+    ta.css("top",Math.max(140,320-$(this).scrollTop()));
+  });
+});
+</script>
+
+
+<script type="text/javascript">
+$(document).ready(function(){ 
+  var $this = $('.share'),
+      url = $this.attr('data-url'),
+      encodedUrl = encodeURIComponent(url),
+      title = $this.attr('data-title'),
+      tsina = $this.attr('data-tsina'),
+      description = $this.attr('description');
+  var html = [
+  '<div class="hoverqrcode clearfix"></div>',
+  '<a class="overlay" id="qrcode"></a>',
+  '<a href="https://www.facebook.com/sharer.php?u=' + encodedUrl + '" class="article-share-facebook" target="_blank" title="Facebook"></a>',
+  '<a href="https://twitter.com/intent/tweet?url=' + encodedUrl + '" class="article-share-twitter" target="_blank" title="Twitter"></a>',
+  '<a href="#qrcode" class="article-share-qrcode" title="微信"></a>',
+  '<a href="http://widget.renren.com/dialog/share?resourceUrl=' + encodedUrl + '&srcUrl=' + encodedUrl + '&title=' + title +'" class="article-share-renren" target="_blank" title="人人"></a>',
+  '<a href="http://service.weibo.com/share/share.php?title='+title+'&url='+encodedUrl +'&ralateUid='+ tsina +'&searchPic=true&style=number' +'" class="article-share-weibo" target="_blank" title="微博"></a>',
+  '<span title="Share to"></span>'
+  ].join('');
+  $this.append(html);
+
+  $('.hoverqrcode').hide();
+
+  var myWidth = 0;
+  function updatehoverqrcode(){
+    if( typeof( window.innerWidth ) == 'number' ) {
+      myWidth = window.innerWidth;
+    } else if( document.documentElement && document.documentElement.clientWidth) {
+      myWidth = document.documentElement.clientWidth;
+    };
+    var qrsize = myWidth > 1024 ? 200:100;
+    var options = {render: 'image', size: qrsize, fill: '#2ca6cb', text: url, radius: 0.5, quiet: 1};
+    var p = $('.article-share-qrcode').position();
+    $('.hoverqrcode').empty().css('width', qrsize).css('height', qrsize)
+                          .css('left', p.left-qrsize/2+20).css('top', p.top-qrsize-10)
+                          .qrcode(options);
+  };
+  $(window).resize(function(){
+    $('.hoverqrcode').hide();
+  });
+  $('.article-share-qrcode').click(function(){
+    updatehoverqrcode();
+    $('.hoverqrcode').toggle();
+  });
+  $('.article-share-qrcode').hover(function(){}, function(){
+      $('.hoverqrcode').hide();
+  });
+});   
+</script>
+
+
+
+<script type="text/javascript">
+  var duoshuoQuery = {short_name:"liexing"};
+  (function() {
+    var ds = document.createElement('script');
+    ds.type = 'text/javascript';ds.async = true;
+    ds.src = '//7xl6z1.com1.z0.glb.clouddn.com/embed_ua.js';
+    ds.charset = 'UTF-8';
+    (document.getElementsByTagName('head')[0] 
+    || document.getElementsByTagName('body')[0]).appendChild(ds);
+  })();
+</script> 
+
+
+
+
+
+
+
+<link rel="stylesheet" href="/fancybox/jquery.fancybox.css" media="screen" type="text/css">
+<script src="/fancybox/jquery.fancybox.pack.js"></script>
+<script type="text/javascript">
+$(document).ready(function(){ 
+  $('.article-content').each(function(i){
+    $(this).find('img').each(function(){
+      if ($(this).parent().hasClass('fancybox')) return;
+      var alt = this.alt;
+      if (alt) $(this).after('<span class="caption">' + alt + '</span>');
+      $(this).wrap('<a href="' + this.src + '" title="' + alt + '" class="fancybox"></a>');
+    });
+    $(this).find('.fancybox').each(function(){
+      $(this).attr('rel', 'article' + i);
+    });
+  });
+  if($.fancybox){
+    $('.fancybox').fancybox();
+  }
+}); 
+</script>
+
+
+
+<!-- Analytics Begin -->
+
+
+
+<script>
+var _hmt = _hmt || [];
+(function() {
+  var hm = document.createElement("script");
+  hm.src = "//hm.baidu.com/hm.js?e6d1f421bbc9962127a50488f9ed37d1";
+  var s = document.getElementsByTagName("script")[0]; 
+  s.parentNode.insertBefore(hm, s);
+})();
+</script>
+
+
+
+<span style="display:none"><script type="text/javascript">var cnzz_protocol = (("https:" == document.location.protocol) ? " https://" : " http://");document.write(unescape("%3Cspan id='cnzz_stat_icon_1256113107'%3E%3C/span%3E%3Cscript src='" + cnzz_protocol + "s23.cnzz.com/z_stat.php%3Fid%3D1256113107' type='text/javascript'%3E%3C/script%3E"));</script></span>
+
+
+<!-- Analytics End -->
+
+<!-- Totop Begin -->
+
+	<div id="totop">
+	<a title="返回顶部"><img src="/img/scrollup.png"/></a>
+	</div>
+	<script src="/js/totop.js"></script>
+
+<!-- Totop End -->
+
+<!-- MathJax Begin -->
+<!-- mathjax config similar to math.stackexchange -->
+
+
+<!-- MathJax End -->
+
+<!-- Tiny_search Begin -->
+
+<!-- Tiny_search End -->
+
+  </body>
+</html>

@@ -1,0 +1,532 @@
+
+ <!DOCTYPE HTML>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+  
+    <title>Cassandra 架构简述 | Liexing&#39;s Blog</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1,user-scalable=no">
+    
+    <meta name="author" content="liexing">
+    
+
+    
+    <meta name="description" content="Cassandra被设计来在多个节点中处理大量的数据负载，并且没有单点故障。它的架构建立在认为系统能够并且可能发生故障的基础上。
+节点使用gossip这个点对点的算法来在集群中交换自身和其他节点的状态信息。
+每个节点上，顺序追加的commit log文件，捕获节点的写入动作来确保数据的持续性。数据在叫做memtable的内存结构中索引和写入，这个结构类似于回写式缓存。每当内存数据结构写满时，数据被">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Cassandra 架构简述">
+<meta property="og:url" content="http://blog.liexing.me/2016/08/25/cassandra-architecture-in-brief/index.html">
+<meta property="og:site_name" content="Liexing's Blog">
+<meta property="og:description" content="Cassandra被设计来在多个节点中处理大量的数据负载，并且没有单点故障。它的架构建立在认为系统能够并且可能发生故障的基础上。
+节点使用gossip这个点对点的算法来在集群中交换自身和其他节点的状态信息。
+每个节点上，顺序追加的commit log文件，捕获节点的写入动作来确保数据的持续性。数据在叫做memtable的内存结构中索引和写入，这个结构类似于回写式缓存。每当内存数据结构写满时，数据被">
+<meta property="og:updated_time" content="2017-02-27T11:34:45.000Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="Cassandra 架构简述">
+<meta name="twitter:description" content="Cassandra被设计来在多个节点中处理大量的数据负载，并且没有单点故障。它的架构建立在认为系统能够并且可能发生故障的基础上。
+节点使用gossip这个点对点的算法来在集群中交换自身和其他节点的状态信息。
+每个节点上，顺序追加的commit log文件，捕获节点的写入动作来确保数据的持续性。数据在叫做memtable的内存结构中索引和写入，这个结构类似于回写式缓存。每当内存数据结构写满时，数据被">
+<meta name="twitter:creator" content="@scusjs">
+
+    
+    <link rel="alternative" href="/atom.xml" title="Liexing&#39;s Blog" type="application/atom+xml">
+    
+    
+    <link rel="icon" href="/img/favicon.ico">
+    
+    
+    <link rel="apple-touch-icon" href="/img/jacman.jpg">
+    <link rel="apple-touch-icon-precomposed" href="/img/jacman.jpg">
+    
+    <link rel="stylesheet" href="/css/style.css">
+</head>
+
+  <body>
+    <header>
+      
+<div>
+		
+			<div id="imglogo">
+				<a href="/"><img src="/img/logo.png" alt="Liexing&#39;s Blog" title="Liexing&#39;s Blog"/></a>
+			</div>
+			
+			<div id="textlogo">
+				<h1 class="site-name"><a href="/" title="Liexing&#39;s Blog">Liexing&#39;s Blog</a></h1>
+				<h2 class="blog-motto">不疯魔，不成佛</h2>
+			</div>
+			<div class="navbar"><a class="navbutton navmobile" href="#" title="菜单">
+			</a></div>
+			<nav class="animated">
+				<ul>
+					<ul>
+					 
+						<li><a href="/">主页 | Home</a></li>
+					
+						<li><a href="/archives">归档 | Archives</a></li>
+					
+						<li><a href="/about">简介 | About</a></li>
+					
+					<li>
+ 					
+					<form class="search" action="/search/index.html" method="get" accept-charset="utf-8">
+						<label>Search</label>
+						<input type="search" id="search" autocomplete="off" name="q" maxlength="20" placeholder="搜索" />
+					</form>
+					
+					</li>
+				</ul>
+			</nav>			
+</div>
+    </header>
+    <div id="container">
+      <div id="main" class="post" itemscope itemprop="blogPost">
+  
+	<article itemprop="articleBody"> 
+		<header class="article-info clearfix">
+  <h1 itemprop="name">
+    
+      <a href="/2016/08/25/cassandra-architecture-in-brief/" title="Cassandra 架构简述" itemprop="url">Cassandra 架构简述</a>
+  </h1>
+  <p class="article-author">By
+       
+		<a href="/about" title="liexing" target="_blank" itemprop="author">liexing</a>
+		
+  <p class="article-time">
+    <time datetime="2016-08-25T13:25:01.000Z" itemprop="datePublished"> 发表于 2016-08-25</time>
+    
+  </p>
+</header>
+	<div class="article-content">
+		
+		<div id="toc" class="toc-article">
+			<strong class="toc-title">文章目录</strong>
+		
+			
+		
+		</div>
+		
+		<p>Cassandra被设计来在多个节点中处理大量的数据负载，并且没有单点故障。它的架构建立在认为系统能够并且可能发生故障的基础上。</p>
+<p>节点使用<a href="http://www.cs.cornell.edu/home/rvr/papers/flowgossip.pdf" target="_blank" rel="external">gossip</a>这个点对点的算法来在集群中交换自身和其他节点的状态信息。</p>
+<p>每个节点上，顺序追加的commit log文件，捕获节点的写入动作来确保数据的持续性。数据在叫做memtable的内存结构中索引和写入，这个结构类似于回写式缓存。每当内存数据结构写满时，数据被写到硬盘上的SSTables文件中。所有的写入都自动分区并在集群中复制。Cassandra会定期使用<a href="http://docs.datastax.com/en/cql/3.3/cql/cql_reference/tabProp.html#tabProp__moreCompaction" target="_blank" rel="external">compaction</a>合并SSTables，并且丢弃使用tombstone标记的过时数据。许多<a href="http://docs.datastax.com/en/cassandra/3.x/cassandra/operations/opsRepairNodesTOC.html" target="_blank" rel="external">repair</a>机制用来确保集群中所有数据的一致性。所有的数据最先被写入commit log，在所有的数据存放到SSTable之后，commit log才能够被读取、删除或者回收。SSTable（sorted string table）只能够被追加并且顺序存放在磁盘上，用来维护所有的Cassandra表。</p>
+<p>Cassandra是分区的行存储数据库，数据库中的每一行都有一个必须的主键。Cassandra的架构允许任何授权的用户使用CQL语言来连接到任何数据中心的任何节点和访问数据。开发者可以通过cqlsh或者应用的语言驱动来使用CQL。通常，集群中每一个应用由一个keyspace管理多个表。</p>
+<p>分区（partitioner）用来确定哪些节点接收一块数据的第一个副本，怎样在集群的节点间分发其他副本。每一行数据都由主键唯一标示，有可能和分区键（partition key）相同，也可能包含其他一些集群键（clustering column）。分区通过对主键进行hash提取出token，然后根据token决定集群中哪个节点接收数据副本。默认的分区策略为Murmur3Partitioner。</p>
+<p>重复因素（Replication factor）表示集群间的副本总数。重复因素大小通常大于1但是小于集群节点数量。其值表示每行数据在多少个不同的节点上有副本。</p>
+<p>snitch定义复制策略使用数据中心和机架（拓扑）中的计算机组中哪一个节点来存放副本。当创建集群的时候必须指定snitch，所有的snitch都使用动态snitch层来监控性能和选择读取副本。默认的SimpleSnitch不能识别数据中心和机架，用来在单个数据中心和单区公共云上部署。在生产环境中推荐使用GossipingPropertyFileSnitch，它定义了节点的数据中心和机架，并使用gossip来向其他节点传播这些信息。</p>
+  
+	</div>
+		<footer class="article-footer clearfix">
+<div class="article-catetags">
+
+<div class="article-categories">
+  <span></span>
+  <a class="article-category-link" href="/categories/Cassandra/">Cassandra</a>
+</div>
+
+
+  <div class="article-tags">
+  
+  <span></span> <a href="/tags/Cassandra/">Cassandra</a><a href="/tags/笔记/">笔记</a><a href="/tags/分布式/">分布式</a><a href="/tags/NOSQL/">NOSQL</a>
+  </div>
+
+</div>
+
+
+
+	<div class="article-share" id="share">
+	
+	  <div data-url="http://blog.liexing.me/2016/08/25/cassandra-architecture-in-brief/" data-title="Cassandra 架构简述 | Liexing&#39;s Blog" data-tsina="1915625641" class="share clearfix">
+	  </div>
+	
+	</div>
+
+
+</footer>
+
+   	       
+	</article>
+	
+<nav class="article-nav clearfix">
+ 
+ <div class="prev" >
+ <a href="/2016/09/08/cassandra-architecture/" title="Cassandra 架构">
+  <strong>上一篇：</strong><br/>
+  <span>
+  Cassandra 架构</span>
+</a>
+</div>
+
+
+<div class="next">
+<a href="/2016/06/16/druid-command-line-hadoop-indexer/"  title="Druid Command Line Hadoop Indexer启动流程">
+ <strong>下一篇：</strong><br/> 
+ <span>Druid Command Line Hadoop Indexer启动流程
+</span>
+</a>
+</div>
+
+</nav>
+
+	
+<section id="comments" class="comment">
+	<div class="ds-thread" data-thread-key="2016/08/25/cassandra-architecture-in-brief/" data-title="Cassandra 架构简述" data-url="http://blog.liexing.me/2016/08/25/cassandra-architecture-in-brief/"></div>
+</section>
+
+
+</div>  
+      <div class="openaside"><a class="navbutton" href="#" title="显示侧边栏"></a></div>
+
+  <div id="toc" class="toc-aside">
+  <strong class="toc-title">文章目录</strong>
+ 
+ 
+ 
+  </div>
+
+<div id="asidepart">
+<div class="closeaside"><a class="closebutton" href="#" title="隐藏侧边栏"></a></div>
+<aside class="clearfix">
+
+  
+<div class="github-card">
+<p class="asidetitle">Github 名片</p>
+<div class="github-card" data-github="scusjs" data-width="220" data-height="119" data-theme="medium">
+<script type="text/javascript" src="//cdn.jsdelivr.net/github-cards/latest/widget.js" ></script>
+</div>
+  </div>
+
+
+
+  
+<div class="categorieslist">
+    <p class="asidetitle">分类</p>
+        <ul>
+        
+          
+            <li><a href="/categories/Cassandra/" title="Cassandra">Cassandra<sup>2</sup></a></li>
+          
+        
+          
+            <li><a href="/categories/Druid/" title="Druid">Druid<sup>6</sup></a></li>
+          
+        
+          
+            <li><a href="/categories/建站相关/" title="建站相关">建站相关<sup>1</sup></a></li>
+          
+        
+          
+            <li><a href="/categories/笔记/" title="笔记">笔记<sup>1</sup></a></li>
+          
+        
+          
+            <li><a href="/categories/算法/" title="算法">算法<sup>1</sup></a></li>
+          
+        
+          
+            <li><a href="/categories/统计学习/" title="统计学习">统计学习<sup>5</sup></a></li>
+          
+        
+        </ul>
+</div>
+
+
+
+  <div class="linkslist">
+  <p class="asidetitle">友情链接</p>
+    <ul>
+        
+          <li>
+            
+            	<a href="http://yaccc.github.io" target="_blank" title="">浮生若梦</a>
+            
+          </li>
+        
+    </ul>
+</div>
+
+  <div class="rsspart">
+	<a href="/atom.xml" target="_blank" title="rss">RSS 订阅</a>
+</div>
+
+  
+  <div class="tagcloudlist">
+    <p class="asidetitle">标签云</p>
+    <div class="tagcloudlist clearfix">
+       <a href="/tags/Cassandra/" style="font-size: 12px;">Cassandra</a> <a href="/tags/Druid/" style="font-size: 16px;">Druid</a> <a href="/tags/LCS/" style="font-size: 10px;">LCS</a> <a href="/tags/NOSQL/" style="font-size: 12px;">NOSQL</a> <a href="/tags/algorithms/" style="font-size: 10px;">algorithms</a> <a href="/tags/bash/" style="font-size: 10px;">bash</a> <a href="/tags/dynamic-programming/" style="font-size: 10px;">dynamic programming</a> <a href="/tags/hexo/" style="font-size: 10px;">hexo</a> <a href="/tags/k-邻近法/" style="font-size: 12px;">k 邻近法</a> <a href="/tags/knn/" style="font-size: 12px;">knn</a> <a href="/tags/linux/" style="font-size: 10px;">linux</a> <a href="/tags/分布式/" style="font-size: 18px;">分布式</a> <a href="/tags/实时计算/" style="font-size: 16px;">实时计算</a> <a href="/tags/感知机/" style="font-size: 10px;">感知机</a> <a href="/tags/朴素贝叶斯/" style="font-size: 10px;">朴素贝叶斯</a> <a href="/tags/机器学习/" style="font-size: 14px;">机器学习</a> <a href="/tags/源码分析/" style="font-size: 10px;">源码分析</a> <a href="/tags/笔记/" style="font-size: 20px;">笔记</a> <a href="/tags/统计学习/" style="font-size: 14px;">统计学习</a>
+    </div>
+  </div>
+
+
+  <div class="weiboshow">
+  <p class="asidetitle">新浪微博</p>
+    <iframe width="100%" height="119" class="share_self"  frameborder="0" scrolling="no" src="http://widget.weibo.com/weiboshow/index.php?language=&width=0&height=119&fansRow=2&ptype=1&speed=0&skin=9&isTitle=1&noborder=1&isWeibo=0&isFans=0&uid=1915625641&verifier=00e07be0&dpc=1"></iframe>
+</div>
+
+
+</aside>
+</div>
+    </div>
+    <footer><div id="footer" >
+	
+	<div class="line">
+		<span></span>
+		<div class="author"></div>
+	</div>
+	
+	
+	<section class="info">
+		<p> Hello, I&#39;m Liexing in UCAS. <br/>
+			Stay hungry. Stay foolish.</p>
+	</section>
+	 
+	<div class="social-font" class="clearfix">
+		
+		<a href="http://weibo.com/scusjs" target="_blank" class="icon-weibo" title="微博"></a>
+		
+		
+		<a href="https://github.com/scusjs" target="_blank" class="icon-github" title="github"></a>
+		
+		
+		
+		<a href="https://twitter.com/scusjs" target="_blank" class="icon-twitter" title="twitter"></a>
+		
+		
+		
+		<a href="https://www.linkedin.com/in/shenjinsheng" target="_blank" class="icon-linkedin" title="linkedin"></a>
+		
+		
+		<a href="https://www.douban.com/people/58108093" target="_blank" class="icon-douban" title="豆瓣"></a>
+		
+		
+		<a href="http://www.zhihu.com/people/scusjs" target="_blank" class="icon-zhihu" title="知乎"></a>
+		
+		
+		
+		<a href="mailto:i@liexing.me" target="_blank" class="icon-email" title="Email Me"></a>
+		
+	</div>
+			
+		
+
+		<p class="copyright">
+		Powered by <a href="http://hexo.io" target="_blank" title="hexo">hexo</a> and Theme by <a href="https://github.com/wuchong/jacman" target="_blank" title="Jacman">Jacman</a> © 2017 
+		
+		<a href="/about" target="_blank" title="liexing">liexing</a>
+		
+		
+		</p>
+</div>
+</footer>
+    <script src="/js/jquery-2.0.3.min.js"></script>
+<script src="/js/jquery.imagesloaded.min.js"></script>
+<script src="/js/gallery.js"></script>
+<script src="/js/jquery.qrcode-0.12.0.min.js"></script>
+
+<script type="text/javascript">
+$(document).ready(function(){ 
+  $('.navbar').click(function(){
+    $('header nav').toggleClass('shownav');
+  });
+  var myWidth = 0;
+  function getSize(){
+    if( typeof( window.innerWidth ) == 'number' ) {
+      myWidth = window.innerWidth;
+    } else if( document.documentElement && document.documentElement.clientWidth) {
+      myWidth = document.documentElement.clientWidth;
+    };
+  };
+  var m = $('#main'),
+      a = $('#asidepart'),
+      c = $('.closeaside'),
+      o = $('.openaside');
+  c.click(function(){
+    a.addClass('fadeOut').css('display', 'none');
+    o.css('display', 'block').addClass('fadeIn');
+    m.addClass('moveMain');
+  });
+  o.click(function(){
+    o.css('display', 'none').removeClass('beforeFadeIn');
+    a.css('display', 'block').removeClass('fadeOut').addClass('fadeIn');      
+    m.removeClass('moveMain');
+  });
+  $(window).scroll(function(){
+    o.css("top",Math.max(80,260-$(this).scrollTop()));
+  });
+  
+  $(window).resize(function(){
+    getSize(); 
+    if (myWidth >= 1024) {
+      $('header nav').removeClass('shownav');
+    }else{
+      m.removeClass('moveMain');
+      a.css('display', 'block').removeClass('fadeOut');
+      o.css('display', 'none');
+      
+      $('#toc.toc-aside').css('display', 'none');
+        
+    }
+  });
+});
+</script>
+
+<script type="text/javascript">
+$(document).ready(function(){ 
+  var ai = $('.article-content>iframe'),
+      ae = $('.article-content>embed'),
+      t  = $('#toc'),
+      ta = $('#toc.toc-aside'),
+      o  = $('.openaside'),
+      c  = $('.closeaside');
+  if(ai.length>0){
+    ai.wrap('<div class="video-container" />');
+  };
+  if(ae.length>0){
+   ae.wrap('<div class="video-container" />');
+  };
+  c.click(function(){
+    ta.css('display', 'block').addClass('fadeIn');
+  });
+  o.click(function(){
+    ta.css('display', 'none');
+  });
+  $(window).scroll(function(){
+    ta.css("top",Math.max(140,320-$(this).scrollTop()));
+  });
+});
+</script>
+
+
+<script type="text/javascript">
+$(document).ready(function(){ 
+  var $this = $('.share'),
+      url = $this.attr('data-url'),
+      encodedUrl = encodeURIComponent(url),
+      title = $this.attr('data-title'),
+      tsina = $this.attr('data-tsina'),
+      description = $this.attr('description');
+  var html = [
+  '<div class="hoverqrcode clearfix"></div>',
+  '<a class="overlay" id="qrcode"></a>',
+  '<a href="https://www.facebook.com/sharer.php?u=' + encodedUrl + '" class="article-share-facebook" target="_blank" title="Facebook"></a>',
+  '<a href="https://twitter.com/intent/tweet?url=' + encodedUrl + '" class="article-share-twitter" target="_blank" title="Twitter"></a>',
+  '<a href="#qrcode" class="article-share-qrcode" title="微信"></a>',
+  '<a href="http://widget.renren.com/dialog/share?resourceUrl=' + encodedUrl + '&srcUrl=' + encodedUrl + '&title=' + title +'" class="article-share-renren" target="_blank" title="人人"></a>',
+  '<a href="http://service.weibo.com/share/share.php?title='+title+'&url='+encodedUrl +'&ralateUid='+ tsina +'&searchPic=true&style=number' +'" class="article-share-weibo" target="_blank" title="微博"></a>',
+  '<span title="Share to"></span>'
+  ].join('');
+  $this.append(html);
+
+  $('.hoverqrcode').hide();
+
+  var myWidth = 0;
+  function updatehoverqrcode(){
+    if( typeof( window.innerWidth ) == 'number' ) {
+      myWidth = window.innerWidth;
+    } else if( document.documentElement && document.documentElement.clientWidth) {
+      myWidth = document.documentElement.clientWidth;
+    };
+    var qrsize = myWidth > 1024 ? 200:100;
+    var options = {render: 'image', size: qrsize, fill: '#2ca6cb', text: url, radius: 0.5, quiet: 1};
+    var p = $('.article-share-qrcode').position();
+    $('.hoverqrcode').empty().css('width', qrsize).css('height', qrsize)
+                          .css('left', p.left-qrsize/2+20).css('top', p.top-qrsize-10)
+                          .qrcode(options);
+  };
+  $(window).resize(function(){
+    $('.hoverqrcode').hide();
+  });
+  $('.article-share-qrcode').click(function(){
+    updatehoverqrcode();
+    $('.hoverqrcode').toggle();
+  });
+  $('.article-share-qrcode').hover(function(){}, function(){
+      $('.hoverqrcode').hide();
+  });
+});   
+</script>
+
+
+
+<script type="text/javascript">
+  var duoshuoQuery = {short_name:"liexing"};
+  (function() {
+    var ds = document.createElement('script');
+    ds.type = 'text/javascript';ds.async = true;
+    ds.src = '//7xl6z1.com1.z0.glb.clouddn.com/embed_ua.js';
+    ds.charset = 'UTF-8';
+    (document.getElementsByTagName('head')[0] 
+    || document.getElementsByTagName('body')[0]).appendChild(ds);
+  })();
+</script> 
+
+
+
+
+
+
+
+<link rel="stylesheet" href="/fancybox/jquery.fancybox.css" media="screen" type="text/css">
+<script src="/fancybox/jquery.fancybox.pack.js"></script>
+<script type="text/javascript">
+$(document).ready(function(){ 
+  $('.article-content').each(function(i){
+    $(this).find('img').each(function(){
+      if ($(this).parent().hasClass('fancybox')) return;
+      var alt = this.alt;
+      if (alt) $(this).after('<span class="caption">' + alt + '</span>');
+      $(this).wrap('<a href="' + this.src + '" title="' + alt + '" class="fancybox"></a>');
+    });
+    $(this).find('.fancybox').each(function(){
+      $(this).attr('rel', 'article' + i);
+    });
+  });
+  if($.fancybox){
+    $('.fancybox').fancybox();
+  }
+}); 
+</script>
+
+
+
+<!-- Analytics Begin -->
+
+
+
+<script>
+var _hmt = _hmt || [];
+(function() {
+  var hm = document.createElement("script");
+  hm.src = "//hm.baidu.com/hm.js?e6d1f421bbc9962127a50488f9ed37d1";
+  var s = document.getElementsByTagName("script")[0]; 
+  s.parentNode.insertBefore(hm, s);
+})();
+</script>
+
+
+
+<span style="display:none"><script type="text/javascript">var cnzz_protocol = (("https:" == document.location.protocol) ? " https://" : " http://");document.write(unescape("%3Cspan id='cnzz_stat_icon_1256113107'%3E%3C/span%3E%3Cscript src='" + cnzz_protocol + "s23.cnzz.com/z_stat.php%3Fid%3D1256113107' type='text/javascript'%3E%3C/script%3E"));</script></span>
+
+
+<!-- Analytics End -->
+
+<!-- Totop Begin -->
+
+	<div id="totop">
+	<a title="返回顶部"><img src="/img/scrollup.png"/></a>
+	</div>
+	<script src="/js/totop.js"></script>
+
+<!-- Totop End -->
+
+<!-- MathJax Begin -->
+<!-- mathjax config similar to math.stackexchange -->
+
+
+<!-- MathJax End -->
+
+<!-- Tiny_search Begin -->
+
+<!-- Tiny_search End -->
+
+  </body>
+</html>
