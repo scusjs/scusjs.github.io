@@ -4,24 +4,26 @@
 <head>
   <meta charset="UTF-8">
   
-    <title>统计学习方法（笔记）-朴素贝叶斯法 | Liexing&#39;s Blog</title>
+    <title>统计学习方法（笔记）-逻辑斯谛回归与最大熵模型 | Liexing&#39;s Blog</title>
     <meta name="viewport" content="width=device-width, initial-scale=1,user-scalable=no">
     
     <meta name="author" content="liexing">
     
 
     
-    <meta name="description" content="朴素贝叶斯（naïve Bayes）法是基于被也是定力与特征条件独立假设的分布方法。首先对于训练数据集，基于特征条件独立假设学习输入输出的联合概率分布，然后对于给定的输入，利用贝叶斯定理求出后验概率最大的输出。 朴素贝叶斯法的学习与分类朴素贝叶斯法是典型的生成学习方法。利用训练数据学习$P(X|Y)$和$P(Y)$的估计，得到联合概率分布 $$P(X,Y) = P(X)P(X|Y)$$ 概率估计方">
-<meta name="keywords" content="笔记,统计学习,机器学习,朴素贝叶斯">
+    <meta name="description" content="逻辑斯谛回归（Logistic regression）是统计学习中的经典分类方法，最大熵是概率模型学习的一个准则，将其推广到分类问题得到最大熵模型。逻辑斯谛回归模型与最大熵模型都是属于对数线性模型。 逻辑斯谛回归模型逻辑斯谛分布的分布函数和密度函数如下： $$F(x) = P(X &amp;lt;= x) = \frac{1}{1+e^{-(x - \mu) / \gamma}}$$ $$f(x) = F">
+<meta name="keywords" content="笔记,统计学习,机器学习,逻辑斯谛回归,最大熵模型">
 <meta property="og:type" content="article">
-<meta property="og:title" content="统计学习方法（笔记）-朴素贝叶斯法">
-<meta property="og:url" content="http://blog.liexing.me/2016/11/03/statistical-learning-method-naive-bayes/index.html">
+<meta property="og:title" content="统计学习方法（笔记）-逻辑斯谛回归与最大熵模型">
+<meta property="og:url" content="http://blog.liexing.me/2017/07/13/statistical-learning-method-logistic-regression-maximum-entropy-model/index.html">
 <meta property="og:site_name" content="Liexing&#39;s Blog">
-<meta property="og:description" content="朴素贝叶斯（naïve Bayes）法是基于被也是定力与特征条件独立假设的分布方法。首先对于训练数据集，基于特征条件独立假设学习输入输出的联合概率分布，然后对于给定的输入，利用贝叶斯定理求出后验概率最大的输出。 朴素贝叶斯法的学习与分类朴素贝叶斯法是典型的生成学习方法。利用训练数据学习$P(X|Y)$和$P(Y)$的估计，得到联合概率分布 $$P(X,Y) = P(X)P(X|Y)$$ 概率估计方">
-<meta property="og:updated_time" content="2017-02-27T11:34:45.000Z">
+<meta property="og:description" content="逻辑斯谛回归（Logistic regression）是统计学习中的经典分类方法，最大熵是概率模型学习的一个准则，将其推广到分类问题得到最大熵模型。逻辑斯谛回归模型与最大熵模型都是属于对数线性模型。 逻辑斯谛回归模型逻辑斯谛分布的分布函数和密度函数如下： $$F(x) = P(X &amp;lt;= x) = \frac{1}{1+e^{-(x - \mu) / \gamma}}$$ $$f(x) = F">
+<meta property="og:image" content="http://7xl6z1.com1.z0.glb.clouddn.com/static/images/statistical-learning-method/1499954622.jpg">
+<meta property="og:updated_time" content="2017-07-13T14:06:14.000Z">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:title" content="统计学习方法（笔记）-朴素贝叶斯法">
-<meta name="twitter:description" content="朴素贝叶斯（naïve Bayes）法是基于被也是定力与特征条件独立假设的分布方法。首先对于训练数据集，基于特征条件独立假设学习输入输出的联合概率分布，然后对于给定的输入，利用贝叶斯定理求出后验概率最大的输出。 朴素贝叶斯法的学习与分类朴素贝叶斯法是典型的生成学习方法。利用训练数据学习$P(X|Y)$和$P(Y)$的估计，得到联合概率分布 $$P(X,Y) = P(X)P(X|Y)$$ 概率估计方">
+<meta name="twitter:title" content="统计学习方法（笔记）-逻辑斯谛回归与最大熵模型">
+<meta name="twitter:description" content="逻辑斯谛回归（Logistic regression）是统计学习中的经典分类方法，最大熵是概率模型学习的一个准则，将其推广到分类问题得到最大熵模型。逻辑斯谛回归模型与最大熵模型都是属于对数线性模型。 逻辑斯谛回归模型逻辑斯谛分布的分布函数和密度函数如下： $$F(x) = P(X &amp;lt;= x) = \frac{1}{1+e^{-(x - \mu) / \gamma}}$$ $$f(x) = F">
+<meta name="twitter:image" content="http://7xl6z1.com1.z0.glb.clouddn.com/static/images/statistical-learning-method/1499954622.jpg">
 <meta name="twitter:creator" content="@scusjs">
 
     
@@ -81,14 +83,14 @@
 		<header class="article-info clearfix">
   <h1 itemprop="name">
     
-      <a href="/2016/11/03/statistical-learning-method-naive-bayes/" title="统计学习方法（笔记）-朴素贝叶斯法" itemprop="url">统计学习方法（笔记）-朴素贝叶斯法</a>
+      <a href="/2017/07/13/statistical-learning-method-logistic-regression-maximum-entropy-model/" title="统计学习方法（笔记）-逻辑斯谛回归与最大熵模型" itemprop="url">统计学习方法（笔记）-逻辑斯谛回归与最大熵模型</a>
   </h1>
   <p class="article-author">By
        
 		<a href="/about" title="liexing" target="_blank" itemprop="author">liexing</a>
 		
   <p class="article-time">
-    <time datetime="2016-11-03T12:52:47.000Z" itemprop="datePublished"> 发表于 2016-11-03</time>
+    <time datetime="2017-07-13T11:29:50.000Z" itemprop="datePublished"> 发表于 2017-07-13</time>
     
   </p>
 </header>
@@ -97,29 +99,25 @@
 		<div id="toc" class="toc-article">
 			<strong class="toc-title">文章目录</strong>
 		
-			<ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link" href="#朴素贝叶斯法的学习与分类"><span class="toc-number">1.</span> <span class="toc-text">朴素贝叶斯法的学习与分类</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#朴素贝叶斯法的参数估计"><span class="toc-number">2.</span> <span class="toc-text">朴素贝叶斯法的参数估计</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#极大似然估计"><span class="toc-number">2.1.</span> <span class="toc-text">极大似然估计</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#贝叶斯估计"><span class="toc-number">2.2.</span> <span class="toc-text">贝叶斯估计</span></a></li></ol></li></ol>
+			<ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link" href="#逻辑斯谛回归模型"><span class="toc-number">1.</span> <span class="toc-text">逻辑斯谛回归模型</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#最大熵模型"><span class="toc-number">2.</span> <span class="toc-text">最大熵模型</span></a></li></ol>
 		
 		</div>
 		
-		<p>朴素贝叶斯（naïve Bayes）法是基于被也是定力与特征条件独立假设的分布方法。首先对于训练数据集，基于特征条件独立假设学习输入输出的联合概率分布，然后对于给定的输入，利用贝叶斯定理求出后验概率最大的输出。</p>
-<h1 id="朴素贝叶斯法的学习与分类"><a href="#朴素贝叶斯法的学习与分类" class="headerlink" title="朴素贝叶斯法的学习与分类"></a>朴素贝叶斯法的学习与分类</h1><p>朴素贝叶斯法是典型的生成学习方法。利用训练数据学习$P(X|Y)$和$P(Y)$的估计，得到联合概率分布</p>
-<p>$$P(X,Y) = P(X)P(X|Y)$$</p>
-<p>概率估计方法可以是极大似然估计或者贝叶斯估计。</p>
-<p>朴素贝叶斯法的基本假设使条件独立性。</p>
-<p>$$P(X=x|Y=c_k)=P(X^{(1)}=x^{(1)},…,X^{(n)}=x^{(n)}|Y=c_k)\\ =\prod \limits_{j=1}^nP(X^{(j)}=x^{(j)}|Y=c_k)$$</p>
-<p>条件独立假设使朴素贝叶斯法变得简单，但是有时候会牺牲一定的分类准确率。</p>
-<p>朴素贝叶斯法利用贝叶斯定理与学到的联合概率模型进行分类预测，将输入的 x 分到后验概率最大的类 y：</p>
-<p>$$y=\arg \max _{c_k}P(Y=c_k)\prod \limits_{j=1}^nP(X^{(j)}=x^{(j)}|Y=c_k)$$</p>
-<p>后验概率最大等价于0-1函数损失时的期望风险最小化。</p>
-<h1 id="朴素贝叶斯法的参数估计"><a href="#朴素贝叶斯法的参数估计" class="headerlink" title="朴素贝叶斯法的参数估计"></a>朴素贝叶斯法的参数估计</h1><p>在朴素贝叶斯法中，学习即估计$P(Y=c_k)$和$P(X^{(j)}=x^{(j)}|Y=c_k)$</p>
-<h2 id="极大似然估计"><a href="#极大似然估计" class="headerlink" title="极大似然估计"></a>极大似然估计</h2><p>先验概率$P(Y=c_k)$的极大似然估计是：</p>
-<p>$$P(Y=c_k)=\frac{\sum \limits_{i=1}^NI(y_i=c_k)}{N},\quad k=1,2,…,K$$</p>
-<p>设第 j 个特征$x^{(j)}$可能取值集合为${a_{j1},a_{j2},…,a_{jS_j} }$，则条件概率为：</p>
-<p>$$P(X^{(j)}=a_{jl}|Y=c_k)=\frac{\sum \limits_{i=1}^NI(x_i^{(j)}=a_{jl},y_i=c_k)}{\sum \limits_{i=1}^NI(y_i=c_k)}\ j=1,2,…,n;\quad l=1,2,…S;\quad k=1,2,…,K$$</p>
-<h2 id="贝叶斯估计"><a href="#贝叶斯估计" class="headerlink" title="贝叶斯估计"></a>贝叶斯估计</h2><p>极大似然估计可能会出现估计的概率值为 0 的情况，这会影响到后验概率的计算结果。可以使用贝叶斯估计来解决这一问题。贝叶斯估计即加入一个系数防止0情况出现。</p>
-<p>$$P_\lambda(Y=c_k)=\frac{\sum \limits_{i=1}^NI(y_i=c_k)+\lambda}{N+K\lambda},\quad k=1,2,…,K$$</p>
-<p>$$P_\lambda(X^{(j)}=a_{jl}|Y=c_k)=\frac{\sum \limits_{i=1}^NI(x_i^{(j)}=a_{jl},y_i=c_k)+\lambda}{\sum \limits_{i=1}^NI(y_i=c_k)+S_j\lambda}\ j=1,2,…,n;\quad l=1,2,…S;\quad k=1,2,…,K$$</p>
-<p>上面两式中，$\lambda\geq0$，当取1时，称为拉普拉斯平滑。</p>
+		<p>逻辑斯谛回归（Logistic regression）是统计学习中的经典<strong>分类方法</strong>，最大熵是概率模型学习的一个准则，将其推广到分类问题得到最大熵模型。逻辑斯谛回归模型与最大熵模型都是属于对数线性模型。</p>
+<h1 id="逻辑斯谛回归模型"><a href="#逻辑斯谛回归模型" class="headerlink" title="逻辑斯谛回归模型"></a>逻辑斯谛回归模型</h1><p>逻辑斯谛分布的分布函数和密度函数如下：</p>
+<p>$$F(x) = P(X &lt;= x) = \frac{1}{1+e^{-(x - \mu) / \gamma}}$$</p>
+<p>$$f(x) = F’(x) = \frac{e^{-(x-\mu) / \gamma}}{\gamma (1+e^{-(x-\mu) / \gamma})^2}$$</p>
+<p>其中$\mu$为位置参数；$\gamma &gt; 0$为形状参数，值越小，分布越集中于$\mu$附近。其分布的密度函数与分布函数如图：</p>
+<img title="逻辑斯谛分布的密度函数与分布函数" alt="逻辑斯谛分布的密度函数与分布函数" src="http://7xl6z1.com1.z0.glb.clouddn.com/static/images/statistical-learning-method/1499954622.jpg">
+<p>二项逻辑斯谛回归模型是如下的条件概率分布：</p>
+<p>$$P(Y=1|x) = \frac{exp(w \cdot x + b)}{1+ exp(w \cdot x + b)}$$<br>$$P(Y=0|x) = \frac{1}{1+ exp(w \cdot x + b)}$$</p>
+<p>逻辑斯谛回归模型是指，输出$Y=1$的对数几率，其是由输入$x$的线性函数表示的模型。可以用极大似然估计法估计模型参数，从而得到逻辑斯谛回归模型。学习过程通常采用的方法是梯度下降法及拟牛顿法。</p>
+<h1 id="最大熵模型"><a href="#最大熵模型" class="headerlink" title="最大熵模型"></a>最大熵模型</h1><p>最大熵原理认为，学习概率模型时，在所有可能的概率模型（分布）中，熵最大的模型是最好的模型。通常用约束条件来确定概率模型的集合，所以最大熵原理也可以表述为在满足约束条件的模型集合汇总选取熵最大的模型。最大熵模型的学习可以形式化为约束最优化问题：</p>
+<p>$$\max_{P \in C} H(P) = - \sum_{x,y}\tilde{P}(x)p(y|x)logP(y|x)$$<br>$$s.t. \qquad E_p(f_i) = E_\tilde{p}(f_i) $$<br>$$\qquad \sum_yP(y|x)=1$$</p>
+<p>最大熵模型是由以下条件概率分布表示的分类模型：</p>
+<p>$$P_w(y|x) = \frac{1}{Z_w(x)}exp(\sum_{i=1}^{n}w_if_i(x,y))$$<br>$$Z_w(x)=\sum_yexp(\sum_{i=1}^{n}w_if_i(x,y))$$</p>
+<p>其中$Z_w(x)$是规范化因子，$f_i$为特征函数，$w_i$为特征的权值。</p>
+<p>逻辑斯谛回归模型与最大熵模型都属于对数线性模型。二者的学习一般采用极大似然估计，或正则化的极大似然估计。逻辑斯谛回归模型及最大熵模型学习可以形式化为无约束最优化问题。求解该最优化问题的算法有改进的迭代尺度法、梯度下降法、拟牛顿法。</p>
   
 	</div>
 		<footer class="article-footer clearfix">
@@ -133,7 +131,7 @@
 
   <div class="article-tags">
   
-  <span></span> <a href="/tags/笔记/">笔记</a><a href="/tags/统计学习/">统计学习</a><a href="/tags/机器学习/">机器学习</a><a href="/tags/朴素贝叶斯/">朴素贝叶斯</a>
+  <span></span> <a href="/tags/笔记/">笔记</a><a href="/tags/统计学习/">统计学习</a><a href="/tags/机器学习/">机器学习</a><a href="/tags/逻辑斯谛回归/">逻辑斯谛回归</a><a href="/tags/最大熵模型/">最大熵模型</a>
   </div>
 
 </div>
@@ -142,7 +140,7 @@
 
 	<div class="article-share" id="share">
 	
-	  <div data-url="http://blog.liexing.me/2016/11/03/statistical-learning-method-naive-bayes/" data-title="统计学习方法（笔记）-朴素贝叶斯法 | Liexing&#39;s Blog" data-tsina="1915625641" class="share clearfix">
+	  <div data-url="http://blog.liexing.me/2017/07/13/statistical-learning-method-logistic-regression-maximum-entropy-model/" data-title="统计学习方法（笔记）-逻辑斯谛回归与最大熵模型 | Liexing&#39;s Blog" data-tsina="1915625641" class="share clearfix">
 	  </div>
 	
 	</div>
@@ -155,19 +153,11 @@
 	
 <nav class="article-nav clearfix">
  
- <div class="prev" >
- <a href="/2016/11/07/statistical-learning-method-decision-tree/" title="统计学习方法（笔记）-决策树">
-  <strong>上一篇：</strong><br/>
-  <span>
-  统计学习方法（笔记）-决策树</span>
-</a>
-</div>
-
 
 <div class="next">
-<a href="/2016/11/02/statistical-learning-method-knn/"  title="统计学习方法（笔记）-k 近邻法">
+<a href="/2016/11/07/statistical-learning-method-decision-tree/"  title="统计学习方法（笔记）-决策树">
  <strong>下一篇：</strong><br/> 
- <span>统计学习方法（笔记）-k 近邻法
+ <span>统计学习方法（笔记）-决策树
 </span>
 </a>
 </div>
@@ -176,7 +166,7 @@
 
 	
 <section id="comments" class="comment">
-	<div class="ds-thread" data-thread-key="2016/11/03/statistical-learning-method-naive-bayes/" data-title="统计学习方法（笔记）-朴素贝叶斯法" data-url="http://blog.liexing.me/2016/11/03/statistical-learning-method-naive-bayes/"></div>
+	<div class="ds-thread" data-thread-key="2017/07/13/statistical-learning-method-logistic-regression-maximum-entropy-model/" data-title="统计学习方法（笔记）-逻辑斯谛回归与最大熵模型" data-url="http://blog.liexing.me/2017/07/13/statistical-learning-method-logistic-regression-maximum-entropy-model/"></div>
 </section>
 
 
@@ -186,7 +176,7 @@
   <div id="toc" class="toc-aside">
   <strong class="toc-title">文章目录</strong>
  
- <ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link" href="#朴素贝叶斯法的学习与分类"><span class="toc-number">1.</span> <span class="toc-text">朴素贝叶斯法的学习与分类</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#朴素贝叶斯法的参数估计"><span class="toc-number">2.</span> <span class="toc-text">朴素贝叶斯法的参数估计</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#极大似然估计"><span class="toc-number">2.1.</span> <span class="toc-text">极大似然估计</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#贝叶斯估计"><span class="toc-number">2.2.</span> <span class="toc-text">贝叶斯估计</span></a></li></ol></li></ol>
+ <ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link" href="#逻辑斯谛回归模型"><span class="toc-number">1.</span> <span class="toc-text">逻辑斯谛回归模型</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#最大熵模型"><span class="toc-number">2.</span> <span class="toc-text">最大熵模型</span></a></li></ol>
  
   </div>
 

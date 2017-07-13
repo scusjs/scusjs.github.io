@@ -11,19 +11,17 @@
     
 
     
-    <meta name="description" content="在Druid中读取已有的数据比较简单，有很多方法可以使用，详见这里。但是如果不同的Druid集群使用了不同的Metadata Storage，迁移任务首先回去找datasource下的segments，但是由于旧的Druid集群把相关信息保存在其他地方，这将会导致找不到Segments。
-因此考虑将旧集群中需要转移的datasource的metadata转到新集群的Metadata Storage">
+    <meta name="description" content="在Druid中读取已有的数据比较简单，有很多方法可以使用，详见这里。但是如果不同的Druid集群使用了不同的Metadata Storage，迁移任务首先回去找datasource下的segments，但是由于旧的Druid集群把相关信息保存在其他地方，这将会导致找不到Segments。 因此考虑将旧集群中需要转移的datasource的metadata转到新集群的Metadata Storage">
+<meta name="keywords" content="分布式,Druid,实时计算">
 <meta property="og:type" content="article">
 <meta property="og:title" content="使用不同Metadata Storage的Druid集群间转移DataSource">
 <meta property="og:url" content="http://blog.liexing.me/2016/04/20/reindex-between-different-druid-use-and-metadatastorage/index.html">
-<meta property="og:site_name" content="Liexing's Blog">
-<meta property="og:description" content="在Druid中读取已有的数据比较简单，有很多方法可以使用，详见这里。但是如果不同的Druid集群使用了不同的Metadata Storage，迁移任务首先回去找datasource下的segments，但是由于旧的Druid集群把相关信息保存在其他地方，这将会导致找不到Segments。
-因此考虑将旧集群中需要转移的datasource的metadata转到新集群的Metadata Storage">
+<meta property="og:site_name" content="Liexing&#39;s Blog">
+<meta property="og:description" content="在Druid中读取已有的数据比较简单，有很多方法可以使用，详见这里。但是如果不同的Druid集群使用了不同的Metadata Storage，迁移任务首先回去找datasource下的segments，但是由于旧的Druid集群把相关信息保存在其他地方，这将会导致找不到Segments。 因此考虑将旧集群中需要转移的datasource的metadata转到新集群的Metadata Storage">
 <meta property="og:updated_time" content="2017-02-27T11:34:45.000Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="使用不同Metadata Storage的Druid集群间转移DataSource">
-<meta name="twitter:description" content="在Druid中读取已有的数据比较简单，有很多方法可以使用，详见这里。但是如果不同的Druid集群使用了不同的Metadata Storage，迁移任务首先回去找datasource下的segments，但是由于旧的Druid集群把相关信息保存在其他地方，这将会导致找不到Segments。
-因此考虑将旧集群中需要转移的datasource的metadata转到新集群的Metadata Storage">
+<meta name="twitter:description" content="在Druid中读取已有的数据比较简单，有很多方法可以使用，详见这里。但是如果不同的Druid集群使用了不同的Metadata Storage，迁移任务首先回去找datasource下的segments，但是由于旧的Druid集群把相关信息保存在其他地方，这将会导致找不到Segments。 因此考虑将旧集群中需要转移的datasource的metadata转到新集群的Metadata Storage">
 <meta name="twitter:creator" content="@scusjs">
 
     
@@ -226,7 +224,7 @@
           
         
           
-            <li><a href="/categories/统计学习/" title="统计学习">统计学习<sup>5</sup></a></li>
+            <li><a href="/categories/统计学习/" title="统计学习">统计学习<sup>6</sup></a></li>
           
         
         </ul>
@@ -261,7 +259,7 @@
   <div class="tagcloudlist">
     <p class="asidetitle">标签云</p>
     <div class="tagcloudlist clearfix">
-       <a href="/tags/Cassandra/" style="font-size: 12px;">Cassandra</a> <a href="/tags/Druid/" style="font-size: 16px;">Druid</a> <a href="/tags/LCS/" style="font-size: 10px;">LCS</a> <a href="/tags/NOSQL/" style="font-size: 12px;">NOSQL</a> <a href="/tags/algorithms/" style="font-size: 10px;">algorithms</a> <a href="/tags/bash/" style="font-size: 10px;">bash</a> <a href="/tags/dynamic-programming/" style="font-size: 10px;">dynamic programming</a> <a href="/tags/hexo/" style="font-size: 10px;">hexo</a> <a href="/tags/k-邻近法/" style="font-size: 12px;">k 邻近法</a> <a href="/tags/knn/" style="font-size: 12px;">knn</a> <a href="/tags/linux/" style="font-size: 10px;">linux</a> <a href="/tags/分布式/" style="font-size: 18px;">分布式</a> <a href="/tags/实时计算/" style="font-size: 16px;">实时计算</a> <a href="/tags/感知机/" style="font-size: 10px;">感知机</a> <a href="/tags/朴素贝叶斯/" style="font-size: 10px;">朴素贝叶斯</a> <a href="/tags/机器学习/" style="font-size: 14px;">机器学习</a> <a href="/tags/源码分析/" style="font-size: 10px;">源码分析</a> <a href="/tags/笔记/" style="font-size: 20px;">笔记</a> <a href="/tags/统计学习/" style="font-size: 14px;">统计学习</a>
+       <a href="/tags/Cassandra/" style="font-size: 12.5px;">Cassandra</a> <a href="/tags/Druid/" style="font-size: 15px;">Druid</a> <a href="/tags/LCS/" style="font-size: 10px;">LCS</a> <a href="/tags/NOSQL/" style="font-size: 12.5px;">NOSQL</a> <a href="/tags/algorithms/" style="font-size: 10px;">algorithms</a> <a href="/tags/bash/" style="font-size: 10px;">bash</a> <a href="/tags/dynamic-programming/" style="font-size: 10px;">dynamic programming</a> <a href="/tags/hexo/" style="font-size: 10px;">hexo</a> <a href="/tags/k-邻近法/" style="font-size: 12.5px;">k 邻近法</a> <a href="/tags/knn/" style="font-size: 12.5px;">knn</a> <a href="/tags/linux/" style="font-size: 10px;">linux</a> <a href="/tags/分布式/" style="font-size: 17.5px;">分布式</a> <a href="/tags/实时计算/" style="font-size: 15px;">实时计算</a> <a href="/tags/感知机/" style="font-size: 10px;">感知机</a> <a href="/tags/最大熵模型/" style="font-size: 10px;">最大熵模型</a> <a href="/tags/朴素贝叶斯/" style="font-size: 10px;">朴素贝叶斯</a> <a href="/tags/机器学习/" style="font-size: 15px;">机器学习</a> <a href="/tags/源码分析/" style="font-size: 10px;">源码分析</a> <a href="/tags/笔记/" style="font-size: 20px;">笔记</a> <a href="/tags/统计学习/" style="font-size: 15px;">统计学习</a> <a href="/tags/逻辑斯谛回归/" style="font-size: 10px;">逻辑斯谛回归</a>
     </div>
   </div>
 

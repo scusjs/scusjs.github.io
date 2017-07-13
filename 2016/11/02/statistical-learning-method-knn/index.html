@@ -11,24 +11,19 @@
     
 
     
-    <meta name="description" content="k 近邻法（knn）是一种基本的分类与回归方法。这里只讨论分类问题。knn 分类可以简单理解为，找到距离输入实例最近的 k 个训练数据集中的实例点，其中多数属于某个类，则新输入的实例也属于某个类。
-knn 算法根据上述描述，其算法表示为：
-$$y=\arg \max \limits_{c_j} \sum \limits_{x_i \in N_{k}(x)} I(y_i = c_j),\quad i">
+    <meta name="description" content="k 近邻法（knn）是一种基本的分类与回归方法。这里只讨论分类问题。knn 分类可以简单理解为，找到距离输入实例最近的 k 个训练数据集中的实例点，其中多数属于某个类，则新输入的实例也属于某个类。 knn 算法根据上述描述，其算法表示为： $$y=\arg \max \limits_{c_j} \sum \limits_{x_i \in N_{k}(x)} I(y_i = c_j),\quad i">
+<meta name="keywords" content="笔记,统计学习,机器学习,k 邻近法,knn">
 <meta property="og:type" content="article">
 <meta property="og:title" content="统计学习方法（笔记）-k 近邻法">
 <meta property="og:url" content="http://blog.liexing.me/2016/11/02/statistical-learning-method-knn/index.html">
-<meta property="og:site_name" content="Liexing's Blog">
-<meta property="og:description" content="k 近邻法（knn）是一种基本的分类与回归方法。这里只讨论分类问题。knn 分类可以简单理解为，找到距离输入实例最近的 k 个训练数据集中的实例点，其中多数属于某个类，则新输入的实例也属于某个类。
-knn 算法根据上述描述，其算法表示为：
-$$y=\arg \max \limits_{c_j} \sum \limits_{x_i \in N_{k}(x)} I(y_i = c_j),\quad i">
+<meta property="og:site_name" content="Liexing&#39;s Blog">
+<meta property="og:description" content="k 近邻法（knn）是一种基本的分类与回归方法。这里只讨论分类问题。knn 分类可以简单理解为，找到距离输入实例最近的 k 个训练数据集中的实例点，其中多数属于某个类，则新输入的实例也属于某个类。 knn 算法根据上述描述，其算法表示为： $$y=\arg \max \limits_{c_j} \sum \limits_{x_i \in N_{k}(x)} I(y_i = c_j),\quad i">
 <meta property="og:image" content="http://7xl6z1.com1.z0.glb.clouddn.com/static/images/statistical-learning-method/1478078547.jpg">
 <meta property="og:image" content="http://7xl6z1.com1.z0.glb.clouddn.com/static/images/statistical-learning-method/1478081508.jpg">
 <meta property="og:updated_time" content="2017-02-27T11:34:45.000Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="统计学习方法（笔记）-k 近邻法">
-<meta name="twitter:description" content="k 近邻法（knn）是一种基本的分类与回归方法。这里只讨论分类问题。knn 分类可以简单理解为，找到距离输入实例最近的 k 个训练数据集中的实例点，其中多数属于某个类，则新输入的实例也属于某个类。
-knn 算法根据上述描述，其算法表示为：
-$$y=\arg \max \limits_{c_j} \sum \limits_{x_i \in N_{k}(x)} I(y_i = c_j),\quad i">
+<meta name="twitter:description" content="k 近邻法（knn）是一种基本的分类与回归方法。这里只讨论分类问题。knn 分类可以简单理解为，找到距离输入实例最近的 k 个训练数据集中的实例点，其中多数属于某个类，则新输入的实例也属于某个类。 knn 算法根据上述描述，其算法表示为： $$y=\arg \max \limits_{c_j} \sum \limits_{x_i \in N_{k}(x)} I(y_i = c_j),\quad i">
 <meta name="twitter:image" content="http://7xl6z1.com1.z0.glb.clouddn.com/static/images/statistical-learning-method/1478078547.jpg">
 <meta name="twitter:creator" content="@scusjs">
 
@@ -240,7 +235,7 @@ $$y=\arg \max \limits_{c_j} \sum \limits_{x_i \in N_{k}(x)} I(y_i = c_j),\quad i
           
         
           
-            <li><a href="/categories/统计学习/" title="统计学习">统计学习<sup>5</sup></a></li>
+            <li><a href="/categories/统计学习/" title="统计学习">统计学习<sup>6</sup></a></li>
           
         
         </ul>
@@ -275,7 +270,7 @@ $$y=\arg \max \limits_{c_j} \sum \limits_{x_i \in N_{k}(x)} I(y_i = c_j),\quad i
   <div class="tagcloudlist">
     <p class="asidetitle">标签云</p>
     <div class="tagcloudlist clearfix">
-       <a href="/tags/Cassandra/" style="font-size: 12px;">Cassandra</a> <a href="/tags/Druid/" style="font-size: 16px;">Druid</a> <a href="/tags/LCS/" style="font-size: 10px;">LCS</a> <a href="/tags/NOSQL/" style="font-size: 12px;">NOSQL</a> <a href="/tags/algorithms/" style="font-size: 10px;">algorithms</a> <a href="/tags/bash/" style="font-size: 10px;">bash</a> <a href="/tags/dynamic-programming/" style="font-size: 10px;">dynamic programming</a> <a href="/tags/hexo/" style="font-size: 10px;">hexo</a> <a href="/tags/k-邻近法/" style="font-size: 12px;">k 邻近法</a> <a href="/tags/knn/" style="font-size: 12px;">knn</a> <a href="/tags/linux/" style="font-size: 10px;">linux</a> <a href="/tags/分布式/" style="font-size: 18px;">分布式</a> <a href="/tags/实时计算/" style="font-size: 16px;">实时计算</a> <a href="/tags/感知机/" style="font-size: 10px;">感知机</a> <a href="/tags/朴素贝叶斯/" style="font-size: 10px;">朴素贝叶斯</a> <a href="/tags/机器学习/" style="font-size: 14px;">机器学习</a> <a href="/tags/源码分析/" style="font-size: 10px;">源码分析</a> <a href="/tags/笔记/" style="font-size: 20px;">笔记</a> <a href="/tags/统计学习/" style="font-size: 14px;">统计学习</a>
+       <a href="/tags/Cassandra/" style="font-size: 12.5px;">Cassandra</a> <a href="/tags/Druid/" style="font-size: 15px;">Druid</a> <a href="/tags/LCS/" style="font-size: 10px;">LCS</a> <a href="/tags/NOSQL/" style="font-size: 12.5px;">NOSQL</a> <a href="/tags/algorithms/" style="font-size: 10px;">algorithms</a> <a href="/tags/bash/" style="font-size: 10px;">bash</a> <a href="/tags/dynamic-programming/" style="font-size: 10px;">dynamic programming</a> <a href="/tags/hexo/" style="font-size: 10px;">hexo</a> <a href="/tags/k-邻近法/" style="font-size: 12.5px;">k 邻近法</a> <a href="/tags/knn/" style="font-size: 12.5px;">knn</a> <a href="/tags/linux/" style="font-size: 10px;">linux</a> <a href="/tags/分布式/" style="font-size: 17.5px;">分布式</a> <a href="/tags/实时计算/" style="font-size: 15px;">实时计算</a> <a href="/tags/感知机/" style="font-size: 10px;">感知机</a> <a href="/tags/最大熵模型/" style="font-size: 10px;">最大熵模型</a> <a href="/tags/朴素贝叶斯/" style="font-size: 10px;">朴素贝叶斯</a> <a href="/tags/机器学习/" style="font-size: 15px;">机器学习</a> <a href="/tags/源码分析/" style="font-size: 10px;">源码分析</a> <a href="/tags/笔记/" style="font-size: 20px;">笔记</a> <a href="/tags/统计学习/" style="font-size: 15px;">统计学习</a> <a href="/tags/逻辑斯谛回归/" style="font-size: 10px;">逻辑斯谛回归</a>
     </div>
   </div>
 
