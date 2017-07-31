@@ -265,7 +265,7 @@
   <div class="tagcloudlist">
     <p class="asidetitle">标签云</p>
     <div class="tagcloudlist clearfix">
-       <a href="/tags/Cassandra/" style="font-size: 12.5px;">Cassandra</a> <a href="/tags/Druid/" style="font-size: 15px;">Druid</a> <a href="/tags/LCS/" style="font-size: 10px;">LCS</a> <a href="/tags/NOSQL/" style="font-size: 12.5px;">NOSQL</a> <a href="/tags/algorithms/" style="font-size: 10px;">algorithms</a> <a href="/tags/bash/" style="font-size: 10px;">bash</a> <a href="/tags/dynamic-programming/" style="font-size: 10px;">dynamic programming</a> <a href="/tags/hexo/" style="font-size: 10px;">hexo</a> <a href="/tags/k-邻近法/" style="font-size: 12.5px;">k 邻近法</a> <a href="/tags/knn/" style="font-size: 12.5px;">knn</a> <a href="/tags/linux/" style="font-size: 10px;">linux</a> <a href="/tags/分布式/" style="font-size: 17.5px;">分布式</a> <a href="/tags/实时计算/" style="font-size: 15px;">实时计算</a> <a href="/tags/感知机/" style="font-size: 10px;">感知机</a> <a href="/tags/最大熵模型/" style="font-size: 10px;">最大熵模型</a> <a href="/tags/朴素贝叶斯/" style="font-size: 10px;">朴素贝叶斯</a> <a href="/tags/机器学习/" style="font-size: 15px;">机器学习</a> <a href="/tags/源码分析/" style="font-size: 10px;">源码分析</a> <a href="/tags/笔记/" style="font-size: 20px;">笔记</a> <a href="/tags/统计学习/" style="font-size: 15px;">统计学习</a> <a href="/tags/逻辑斯谛回归/" style="font-size: 10px;">逻辑斯谛回归</a>
+       <a href="/tags/Cassandra/" style="font-size: 12.5px;">Cassandra</a> <a href="/tags/Druid/" style="font-size: 15px;">Druid</a> <a href="/tags/Java/" style="font-size: 10px;">Java</a> <a href="/tags/LCS/" style="font-size: 10px;">LCS</a> <a href="/tags/NOSQL/" style="font-size: 12.5px;">NOSQL</a> <a href="/tags/algorithms/" style="font-size: 10px;">algorithms</a> <a href="/tags/bash/" style="font-size: 10px;">bash</a> <a href="/tags/dynamic-programming/" style="font-size: 10px;">dynamic programming</a> <a href="/tags/hexo/" style="font-size: 10px;">hexo</a> <a href="/tags/k-邻近法/" style="font-size: 12.5px;">k 邻近法</a> <a href="/tags/knn/" style="font-size: 12.5px;">knn</a> <a href="/tags/linux/" style="font-size: 10px;">linux</a> <a href="/tags/内存模型/" style="font-size: 10px;">内存模型</a> <a href="/tags/分布式/" style="font-size: 17.5px;">分布式</a> <a href="/tags/多线程/" style="font-size: 10px;">多线程</a> <a href="/tags/实时计算/" style="font-size: 15px;">实时计算</a> <a href="/tags/感知机/" style="font-size: 10px;">感知机</a> <a href="/tags/最大熵模型/" style="font-size: 10px;">最大熵模型</a> <a href="/tags/朴素贝叶斯/" style="font-size: 10px;">朴素贝叶斯</a> <a href="/tags/机器学习/" style="font-size: 15px;">机器学习</a> <a href="/tags/源码分析/" style="font-size: 10px;">源码分析</a> <a href="/tags/笔记/" style="font-size: 20px;">笔记</a> <a href="/tags/统计学习/" style="font-size: 15px;">统计学习</a> <a href="/tags/逻辑斯谛回归/" style="font-size: 10px;">逻辑斯谛回归</a>
     </div>
   </div>
 
@@ -533,7 +533,36 @@ var _hmt = _hmt || [];
 
 <!-- MathJax Begin -->
 <!-- mathjax config similar to math.stackexchange -->
+<% if (theme.mathjax || page.mathjax || 1){ %>
+<script type="text/x-mathjax-config">
+  MathJax.Hub.Config({
+    tex2jax: {
+      inlineMath: [ ['$','$'], ["\\(","\\)"] ],
+      processEscapes: true
+    }
+  });
+</script>
 
+<script type="text/x-mathjax-config">
+    MathJax.Hub.Config({
+      tex2jax: {
+        skipTags: ['script', 'noscript', 'style', 'textarea', 'pre', 'code']
+      }
+    });
+</script>
+
+<script type="text/x-mathjax-config">
+    MathJax.Hub.Queue(function() {
+        var all = MathJax.Hub.getAllJax(), i;
+        for(i=0; i < all.length; i += 1) {
+            all[i].SourceElement().parentNode.className += ' has-jax';
+        }
+    });
+</script>
+
+<script type="text/javascript" src="http://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML">
+</script>
+<% } %>
 
 <!-- MathJax End -->
 
