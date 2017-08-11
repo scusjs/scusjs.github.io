@@ -12,6 +12,7 @@
 
     
     <meta name="description" content="某人心心念念的rmbp终于到手了，然而我还在杭州没法帮忙各种配置，这里就写一份教程好了，自己拿去照着撸吧（￣︶￣）↗  ps. 毕竟你的是高大上的17带bar rmbp。。。然而，bar的操作我都！不！知！道！ 大概介绍 macOS 的一些基本操作以及常见的软件、开发环境的搭建。 基本操作介绍 17的触摸板应该是二段的按压，意思就是分为轻按和重按，按到底会响两次，轻按表示单击，重按表示双击。但是也">
+<meta name="keywords" content="macOS,配置">
 <meta property="og:type" content="article">
 <meta property="og:title" content="macOS 开发配置">
 <meta property="og:url" content="http://blog.liexing.me/2017/08/11/macos-dev-setup/index.html">
@@ -19,7 +20,9 @@
 <meta property="og:description" content="某人心心念念的rmbp终于到手了，然而我还在杭州没法帮忙各种配置，这里就写一份教程好了，自己拿去照着撸吧（￣︶￣）↗  ps. 毕竟你的是高大上的17带bar rmbp。。。然而，bar的操作我都！不！知！道！ 大概介绍 macOS 的一些基本操作以及常见的软件、开发环境的搭建。 基本操作介绍 17的触摸板应该是二段的按压，意思就是分为轻按和重按，按到底会响两次，轻按表示单击，重按表示双击。但是也">
 <meta property="og:image" content="http://7xl6z1.com1.z0.glb.clouddn.com/static/images/macos-dev-setup/1502459911.jpg">
 <meta property="og:image" content="http://7xl6z1.com1.z0.glb.clouddn.com/static/images/macos-dev-setup/1502460257.jpg">
-<meta property="og:updated_time" content="2017-08-11T16:17:57.000Z">
+<meta property="og:image" content="http://7xl6z1.com1.z0.glb.clouddn.com/static/images/macos-dev-setup/1502463526.png">
+<meta property="og:image" content="http://7xl6z1.com1.z0.glb.clouddn.com/static/images/macos-dev-setup/1502469911.jpg">
+<meta property="og:updated_time" content="2017-08-11T16:51:35.000Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="macOS 开发配置">
 <meta name="twitter:description" content="某人心心念念的rmbp终于到手了，然而我还在杭州没法帮忙各种配置，这里就写一份教程好了，自己拿去照着撸吧（￣︶￣）↗  ps. 毕竟你的是高大上的17带bar rmbp。。。然而，bar的操作我都！不！知！道！ 大概介绍 macOS 的一些基本操作以及常见的软件、开发环境的搭建。 基本操作介绍 17的触摸板应该是二段的按压，意思就是分为轻按和重按，按到底会响两次，轻按表示单击，重按表示双击。但是也">
@@ -172,8 +175,10 @@
 <p>然后可以选择<a href="https://github.com/oh-my-fish/oh-my-fish/blob/master/docs/Themes.md" target="_blank" rel="external">主题</a>，我用的 ocean，这么安装：</p>
 <figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line">omf install ocean</div><div class="line">omf theme ocean</div></pre></td></tr></table></figure>
 <p>当然也可以安装其他主题，去上面那个链接选选。。安装好后长这样：</p>
+<img title="Ocean主题" alt="Ocean主题" src="http://7xl6z1.com1.z0.glb.clouddn.com/static/images/macos-dev-setup/1502463526.png">
 <h3 id="ShadowsocksX"><a href="#ShadowsocksX" class="headerlink" title="ShadowsocksX"></a>ShadowsocksX</h3><p><a href="https://github.com/shadowsocks/ShadowsocksX-NG/releases" target="_blank" rel="external">ShadowsocksX</a>这个就不多说了。。。</p>
 <h3 id="Karabiner-Elements"><a href="#Karabiner-Elements" class="headerlink" title="Karabiner-Elements"></a>Karabiner-Elements</h3><p><a href="https://github.com/tekezo/Karabiner-Elements" target="_blank" rel="external">Karabiner-Elements</a> 是一个修改键位的软件，建议用它把 <code>caps lock</code>和<code>control</code>位置替换。因为大小写锁定占据了更好的位置，而 <code>control</code> 是更加频繁使用的一个按键，调换后更方便。</p>
+<img title="Karabiner-Elements" alt="Karabiner-Elements" src="http://7xl6z1.com1.z0.glb.clouddn.com/static/images/macos-dev-setup/1502469911.jpg">
 <h3 id="其他软件"><a href="#其他软件" class="headerlink" title="其他软件"></a>其他软件</h3><p><a href="https://www.jetbrains.com/idea/download/" target="_blank" rel="external">IntelliJ IDEA</a>(不过强烈建议通过<a href="https://www.jetbrains.com/toolbox/app/?fromMenu" target="_blank" rel="external">JetBrains Toolbox</a> 安装)、<br><a href="https://go.microsoft.com/fwlink/p/?LinkID=511647" target="_blank" rel="external">Office 365</a>、<br><a href="http://pinyin.sogou.com/mac/" target="_blank" rel="external">搜狗输入法</a>、<br><a href="http://mac.xunlei.com/" target="_blank" rel="external">迅雷</a>、<br><a href="https://www.alfredapp.com/" target="_blank" rel="external">Alfred</a>（<a href="www.alfredworkflow.com">这里</a>有一堆工作流工具）、<br><a href="http://bjango.com/" target="_blank" rel="external">iStat</a>、<br><a href="http://mac.guanjia.qq.com/" target="_blank" rel="external">腾讯电脑管家</a>、<br><a href="http://im.qq.com/macqq/" target="_blank" rel="external">QQ</a>、<br><a href="https://mac.weixin.qq.com/" target="_blank" rel="external">微信</a></p>
 <h2 id="其他参考"><a href="#其他参考" class="headerlink" title="其他参考"></a>其他参考</h2><ol>
 <li><a href="https://github.com/hzlzh/Best-App" target="_blank" rel="external">收集&amp;推荐优秀的 Apps/硬件/技巧/周边等</a></li>
@@ -187,6 +192,11 @@
 		<footer class="article-footer clearfix">
 <div class="article-catetags">
 
+
+  <div class="article-tags">
+  
+  <span></span> <a href="/tags/macOS/">macOS</a><a href="/tags/配置/">配置</a>
+  </div>
 
 </div>
 
@@ -309,7 +319,7 @@
   <div class="tagcloudlist">
     <p class="asidetitle">标签云</p>
     <div class="tagcloudlist clearfix">
-       <a href="/tags/Cassandra/" style="font-size: 12.5px;">Cassandra</a> <a href="/tags/Druid/" style="font-size: 15px;">Druid</a> <a href="/tags/Java/" style="font-size: 10px;">Java</a> <a href="/tags/LCS/" style="font-size: 10px;">LCS</a> <a href="/tags/NOSQL/" style="font-size: 12.5px;">NOSQL</a> <a href="/tags/algorithms/" style="font-size: 10px;">algorithms</a> <a href="/tags/bash/" style="font-size: 10px;">bash</a> <a href="/tags/dynamic-programming/" style="font-size: 10px;">dynamic programming</a> <a href="/tags/hexo/" style="font-size: 10px;">hexo</a> <a href="/tags/k-邻近法/" style="font-size: 12.5px;">k 邻近法</a> <a href="/tags/knn/" style="font-size: 12.5px;">knn</a> <a href="/tags/linux/" style="font-size: 10px;">linux</a> <a href="/tags/内存模型/" style="font-size: 10px;">内存模型</a> <a href="/tags/分布式/" style="font-size: 17.5px;">分布式</a> <a href="/tags/多线程/" style="font-size: 10px;">多线程</a> <a href="/tags/实时计算/" style="font-size: 15px;">实时计算</a> <a href="/tags/感知机/" style="font-size: 10px;">感知机</a> <a href="/tags/最大熵模型/" style="font-size: 10px;">最大熵模型</a> <a href="/tags/朴素贝叶斯/" style="font-size: 10px;">朴素贝叶斯</a> <a href="/tags/机器学习/" style="font-size: 15px;">机器学习</a> <a href="/tags/源码分析/" style="font-size: 10px;">源码分析</a> <a href="/tags/笔记/" style="font-size: 20px;">笔记</a> <a href="/tags/统计学习/" style="font-size: 15px;">统计学习</a> <a href="/tags/逻辑斯谛回归/" style="font-size: 10px;">逻辑斯谛回归</a>
+       <a href="/tags/Cassandra/" style="font-size: 12.5px;">Cassandra</a> <a href="/tags/Druid/" style="font-size: 15px;">Druid</a> <a href="/tags/Java/" style="font-size: 10px;">Java</a> <a href="/tags/LCS/" style="font-size: 10px;">LCS</a> <a href="/tags/NOSQL/" style="font-size: 12.5px;">NOSQL</a> <a href="/tags/algorithms/" style="font-size: 10px;">algorithms</a> <a href="/tags/bash/" style="font-size: 10px;">bash</a> <a href="/tags/dynamic-programming/" style="font-size: 10px;">dynamic programming</a> <a href="/tags/hexo/" style="font-size: 10px;">hexo</a> <a href="/tags/k-邻近法/" style="font-size: 12.5px;">k 邻近法</a> <a href="/tags/knn/" style="font-size: 12.5px;">knn</a> <a href="/tags/linux/" style="font-size: 10px;">linux</a> <a href="/tags/macOS/" style="font-size: 10px;">macOS</a> <a href="/tags/内存模型/" style="font-size: 10px;">内存模型</a> <a href="/tags/分布式/" style="font-size: 17.5px;">分布式</a> <a href="/tags/多线程/" style="font-size: 10px;">多线程</a> <a href="/tags/实时计算/" style="font-size: 15px;">实时计算</a> <a href="/tags/感知机/" style="font-size: 10px;">感知机</a> <a href="/tags/最大熵模型/" style="font-size: 10px;">最大熵模型</a> <a href="/tags/朴素贝叶斯/" style="font-size: 10px;">朴素贝叶斯</a> <a href="/tags/机器学习/" style="font-size: 15px;">机器学习</a> <a href="/tags/源码分析/" style="font-size: 10px;">源码分析</a> <a href="/tags/笔记/" style="font-size: 20px;">笔记</a> <a href="/tags/统计学习/" style="font-size: 15px;">统计学习</a> <a href="/tags/逻辑斯谛回归/" style="font-size: 10px;">逻辑斯谛回归</a> <a href="/tags/配置/" style="font-size: 10px;">配置</a>
     </div>
   </div>
 
@@ -577,36 +587,7 @@ var _hmt = _hmt || [];
 
 <!-- MathJax Begin -->
 <!-- mathjax config similar to math.stackexchange -->
-<% if (theme.mathjax || page.mathjax || 1){ %>
-<script type="text/x-mathjax-config">
-  MathJax.Hub.Config({
-    tex2jax: {
-      inlineMath: [ ['$','$'], ["\\(","\\)"] ],
-      processEscapes: true
-    }
-  });
-</script>
 
-<script type="text/x-mathjax-config">
-    MathJax.Hub.Config({
-      tex2jax: {
-        skipTags: ['script', 'noscript', 'style', 'textarea', 'pre', 'code']
-      }
-    });
-</script>
-
-<script type="text/x-mathjax-config">
-    MathJax.Hub.Queue(function() {
-        var all = MathJax.Hub.getAllJax(), i;
-        for(i=0; i < all.length; i += 1) {
-            all[i].SourceElement().parentNode.className += ' has-jax';
-        }
-    });
-</script>
-
-<script type="text/javascript" src="http://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML">
-</script>
-<% } %>
 
 <!-- MathJax End -->
 

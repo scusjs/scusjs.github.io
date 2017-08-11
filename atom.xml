@@ -5,7 +5,7 @@
   <link href="/atom.xml" rel="self"/>
   
   <link href="http://blog.liexing.me/"/>
-  <updated>2017-08-11T16:17:57.000Z</updated>
+  <updated>2017-08-11T16:51:35.000Z</updated>
   <id>http://blog.liexing.me/</id>
   
   <author>
@@ -20,7 +20,7 @@
     <link href="http://blog.liexing.me/2017/08/11/macos-dev-setup/"/>
     <id>http://blog.liexing.me/2017/08/11/macos-dev-setup/</id>
     <published>2017-08-11T15:49:22.000Z</published>
-    <updated>2017-08-11T16:17:57.000Z</updated>
+    <updated>2017-08-11T16:51:35.000Z</updated>
     
     <content type="html"><![CDATA[<p>某人心心念念的rmbp终于到手了，然而我还在杭州没法帮忙各种配置，这里就写一份教程好了，自己拿去照着撸吧（￣︶￣）↗ </p>
 <p>ps. 毕竟你的是高大上的17带bar rmbp。。。然而，bar的操作我都！不！知！道！</p>
@@ -91,8 +91,10 @@
 <p>然后可以选择<a href="https://github.com/oh-my-fish/oh-my-fish/blob/master/docs/Themes.md" target="_blank" rel="external">主题</a>，我用的 ocean，这么安装：</p>
 <figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line">omf install ocean</div><div class="line">omf theme ocean</div></pre></td></tr></table></figure>
 <p>当然也可以安装其他主题，去上面那个链接选选。。安装好后长这样：</p>
+<img title="Ocean主题" alt="Ocean主题" src="http://7xl6z1.com1.z0.glb.clouddn.com/static/images/macos-dev-setup/1502463526.png">
 <h3 id="ShadowsocksX"><a href="#ShadowsocksX" class="headerlink" title="ShadowsocksX"></a>ShadowsocksX</h3><p><a href="https://github.com/shadowsocks/ShadowsocksX-NG/releases" target="_blank" rel="external">ShadowsocksX</a>这个就不多说了。。。</p>
 <h3 id="Karabiner-Elements"><a href="#Karabiner-Elements" class="headerlink" title="Karabiner-Elements"></a>Karabiner-Elements</h3><p><a href="https://github.com/tekezo/Karabiner-Elements" target="_blank" rel="external">Karabiner-Elements</a> 是一个修改键位的软件，建议用它把 <code>caps lock</code>和<code>control</code>位置替换。因为大小写锁定占据了更好的位置，而 <code>control</code> 是更加频繁使用的一个按键，调换后更方便。</p>
+<img title="Karabiner-Elements" alt="Karabiner-Elements" src="http://7xl6z1.com1.z0.glb.clouddn.com/static/images/macos-dev-setup/1502469911.jpg">
 <h3 id="其他软件"><a href="#其他软件" class="headerlink" title="其他软件"></a>其他软件</h3><p><a href="https://www.jetbrains.com/idea/download/" target="_blank" rel="external">IntelliJ IDEA</a>(不过强烈建议通过<a href="https://www.jetbrains.com/toolbox/app/?fromMenu" target="_blank" rel="external">JetBrains Toolbox</a> 安装)、<br><a href="https://go.microsoft.com/fwlink/p/?LinkID=511647" target="_blank" rel="external">Office 365</a>、<br><a href="http://pinyin.sogou.com/mac/" target="_blank" rel="external">搜狗输入法</a>、<br><a href="http://mac.xunlei.com/" target="_blank" rel="external">迅雷</a>、<br><a href="https://www.alfredapp.com/" target="_blank" rel="external">Alfred</a>（<a href="www.alfredworkflow.com">这里</a>有一堆工作流工具）、<br><a href="http://bjango.com/" target="_blank" rel="external">iStat</a>、<br><a href="http://mac.guanjia.qq.com/" target="_blank" rel="external">腾讯电脑管家</a>、<br><a href="http://im.qq.com/macqq/" target="_blank" rel="external">QQ</a>、<br><a href="https://mac.weixin.qq.com/" target="_blank" rel="external">微信</a></p>
 <h2 id="其他参考"><a href="#其他参考" class="headerlink" title="其他参考"></a>其他参考</h2><ol>
 <li><a href="https://github.com/hzlzh/Best-App" target="_blank" rel="external">收集&amp;推荐优秀的 Apps/硬件/技巧/周边等</a></li>
@@ -111,6 +113,10 @@
     
     </summary>
     
+    
+      <category term="macOS" scheme="http://blog.liexing.me/tags/macOS/"/>
+    
+      <category term="配置" scheme="http://blog.liexing.me/tags/%E9%85%8D%E7%BD%AE/"/>
     
   </entry>
   
@@ -692,9 +698,9 @@
       <category term="Cassandra" scheme="http://blog.liexing.me/categories/Cassandra/"/>
     
     
-      <category term="Cassandra" scheme="http://blog.liexing.me/tags/Cassandra/"/>
-    
       <category term="笔记" scheme="http://blog.liexing.me/tags/%E7%AC%94%E8%AE%B0/"/>
+    
+      <category term="Cassandra" scheme="http://blog.liexing.me/tags/Cassandra/"/>
     
       <category term="分布式" scheme="http://blog.liexing.me/tags/%E5%88%86%E5%B8%83%E5%BC%8F/"/>
     
@@ -728,9 +734,9 @@
       <category term="Cassandra" scheme="http://blog.liexing.me/categories/Cassandra/"/>
     
     
-      <category term="Cassandra" scheme="http://blog.liexing.me/tags/Cassandra/"/>
-    
       <category term="笔记" scheme="http://blog.liexing.me/tags/%E7%AC%94%E8%AE%B0/"/>
+    
+      <category term="Cassandra" scheme="http://blog.liexing.me/tags/Cassandra/"/>
     
       <category term="分布式" scheme="http://blog.liexing.me/tags/%E5%88%86%E5%B8%83%E5%BC%8F/"/>
     
@@ -1173,11 +1179,11 @@
       <category term="笔记" scheme="http://blog.liexing.me/categories/%E7%AC%94%E8%AE%B0/"/>
     
     
-      <category term="笔记" scheme="http://blog.liexing.me/tags/%E7%AC%94%E8%AE%B0/"/>
-    
       <category term="linux" scheme="http://blog.liexing.me/tags/linux/"/>
     
       <category term="bash" scheme="http://blog.liexing.me/tags/bash/"/>
+    
+      <category term="笔记" scheme="http://blog.liexing.me/tags/%E7%AC%94%E8%AE%B0/"/>
     
   </entry>
   
