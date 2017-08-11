@@ -5,7 +5,7 @@
   <link href="/atom.xml" rel="self"/>
   
   <link href="http://blog.liexing.me/"/>
-  <updated>2017-07-31T16:42:04.000Z</updated>
+  <updated>2017-08-11T16:13:33.000Z</updated>
   <id>http://blog.liexing.me/</id>
   
   <author>
@@ -14,6 +14,105 @@
   </author>
   
   <generator uri="http://hexo.io/">Hexo</generator>
+  
+  <entry>
+    <title>macOS 开发配置</title>
+    <link href="http://blog.liexing.me/2017/08/11/macos-dev-setup/"/>
+    <id>http://blog.liexing.me/2017/08/11/macos-dev-setup/</id>
+    <published>2017-08-11T15:49:22.000Z</published>
+    <updated>2017-08-11T16:13:33.000Z</updated>
+    
+    <content type="html"><![CDATA[<p>某人心心念念的rmbp终于到手了，然而我还在杭州没法帮忙各种配置，这里就写一份教程好了，自己拿去照着撸吧（￣︶￣）↗ </p>
+<p>ps. 毕竟你的是高大上的17带bar rmbp。。。然而，bar的操作我都！不！知！道！</p>
+<p>大概介绍 iMac 的一些基本操作以及常见的软件、开发环境的搭建。</p>
+<h2 id="基本操作介绍"><a href="#基本操作介绍" class="headerlink" title="基本操作介绍"></a>基本操作介绍</h2><ol>
+<li>17的触摸板应该是二段的按压，意思就是分为轻按和重按，按到底会响两次，轻按表示单击，重按表示双击。但是也可以配置成双指按表示双击；</li>
+</ol>
+<ol>
+<li><p>键盘键位，Mac的键位和Windows的不太一样，没有<code>Win</code>那个图标，取而代之的是<code>command</code>（长这样：<code>⌘</code>）但是功能差不多；<code>alt</code>又叫做<code>option</code>（一些地方画成<code>⌥</code>）；退格、<code>del</code>合并为<code>delete</code>；<code>Shift</code>画成<code>⇧</code>，<code>control</code>画成<code>⌃</code>，大小写锁定画成<code>⇪</code></p>
+</li>
+<li><p>一些常用的快捷键：</p>
+<blockquote>
+<ol>
+<li>截屏，默认的截屏快捷键有两种：<code>⌘+shift+control+4</code>（区域截图到剪切板），<code>⌘+shift+control+3</code>（全屏截图到剪切板），<code>⌘+shift+4</code>（区域截图到桌面），<code>⌘+shift+3</code>（全屏截图到桌面）</li>
+<li>复制：<code>⌘+c</code>，粘贴：<code>⌘+v</code>，全选：<code>⌘+a</code></li>
+<li>输入法切换：<code>control+空格</code>（选择上一个输入法），<code>control+option+空格</code>（选择下一个输入法）</li>
+<li>其他自己看<a href="https://support.apple.com/zh-cn/HT201236" target="_blank" rel="external">官方的文档</a></li>
+</ol>
+</blockquote>
+</li>
+</ol>
+<h2 id="系统基本配置"><a href="#系统基本配置" class="headerlink" title="系统基本配置"></a>系统基本配置</h2><ol>
+<li><p>开机首先是各种基本的配置，什么语言呐区域呐用户名呐乱七八糟就不说啦。</p>
+</li>
+<li><p>首先是调整下分辨率。进入系统后，点击桌面左上角的，点击 系统偏好设置-显示器，这里把分辨率调了吧，默认的太太太大了，不仅看着难受，而且因为大，所以显示的东西太少了，怎么愉快的撸代码。</p>
+</li>
+<li><p>设置窗口的左上方，有后退前进的按钮，点击后退可以退回主菜单。</p>
+</li>
+<li><p>其次，在触摸板中把全部的东西都打开吧，rmbp最优秀的就是那个触摸板了。而且17款这么大的触摸板，好好用~ps.建议把“轻点来点按”打开，就不用每次都按下去了。ps. 每一个选项右边都有图示，可以看看。</p>
+</li>
+<li><p>然后打开一些安全设置，不然装不上第三方的软件。找到“安全性与隐私”，点击左下角的🔐并输入密码，以允许后面的修改。然后“允许从以下位置下载的应用”中选择“任何来源”。</p>
+</li>
+<li><p>接着在系统设置的辅助功能中，左边一列选中“鼠标与触控板”，右边点击“触控板选项…”，然后打开启用拖拽-“三指拖拽”，这样，鼠标放在窗口的标题栏，三个手指就能拖动窗口了，非常方便。</p>
+</li>
+<li><p>iCloud 中，登录 iCloud 账户并且开启“查找我的 Mac”选项。</p>
+</li>
+<li><p>Docker（类似 Windows 底部的菜单栏） 配置。建议小一些，放左边或者右边，并且自动隐藏。</p>
+</li>
+<li><p>接着配置网络，网络选项在桌面上面一栏，一个WiFi图标，点击可以选择网络。</p>
+</li>
+<li><p>其他设置：点击电池图标，勾选显示百分比；时间显示日期、星期等</p>
+</li>
+</ol>
+<h2 id="系统基本介绍"><a href="#系统基本介绍" class="headerlink" title="系统基本介绍"></a>系统基本介绍</h2><h3 id="一些介绍"><a href="#一些介绍" class="headerlink" title="一些介绍"></a>一些介绍</h3><ol>
+<li><p>首先 macOS 是基于 Unix 的发行版，所以文件结构、命令上，都和 *nix 系统非常像（但是非常多坑）。</p>
+</li>
+<li><p>点击 Dock 上的 Finder（即 macOS 的资源管理器）<img src="http://7xl6z1.com1.z0.glb.clouddn.com/static/images/macos-dev-setup/1502459911.jpg">，可以看到左边有一栏，里面有个应用程序（/Applications），应用程序放在这里的。然后 macOS 中，用户目录是<code>/Users/username</code>，而不是<code>/home/username</code>，这个需要注意。激活 Finder 的情况下，屏幕左上角会有一排菜单，这个菜单针对每个软件可能不同。一般软件的设置都是<code>软件名-偏好设置</code>中，或者使用<code>⌘+,</code>快捷键打开软件的偏好设置。在显示中是一些显示的选项，对于 Finder 可以打开显示标签页、路径、状态等</p>
+</li>
+<li><p>如果前面触摸板中打开了 Launchpad 的手势，捏拢拇指与其他三个手指即可打开 Launchpad，或者点击 Dock 中的小火箭图标<img src="http://7xl6z1.com1.z0.glb.clouddn.com/static/images/macos-dev-setup/1502460257.jpg">，则能看到所有安装的应用程序，可以两个手指轻扫翻页。</p>
+</li>
+</ol>
+<h3 id="安装软件"><a href="#安装软件" class="headerlink" title="安装软件"></a>安装软件</h3><ol>
+<li>App Store 下载。App Store 中直接下载即可；</li>
+<li>第三方下载安装。下载下来的软件一般是 dmg 格式的或者无格式（解压后）的。dmg 和 exe 类似，打开后，里面一般有个软件图标和一个 Application 文件夹，直接把软件图标拖到 Application 即可。或者直接把下载的无格式（如果是压缩文件，打开即可解压）拖到 Application 即可。</li>
+</ol>
+<h2 id="软件"><a href="#软件" class="headerlink" title="软件"></a>软件</h2><h3 id="iTerm2"><a href="#iTerm2" class="headerlink" title="iTerm2"></a>iTerm2</h3><p> Mac 上传说中最强大的终端工具，主页戳<a href="https://www.iterm2.com/" target="_blank" rel="external">这里</a>。建议把 iTerm2 固定到 Docker，方便打开，双指点按 iTerm 图标-选项-在 Docker 中固定。</p>
+<h3 id="Homebrew"><a href="#Homebrew" class="headerlink" title="Homebrew"></a>Homebrew</h3><p>一个包管理工具，在终端（iTerm）中输入下面语句即可安装。其官网为：<a href="https://brew.sh/" target="_blank" rel="external">点这里</a></p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">/usr/bin/ruby <span class="_">-e</span> <span class="string">"<span class="variable">$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/master/install)</span>"</span></div></pre></td></tr></table></figure>
+<p><code>brew upgrade</code>更新软件包，然后<code>brew install 软件名</code>即可安装一些软件。</p>
+<h4 id="Cask"><a href="#Cask" class="headerlink" title="Cask"></a>Cask</h4><p><a href="https://caskroom.github.io/" target="_blank" rel="external">Homebrew-Cask</a>是 Homebrew 的扩展，用以安装其他一些软件，可以用于安装其他一些软件以前需要使用<code>brew cask</code>来使用 Cask，现在直接使用 Cask 的 tap 即可：</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div></pre></td><td class="code"><pre><div class="line">brew install caskroom/cask/google-chrome <span class="comment">#安装chrome</span></div><div class="line">brew install caskroom/cask/java <span class="comment"># 安装java</span></div><div class="line">brew install caskroom/cask/visual-studio-code<span class="comment">#安装 vs code</span></div><div class="line">brew install caskroom/cask/iina<span class="comment">#安装iina，一个非常棒的视频播放器</span></div><div class="line">brew install maven <span class="comment">#安装maven</span></div><div class="line">brew install you-get youtube-dl <span class="comment">#安装两个视频下载工具</span></div><div class="line">brew install vim <span class="comment">#用 brew 管理 vim，能升级到更新版</span></div></pre></td></tr></table></figure>
+<h3 id="fish"><a href="#fish" class="headerlink" title="fish"></a>fish</h3><p>90后用的 shell~其他常用的还有 zsh。使用 brew 安装即可：</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">brew install fish</div></pre></td></tr></table></figure>
+<p>然后切换默认的 shell 为 fish：</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">chsh <span class="_">-s</span> /usr/<span class="built_in">local</span>/bin/fish</div></pre></td></tr></table></figure>
+<p>安装好后，还有个方便的 fish 管理工具：<a href="http://git.io/oh-my-fish" target="_blank" rel="external">oh my fish</a>，安装命令：</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">curl -L https://get.oh-my.fish | fish</div></pre></td></tr></table></figure>
+<p>然后可以选择<a href="https://github.com/oh-my-fish/oh-my-fish/blob/master/docs/Themes.md" target="_blank" rel="external">主题</a>，我用的 ocean，这么安装：</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line">omf install ocean</div><div class="line">omf theme ocean</div></pre></td></tr></table></figure>
+<p>当然也可以安装其他主题，去上面那个链接选选。。安装好后长这样：</p>
+<h3 id="ShadowsocksX"><a href="#ShadowsocksX" class="headerlink" title="ShadowsocksX"></a>ShadowsocksX</h3><p><a href="https://github.com/shadowsocks/ShadowsocksX-NG/releases" target="_blank" rel="external">ShadowsocksX</a>这个就不多说了。。。</p>
+<h3 id="Karabiner-Elements"><a href="#Karabiner-Elements" class="headerlink" title="Karabiner-Elements"></a>Karabiner-Elements</h3><p><a href="https://github.com/tekezo/Karabiner-Elements" target="_blank" rel="external">Karabiner-Elements</a> 是一个修改键位的软件，建议用它把 <code>caps lock</code>和<code>control</code>位置替换。因为大小写锁定占据了更好的位置，而 <code>control</code> 是更加频繁使用的一个按键，调换后更方便。</p>
+<h3 id="其他软件"><a href="#其他软件" class="headerlink" title="其他软件"></a>其他软件</h3><p><a href="https://www.jetbrains.com/idea/download/" target="_blank" rel="external">IntelliJ IDEA</a>(不过强烈建议通过<a href="https://www.jetbrains.com/toolbox/app/?fromMenu" target="_blank" rel="external">JetBrains Toolbox</a> 安装)、<br><a href="https://go.microsoft.com/fwlink/p/?LinkID=511647" target="_blank" rel="external">Office 365</a>、<br><a href="http://pinyin.sogou.com/mac/" target="_blank" rel="external">搜狗输入法</a>、<br><a href="http://mac.xunlei.com/" target="_blank" rel="external">迅雷</a>、<br><a href="https://www.alfredapp.com/" target="_blank" rel="external">Alfred</a>（<a href="www.alfredworkflow.com">这里</a>有一堆工作流工具）、<br><a href="http://bjango.com/" target="_blank" rel="external">iStat</a>、<br><a href="http://mac.guanjia.qq.com/" target="_blank" rel="external">腾讯电脑管家</a>、<br><a href="http://im.qq.com/macqq/" target="_blank" rel="external">QQ</a>、<br><a href="https://mac.weixin.qq.com/" target="_blank" rel="external">微信</a></p>
+<h2 id="其他参考"><a href="#其他参考" class="headerlink" title="其他参考"></a>其他参考</h2><ol>
+<li><a href="https://github.com/hzlzh/Best-App" target="_blank" rel="external">收集&amp;推荐优秀的 Apps/硬件/技巧/周边等</a></li>
+<li><a href="https://wsgzao.github.io/post/mac/" target="_blank" rel="external">Mac新手入门以及常用软件推荐</a></li>
+<li><a href="http://xialeizhou.com/2019/06/23/%E9%AB%98%E6%95%88macbook%E5%B7%A5%E4%BD%9C%E7%8E%AF%E5%A2%83%E9%85%8D%E7%BD%AE/" target="_blank" rel="external">高效macbook工作环境配置</a></li>
+<li><a href="https://www.gitbook.com/book/aaaaaashu/mac-dev-setup/details" target="_blank" rel="external">Mac 开发配置手册</a></li>
+</ol>
+<p>自己折腾去吧~╰(￣▽￣)╭</p>
+]]></content>
+    
+    <summary type="html">
+    
+      &lt;p&gt;某人心心念念的rmbp终于到手了，然而我还在杭州没法帮忙各种配置，这里就写一份教程好了，自己拿去照着撸吧（￣︶￣）↗ &lt;/p&gt;
+&lt;p&gt;ps. 毕竟你的是高大上的17带bar rmbp。。。然而，bar的操作我都！不！知！道！&lt;/p&gt;
+&lt;p&gt;大概介绍 iMac 的一些基本操作
+    
+    </summary>
+    
+    
+  </entry>
   
   <entry>
     <title>Java 内存模型</title>
@@ -593,9 +692,9 @@
       <category term="Cassandra" scheme="http://blog.liexing.me/categories/Cassandra/"/>
     
     
-      <category term="笔记" scheme="http://blog.liexing.me/tags/%E7%AC%94%E8%AE%B0/"/>
-    
       <category term="Cassandra" scheme="http://blog.liexing.me/tags/Cassandra/"/>
+    
+      <category term="笔记" scheme="http://blog.liexing.me/tags/%E7%AC%94%E8%AE%B0/"/>
     
       <category term="分布式" scheme="http://blog.liexing.me/tags/%E5%88%86%E5%B8%83%E5%BC%8F/"/>
     
@@ -629,9 +728,9 @@
       <category term="Cassandra" scheme="http://blog.liexing.me/categories/Cassandra/"/>
     
     
-      <category term="笔记" scheme="http://blog.liexing.me/tags/%E7%AC%94%E8%AE%B0/"/>
-    
       <category term="Cassandra" scheme="http://blog.liexing.me/tags/Cassandra/"/>
+    
+      <category term="笔记" scheme="http://blog.liexing.me/tags/%E7%AC%94%E8%AE%B0/"/>
     
       <category term="分布式" scheme="http://blog.liexing.me/tags/%E5%88%86%E5%B8%83%E5%BC%8F/"/>
     
@@ -1074,11 +1173,11 @@
       <category term="笔记" scheme="http://blog.liexing.me/categories/%E7%AC%94%E8%AE%B0/"/>
     
     
+      <category term="笔记" scheme="http://blog.liexing.me/tags/%E7%AC%94%E8%AE%B0/"/>
+    
       <category term="linux" scheme="http://blog.liexing.me/tags/linux/"/>
     
       <category term="bash" scheme="http://blog.liexing.me/tags/bash/"/>
-    
-      <category term="笔记" scheme="http://blog.liexing.me/tags/%E7%AC%94%E8%AE%B0/"/>
     
   </entry>
   
