@@ -30,14 +30,14 @@
   </url>
   
   <url>
-    <loc>http://blog.liexing.me/2015/09/01/oh-my-hexo/</loc>
+    <loc>http://blog.liexing.me/2016/05/19/druid-indexing-service-process-analysis/</loc>
     
     <lastmod>2017-02-27T11:34:45.000Z</lastmod>
     
   </url>
   
   <url>
-    <loc>http://blog.liexing.me/2016/05/19/druid-indexing-service-process-analysis/</loc>
+    <loc>http://blog.liexing.me/2016/04/15/druid-indexing-service/</loc>
     
     <lastmod>2017-02-27T11:34:45.000Z</lastmod>
     
@@ -65,28 +65,7 @@
   </url>
   
   <url>
-    <loc>http://blog.liexing.me/2016/08/25/cassandra-architecture-in-brief/</loc>
-    
-    <lastmod>2017-02-27T11:34:45.000Z</lastmod>
-    
-  </url>
-  
-  <url>
     <loc>http://blog.liexing.me/2016/01/05/longest-common-subsequence/</loc>
-    
-    <lastmod>2017-02-27T11:34:45.000Z</lastmod>
-    
-  </url>
-  
-  <url>
-    <loc>http://blog.liexing.me/2016/09/08/cassandra-architecture/</loc>
-    
-    <lastmod>2017-02-27T11:34:45.000Z</lastmod>
-    
-  </url>
-  
-  <url>
-    <loc>http://blog.liexing.me/2016/04/20/reindex-between-different-druid-use-and-metadatastorage/</loc>
     
     <lastmod>2017-02-27T11:34:45.000Z</lastmod>
     
@@ -100,6 +79,27 @@
   </url>
   
   <url>
+    <loc>http://blog.liexing.me/2016/08/25/cassandra-architecture-in-brief/</loc>
+    
+    <lastmod>2017-02-27T11:34:45.000Z</lastmod>
+    
+  </url>
+  
+  <url>
+    <loc>http://blog.liexing.me/2015/09/01/oh-my-hexo/</loc>
+    
+    <lastmod>2017-02-27T11:34:45.000Z</lastmod>
+    
+  </url>
+  
+  <url>
+    <loc>http://blog.liexing.me/2016/04/20/reindex-between-different-druid-use-and-metadatastorage/</loc>
+    
+    <lastmod>2017-02-27T11:34:45.000Z</lastmod>
+    
+  </url>
+  
+  <url>
     <loc>http://blog.liexing.me/2016/10/30/statistical-learning-method-intro/</loc>
     
     <lastmod>2017-02-27T11:34:45.000Z</lastmod>
@@ -107,14 +107,14 @@
   </url>
   
   <url>
-    <loc>http://blog.liexing.me/2016/11/02/statistical-learning-method-knn/</loc>
+    <loc>http://blog.liexing.me/2016/09/08/cassandra-architecture/</loc>
     
     <lastmod>2017-02-27T11:34:45.000Z</lastmod>
     
   </url>
   
   <url>
-    <loc>http://blog.liexing.me/2016/06/16/druid-command-line-hadoop-indexer/</loc>
+    <loc>http://blog.liexing.me/2016/11/02/statistical-learning-method-knn/</loc>
     
     <lastmod>2017-02-27T11:34:45.000Z</lastmod>
     
@@ -135,14 +135,14 @@
   </url>
   
   <url>
-    <loc>http://blog.liexing.me/2016/04/15/druid-indexing-service/</loc>
+    <loc>http://blog.liexing.me/2016/06/16/druid-command-line-hadoop-indexer/</loc>
     
     <lastmod>2017-02-27T11:34:45.000Z</lastmod>
     
   </url>
   
   <url>
-    <loc>http://blog.liexing.me/tags/index.html</loc>
+    <loc>http://blog.liexing.me/search/index.html</loc>
     
     <lastmod>2017-02-27T11:34:45.000Z</lastmod>
     
@@ -156,7 +156,7 @@
   </url>
   
   <url>
-    <loc>http://blog.liexing.me/search/index.html</loc>
+    <loc>http://blog.liexing.me/tags/index.html</loc>
     
     <lastmod>2017-02-27T11:34:45.000Z</lastmod>
     
