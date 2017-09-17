@@ -12,7 +12,7 @@
 
     
     <meta name="description" content="在不支持免密登录的跳转机上通过expect自动连接主机">
-<meta name="keywords" content="linux,bash,笔记">
+<meta name="keywords" content="笔记,linux,bash">
 <meta property="og:type" content="article">
 <meta property="og:title" content="SSH 自动连接脚本">
 <meta property="og:url" content="http://blog.liexing.me/2016/04/21/auto-ssh-to-server/index.html">
@@ -123,7 +123,7 @@
 
   <div class="article-tags">
   
-  <span></span> <a href="/tags/linux/">linux</a><a href="/tags/bash/">bash</a><a href="/tags/笔记/">笔记</a>
+  <span></span> <a href="/tags/笔记/">笔记</a><a href="/tags/linux/">linux</a><a href="/tags/bash/">bash</a>
   </div>
 
 </div>
@@ -541,7 +541,36 @@ var _hmt = _hmt || [];
 
 <!-- MathJax Begin -->
 <!-- mathjax config similar to math.stackexchange -->
+<% if (theme.mathjax || page.mathjax || 1){ %>
+<script type="text/x-mathjax-config">
+  MathJax.Hub.Config({
+    tex2jax: {
+      inlineMath: [ ['$','$'], ["\\(","\\)"] ],
+      processEscapes: true
+    }
+  });
+</script>
 
+<script type="text/x-mathjax-config">
+    MathJax.Hub.Config({
+      tex2jax: {
+        skipTags: ['script', 'noscript', 'style', 'textarea', 'pre', 'code']
+      }
+    });
+</script>
+
+<script type="text/x-mathjax-config">
+    MathJax.Hub.Queue(function() {
+        var all = MathJax.Hub.getAllJax(), i;
+        for(i=0; i < all.length; i += 1) {
+            all[i].SourceElement().parentNode.className += ' has-jax';
+        }
+    });
+</script>
+
+<script type="text/javascript" src="http://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML">
+</script>
+<% } %>
 
 <!-- MathJax End -->
 

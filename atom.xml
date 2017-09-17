@@ -5,7 +5,7 @@
   <link href="/atom.xml" rel="self"/>
   
   <link href="http://blog.liexing.me/"/>
-  <updated>2017-09-17T08:09:12.000Z</updated>
+  <updated>2017-09-17T08:24:06.000Z</updated>
   <id>http://blog.liexing.me/</id>
   
   <author>
@@ -20,7 +20,7 @@
     <link href="http://blog.liexing.me/2017/09/17/java-exception-table/"/>
     <id>http://blog.liexing.me/2017/09/17/java-exception-table/</id>
     <published>2017-09-17T07:12:11.000Z</published>
-    <updated>2017-09-17T08:09:12.000Z</updated>
+    <updated>2017-09-17T08:24:06.000Z</updated>
     
     <content type="html"><![CDATA[<p>Java 在代码中通过使用 <code>try{}catch(){}finally{}</code> 块来对异常进行捕获或者处理。但是对于 JVM 来说，是如何处理 try/catch 代码块与异常的呢。</p>
 <p>实际上 Java 编译后，会在代码后附加异常表的形式来实现 Java 的异常处理及 finally 机制（在 JDK1.4.2之前，javac 编译器使用 jsr 和 ret 指令来实现 finally 语句，但是1.4.2之后自动在每段可能的分支路径后将 finally 语句块内容冗余生成一遍来实现。JDK1.7及之后版本，则完全禁止在 Class 文件中使用 jsr 和 ret 指令）。</p>
@@ -61,7 +61,7 @@
 <h2 id="异常处理实例"><a href="#异常处理实例" class="headerlink" title="异常处理实例"></a>异常处理实例</h2><p>对于 Java 源码：</p>
 <figure class="highlight java"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div></pre></td><td class="code"><pre><div class="line"><span class="function"><span class="keyword">public</span> <span class="keyword">int</span> <span class="title">inc</span><span class="params">()</span> </span>&#123;</div><div class="line">    <span class="keyword">int</span> x;</div><div class="line">    <span class="keyword">try</span> &#123;</div><div class="line">        x = <span class="number">1</span>;</div><div class="line">        <span class="keyword">return</span> x;</div><div class="line">    &#125; <span class="keyword">catch</span> (Exception e) &#123;</div><div class="line">        x = <span class="number">2</span>;</div><div class="line">        <span class="keyword">return</span> x;</div><div class="line">    &#125; <span class="keyword">finally</span> &#123;</div><div class="line">        x = <span class="number">3</span>;</div><div class="line">    &#125;</div><div class="line">&#125;</div></pre></td></tr></table></figure>
 <p>将其编译为 ByteCode 字节码：</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div><div class="line">30</div><div class="line">31</div><div class="line">32</div></pre></td><td class="code"><pre><div class="line">public int inc();</div><div class="line">  Code:</div><div class="line">    Stack=1, Locals=5, Args_size=1</div><div class="line">    0:	iconst_1		//try 中的x=1</div><div class="line">    1:	istore_1</div><div class="line">    2:	iload_1		//保存 x 到 returnValue 中</div><div class="line">    3:	istore	4</div><div class="line">    5:	iconst_3		//finally 中的 x=3</div><div class="line">    6:	istore_1</div><div class="line">    7: 	iload		4	//将 returnValue 中的值放到栈顶，准备给 ireturn 返回</div><div class="line">    9:	ireturn</div><div class="line">    10:	astore_2		//给 catch 中的 Exception e 赋值，存储在 Slot 2 中</div><div class="line">    11:	iconst_2		//catch 中的 x=2</div><div class="line">    12:	istore_1</div><div class="line">    13:	iload_1		//保存 x 到 returnValue 中，此时 x=2</div><div class="line">    14:	istore	4</div><div class="line">    16:	iconst_3		//finally 中的 x=3</div><div class="line">    17:	istore_1</div><div class="line">    18:	iload		4	//将 returnValue 中的值放到栈顶，准备给 ireturn 返回</div><div class="line">    20:	ireturn</div><div class="line">    21:	astore_3		//如果出现了不属于 java.lang.Exception 及其子类中的异常则到这里</div><div class="line">    22:	iconst_3		//finally 中的 x=3</div><div class="line">    23:	istore_1</div><div class="line">    24: 	aload_3		//将异常放置到栈顶，并抛出</div><div class="line">    25:	athrow</div><div class="line">    </div><div class="line">    </div><div class="line">  Exception table:</div><div class="line">    from		to		target		type</div><div class="line">    0			5		10				Class java/lang/Exception</div><div class="line">    0			5		21				any</div><div class="line">    10		16		21				any</div></pre></td></tr></table></figure>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div><div class="line">30</div><div class="line">31</div><div class="line">32</div></pre></td><td class="code"><pre><div class="line">public int inc();</div><div class="line">  Code:</div><div class="line">    Stack=1, Locals=5, Args_size=1</div><div class="line">    0:	iconst_1		//try 中的x=1</div><div class="line">    1:	istore_1</div><div class="line">    2:	iload_1		//保存 x 到 returnValue 中</div><div class="line">    3:	istore	4</div><div class="line">    5:	iconst_3		//finally 中的 x=3</div><div class="line">    6:	istore_1</div><div class="line">    7: 	iload		4	//将 returnValue 中的值放到栈顶，准备给 ireturn 返回</div><div class="line">    9:	ireturn</div><div class="line">    10:	astore_2		//给 catch 中的 Exception e 赋值，存储在 Slot 2 中</div><div class="line">    11:	iconst_2		//catch 中的 x=2</div><div class="line">    12:	istore_1</div><div class="line">    13:	iload_1		//保存 x 到 returnValue 中，此时 x=2</div><div class="line">    14:	istore	4</div><div class="line">    16:	iconst_3		//finally 中的 x=3</div><div class="line">    17:	istore_1</div><div class="line">    18:	iload	4	//将 returnValue 中的值放到栈顶，准备给 ireturn 返回</div><div class="line">    20:	ireturn</div><div class="line">    21:	astore_3		//如果出现了不属于 java.lang.Exception 及其子类中的异常则到这里</div><div class="line">    22:	iconst_3		//finally 中的 x=3</div><div class="line">    23:	istore_1</div><div class="line">    24:	aload_3		//将异常放置到栈顶，并抛出</div><div class="line">    25:	athrow</div><div class="line">    </div><div class="line">    </div><div class="line">  Exception table:</div><div class="line">    from		to		target		type</div><div class="line">    0			5		10		Class java/lang/Exception</div><div class="line">    0			5		21		any</div><div class="line">    10		16		21		any</div></pre></td></tr></table></figure>
 <p>首先可以看到，对于 finally，编译器将每个可能出现的分支后都放置了冗余。并且编译器生成了三个异常表记录，从 Java 代码的语义上讲，执行路径分别为：</p>
 <blockquote>
 <ol>
@@ -785,9 +785,9 @@
       <category term="Cassandra" scheme="http://blog.liexing.me/categories/Cassandra/"/>
     
     
-      <category term="笔记" scheme="http://blog.liexing.me/tags/%E7%AC%94%E8%AE%B0/"/>
-    
       <category term="Cassandra" scheme="http://blog.liexing.me/tags/Cassandra/"/>
+    
+      <category term="笔记" scheme="http://blog.liexing.me/tags/%E7%AC%94%E8%AE%B0/"/>
     
       <category term="分布式" scheme="http://blog.liexing.me/tags/%E5%88%86%E5%B8%83%E5%BC%8F/"/>
     
@@ -821,9 +821,9 @@
       <category term="Cassandra" scheme="http://blog.liexing.me/categories/Cassandra/"/>
     
     
-      <category term="笔记" scheme="http://blog.liexing.me/tags/%E7%AC%94%E8%AE%B0/"/>
-    
       <category term="Cassandra" scheme="http://blog.liexing.me/tags/Cassandra/"/>
+    
+      <category term="笔记" scheme="http://blog.liexing.me/tags/%E7%AC%94%E8%AE%B0/"/>
     
       <category term="分布式" scheme="http://blog.liexing.me/tags/%E5%88%86%E5%B8%83%E5%BC%8F/"/>
     
@@ -1266,11 +1266,11 @@
       <category term="笔记" scheme="http://blog.liexing.me/categories/%E7%AC%94%E8%AE%B0/"/>
     
     
+      <category term="笔记" scheme="http://blog.liexing.me/tags/%E7%AC%94%E8%AE%B0/"/>
+    
       <category term="linux" scheme="http://blog.liexing.me/tags/linux/"/>
     
       <category term="bash" scheme="http://blog.liexing.me/tags/bash/"/>
-    
-      <category term="笔记" scheme="http://blog.liexing.me/tags/%E7%AC%94%E8%AE%B0/"/>
     
   </entry>
   

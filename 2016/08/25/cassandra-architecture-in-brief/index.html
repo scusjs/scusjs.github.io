@@ -12,7 +12,7 @@
 
     
     <meta name="description" content="Cassandra被设计来在多个节点中处理大量的数据负载，并且没有单点故障。它的架构建立在认为系统能够并且可能发生故障的基础上。 节点使用gossip这个点对点的算法来在集群中交换自身和其他节点的状态信息。 每个节点上，顺序追加的commit log文件，捕获节点的写入动作来确保数据的持续性。数据在叫做memtable的内存结构中索引和写入，这个结构类似于回写式缓存。每当内存数据结构写满时，数据被">
-<meta name="keywords" content="笔记,Cassandra,分布式,NOSQL">
+<meta name="keywords" content="Cassandra,笔记,分布式,NOSQL">
 <meta property="og:type" content="article">
 <meta property="og:title" content="Cassandra 架构简述">
 <meta property="og:url" content="http://blog.liexing.me/2016/08/25/cassandra-architecture-in-brief/index.html">
@@ -121,7 +121,7 @@
 
   <div class="article-tags">
   
-  <span></span> <a href="/tags/笔记/">笔记</a><a href="/tags/Cassandra/">Cassandra</a><a href="/tags/分布式/">分布式</a><a href="/tags/NOSQL/">NOSQL</a>
+  <span></span> <a href="/tags/Cassandra/">Cassandra</a><a href="/tags/笔记/">笔记</a><a href="/tags/分布式/">分布式</a><a href="/tags/NOSQL/">NOSQL</a>
   </div>
 
 </div>
@@ -539,7 +539,36 @@ var _hmt = _hmt || [];
 
 <!-- MathJax Begin -->
 <!-- mathjax config similar to math.stackexchange -->
+<% if (theme.mathjax || page.mathjax || 1){ %>
+<script type="text/x-mathjax-config">
+  MathJax.Hub.Config({
+    tex2jax: {
+      inlineMath: [ ['$','$'], ["\\(","\\)"] ],
+      processEscapes: true
+    }
+  });
+</script>
 
+<script type="text/x-mathjax-config">
+    MathJax.Hub.Config({
+      tex2jax: {
+        skipTags: ['script', 'noscript', 'style', 'textarea', 'pre', 'code']
+      }
+    });
+</script>
+
+<script type="text/x-mathjax-config">
+    MathJax.Hub.Queue(function() {
+        var all = MathJax.Hub.getAllJax(), i;
+        for(i=0; i < all.length; i += 1) {
+            all[i].SourceElement().parentNode.className += ' has-jax';
+        }
+    });
+</script>
+
+<script type="text/javascript" src="http://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML">
+</script>
+<% } %>
 
 <!-- MathJax End -->
 
