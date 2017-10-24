@@ -80,17 +80,20 @@
     <article itemprop="articleBody"> 
         <header class="article-info clearfix">
   <h1 itemprop="name">
-    
-      <a href="/2016/11/03/statistical-learning-method-naive-bayes/" title="统计学习方法（笔记）-朴素贝叶斯法" itemprop="url">统计学习方法（笔记）-朴素贝叶斯法</a>
+    <% if(item.link) { %>
+      <a href="<%- item.link %>" target="_blank" title="<%= item.title %>"><%= item.title %></a><% } else { %>
+      <a href="<%- config.root %><%- item.path %>" title="<%= item.title %>" itemprop="url"><%= item.title %></a><% } %>
   </h1>
   <p class="article-author">By
-       
-		<a href="/about" title="liexing" target="_blank" itemprop="author">liexing</a>
-		
+       <% if(theme.author.google_plus){ %>
+		<a href="https://plus.google.com/<%=theme.author.google_plus %>?rel=author" title="<%= config.author %>" target="_blank" itemprop="author"><%= config.author %></a>
+		<% }else{ %>
+		<a href="<%= config.root %>about" title="<%= config.author %>" target="_blank" itemprop="author"><%= config.author %></a>
+		<% } %>
   <p class="article-time">
-    <time datetime="2016-11-03T12:52:47.000Z" itemprop="datePublished"> 发表于 2016-11-03</time>
+    <time datetime="<%= date_xml(item.date) %>" itemprop="datePublished"> <%= __('datepublished') %> <%= item.date.format(config.date_format) %></time>
 <span id="busuanzi_container_page_pv">
-  &nbspViewed <span id="busuanzi_value_page_pv"></span> times
+  viewed <span id="busuanzi_value_page_pv"></span> times
 </span>
     
   </p>
@@ -343,6 +346,10 @@
           
         
           
+            <li><a href="/categories/深度学习/" title="深度学习">深度学习<sup>1</sup></a></li>
+          
+        
+          
             <li><a href="/categories/笔记/" title="笔记">笔记<sup>1</sup></a></li>
           
         
@@ -386,7 +393,7 @@
   <div class="tagcloudlist">
     <p class="asidetitle">标签云</p>
     <div class="tagcloudlist clearfix">
-       <a href="/tags/Cassandra/" style="font-size: 12.5px;">Cassandra</a> <a href="/tags/Druid/" style="font-size: 15px;">Druid</a> <a href="/tags/JVM/" style="font-size: 10px;">JVM</a> <a href="/tags/Java/" style="font-size: 10px;">Java</a> <a href="/tags/LCS/" style="font-size: 10px;">LCS</a> <a href="/tags/NOSQL/" style="font-size: 12.5px;">NOSQL</a> <a href="/tags/algorithms/" style="font-size: 10px;">algorithms</a> <a href="/tags/bash/" style="font-size: 10px;">bash</a> <a href="/tags/dynamic-programming/" style="font-size: 10px;">dynamic programming</a> <a href="/tags/hexo/" style="font-size: 10px;">hexo</a> <a href="/tags/k-邻近法/" style="font-size: 12.5px;">k 邻近法</a> <a href="/tags/knn/" style="font-size: 12.5px;">knn</a> <a href="/tags/linux/" style="font-size: 10px;">linux</a> <a href="/tags/macOS/" style="font-size: 10px;">macOS</a> <a href="/tags/内存模型/" style="font-size: 10px;">内存模型</a> <a href="/tags/分布式/" style="font-size: 17.5px;">分布式</a> <a href="/tags/多线程/" style="font-size: 10px;">多线程</a> <a href="/tags/实时计算/" style="font-size: 15px;">实时计算</a> <a href="/tags/异常处理/" style="font-size: 10px;">异常处理</a> <a href="/tags/异常表/" style="font-size: 10px;">异常表</a> <a href="/tags/感知机/" style="font-size: 10px;">感知机</a> <a href="/tags/最大熵模型/" style="font-size: 10px;">最大熵模型</a> <a href="/tags/朴素贝叶斯/" style="font-size: 10px;">朴素贝叶斯</a> <a href="/tags/机器学习/" style="font-size: 15px;">机器学习</a> <a href="/tags/源码分析/" style="font-size: 10px;">源码分析</a> <a href="/tags/笔记/" style="font-size: 20px;">笔记</a> <a href="/tags/统计学习/" style="font-size: 15px;">统计学习</a> <a href="/tags/逻辑斯谛回归/" style="font-size: 10px;">逻辑斯谛回归</a> <a href="/tags/配置/" style="font-size: 10px;">配置</a>
+       <a href="/tags/Cassandra/" style="font-size: 12.5px;">Cassandra</a> <a href="/tags/Druid/" style="font-size: 15px;">Druid</a> <a href="/tags/JVM/" style="font-size: 10px;">JVM</a> <a href="/tags/Java/" style="font-size: 10px;">Java</a> <a href="/tags/LCS/" style="font-size: 10px;">LCS</a> <a href="/tags/NOSQL/" style="font-size: 12.5px;">NOSQL</a> <a href="/tags/Weight-initialization/" style="font-size: 10px;">Weight initialization</a> <a href="/tags/algorithms/" style="font-size: 10px;">algorithms</a> <a href="/tags/bash/" style="font-size: 10px;">bash</a> <a href="/tags/dynamic-programming/" style="font-size: 10px;">dynamic programming</a> <a href="/tags/hexo/" style="font-size: 10px;">hexo</a> <a href="/tags/k-邻近法/" style="font-size: 12.5px;">k 邻近法</a> <a href="/tags/knn/" style="font-size: 12.5px;">knn</a> <a href="/tags/linux/" style="font-size: 10px;">linux</a> <a href="/tags/macOS/" style="font-size: 10px;">macOS</a> <a href="/tags/内存模型/" style="font-size: 10px;">内存模型</a> <a href="/tags/分布式/" style="font-size: 17.5px;">分布式</a> <a href="/tags/多线程/" style="font-size: 10px;">多线程</a> <a href="/tags/实时计算/" style="font-size: 15px;">实时计算</a> <a href="/tags/异常处理/" style="font-size: 10px;">异常处理</a> <a href="/tags/异常表/" style="font-size: 10px;">异常表</a> <a href="/tags/感知机/" style="font-size: 10px;">感知机</a> <a href="/tags/最大熵模型/" style="font-size: 10px;">最大熵模型</a> <a href="/tags/朴素贝叶斯/" style="font-size: 10px;">朴素贝叶斯</a> <a href="/tags/机器学习/" style="font-size: 15px;">机器学习</a> <a href="/tags/深度学习/" style="font-size: 10px;">深度学习</a> <a href="/tags/源码分析/" style="font-size: 10px;">源码分析</a> <a href="/tags/笔记/" style="font-size: 20px;">笔记</a> <a href="/tags/统计学习/" style="font-size: 15px;">统计学习</a> <a href="/tags/调参/" style="font-size: 10px;">调参</a> <a href="/tags/逻辑斯谛回归/" style="font-size: 10px;">逻辑斯谛回归</a> <a href="/tags/配置/" style="font-size: 10px;">配置</a>
     </div>
   </div>
 
