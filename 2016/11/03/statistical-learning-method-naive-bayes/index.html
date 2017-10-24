@@ -75,58 +75,26 @@
 </div>
     </header>
     <div id="container">
-      <div id="main" class="post" itemscope itemprop="blogPost">
-  
+      <div id="main" class="<%= item.layout %>" itemscope itemprop="blogPost">
+  <% if (page.layout=='photo' && item.photos && item.photos.length){ %>
+    <%- partial('gallery') %>
+  <% } %>
 	<article itemprop="articleBody"> 
-		<header class="article-info clearfix">
-  <h1 itemprop="name">
-    
-      <a href="/2016/11/03/statistical-learning-method-naive-bayes/" title="统计学习方法（笔记）-朴素贝叶斯法" itemprop="url">统计学习方法（笔记）-朴素贝叶斯法</a>
-  </h1>
-  <p class="article-author">By
-       
-		<a href="/about" title="liexing" target="_blank" itemprop="author">liexing</a>
-		
-  <p class="article-time">
-    <time datetime="2016-11-03T12:52:47.000Z" itemprop="datePublished"> 发表于 2016-11-03</time>
-<span id="busuanzi_container_page_pv">
-  &nbspViewed <span id="busuanzi_value_page_pv"></span> times
-</span>
-    
-  </p>
-</header>
-
+		<%- partial('header') %>
 	<div class="article-content">
-		
+		<% if( table&&(item.toc !== false) && theme.toc.article){ %>
 		<div id="toc" class="toc-article">
-			<strong class="toc-title">文章目录</strong>
-		
-			<ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link" href="#朴素贝叶斯法的学习与分类"><span class="toc-number">1.</span> <span class="toc-text">朴素贝叶斯法的学习与分类</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#朴素贝叶斯法的参数估计"><span class="toc-number">2.</span> <span class="toc-text">朴素贝叶斯法的参数估计</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#极大似然估计"><span class="toc-number">2.1.</span> <span class="toc-text">极大似然估计</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#贝叶斯估计"><span class="toc-number">2.2.</span> <span class="toc-text">贝叶斯估计</span></a></li></ol></li></ol>
-		
+			<strong class="toc-title"><%= __('contents') %></strong>
+		<% if(item.list_number == false) {%>
+		<%- toc(item.content,{list_number:false}) %>
+		<% }else{ %>
+			<%- toc(item.content) %>
+		<% } %>
 		</div>
-		
-		<p>朴素贝叶斯（naïve Bayes）法是基于被也是定力与特征条件独立假设的分布方法。首先对于训练数据集，基于特征条件独立假设学习输入输出的联合概率分布，然后对于给定的输入，利用贝叶斯定理求出后验概率最大的输出。</p>
-<h1 id="朴素贝叶斯法的学习与分类"><a href="#朴素贝叶斯法的学习与分类" class="headerlink" title="朴素贝叶斯法的学习与分类"></a>朴素贝叶斯法的学习与分类</h1><p>朴素贝叶斯法是典型的生成学习方法。利用训练数据学习$P(X|Y)$和$P(Y)$的估计，得到联合概率分布</p>
-<p>$$P(X,Y) = P(X)P(X|Y)$$</p>
-<p>概率估计方法可以是极大似然估计或者贝叶斯估计。</p>
-<p>朴素贝叶斯法的基本假设使条件独立性。</p>
-<p>$$P(X=x|Y=c_k)=P(X^{(1)}=x^{(1)},…,X^{(n)}=x^{(n)}|Y=c_k)\\ =\prod \limits_{j=1}^nP(X^{(j)}=x^{(j)}|Y=c_k)$$</p>
-<p>条件独立假设使朴素贝叶斯法变得简单，但是有时候会牺牲一定的分类准确率。</p>
-<p>朴素贝叶斯法利用贝叶斯定理与学到的联合概率模型进行分类预测，将输入的 x 分到后验概率最大的类 y：</p>
-<p>$$y=\arg \max _{c_k}P(Y=c_k)\prod \limits_{j=1}^nP(X^{(j)}=x^{(j)}|Y=c_k)$$</p>
-<p>后验概率最大等价于0-1函数损失时的期望风险最小化。</p>
-<h1 id="朴素贝叶斯法的参数估计"><a href="#朴素贝叶斯法的参数估计" class="headerlink" title="朴素贝叶斯法的参数估计"></a>朴素贝叶斯法的参数估计</h1><p>在朴素贝叶斯法中，学习即估计$P(Y=c_k)$和$P(X^{(j)}=x^{(j)}|Y=c_k)$</p>
-<h2 id="极大似然估计"><a href="#极大似然估计" class="headerlink" title="极大似然估计"></a>极大似然估计</h2><p>先验概率$P(Y=c_k)$的极大似然估计是：</p>
-<p>$$P(Y=c_k)=\frac{\sum \limits_{i=1}^NI(y_i=c_k)}{N},\quad k=1,2,…,K$$</p>
-<p>设第 j 个特征$x^{(j)}$可能取值集合为${a_{j1},a_{j2},…,a_{jS_j} }$，则条件概率为：</p>
-<p>$$P(X^{(j)}=a_{jl}|Y=c_k)=\frac{\sum \limits_{i=1}^NI(x_i^{(j)}=a_{jl},y_i=c_k)}{\sum \limits_{i=1}^NI(y_i=c_k)}\ j=1,2,…,n;\quad l=1,2,…S;\quad k=1,2,…,K$$</p>
-<h2 id="贝叶斯估计"><a href="#贝叶斯估计" class="headerlink" title="贝叶斯估计"></a>贝叶斯估计</h2><p>极大似然估计可能会出现估计的概率值为 0 的情况，这会影响到后验概率的计算结果。可以使用贝叶斯估计来解决这一问题。贝叶斯估计即加入一个系数防止0情况出现。</p>
-<p>$$P_\lambda(Y=c_k)=\frac{\sum \limits_{i=1}^NI(y_i=c_k)+\lambda}{N+K\lambda},\quad k=1,2,…,K$$</p>
-<p>$$P_\lambda(X^{(j)}=a_{jl}|Y=c_k)=\frac{\sum \limits_{i=1}^NI(x_i^{(j)}=a_{jl},y_i=c_k)+\lambda}{\sum \limits_{i=1}^NI(y_i=c_k)+S_j\lambda}\ j=1,2,…,n;\quad l=1,2,…S;\quad k=1,2,…,K$$</p>
-<p>上面两式中，$\lambda\geq0$，当取1时，称为拉普拉斯平滑。</p>
-  
+		<% } %>
+		<%- item.content %>  
 	</div>
-    
+    <% if (theme.donate) { %>
         <!-- css -->
         <style type="text/css">
             .center {
@@ -174,7 +142,7 @@
             <br>
             <a id="btn_donate" class="btn_donate" target="_self" href="javascript:;" title="Donate 打赏"></a>
             <span class="donate_txt">
-                如果对你有帮助，可以赏我一杯咖啡~
+                <%= theme.donate.text %>
             </span>
                 
             
@@ -187,23 +155,23 @@
             <br>
             ------------------------------------------------------------------------------------------------------------------------------
             <br>
-            
-            <div width="100%" align="center"><div name="dashmain" id="dash-main-id-879873" class="dash-main-3 879873-0.99"></div></div>
+            <% if(theme.donate.web) { %>
+            <div width="100%" align="center"><div name="dashmain" id="dash-main-id-87895f" class="dash-main-3 87895f-0.99"></div></div>
             <script type="text/javascript" charset="utf-8" src="http://www.dashangcloud.com/static/ds.js"></script>
-            
+            <% } %>
 
-            <a href="http://7xl6z1.com1.z0.glb.clouddn.com/static/images/theme/reward_wechat.jpg" title="用微信扫一扫哦~" class="fancybox" rel="article0">
-                <img src="http://7xl6z1.com1.z0.glb.clouddn.com/static/images/theme/reward_wechat.jpg" title="微信打赏 Donate" height="190px" width="auto"/>
+            <a href="<%= theme.donate.wechat %>" title="用微信扫一扫哦~" class="fancybox" rel="article0">
+                <img src="<%= theme.donate.wechat %>" title="微信打赏 Donate" height="190px" width="auto"/>
             </a>
             
             &nbsp;&nbsp;
 
-            <a href="http://7xl6z1.com1.z0.glb.clouddn.com/static/images/theme/reward_alipay.jpg" title="用支付宝扫一扫即可~" class="fancybox" rel="article0">
-                <img src="http://7xl6z1.com1.z0.glb.clouddn.com/static/images/theme/reward_alipay.jpg" title="支付宝打赏 Donate" height="190px" width="auto"/>
+            <a href="<%= theme.donate.alipay %>" title="用支付宝扫一扫即可~" class="fancybox" rel="article0">
+                <img src="<%= theme.donate.alipay %>" title="支付宝打赏 Donate" height="190px" width="auto"/>
             </a>
 
             <span class="donate_txt">
-                如果对你有帮助，可以赏我一杯咖啡~
+                <%= theme.donate.text %>
             </span>
 
         </div>
@@ -231,67 +199,11 @@
         <!-- /donate script -->
     </div>
     <!-- /Donate Module -->
-       
-		<footer class="article-footer clearfix">
-<div class="article-catetags">
-
-<div class="article-categories">
-  <span></span>
-  <a class="article-category-link" href="/categories/统计学习/">统计学习</a>
-</div>
-
-
-  <div class="article-tags">
-  
-  <span></span> <a href="/tags/笔记/">笔记</a><a href="/tags/统计学习/">统计学习</a><a href="/tags/机器学习/">机器学习</a><a href="/tags/朴素贝叶斯/">朴素贝叶斯</a>
-  </div>
-
-</div>
-
-
-
-	<div class="article-share" id="share">
-	
-	  <div data-url="http://blog.liexing.me/2016/11/03/statistical-learning-method-naive-bayes/" data-title="统计学习方法（笔记）-朴素贝叶斯法 | Liexing&#39;s Blog" data-tsina="1915625641" class="share clearfix">
-	  </div>
-	
-	</div>
-
-
-</footer>
-
-   	       
+       <% } %>
+		<%- partial('footer') %>   	       
 	</article>
-	
-<nav class="article-nav clearfix">
- 
- <div class="prev" >
- <a href="/2016/11/07/statistical-learning-method-decision-tree/" title="统计学习方法（笔记）-决策树">
-  <strong>上一篇：</strong><br/>
-  <span>
-  统计学习方法（笔记）-决策树</span>
-</a>
-</div>
-
-
-<div class="next">
-<a href="/2016/11/02/statistical-learning-method-knn/"  title="统计学习方法（笔记）-k 近邻法">
- <strong>下一篇：</strong><br/> 
- <span>统计学习方法（笔记）-k 近邻法
-</span>
-</a>
-</div>
-
-</nav>
-
-	
-
-<section id="comments" class="comment">
-  <div id="disqus_thread">
-    <noscript>Please enable JavaScript to view the <a href="//disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
-  </div>
-</section>
-
+	<%- partial('pagination') %>
+	<%- partial('comment') %>
 </div>  
 
       <div class="openaside"><a class="navbutton" href="#" title="显示侧边栏"></a></div>

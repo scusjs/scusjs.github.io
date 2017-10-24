@@ -78,96 +78,26 @@
 </div>
     </header>
     <div id="container">
-      <div id="main" class="post" itemscope itemprop="blogPost">
-  
+      <div id="main" class="<%= item.layout %>" itemscope itemprop="blogPost">
+  <% if (page.layout=='photo' && item.photos && item.photos.length){ %>
+    <%- partial('gallery') %>
+  <% } %>
 	<article itemprop="articleBody"> 
-		<header class="article-info clearfix">
-  <h1 itemprop="name">
-    
-      <a href="/2016/03/28/druid-quickstart/" title="Druid Quickstart" itemprop="url">Druid Quickstart</a>
-  </h1>
-  <p class="article-author">By
-       
-		<a href="/about" title="liexing" target="_blank" itemprop="author">liexing</a>
-		
-  <p class="article-time">
-    <time datetime="2016-03-28T10:14:36.000Z" itemprop="datePublished"> 发表于 2016-03-28</time>
-<span id="busuanzi_container_page_pv">
-  &nbspViewed <span id="busuanzi_value_page_pv"></span> times
-</span>
-    
-  </p>
-</header>
-
+		<%- partial('header') %>
 	<div class="article-content">
-		
+		<% if( table&&(item.toc !== false) && theme.toc.article){ %>
 		<div id="toc" class="toc-article">
-			<strong class="toc-title">文章目录</strong>
-		
-			<ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#Druid-简单架构"><span class="toc-number">1.</span> <span class="toc-text">Druid 简单架构</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#节点类型与容错"><span class="toc-number">1.1.</span> <span class="toc-text">节点类型与容错</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#环境要求"><span class="toc-number">2.</span> <span class="toc-text">环境要求</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#运行"><span class="toc-number">3.</span> <span class="toc-text">运行</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#运行Druid"><span class="toc-number">3.1.</span> <span class="toc-text">运行Druid</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#装载批量数据"><span class="toc-number">3.2.</span> <span class="toc-text">装载批量数据</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#装载数据流"><span class="toc-number">3.3.</span> <span class="toc-text">装载数据流</span></a></li></ol></li></ol>
-		
+			<strong class="toc-title"><%= __('contents') %></strong>
+		<% if(item.list_number == false) {%>
+		<%- toc(item.content,{list_number:false}) %>
+		<% }else{ %>
+			<%- toc(item.content) %>
+		<% } %>
 		</div>
-		
-		<p><a href="http://druid.io" target="_blank" rel="external">Druid</a>是一个用于大数据实时查询和分析的高容错、高性能开源分布式系统，旨在快速处理大规模的数据，并能够实现快速查询和分析。</p>
-<h2 id="Druid-简单架构"><a href="#Druid-简单架构" class="headerlink" title="Druid 简单架构"></a>Druid 简单架构</h2><h3 id="节点类型与容错"><a href="#节点类型与容错" class="headerlink" title="节点类型与容错"></a>节点类型与容错</h3><ul>
-<li>Historical，对非实时数据进行处理存储和查询。从deep storage下载段（segment），并对基于段的查询请求作出响应，并且把结果返回给broker节点。它们通过Zookeeper向它们自己和段宣布提供服务，并且通过Zookeeper监视装载和删除新段的信号。如果一个Historical节点失效，其他的Historical节点将会替代它，不会导致数据损失。</li>
-<li>Coordinator，监视Historical组，来确保数据是可用的、可复制的，并且处于通常“最优”的配置。它们通过读取元数据存储（metadata storage）中的段元数据信息来决定哪些段应该被集群装载，利用Zookeeper来确定存在哪些Historical节点，并且创建Zookeeper项来告诉Historical节点装载或者删除段。能通过热故障转移配置运行。如果没有Coordinator在运行，将不会发生数据拓扑的变化，但是系统任然能继续运行。</li>
-<li>Broker，从外部客户端接收查询语句并且分发给Realtime或者Historical节点。当Broker接收到结果后，合并结果并且返回给调用者。对于已知拓扑，Broker通过Zookeeper来判断存在哪些Realtime节点和Historical节点。能够平行的运行或者热故障转移。</li>
-<li>Indexing Service，形成一个获取批量数据和实时数据到系统中的工作集群，也允许更改系统中数据的存储方式。工作节点的摄入任务可以复制运行，协调片可热故障转移。</li>
-<li>Realtime，也是装载实时数据进入系统。比建立Indexing Service更加简单，作为生产环境使用的限制代价也更小。不同的节点能够平行的运行并且摄入相同的数据流。它们向磁盘定期写入检查点并且最终都推向Deep Storage。如果这是唯一的向系统输入数据的方式，并且Realtime不能访问本地磁盘，则会导致数据丢失。</li>
-</ul>
-<blockquote>
-<p>早期的Druid有读立的Realtime节点，它们从Kafka或者Rabbit拉回数据，本地索引这些数据，并且周期性的分为数据段再发送给Historical节点。这种方式相当简单并且易于扩展。但是这将导致让Kafka有高可用性变得相当困难，因为高层的消费者没有提供扩展复制者组的功能，也会导致当有很多节点时管理相当困难，因为每一个节点都需要独立的配置文件。因此使用replication，从kafka拉回数据，并且推送到druid。<a href="https://groups.google.com/forum/#!searchin/druid-development/fangjin$20yang$20%22thoughts%22/druid-development/aRMmNHQGdhI/muBGl0Xi_wgJ" target="_blank" rel="external">参考这里</a></p>
-</blockquote>
-<p>druid简单的架构图如下，该图展示了查询、数据流是如何通过Druid的：<br><img title="Druid架构图" alt="Druid架构图" src="http://7xl6z1.com1.z0.glb.clouddn.com/static/images/14591361559273.jpg"><br>所有的节点都以对等无共享集群或者热插拔故障转移节点的方式运行，来保证高可用性。此外，这个系统还包含三个依赖组件：</p>
-<ul>
-<li>ZooKeeper集群，负责集群服务发现和维持当前数据拓扑</li>
-<li>元数据存储实例（metadata storage instance），用于对应用于系统的数据段的元数据维护</li>
-<li>Deep Storage LOB（Large Object）存储/文件系统，存储数据段</li>
-</ul>
-<p>下图演示集群的管理层，表示了某些节点和依赖组件是怎么通过追踪和交换元数据来帮助管理集群的。<br><img title="Druid管理层" alt="Druid管理层" src="http://7xl6z1.com1.z0.glb.clouddn.com/static/images/14591373994615.jpg"></p>
-<h2 id="环境要求"><a href="#环境要求" class="headerlink" title="环境要求"></a>环境要求</h2><ul>
-<li>Java 7 or higher</li>
-<li>Linux, Mac OS X, or other Unix-like OS (Windows is not supported)</li>
-<li>8G of RAM</li>
-<li>2 vCPUs</li>
-</ul>
-<h2 id="运行"><a href="#运行" class="headerlink" title="运行"></a>运行</h2><h3 id="运行Druid"><a href="#运行Druid" class="headerlink" title="运行Druid"></a>运行Druid</h3><p>首先下载Druid:</p>
-<figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div></pre></td><td class="code"><pre><div class="line">curl -O http://static.druid.io/artifacts/releases/druid-0.9.0-rc3-bin.tar.gz</div><div class="line">mkdir druid-0.9.0</div><div class="line">tar -xzf druid-0.9.0-rc3-bin.tar.gz -C druid-0.9.0 --strip-components=1</div><div class="line"><span class="built_in">cd</span> druid-0.9.0</div></pre></td></tr></table></figure>
-<p>目录结构如下：</p>
-<ul>
-<li><code>LICENSE</code> - 许可文件</li>
-<li><code>bin/</code> - 一些对quickstart有用的脚本</li>
-<li><code>conf/*</code> - 集群配置文件</li>
-<li><code>conf-quickstart/*</code> - quickstart的配置文件</li>
-<li><code>extensions/*</code> - 所有的Druid扩展</li>
-<li><code>hadoop-dependencies/*</code> - Druid的Hadoop依赖</li>
-<li><code>lib/*</code> - 所有的Druid核心软件包</li>
-<li><code>quickstart/*</code> - 一些对quickstart有用的文件</li>
-</ul>
-<p>然后下载并启动Zookeeper：</p>
-<figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div></pre></td><td class="code"><pre><div class="line">curl http://www.gtlib.gatech.edu/pub/apache/zookeeper/zookeeper-3.4.6/zookeeper-3.4.6.tar.gz -o zookeeper-3.4.6.tar.gz</div><div class="line">tar -xzf zookeeper-3.4.6.tar.gz</div><div class="line"><span class="built_in">cd</span> zookeeper-3.4.6</div><div class="line">cp conf/zoo_sample.cfg conf/zoo.cfg</div><div class="line">./bin/zkServer.sh start</div></pre></td></tr></table></figure>
-<p>Zookeper启动后，回到druid目录下，并且执行：</p>
-<figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">bin/init</div></pre></td></tr></table></figure>
-<p>上面命令将会生成一些目录，然后在不同的终端下执行：</p>
-<figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div></pre></td><td class="code"><pre><div class="line">java `cat conf-quickstart/druid/historical/jvm.config | xargs` -cp conf-quickstart/druid/_common:conf-quickstart/druid/historical:lib/* io.druid.cli.Main server historical</div><div class="line">java `cat conf-quickstart/druid/broker/jvm.config | xargs` -cp conf-quickstart/druid/_common:conf-quickstart/druid/broker:lib/* io.druid.cli.Main server broker</div><div class="line">java `cat conf-quickstart/druid/coordinator/jvm.config | xargs` -cp conf-quickstart/druid/_common:conf-quickstart/druid/coordinator:lib/* io.druid.cli.Main server coordinator</div><div class="line">java `cat conf-quickstart/druid/overlord/jvm.config | xargs` -cp conf-quickstart/druid/_common:conf-quickstart/druid/overlord:lib/* io.druid.cli.Main server overlord</div><div class="line">java `cat conf-quickstart/druid/middleManager/jvm.config | xargs` -cp conf-quickstart/druid/_common:conf-quickstart/druid/middleManager:lib/* io.druid.cli.Main server middleManager</div></pre></td></tr></table></figure>
-<p>对于装载批量数据，上面运行的程序已经足够了。</p>
-<h3 id="装载批量数据"><a href="#装载批量数据" class="headerlink" title="装载批量数据"></a>装载批量数据</h3><p>首先通过摄入任务将<code>wikiticker-2015-09-12-sampled.json</code>文件装载。提交摄入任务通过向Druid提交POST请求：</p>
-<figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">curl -X <span class="string">'POST'</span> -H <span class="string">'Content-Type:application/json'</span> <span class="_">-d</span> @quickstart/wikiticker-index.json localhost:8090/druid/indexer/v1/task</div></pre></td></tr></table></figure>
-<p>返回任务的ID表示提交成功：</p>
-<figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">&#123;<span class="string">"task"</span>:<span class="string">"index_hadoop_wikipedia_2016-03-28T17:24:21.802Z"</span>&#125;</div></pre></td></tr></table></figure>
-<p>可以通过访问<code>http://localhost:8090/console.html</code>查看提交任务的状态。</p>
-<h3 id="装载数据流"><a href="#装载数据流" class="headerlink" title="装载数据流"></a>装载数据流</h3><p>要使Druid装载数据流，需要借助<a href="https://github.com/druid-io/tranquility" target="_blank" rel="external">Tranquility</a>：</p>
-<figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line">curl -O http://static.druid.io/tranquility/releases/tranquility-distribution-0.7.4.tgz</div><div class="line">tar -xzf tranquility-distribution-0.7.4.tgz</div><div class="line"><span class="built_in">cd</span> tranquility-distribution-0.7.4</div></pre></td></tr></table></figure>
-<p>在Druid的<code>conf-quickstart/tranquility/</code>目录下已经有配置的例子，运行即可：</p>
-<figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line">bin/tranquility server -configFile &lt;path_to_druid_distro&gt;/conf-quickstart/tranquility/server.json</div><div class="line">bin/generate-example-metrics | curl -XPOST -H<span class="string">'Content-Type: application/json'</span> --data-binary @- http://localhost:8200/v1/post/metrics</div></pre></td></tr></table></figure>
-<p>如果需要使用Kafka来搭配Druid使用，则调用：</p>
-<figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">bin/tranquility kafka -configFile &lt;path_to_druid_distro&gt;/conf-quickstart/tranquility/kafka.json</div></pre></td></tr></table></figure>
-<p>Kafka配置示例：</p>
-<figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div><div class="line">30</div><div class="line">31</div><div class="line">32</div><div class="line">33</div><div class="line">34</div><div class="line">35</div><div class="line">36</div><div class="line">37</div><div class="line">38</div><div class="line">39</div><div class="line">40</div><div class="line">41</div><div class="line">42</div><div class="line">43</div><div class="line">44</div><div class="line">45</div><div class="line">46</div><div class="line">47</div><div class="line">48</div><div class="line">49</div><div class="line">50</div><div class="line">51</div><div class="line">52</div><div class="line">53</div><div class="line">54</div><div class="line">55</div><div class="line">56</div><div class="line">57</div><div class="line">58</div><div class="line">59</div><div class="line">60</div><div class="line">61</div><div class="line">62</div><div class="line">63</div><div class="line">64</div></pre></td><td class="code"><pre><div class="line">&#123;</div><div class="line">    <span class="string">"dataSources"</span>: [</div><div class="line">        &#123;</div><div class="line">            <span class="string">"spec"</span>: &#123;</div><div class="line">                <span class="string">"dataSchema"</span>: &#123;</div><div class="line">                    <span class="string">"parser"</span>: &#123;</div><div class="line">                        <span class="string">"type"</span>: <span class="string">"string"</span>,</div><div class="line">                        <span class="string">"parseSpec"</span>: &#123;</div><div class="line">                            <span class="string">"timestampSpec"</span>: &#123;</div><div class="line">                                <span class="string">"format"</span>: <span class="string">"auto"</span>,</div><div class="line">                                <span class="string">"column"</span>: <span class="string">"timestamp"</span></div><div class="line">                            &#125;,</div><div class="line">                            <span class="string">"dimensionsSpec"</span>: &#123;</div><div class="line">                                <span class="string">"dimensions"</span>: [</div><div class="line">                                    <span class="string">"url"</span>,</div><div class="line">                                    <span class="string">"user"</span></div><div class="line">                                ]</div><div class="line">                            &#125;,</div><div class="line">                            <span class="string">"format"</span>: <span class="string">"json"</span></div><div class="line">                        &#125;</div><div class="line">                    &#125;,</div><div class="line">                    <span class="string">"dataSource"</span>: <span class="string">"pageviews"</span>,</div><div class="line">                    <span class="string">"granularitySpec"</span>: &#123;</div><div class="line">                        <span class="string">"segmentGranularity"</span>: <span class="string">"hour"</span>,</div><div class="line">                        <span class="string">"type"</span>: <span class="string">"uniform"</span>,</div><div class="line">                        <span class="string">"queryGranularity"</span>: <span class="string">"none"</span></div><div class="line">                    &#125;,</div><div class="line">                    <span class="string">"metricsSpec"</span>: [</div><div class="line">                        &#123;</div><div class="line">                            <span class="string">"type"</span>: <span class="string">"count"</span>,</div><div class="line">                            <span class="string">"name"</span>: <span class="string">"views"</span></div><div class="line">                        &#125;,</div><div class="line">                        &#123;</div><div class="line">                            <span class="string">"fieldName"</span>: <span class="string">"latencyMs"</span>,</div><div class="line">                            <span class="string">"type"</span>: <span class="string">"doubleSum"</span>,</div><div class="line">                            <span class="string">"name"</span>: <span class="string">"latencyMs"</span></div><div class="line">                        &#125;</div><div class="line">                    ]</div><div class="line">                &#125;,</div><div class="line">                <span class="string">"tuningConfig"</span>: &#123;</div><div class="line">                    <span class="string">"maxRowsInMemory"</span>: <span class="string">"100000"</span>,</div><div class="line">                    <span class="string">"type"</span>: <span class="string">"realtime"</span>,</div><div class="line">                    <span class="string">"windowPeriod"</span>: <span class="string">"PT5M"</span>,</div><div class="line">                    <span class="string">"intermediatePersistPeriod"</span>: <span class="string">"PT5M"</span></div><div class="line">                &#125;</div><div class="line">            &#125;,</div><div class="line">            <span class="string">"properties"</span>: &#123;</div><div class="line">                <span class="string">"topicPattern.priority"</span>: <span class="string">"1"</span>,</div><div class="line">                <span class="string">"topicPattern"</span>: <span class="string">"pageviews"</span></div><div class="line">            &#125;</div><div class="line">        &#125;</div><div class="line">    ],</div><div class="line">    <span class="string">"properties"</span>: &#123;</div><div class="line">        <span class="string">"zookeeper.connect"</span>: <span class="string">"localhost:2181"</span>,</div><div class="line">        <span class="string">"zookeeper.timeout"</span>: <span class="string">"PT20S"</span>,</div><div class="line">        <span class="string">"druid.selectors.indexing.serviceName"</span>: <span class="string">"druid/overlord"</span>,</div><div class="line">        <span class="string">"druid.discovery.curator.path"</span>: <span class="string">"/druid/discovery"</span>,</div><div class="line">        <span class="string">"kafka.zookeeper.connect"</span>: <span class="string">"localhost:2181"</span>,</div><div class="line">        <span class="string">"kafka.group.id"</span>: <span class="string">"tranquility-kafka"</span>,</div><div class="line">        <span class="string">"consumer.numThreads"</span>: <span class="string">"2"</span>,</div><div class="line">        <span class="string">"commit.periodMillis"</span>: <span class="string">"15000"</span>,</div><div class="line">        <span class="string">"reportDropsAsExceptions"</span>: <span class="string">"false"</span></div><div class="line">    &#125;</div><div class="line">&#125;</div></pre></td></tr></table></figure>
-  
+		<% } %>
+		<%- item.content %>  
 	</div>
-    
+    <% if (theme.donate) { %>
         <!-- css -->
         <style type="text/css">
             .center {
@@ -215,7 +145,7 @@
             <br>
             <a id="btn_donate" class="btn_donate" target="_self" href="javascript:;" title="Donate 打赏"></a>
             <span class="donate_txt">
-                如果对你有帮助，可以赏我一杯咖啡~
+                <%= theme.donate.text %>
             </span>
                 
             
@@ -228,23 +158,23 @@
             <br>
             ------------------------------------------------------------------------------------------------------------------------------
             <br>
-            
-            <div width="100%" align="center"><div name="dashmain" id="dash-main-id-879873" class="dash-main-3 879873-0.99"></div></div>
+            <% if(theme.donate.web) { %>
+            <div width="100%" align="center"><div name="dashmain" id="dash-main-id-87895f" class="dash-main-3 87895f-0.99"></div></div>
             <script type="text/javascript" charset="utf-8" src="http://www.dashangcloud.com/static/ds.js"></script>
-            
+            <% } %>
 
-            <a href="http://7xl6z1.com1.z0.glb.clouddn.com/static/images/theme/reward_wechat.jpg" title="用微信扫一扫哦~" class="fancybox" rel="article0">
-                <img src="http://7xl6z1.com1.z0.glb.clouddn.com/static/images/theme/reward_wechat.jpg" title="微信打赏 Donate" height="190px" width="auto"/>
+            <a href="<%= theme.donate.wechat %>" title="用微信扫一扫哦~" class="fancybox" rel="article0">
+                <img src="<%= theme.donate.wechat %>" title="微信打赏 Donate" height="190px" width="auto"/>
             </a>
             
             &nbsp;&nbsp;
 
-            <a href="http://7xl6z1.com1.z0.glb.clouddn.com/static/images/theme/reward_alipay.jpg" title="用支付宝扫一扫即可~" class="fancybox" rel="article0">
-                <img src="http://7xl6z1.com1.z0.glb.clouddn.com/static/images/theme/reward_alipay.jpg" title="支付宝打赏 Donate" height="190px" width="auto"/>
+            <a href="<%= theme.donate.alipay %>" title="用支付宝扫一扫即可~" class="fancybox" rel="article0">
+                <img src="<%= theme.donate.alipay %>" title="支付宝打赏 Donate" height="190px" width="auto"/>
             </a>
 
             <span class="donate_txt">
-                如果对你有帮助，可以赏我一杯咖啡~
+                <%= theme.donate.text %>
             </span>
 
         </div>
@@ -272,67 +202,11 @@
         <!-- /donate script -->
     </div>
     <!-- /Donate Module -->
-       
-		<footer class="article-footer clearfix">
-<div class="article-catetags">
-
-<div class="article-categories">
-  <span></span>
-  <a class="article-category-link" href="/categories/Druid/">Druid</a>
-</div>
-
-
-  <div class="article-tags">
-  
-  <span></span> <a href="/tags/分布式/">分布式</a><a href="/tags/Druid/">Druid</a><a href="/tags/实时计算/">实时计算</a>
-  </div>
-
-</div>
-
-
-
-	<div class="article-share" id="share">
-	
-	  <div data-url="http://blog.liexing.me/2016/03/28/druid-quickstart/" data-title="Druid Quickstart | Liexing&#39;s Blog" data-tsina="1915625641" class="share clearfix">
-	  </div>
-	
-	</div>
-
-
-</footer>
-
-   	       
+       <% } %>
+		<%- partial('footer') %>   	       
 	</article>
-	
-<nav class="article-nav clearfix">
- 
- <div class="prev" >
- <a href="/2016/04/15/druid-indexing-service/" title="Druid Indexing Service（索引服务）">
-  <strong>上一篇：</strong><br/>
-  <span>
-  Druid Indexing Service（索引服务）</span>
-</a>
-</div>
-
-
-<div class="next">
-<a href="/2016/01/05/longest-common-subsequence/"  title="最长公共子序列问题">
- <strong>下一篇：</strong><br/> 
- <span>最长公共子序列问题
-</span>
-</a>
-</div>
-
-</nav>
-
-	
-
-<section id="comments" class="comment">
-  <div id="disqus_thread">
-    <noscript>Please enable JavaScript to view the <a href="//disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
-  </div>
-</section>
-
+	<%- partial('pagination') %>
+	<%- partial('comment') %>
 </div>  
 
       <div class="openaside"><a class="navbutton" href="#" title="显示侧边栏"></a></div>

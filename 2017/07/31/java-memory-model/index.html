@@ -78,79 +78,26 @@
 </div>
     </header>
     <div id="container">
-      <div id="main" class="post" itemscope itemprop="blogPost">
-  
+      <div id="main" class="<%= item.layout %>" itemscope itemprop="blogPost">
+  <% if (page.layout=='photo' && item.photos && item.photos.length){ %>
+    <%- partial('gallery') %>
+  <% } %>
 	<article itemprop="articleBody"> 
-		<header class="article-info clearfix">
-  <h1 itemprop="name">
-    
-      <a href="/2017/07/31/java-memory-model/" title="Java 内存模型" itemprop="url">Java 内存模型</a>
-  </h1>
-  <p class="article-author">By
-       
-		<a href="/about" title="liexing" target="_blank" itemprop="author">liexing</a>
-		
-  <p class="article-time">
-    <time datetime="2017-07-31T15:15:12.000Z" itemprop="datePublished"> 发表于 2017-07-31</time>
-<span id="busuanzi_container_page_pv">
-  &nbspViewed <span id="busuanzi_value_page_pv"></span> times
-</span>
-    
-  </p>
-</header>
-
+		<%- partial('header') %>
 	<div class="article-content">
-		
+		<% if( table&&(item.toc !== false) && theme.toc.article){ %>
 		<div id="toc" class="toc-article">
-			<strong class="toc-title">文章目录</strong>
-		
-			<ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link" href="#缓存与一致性"><span class="toc-number">1.</span> <span class="toc-text">缓存与一致性</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#JMM"><span class="toc-number">2.</span> <span class="toc-text">JMM</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#内存间交互操作"><span class="toc-number">2.1.</span> <span class="toc-text">内存间交互操作</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#Happens-before"><span class="toc-number">2.2.</span> <span class="toc-text">Happens-before</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#指令重排序"><span class="toc-number">2.3.</span> <span class="toc-text">指令重排序</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#数据依耐性"><span class="toc-number">2.3.1.</span> <span class="toc-text">数据依耐性</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#as-if-serial"><span class="toc-number">2.3.2.</span> <span class="toc-text">as-if-serial</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#内存屏障"><span class="toc-number">2.3.3.</span> <span class="toc-text">内存屏障</span></a></li></ol></li></ol></li></ol>
-		
+			<strong class="toc-title"><%= __('contents') %></strong>
+		<% if(item.list_number == false) {%>
+		<%- toc(item.content,{list_number:false}) %>
+		<% }else{ %>
+			<%- toc(item.content) %>
+		<% } %>
 		</div>
-		
-		<p>Java内存模型，即 Java Memory Model（JMM），定义了 Java 虚拟机在计算机内存的工作方式。现在的 Java 内存模型主要源于1.5版本。</p>
-<h1 id="缓存与一致性"><a href="#缓存与一致性" class="headerlink" title="缓存与一致性"></a>缓存与一致性</h1><p>在计算机中，不同硬件的处理速度不同，往往有几个数量级的差距。比如 CPU 的处理速度往往高于内存数个数量级。因此计算机体系结构中引入了告诉缓存（Cache）放在内存和处理器之间作为缓冲。将 CPU 可能将要访问的数据先放在缓存中，因为访问缓存的速度远远高于直接访问内存，因此能加速运算。</p>
-<img title="高速缓存" alt="高速缓存" src="http://7xl6z1.com1.z0.glb.clouddn.com/static/images/java-memory-model/1501516073.png">
-<p>虽然高速缓存解决了 CPU 和内存之间的速度问题，但是引入了另一个问题：缓存一致性。在多处理系统中，每一个处理器都有自己独立的缓存，但是整个系统共享一个内存，因此需要保证每个 CPU 读写的数据一致。常见的一致性协议有 MSI、MESI、MOSI以及 Dragon Protocol 等。</p>
-<p> JMM 中定义的内存访问操作与计算机的高速缓存访问是类似的。</p>
-<h1 id="JMM"><a href="#JMM" class="headerlink" title="JMM"></a>JMM</h1><p> JMM 定义了程序中各个变量的访问规则。JMM 规定，所有的变量都存储在主内存中，但是每个线程还会有自己的工作内存，其中保存该线程使用到的变量副本，并且线程对内存的操作必须在工作线程中进行，不能直接访问主内存变量。如图所示：</p>
-<img title="JMM" alt="JMM" src="http://7xl6z1.com1.z0.glb.clouddn.com/static/images/java-memory-model/1501516897.png">
-<p>在命令式编程中，线程之间的通信机制有两种：共享内存和消息传递。在共享内存的模型中，线程之间通过共享内存中的一个公共状态来进行通信。在消息传递模型中，通过显示的发送消息来通信。Java线程之间的通信采用的是过共享内存模型，即 JMM。</p>
-<p>线程之间的通信必须要经历将要发送的消息通过共享变量的方式写入主内存，再被其他线程读取的过程。</p>
-<h2 id="内存间交互操作"><a href="#内存间交互操作" class="headerlink" title="内存间交互操作"></a>内存间交互操作</h2><p>为了保证其他线程读取的是最新写入的数据，因此 Java 内存模型定义了如下几种操作：</p>
-<ol>
-<li>lock: 作用于主内存的变量，把一个变量标识为一条线程独占状态；</li>
-<li>unlock: 作用于主内存的变量，解锁占用状态，允许被其他线程锁定；</li>
-<li>read: 作用于主内存变量，把一个变量值从主内存传输到线程的工作内存中，以便随后的load动作使用；</li>
-<li>load: 作用于工作内存的变量，把 read 操作从主内存中得到的变量值放入工作内存的变量副本中；</li>
-<li>use: 作用于工作内存的变量，把工作内存中的变量传递给虚拟机执行引擎，用于执行指令；</li>
-<li>assign: 作用于工作内存的变量，把执行引擎的值赋予工作内存变量；</li>
-<li>store: 作用于工作内存的变量，把工作内存的一个变量传递给主内存，以便随后的 write 的操作；</li>
-<li>write: 作用于主内存的变量，把 store 操作从工作内存中一个变量的值传送到主内存的变量中。</li>
-</ol>
-<h2 id="Happens-before"><a href="#Happens-before" class="headerlink" title="Happens-before"></a>Happens-before</h2><p>从 jdk5 开始，java 使用新的 JSR-133 内存模型，基于 happens-before 的概念来阐述操作之间的内存可见性。<br>如果要把一个变量从主内存中复制到工作内存，就需要按顺寻地执行 read 和 load 操作，如果把变量从工作内存中同步回主内存中，就要按顺序地执行 store 和 write 操作。Java 内存模型只要求上述操作必须按顺序执行，而没有保证必须是连续执行。也就是 read 和 load 之间，store 和 write 之间是可以插入其他指令的。Java内存模型还规定了在执行上述八种基本操作时，必须满足如下规则：</p>
-<ul>
-<li>不允许 read 和 load、store 和 write 操作之一单独出现</li>
-<li>不允许一个线程丢弃它的最近 assign 的操作，即变量在工作内存中改变了之后必须同步到主内存中。</li>
-<li>不允许一个线程无原因地（没有发生过任何 assign 操作）把数据从工作内存同步回主内存中。</li>
-<li>一个新的变量只能在主内存中诞生，不允许在工作内存中直接使用一个未被初始化（load 或 assign）的变量。即就是对一个变量实施 use 和 store 操作之前，必须先执行过了 assign 和 load 操作。</li>
-<li>一个变量在同一时刻只允许一条线程对其进行 lock 操作，lock 和 unlock 必须成对出现</li>
-<li>如果对一个变量执行 lock 操作，将会清空工作内存中此变量的值，在执行引擎使用这个变量前需要重新执行 load 或 assign 操作初始化变量的值</li>
-<li>如果一个变量事先没有被 lock 操作锁定，则不允许对它执行 unlock 操作；也不允许去 unlock 一个被其他线程锁定的变量。</li>
-<li>对一个变量执行 unlock 操作之前，必须先把此变量同步到主内存中（执行 store 和 write 操作）。</li>
-</ul>
-<h2 id="指令重排序"><a href="#指令重排序" class="headerlink" title="指令重排序"></a>指令重排序</h2><p>在执行程序时为了提高性能，编译器和处理器经常会对指令进行重排序。重排序分成三种类型：</p>
-<ol>
-<li>编译器优化的重排序。编译器在不改变单线程程序语义放入前提下，可以重新安排语句的执行顺序。</li>
-<li>指令级并行的重排序。现代处理器采用了指令级并行技术来将多条指令重叠执行。如果不存在数据依赖性，处理器可以改变语句对应机器指令的执行顺序。</li>
-<li>内存系统的重排序。由于处理器使用缓存和读写缓冲区，这使得加载和存储操作看上去可能是在乱序执行。</li>
-</ol>
-<h3 id="数据依耐性"><a href="#数据依耐性" class="headerlink" title="数据依耐性"></a>数据依耐性</h3><p>如果两个操作访问同一个变量，其中一个为写操作，此时这两个操作之间存在数据依赖性。<br>编译器和处理器不会改变存在数据依赖性关系的两个操作的执行顺序，即不会重排序。</p>
-<h3 id="as-if-serial"><a href="#as-if-serial" class="headerlink" title="as-if-serial"></a>as-if-serial</h3><p>不管怎么重排序，单线程下的执行结果不能被改变，编译器、runtime 和处理器都必须遵守 as-if-serial 语义。</p>
-<h3 id="内存屏障"><a href="#内存屏障" class="headerlink" title="内存屏障"></a>内存屏障</h3><p>为了保证内存的可见性，Java 编译器在生成指令序列的适当位置会插入内存屏障指令来禁止特定类型的处理器重排序。Java 内存模型把内存屏障分为 LoadLoad、LoadStore、StoreLoad和StoreStore 四种。</p>
-  
+		<% } %>
+		<%- item.content %>  
 	</div>
-    
+    <% if (theme.donate) { %>
         <!-- css -->
         <style type="text/css">
             .center {
@@ -198,7 +145,7 @@
             <br>
             <a id="btn_donate" class="btn_donate" target="_self" href="javascript:;" title="Donate 打赏"></a>
             <span class="donate_txt">
-                如果对你有帮助，可以赏我一杯咖啡~
+                <%= theme.donate.text %>
             </span>
                 
             
@@ -211,23 +158,23 @@
             <br>
             ------------------------------------------------------------------------------------------------------------------------------
             <br>
-            
-            <div width="100%" align="center"><div name="dashmain" id="dash-main-id-879873" class="dash-main-3 879873-0.99"></div></div>
+            <% if(theme.donate.web) { %>
+            <div width="100%" align="center"><div name="dashmain" id="dash-main-id-87895f" class="dash-main-3 87895f-0.99"></div></div>
             <script type="text/javascript" charset="utf-8" src="http://www.dashangcloud.com/static/ds.js"></script>
-            
+            <% } %>
 
-            <a href="http://7xl6z1.com1.z0.glb.clouddn.com/static/images/theme/reward_wechat.jpg" title="用微信扫一扫哦~" class="fancybox" rel="article0">
-                <img src="http://7xl6z1.com1.z0.glb.clouddn.com/static/images/theme/reward_wechat.jpg" title="微信打赏 Donate" height="190px" width="auto"/>
+            <a href="<%= theme.donate.wechat %>" title="用微信扫一扫哦~" class="fancybox" rel="article0">
+                <img src="<%= theme.donate.wechat %>" title="微信打赏 Donate" height="190px" width="auto"/>
             </a>
             
             &nbsp;&nbsp;
 
-            <a href="http://7xl6z1.com1.z0.glb.clouddn.com/static/images/theme/reward_alipay.jpg" title="用支付宝扫一扫即可~" class="fancybox" rel="article0">
-                <img src="http://7xl6z1.com1.z0.glb.clouddn.com/static/images/theme/reward_alipay.jpg" title="支付宝打赏 Donate" height="190px" width="auto"/>
+            <a href="<%= theme.donate.alipay %>" title="用支付宝扫一扫即可~" class="fancybox" rel="article0">
+                <img src="<%= theme.donate.alipay %>" title="支付宝打赏 Donate" height="190px" width="auto"/>
             </a>
 
             <span class="donate_txt">
-                如果对你有帮助，可以赏我一杯咖啡~
+                <%= theme.donate.text %>
             </span>
 
         </div>
@@ -255,62 +202,11 @@
         <!-- /donate script -->
     </div>
     <!-- /Donate Module -->
-       
-		<footer class="article-footer clearfix">
-<div class="article-catetags">
-
-
-  <div class="article-tags">
-  
-  <span></span> <a href="/tags/Java/">Java</a><a href="/tags/内存模型/">内存模型</a><a href="/tags/多线程/">多线程</a>
-  </div>
-
-</div>
-
-
-
-	<div class="article-share" id="share">
-	
-	  <div data-url="http://blog.liexing.me/2017/07/31/java-memory-model/" data-title="Java 内存模型 | Liexing&#39;s Blog" data-tsina="1915625641" class="share clearfix">
-	  </div>
-	
-	</div>
-
-
-</footer>
-
-   	       
+       <% } %>
+		<%- partial('footer') %>   	       
 	</article>
-	
-<nav class="article-nav clearfix">
- 
- <div class="prev" >
- <a href="/2017/08/11/macos-dev-setup/" title="macOS 开发配置">
-  <strong>上一篇：</strong><br/>
-  <span>
-  macOS 开发配置</span>
-</a>
-</div>
-
-
-<div class="next">
-<a href="/2017/07/13/statistical-learning-method-logistic-regression-maximum-entropy-model/"  title="统计学习方法（笔记）-逻辑斯谛回归与最大熵模型">
- <strong>下一篇：</strong><br/> 
- <span>统计学习方法（笔记）-逻辑斯谛回归与最大熵模型
-</span>
-</a>
-</div>
-
-</nav>
-
-	
-
-<section id="comments" class="comment">
-  <div id="disqus_thread">
-    <noscript>Please enable JavaScript to view the <a href="//disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
-  </div>
-</section>
-
+	<%- partial('pagination') %>
+	<%- partial('comment') %>
 </div>  
 
       <div class="openaside"><a class="navbutton" href="#" title="显示侧边栏"></a></div>
