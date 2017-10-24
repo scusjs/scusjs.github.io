@@ -79,9 +79,9 @@
     </header>
     <div id="container">
       <div id="main" class="post" itemscope itemprop="blogPost">
-  
-	<article itemprop="articleBody"> 
-		<header class="article-info clearfix">
+    
+    <article itemprop="articleBody"> 
+        <header class="article-info clearfix">
   <h1 itemprop="name">
     
       <a href="/2016/11/02/statistical-learning-method-knn/" title="统计学习方法（笔记）-k 近邻法" itemprop="url">统计学习方法（笔记）-k 近邻法</a>
@@ -99,16 +99,16 @@
   </p>
 </header>
 
-	<div class="article-content">
-		
-		<div id="toc" class="toc-article">
-			<strong class="toc-title">文章目录</strong>
-		
-			<ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link" href="#knn-算法"><span class="toc-number">1.</span> <span class="toc-text">knn 算法</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#knn-模型"><span class="toc-number">2.</span> <span class="toc-text">knn 模型</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#kd-树"><span class="toc-number">3.</span> <span class="toc-text">kd 树</span></a></li></ol>
-		
-		</div>
-		
-		<p>k 近邻法（knn）是一种基本的分类与回归方法。这里只讨论分类问题。knn 分类可以简单理解为，找到距离输入实例最近的 k 个训练数据集中的实例点，其中多数属于某个类，则新输入的实例也属于某个类。</p>
+    <div class="article-content">
+        
+        <div id="toc" class="toc-article">
+            <strong class="toc-title">文章目录</strong>
+        
+            <ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link" href="#knn-算法"><span class="toc-number">1.</span> <span class="toc-text">knn 算法</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#knn-模型"><span class="toc-number">2.</span> <span class="toc-text">knn 模型</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#kd-树"><span class="toc-number">3.</span> <span class="toc-text">kd 树</span></a></li></ol>
+        
+        </div>
+        
+        <p>k 近邻法（knn）是一种基本的分类与回归方法。这里只讨论分类问题。knn 分类可以简单理解为，找到距离输入实例最近的 k 个训练数据集中的实例点，其中多数属于某个类，则新输入的实例也属于某个类。</p>
 <h1 id="knn-算法"><a href="#knn-算法" class="headerlink" title="knn 算法"></a>knn 算法</h1><p>根据上述描述，其算法表示为：</p>
 <p>$$y=\arg \max \limits_{c_j} \sum \limits_{x_i \in N_{k}(x)} I(y_i = c_j),\quad i=1,2,…,N;j=1,2,…,K$$</p>
 <p>其中，$N_{k}(x)$表示涵盖训练集 T 中与 x 最邻近的 k 个点的邻域。I 为指示函数，当$y_i=c_j$时为1，否则为0。</p>
@@ -129,8 +129,8 @@
 <p>构造 kd 树相当于不断地用垂直于坐标轴的超平面将 k 维空间切分，构成一系列的 k 维超矩形区域。kd 树的每个节点对应于一个 k 维超矩形区域。通常，一次选择坐标轴对空间切分，选择训练实例点在选定坐标轴的中位数为切分点，直到子区域没有实例点，这样得到的 kd 树是平衡的（搜索效率未必最优）。</p>
 <p>搜索时，从根开始，递归向下访问，如果目标点当前维的坐标小于切分点的坐标，则移动到左子树，否则移动到右子树，直到叶节点，这时候取当前叶节点为当前最近点。这时候递归向上回退，如果该节点比当前实例点距离目标点更近，则当前点为当前最近点；检查当前最近点另一个子节点对应的区域是否与目标点为球心、目标点与当前最近点为半径的超球体相交，如果相交则另一个子节点中可能存在更近的点，移动到另一子节点递归进行搜索，如果不想交则向上回退；直到会退到根节点，最后的当前最近点即为目标点的最近邻点。</p>
 <p>如果实例点是随机分布的，则搜索的平均复杂度为$O(\log N)$，kd 树更适合训练实例点远大于空间维数时的 k 近邻搜索。当空间位数接近训练实例数时，效率会迅速下降，几乎接近线性扫描。</p>
-  
-	</div>
+
+    </div>
     
         <!-- css -->
         <style type="text/css">
@@ -459,10 +459,12 @@
 		</p>
 </div>
 </footer>
-    <script src="<%- config.root %>js/jquery-2.0.3.min.js"></script>
-<script src="<%- config.root %>js/jquery.imagesloaded.min.js"></script>
-<script src="<%- config.root %>js/gallery.js"></script>
-<script src="<%- config.root %>js/jquery.qrcode-0.12.0.min.js"></script>
+    <script src="/js/jquery-2.0.3.min.js"></script>
+<script src="/js/jquery.imagesloaded.min.js"></script>
+<script src="/js/gallery.js"></script>
+<script src="/js/jquery.qrcode-0.12.0.min.js"></script>
+<script async src="//dn-lbstatics.qbox.me/busuanzi/2.3/busuanzi.pure.mini.js">
+</script>
 
 <script type="text/javascript">
 $(document).ready(function(){ 
@@ -494,12 +496,7 @@ $(document).ready(function(){
   $(window).scroll(function(){
     o.css("top",Math.max(80,260-$(this).scrollTop()));
   });
-  <% if (is_post() && theme.close_aside) { %>
-        getSize();
-        if (myWidth >= 1024) {
-          c.click();
-        }
-  <% } %>
+  
   $(window).resize(function(){
     getSize(); 
     if (myWidth >= 1024) {
@@ -508,14 +505,14 @@ $(document).ready(function(){
       m.removeClass('moveMain');
       a.css('display', 'block').removeClass('fadeOut');
       o.css('display', 'none');
-      <% if( is_post()&&(page.toc !== false) && theme.toc.aside){ %>
+      
       $('#toc.toc-aside').css('display', 'none');
-      <% } %>  
+        
     }
   });
 });
 </script>
-<% if (is_post()) { %>
+
 <script type="text/javascript">
 $(document).ready(function(){ 
   var ai = $('.article-content>iframe'),
@@ -541,8 +538,8 @@ $(document).ready(function(){
   });
 });
 </script>
-<% } %>
-<% if ((page.layout=='post'||page.layout=='page'||page.layout=='photo')&&!theme.jiathis.enable) { %>
+
+
 <script type="text/javascript">
 $(document).ready(function(){ 
   var $this = $('.share'),
@@ -591,28 +588,14 @@ $(document).ready(function(){
   });
 });   
 </script>
-<% } %>
 
-<% if (theme.duoshuo_shortname && page.comments){ %>
+
+
+
 <script type="text/javascript">
-  var duoshuoQuery = {short_name:"<%= theme.duoshuo_shortname %>"};
-  (function() {
-    var ds = document.createElement('script');
-    ds.type = 'text/javascript';ds.async = true;
-    ds.src = '//7xl6z1.com1.z0.glb.clouddn.com/embed_ua.js';
-    ds.charset = 'UTF-8';
-    (document.getElementsByTagName('head')[0] 
-    || document.getElementsByTagName('body')[0]).appendChild(ds);
-  })();
-</script> 
-<% } %>
-<% if( (config.disqus_shortname || theme.disqus_shortname) && page.comments) { %>
-<script type="text/javascript">
-<% if(config.disqus_shortname){ %>
-var disqus_shortname = '<%= config.disqus_shortname %>';
-<% }else{ %>
-var disqus_shortname = '<%= theme.disqus_shortname %>';
-<% } %>
+
+var disqus_shortname = 'liexing';
+
 (function(){
   var dsq = document.createElement('script');
   dsq.type = 'text/javascript';
@@ -628,32 +611,14 @@ var disqus_shortname = '<%= theme.disqus_shortname %>';
   (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
 }());
 </script>
-<% } %>
 
 
 
-<% if (page.layout=='tags'||page.layout=='categories'){ %>
-<script type="text/javascript">
-$(document).ready(function(){ 
-  var list    = $('.archive-title a'),
-      box     = $('.all-list-box'),
-      first   = $('.archive-title a:first-of-type');
-      box.load(first.attr('data-src').toString()+' #archive-page');
-      first.addClass('current');
-  list.each(function(){
-    $(this).click(function(){
-      var listSrc=$(this).attr('data-src').toString()+' #archive-page';
-      box.load(listSrc);
-      list.removeClass('current');
-      $(this).addClass('current');
-     });  
-    });
-  }); 
-</script>
-<% } %>
-<% if (theme.fancybox){ %>
-<link rel="stylesheet" href="<%- config.root %>fancybox/jquery.fancybox.css" media="screen" type="text/css">
-<script src="<%- config.root %>fancybox/jquery.fancybox.pack.js"></script>
+
+
+
+<link rel="stylesheet" href="/fancybox/jquery.fancybox.css" media="screen" type="text/css">
+<script src="/fancybox/jquery.fancybox.pack.js"></script>
 <script type="text/javascript">
 $(document).ready(function(){ 
   $('.article-content').each(function(i){
@@ -672,23 +637,76 @@ $(document).ready(function(){
   }
 }); 
 </script>
-<% } %>
+
 
 
 <!-- Analytics Begin -->
-<%- partial('analytics') %>
+
+
+
+<script>
+var _hmt = _hmt || [];
+(function() {
+  var hm = document.createElement("script");
+  hm.src = "//hm.baidu.com/hm.js?e6d1f421bbc9962127a50488f9ed37d1";
+  var s = document.getElementsByTagName("script")[0]; 
+  s.parentNode.insertBefore(hm, s);
+})();
+</script>
+
+
+
+<span style="display:none"><script type="text/javascript">var cnzz_protocol = (("https:" == document.location.protocol) ? " https://" : " http://");document.write(unescape("%3Cspan id='cnzz_stat_icon_1256113107'%3E%3C/span%3E%3Cscript src='" + cnzz_protocol + "s23.cnzz.com/z_stat.php%3Fid%3D1256113107' type='text/javascript'%3E%3C/script%3E"));</script></span>
+
+
 <!-- Analytics End -->
 
 <!-- Totop Begin -->
-<%- partial('totop') %>
+
+	<div id="totop">
+	<a title="返回顶部"><img src="/img/scrollup.png"/></a>
+	</div>
+	<script src="/js/totop.js"></script>
+
 <!-- Totop End -->
 
 <!-- MathJax Begin -->
-<%- partial('mathjax') %>
+<!-- mathjax config similar to math.stackexchange -->
+
+<script type="text/x-mathjax-config">
+  MathJax.Hub.Config({
+    tex2jax: {
+      inlineMath: [ ['$','$'], ["\\(","\\)"] ],
+      processEscapes: true
+    }
+  });
+</script>
+
+<script type="text/x-mathjax-config">
+    MathJax.Hub.Config({
+      tex2jax: {
+        skipTags: ['script', 'noscript', 'style', 'textarea', 'pre', 'code']
+      }
+    });
+</script>
+
+<script type="text/x-mathjax-config">
+    MathJax.Hub.Queue(function() {
+        var all = MathJax.Hub.getAllJax(), i;
+        for(i=0; i < all.length; i += 1) {
+            all[i].SourceElement().parentNode.className += ' has-jax';
+        }
+    });
+</script>
+
+<script type="text/javascript" src="http://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML">
+</script>
+
+
 <!-- MathJax End -->
 
 <!-- Tiny_search Begin -->
-<%- partial('tinysou_search') %>
+
 <!-- Tiny_search End -->
 
   </body>

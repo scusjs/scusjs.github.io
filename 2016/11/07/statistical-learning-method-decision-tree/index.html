@@ -78,9 +78,9 @@
     </header>
     <div id="container">
       <div id="main" class="post" itemscope itemprop="blogPost">
-  
-	<article itemprop="articleBody"> 
-		<header class="article-info clearfix">
+    
+    <article itemprop="articleBody"> 
+        <header class="article-info clearfix">
   <h1 itemprop="name">
     
       <a href="/2016/11/07/statistical-learning-method-decision-tree/" title="统计学习方法（笔记）-决策树" itemprop="url">统计学习方法（笔记）-决策树</a>
@@ -98,16 +98,16 @@
   </p>
 </header>
 
-	<div class="article-content">
-		
-		<div id="toc" class="toc-article">
-			<strong class="toc-title">文章目录</strong>
-		
-			<ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link" href="#决策树模型与学习"><span class="toc-number">1.</span> <span class="toc-text">决策树模型与学习</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#特征选择"><span class="toc-number">2.</span> <span class="toc-text">特征选择</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#ID3-算法"><span class="toc-number">2.1.</span> <span class="toc-text">ID3 算法</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#C4-5-算法"><span class="toc-number">2.2.</span> <span class="toc-text">C4.5 算法</span></a></li></ol></li><li class="toc-item toc-level-1"><a class="toc-link" href="#决策树的剪枝"><span class="toc-number">3.</span> <span class="toc-text">决策树的剪枝</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#CART-算法"><span class="toc-number">4.</span> <span class="toc-text">CART 算法</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#CART-生成"><span class="toc-number">4.1.</span> <span class="toc-text">CART 生成</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#回归树的生成"><span class="toc-number">4.1.1.</span> <span class="toc-text">回归树的生成</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#分类树的生成"><span class="toc-number">4.1.2.</span> <span class="toc-text">分类树的生成</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#CART-剪枝"><span class="toc-number">4.2.</span> <span class="toc-text">CART 剪枝</span></a></li></ol></li></ol>
-		
-		</div>
-		
-		<p>决策树是一种基本的分类与回归方法。模型可读性强，分类速度快，可以认为是 if-then 规则的集合。</p>
+    <div class="article-content">
+        
+        <div id="toc" class="toc-article">
+            <strong class="toc-title">文章目录</strong>
+        
+            <ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link" href="#决策树模型与学习"><span class="toc-number">1.</span> <span class="toc-text">决策树模型与学习</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#特征选择"><span class="toc-number">2.</span> <span class="toc-text">特征选择</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#ID3-算法"><span class="toc-number">2.1.</span> <span class="toc-text">ID3 算法</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#C4-5-算法"><span class="toc-number">2.2.</span> <span class="toc-text">C4.5 算法</span></a></li></ol></li><li class="toc-item toc-level-1"><a class="toc-link" href="#决策树的剪枝"><span class="toc-number">3.</span> <span class="toc-text">决策树的剪枝</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#CART-算法"><span class="toc-number">4.</span> <span class="toc-text">CART 算法</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#CART-生成"><span class="toc-number">4.1.</span> <span class="toc-text">CART 生成</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#回归树的生成"><span class="toc-number">4.1.1.</span> <span class="toc-text">回归树的生成</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#分类树的生成"><span class="toc-number">4.1.2.</span> <span class="toc-text">分类树的生成</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#CART-剪枝"><span class="toc-number">4.2.</span> <span class="toc-text">CART 剪枝</span></a></li></ol></li></ol>
+        
+        </div>
+        
+        <p>决策树是一种基本的分类与回归方法。模型可读性强，分类速度快，可以认为是 if-then 规则的集合。</p>
 <h1 id="决策树模型与学习"><a href="#决策树模型与学习" class="headerlink" title="决策树模型与学习"></a>决策树模型与学习</h1><p>分类决策树模型是一种描述对实例进行分类的树形结构。内部节点表示特征或者属性，叶节点表示一个类。分类时，从根节点开始，对实例某一特征进行测试，根据测试结果分配到子节点，递归进行，直到到达叶节点，即为实例所属的类，如图：</p>
 <img title="决策树" alt="决策树" src="http://7xl6z1.com1.z0.glb.clouddn.com/static/images/statistical-learning-method/1478508855.jpg">
 <p>可以将决策树看做一个 if-then 规则的集合，并且其路径具有互斥且完备性质。如上图，最终的类别为 Yes 和 No 两类，假设存在数据$x={青少年,是学生}$，首先判断第一个特征，年龄，为青少年，跳转到最左边节点，判断是否是学生，则类别为 Yes。</p>
@@ -191,8 +191,8 @@
 <li>如果 T 不是由根节点单独构成的树，则回到步骤4</li>
 <li>采用交叉验证法在子树序列$T_0,T_1,…,T_n$中选取最优子树$T_\alpha$ </li>
 </ol>
-  
-	</div>
+
+    </div>
     
         <!-- css -->
         <style type="text/css">
@@ -521,10 +521,12 @@
 		</p>
 </div>
 </footer>
-    <script src="<%- config.root %>js/jquery-2.0.3.min.js"></script>
-<script src="<%- config.root %>js/jquery.imagesloaded.min.js"></script>
-<script src="<%- config.root %>js/gallery.js"></script>
-<script src="<%- config.root %>js/jquery.qrcode-0.12.0.min.js"></script>
+    <script src="/js/jquery-2.0.3.min.js"></script>
+<script src="/js/jquery.imagesloaded.min.js"></script>
+<script src="/js/gallery.js"></script>
+<script src="/js/jquery.qrcode-0.12.0.min.js"></script>
+<script async src="//dn-lbstatics.qbox.me/busuanzi/2.3/busuanzi.pure.mini.js">
+</script>
 
 <script type="text/javascript">
 $(document).ready(function(){ 
@@ -556,12 +558,7 @@ $(document).ready(function(){
   $(window).scroll(function(){
     o.css("top",Math.max(80,260-$(this).scrollTop()));
   });
-  <% if (is_post() && theme.close_aside) { %>
-        getSize();
-        if (myWidth >= 1024) {
-          c.click();
-        }
-  <% } %>
+  
   $(window).resize(function(){
     getSize(); 
     if (myWidth >= 1024) {
@@ -570,14 +567,14 @@ $(document).ready(function(){
       m.removeClass('moveMain');
       a.css('display', 'block').removeClass('fadeOut');
       o.css('display', 'none');
-      <% if( is_post()&&(page.toc !== false) && theme.toc.aside){ %>
+      
       $('#toc.toc-aside').css('display', 'none');
-      <% } %>  
+        
     }
   });
 });
 </script>
-<% if (is_post()) { %>
+
 <script type="text/javascript">
 $(document).ready(function(){ 
   var ai = $('.article-content>iframe'),
@@ -603,8 +600,8 @@ $(document).ready(function(){
   });
 });
 </script>
-<% } %>
-<% if ((page.layout=='post'||page.layout=='page'||page.layout=='photo')&&!theme.jiathis.enable) { %>
+
+
 <script type="text/javascript">
 $(document).ready(function(){ 
   var $this = $('.share'),
@@ -653,28 +650,14 @@ $(document).ready(function(){
   });
 });   
 </script>
-<% } %>
 
-<% if (theme.duoshuo_shortname && page.comments){ %>
+
+
+
 <script type="text/javascript">
-  var duoshuoQuery = {short_name:"<%= theme.duoshuo_shortname %>"};
-  (function() {
-    var ds = document.createElement('script');
-    ds.type = 'text/javascript';ds.async = true;
-    ds.src = '//7xl6z1.com1.z0.glb.clouddn.com/embed_ua.js';
-    ds.charset = 'UTF-8';
-    (document.getElementsByTagName('head')[0] 
-    || document.getElementsByTagName('body')[0]).appendChild(ds);
-  })();
-</script> 
-<% } %>
-<% if( (config.disqus_shortname || theme.disqus_shortname) && page.comments) { %>
-<script type="text/javascript">
-<% if(config.disqus_shortname){ %>
-var disqus_shortname = '<%= config.disqus_shortname %>';
-<% }else{ %>
-var disqus_shortname = '<%= theme.disqus_shortname %>';
-<% } %>
+
+var disqus_shortname = 'liexing';
+
 (function(){
   var dsq = document.createElement('script');
   dsq.type = 'text/javascript';
@@ -690,32 +673,14 @@ var disqus_shortname = '<%= theme.disqus_shortname %>';
   (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
 }());
 </script>
-<% } %>
 
 
 
-<% if (page.layout=='tags'||page.layout=='categories'){ %>
-<script type="text/javascript">
-$(document).ready(function(){ 
-  var list    = $('.archive-title a'),
-      box     = $('.all-list-box'),
-      first   = $('.archive-title a:first-of-type');
-      box.load(first.attr('data-src').toString()+' #archive-page');
-      first.addClass('current');
-  list.each(function(){
-    $(this).click(function(){
-      var listSrc=$(this).attr('data-src').toString()+' #archive-page';
-      box.load(listSrc);
-      list.removeClass('current');
-      $(this).addClass('current');
-     });  
-    });
-  }); 
-</script>
-<% } %>
-<% if (theme.fancybox){ %>
-<link rel="stylesheet" href="<%- config.root %>fancybox/jquery.fancybox.css" media="screen" type="text/css">
-<script src="<%- config.root %>fancybox/jquery.fancybox.pack.js"></script>
+
+
+
+<link rel="stylesheet" href="/fancybox/jquery.fancybox.css" media="screen" type="text/css">
+<script src="/fancybox/jquery.fancybox.pack.js"></script>
 <script type="text/javascript">
 $(document).ready(function(){ 
   $('.article-content').each(function(i){
@@ -734,23 +699,76 @@ $(document).ready(function(){
   }
 }); 
 </script>
-<% } %>
+
 
 
 <!-- Analytics Begin -->
-<%- partial('analytics') %>
+
+
+
+<script>
+var _hmt = _hmt || [];
+(function() {
+  var hm = document.createElement("script");
+  hm.src = "//hm.baidu.com/hm.js?e6d1f421bbc9962127a50488f9ed37d1";
+  var s = document.getElementsByTagName("script")[0]; 
+  s.parentNode.insertBefore(hm, s);
+})();
+</script>
+
+
+
+<span style="display:none"><script type="text/javascript">var cnzz_protocol = (("https:" == document.location.protocol) ? " https://" : " http://");document.write(unescape("%3Cspan id='cnzz_stat_icon_1256113107'%3E%3C/span%3E%3Cscript src='" + cnzz_protocol + "s23.cnzz.com/z_stat.php%3Fid%3D1256113107' type='text/javascript'%3E%3C/script%3E"));</script></span>
+
+
 <!-- Analytics End -->
 
 <!-- Totop Begin -->
-<%- partial('totop') %>
+
+	<div id="totop">
+	<a title="返回顶部"><img src="/img/scrollup.png"/></a>
+	</div>
+	<script src="/js/totop.js"></script>
+
 <!-- Totop End -->
 
 <!-- MathJax Begin -->
-<%- partial('mathjax') %>
+<!-- mathjax config similar to math.stackexchange -->
+
+<script type="text/x-mathjax-config">
+  MathJax.Hub.Config({
+    tex2jax: {
+      inlineMath: [ ['$','$'], ["\\(","\\)"] ],
+      processEscapes: true
+    }
+  });
+</script>
+
+<script type="text/x-mathjax-config">
+    MathJax.Hub.Config({
+      tex2jax: {
+        skipTags: ['script', 'noscript', 'style', 'textarea', 'pre', 'code']
+      }
+    });
+</script>
+
+<script type="text/x-mathjax-config">
+    MathJax.Hub.Queue(function() {
+        var all = MathJax.Hub.getAllJax(), i;
+        for(i=0; i < all.length; i += 1) {
+            all[i].SourceElement().parentNode.className += ' has-jax';
+        }
+    });
+</script>
+
+<script type="text/javascript" src="http://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML">
+</script>
+
+
 <!-- MathJax End -->
 
 <!-- Tiny_search Begin -->
-<%- partial('tinysou_search') %>
+
 <!-- Tiny_search End -->
 
   </body>

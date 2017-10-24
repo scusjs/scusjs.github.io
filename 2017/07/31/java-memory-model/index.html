@@ -79,9 +79,9 @@
     </header>
     <div id="container">
       <div id="main" class="post" itemscope itemprop="blogPost">
-  
-	<article itemprop="articleBody"> 
-		<header class="article-info clearfix">
+    
+    <article itemprop="articleBody"> 
+        <header class="article-info clearfix">
   <h1 itemprop="name">
     
       <a href="/2017/07/31/java-memory-model/" title="Java 内存模型" itemprop="url">Java 内存模型</a>
@@ -99,16 +99,16 @@
   </p>
 </header>
 
-	<div class="article-content">
-		
-		<div id="toc" class="toc-article">
-			<strong class="toc-title">文章目录</strong>
-		
-			<ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link" href="#缓存与一致性"><span class="toc-number">1.</span> <span class="toc-text">缓存与一致性</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#JMM"><span class="toc-number">2.</span> <span class="toc-text">JMM</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#内存间交互操作"><span class="toc-number">2.1.</span> <span class="toc-text">内存间交互操作</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#Happens-before"><span class="toc-number">2.2.</span> <span class="toc-text">Happens-before</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#指令重排序"><span class="toc-number">2.3.</span> <span class="toc-text">指令重排序</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#数据依耐性"><span class="toc-number">2.3.1.</span> <span class="toc-text">数据依耐性</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#as-if-serial"><span class="toc-number">2.3.2.</span> <span class="toc-text">as-if-serial</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#内存屏障"><span class="toc-number">2.3.3.</span> <span class="toc-text">内存屏障</span></a></li></ol></li></ol></li></ol>
-		
-		</div>
-		
-		<p>Java内存模型，即 Java Memory Model（JMM），定义了 Java 虚拟机在计算机内存的工作方式。现在的 Java 内存模型主要源于1.5版本。</p>
+    <div class="article-content">
+        
+        <div id="toc" class="toc-article">
+            <strong class="toc-title">文章目录</strong>
+        
+            <ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link" href="#缓存与一致性"><span class="toc-number">1.</span> <span class="toc-text">缓存与一致性</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#JMM"><span class="toc-number">2.</span> <span class="toc-text">JMM</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#内存间交互操作"><span class="toc-number">2.1.</span> <span class="toc-text">内存间交互操作</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#Happens-before"><span class="toc-number">2.2.</span> <span class="toc-text">Happens-before</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#指令重排序"><span class="toc-number">2.3.</span> <span class="toc-text">指令重排序</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#数据依耐性"><span class="toc-number">2.3.1.</span> <span class="toc-text">数据依耐性</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#as-if-serial"><span class="toc-number">2.3.2.</span> <span class="toc-text">as-if-serial</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#内存屏障"><span class="toc-number">2.3.3.</span> <span class="toc-text">内存屏障</span></a></li></ol></li></ol></li></ol>
+        
+        </div>
+        
+        <p>Java内存模型，即 Java Memory Model（JMM），定义了 Java 虚拟机在计算机内存的工作方式。现在的 Java 内存模型主要源于1.5版本。</p>
 <h1 id="缓存与一致性"><a href="#缓存与一致性" class="headerlink" title="缓存与一致性"></a>缓存与一致性</h1><p>在计算机中，不同硬件的处理速度不同，往往有几个数量级的差距。比如 CPU 的处理速度往往高于内存数个数量级。因此计算机体系结构中引入了告诉缓存（Cache）放在内存和处理器之间作为缓冲。将 CPU 可能将要访问的数据先放在缓存中，因为访问缓存的速度远远高于直接访问内存，因此能加速运算。</p>
 <img title="高速缓存" alt="高速缓存" src="http://7xl6z1.com1.z0.glb.clouddn.com/static/images/java-memory-model/1501516073.png">
 <p>虽然高速缓存解决了 CPU 和内存之间的速度问题，但是引入了另一个问题：缓存一致性。在多处理系统中，每一个处理器都有自己独立的缓存，但是整个系统共享一个内存，因此需要保证每个 CPU 读写的数据一致。常见的一致性协议有 MSI、MESI、MOSI以及 Dragon Protocol 等。</p>
@@ -148,8 +148,8 @@
 <h3 id="数据依耐性"><a href="#数据依耐性" class="headerlink" title="数据依耐性"></a>数据依耐性</h3><p>如果两个操作访问同一个变量，其中一个为写操作，此时这两个操作之间存在数据依赖性。<br>编译器和处理器不会改变存在数据依赖性关系的两个操作的执行顺序，即不会重排序。</p>
 <h3 id="as-if-serial"><a href="#as-if-serial" class="headerlink" title="as-if-serial"></a>as-if-serial</h3><p>不管怎么重排序，单线程下的执行结果不能被改变，编译器、runtime 和处理器都必须遵守 as-if-serial 语义。</p>
 <h3 id="内存屏障"><a href="#内存屏障" class="headerlink" title="内存屏障"></a>内存屏障</h3><p>为了保证内存的可见性，Java 编译器在生成指令序列的适当位置会插入内存屏障指令来禁止特定类型的处理器重排序。Java 内存模型把内存屏障分为 LoadLoad、LoadStore、StoreLoad和StoreStore 四种。</p>
-  
-	</div>
+
+    </div>
     
         <!-- css -->
         <style type="text/css">
@@ -473,10 +473,12 @@
 		</p>
 </div>
 </footer>
-    <script src="<%- config.root %>js/jquery-2.0.3.min.js"></script>
-<script src="<%- config.root %>js/jquery.imagesloaded.min.js"></script>
-<script src="<%- config.root %>js/gallery.js"></script>
-<script src="<%- config.root %>js/jquery.qrcode-0.12.0.min.js"></script>
+    <script src="/js/jquery-2.0.3.min.js"></script>
+<script src="/js/jquery.imagesloaded.min.js"></script>
+<script src="/js/gallery.js"></script>
+<script src="/js/jquery.qrcode-0.12.0.min.js"></script>
+<script async src="//dn-lbstatics.qbox.me/busuanzi/2.3/busuanzi.pure.mini.js">
+</script>
 
 <script type="text/javascript">
 $(document).ready(function(){ 
@@ -508,12 +510,7 @@ $(document).ready(function(){
   $(window).scroll(function(){
     o.css("top",Math.max(80,260-$(this).scrollTop()));
   });
-  <% if (is_post() && theme.close_aside) { %>
-        getSize();
-        if (myWidth >= 1024) {
-          c.click();
-        }
-  <% } %>
+  
   $(window).resize(function(){
     getSize(); 
     if (myWidth >= 1024) {
@@ -522,14 +519,14 @@ $(document).ready(function(){
       m.removeClass('moveMain');
       a.css('display', 'block').removeClass('fadeOut');
       o.css('display', 'none');
-      <% if( is_post()&&(page.toc !== false) && theme.toc.aside){ %>
+      
       $('#toc.toc-aside').css('display', 'none');
-      <% } %>  
+        
     }
   });
 });
 </script>
-<% if (is_post()) { %>
+
 <script type="text/javascript">
 $(document).ready(function(){ 
   var ai = $('.article-content>iframe'),
@@ -555,8 +552,8 @@ $(document).ready(function(){
   });
 });
 </script>
-<% } %>
-<% if ((page.layout=='post'||page.layout=='page'||page.layout=='photo')&&!theme.jiathis.enable) { %>
+
+
 <script type="text/javascript">
 $(document).ready(function(){ 
   var $this = $('.share'),
@@ -605,28 +602,14 @@ $(document).ready(function(){
   });
 });   
 </script>
-<% } %>
 
-<% if (theme.duoshuo_shortname && page.comments){ %>
+
+
+
 <script type="text/javascript">
-  var duoshuoQuery = {short_name:"<%= theme.duoshuo_shortname %>"};
-  (function() {
-    var ds = document.createElement('script');
-    ds.type = 'text/javascript';ds.async = true;
-    ds.src = '//7xl6z1.com1.z0.glb.clouddn.com/embed_ua.js';
-    ds.charset = 'UTF-8';
-    (document.getElementsByTagName('head')[0] 
-    || document.getElementsByTagName('body')[0]).appendChild(ds);
-  })();
-</script> 
-<% } %>
-<% if( (config.disqus_shortname || theme.disqus_shortname) && page.comments) { %>
-<script type="text/javascript">
-<% if(config.disqus_shortname){ %>
-var disqus_shortname = '<%= config.disqus_shortname %>';
-<% }else{ %>
-var disqus_shortname = '<%= theme.disqus_shortname %>';
-<% } %>
+
+var disqus_shortname = 'liexing';
+
 (function(){
   var dsq = document.createElement('script');
   dsq.type = 'text/javascript';
@@ -642,32 +625,14 @@ var disqus_shortname = '<%= theme.disqus_shortname %>';
   (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
 }());
 </script>
-<% } %>
 
 
 
-<% if (page.layout=='tags'||page.layout=='categories'){ %>
-<script type="text/javascript">
-$(document).ready(function(){ 
-  var list    = $('.archive-title a'),
-      box     = $('.all-list-box'),
-      first   = $('.archive-title a:first-of-type');
-      box.load(first.attr('data-src').toString()+' #archive-page');
-      first.addClass('current');
-  list.each(function(){
-    $(this).click(function(){
-      var listSrc=$(this).attr('data-src').toString()+' #archive-page';
-      box.load(listSrc);
-      list.removeClass('current');
-      $(this).addClass('current');
-     });  
-    });
-  }); 
-</script>
-<% } %>
-<% if (theme.fancybox){ %>
-<link rel="stylesheet" href="<%- config.root %>fancybox/jquery.fancybox.css" media="screen" type="text/css">
-<script src="<%- config.root %>fancybox/jquery.fancybox.pack.js"></script>
+
+
+
+<link rel="stylesheet" href="/fancybox/jquery.fancybox.css" media="screen" type="text/css">
+<script src="/fancybox/jquery.fancybox.pack.js"></script>
 <script type="text/javascript">
 $(document).ready(function(){ 
   $('.article-content').each(function(i){
@@ -686,23 +651,47 @@ $(document).ready(function(){
   }
 }); 
 </script>
-<% } %>
+
 
 
 <!-- Analytics Begin -->
-<%- partial('analytics') %>
+
+
+
+<script>
+var _hmt = _hmt || [];
+(function() {
+  var hm = document.createElement("script");
+  hm.src = "//hm.baidu.com/hm.js?e6d1f421bbc9962127a50488f9ed37d1";
+  var s = document.getElementsByTagName("script")[0]; 
+  s.parentNode.insertBefore(hm, s);
+})();
+</script>
+
+
+
+<span style="display:none"><script type="text/javascript">var cnzz_protocol = (("https:" == document.location.protocol) ? " https://" : " http://");document.write(unescape("%3Cspan id='cnzz_stat_icon_1256113107'%3E%3C/span%3E%3Cscript src='" + cnzz_protocol + "s23.cnzz.com/z_stat.php%3Fid%3D1256113107' type='text/javascript'%3E%3C/script%3E"));</script></span>
+
+
 <!-- Analytics End -->
 
 <!-- Totop Begin -->
-<%- partial('totop') %>
+
+	<div id="totop">
+	<a title="返回顶部"><img src="/img/scrollup.png"/></a>
+	</div>
+	<script src="/js/totop.js"></script>
+
 <!-- Totop End -->
 
 <!-- MathJax Begin -->
-<%- partial('mathjax') %>
+<!-- mathjax config similar to math.stackexchange -->
+
+
 <!-- MathJax End -->
 
 <!-- Tiny_search Begin -->
-<%- partial('tinysou_search') %>
+
 <!-- Tiny_search End -->
 
   </body>

@@ -79,9 +79,9 @@
     </header>
     <div id="container">
       <div id="main" class="post" itemscope itemprop="blogPost">
-  
-	<article itemprop="articleBody"> 
-		<header class="article-info clearfix">
+    
+    <article itemprop="articleBody"> 
+        <header class="article-info clearfix">
   <h1 itemprop="name">
     
       <a href="/2016/03/28/druid-quickstart/" title="Druid Quickstart" itemprop="url">Druid Quickstart</a>
@@ -99,16 +99,16 @@
   </p>
 </header>
 
-	<div class="article-content">
-		
-		<div id="toc" class="toc-article">
-			<strong class="toc-title">文章目录</strong>
-		
-			<ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#Druid-简单架构"><span class="toc-number">1.</span> <span class="toc-text">Druid 简单架构</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#节点类型与容错"><span class="toc-number">1.1.</span> <span class="toc-text">节点类型与容错</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#环境要求"><span class="toc-number">2.</span> <span class="toc-text">环境要求</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#运行"><span class="toc-number">3.</span> <span class="toc-text">运行</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#运行Druid"><span class="toc-number">3.1.</span> <span class="toc-text">运行Druid</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#装载批量数据"><span class="toc-number">3.2.</span> <span class="toc-text">装载批量数据</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#装载数据流"><span class="toc-number">3.3.</span> <span class="toc-text">装载数据流</span></a></li></ol></li></ol>
-		
-		</div>
-		
-		<p><a href="http://druid.io" target="_blank" rel="external">Druid</a>是一个用于大数据实时查询和分析的高容错、高性能开源分布式系统，旨在快速处理大规模的数据，并能够实现快速查询和分析。</p>
+    <div class="article-content">
+        
+        <div id="toc" class="toc-article">
+            <strong class="toc-title">文章目录</strong>
+        
+            <ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#Druid-简单架构"><span class="toc-number">1.</span> <span class="toc-text">Druid 简单架构</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#节点类型与容错"><span class="toc-number">1.1.</span> <span class="toc-text">节点类型与容错</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#环境要求"><span class="toc-number">2.</span> <span class="toc-text">环境要求</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#运行"><span class="toc-number">3.</span> <span class="toc-text">运行</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#运行Druid"><span class="toc-number">3.1.</span> <span class="toc-text">运行Druid</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#装载批量数据"><span class="toc-number">3.2.</span> <span class="toc-text">装载批量数据</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#装载数据流"><span class="toc-number">3.3.</span> <span class="toc-text">装载数据流</span></a></li></ol></li></ol>
+        
+        </div>
+        
+        <p><a href="http://druid.io" target="_blank" rel="external">Druid</a>是一个用于大数据实时查询和分析的高容错、高性能开源分布式系统，旨在快速处理大规模的数据，并能够实现快速查询和分析。</p>
 <h2 id="Druid-简单架构"><a href="#Druid-简单架构" class="headerlink" title="Druid 简单架构"></a>Druid 简单架构</h2><h3 id="节点类型与容错"><a href="#节点类型与容错" class="headerlink" title="节点类型与容错"></a>节点类型与容错</h3><ul>
 <li>Historical，对非实时数据进行处理存储和查询。从deep storage下载段（segment），并对基于段的查询请求作出响应，并且把结果返回给broker节点。它们通过Zookeeper向它们自己和段宣布提供服务，并且通过Zookeeper监视装载和删除新段的信号。如果一个Historical节点失效，其他的Historical节点将会替代它，不会导致数据损失。</li>
 <li>Coordinator，监视Historical组，来确保数据是可用的、可复制的，并且处于通常“最优”的配置。它们通过读取元数据存储（metadata storage）中的段元数据信息来决定哪些段应该被集群装载，利用Zookeeper来确定存在哪些Historical节点，并且创建Zookeeper项来告诉Historical节点装载或者删除段。能通过热故障转移配置运行。如果没有Coordinator在运行，将不会发生数据拓扑的变化，但是系统任然能继续运行。</li>
@@ -165,8 +165,8 @@
 <figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">bin/tranquility kafka -configFile &lt;path_to_druid_distro&gt;/conf-quickstart/tranquility/kafka.json</div></pre></td></tr></table></figure>
 <p>Kafka配置示例：</p>
 <figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div><div class="line">30</div><div class="line">31</div><div class="line">32</div><div class="line">33</div><div class="line">34</div><div class="line">35</div><div class="line">36</div><div class="line">37</div><div class="line">38</div><div class="line">39</div><div class="line">40</div><div class="line">41</div><div class="line">42</div><div class="line">43</div><div class="line">44</div><div class="line">45</div><div class="line">46</div><div class="line">47</div><div class="line">48</div><div class="line">49</div><div class="line">50</div><div class="line">51</div><div class="line">52</div><div class="line">53</div><div class="line">54</div><div class="line">55</div><div class="line">56</div><div class="line">57</div><div class="line">58</div><div class="line">59</div><div class="line">60</div><div class="line">61</div><div class="line">62</div><div class="line">63</div><div class="line">64</div></pre></td><td class="code"><pre><div class="line">&#123;</div><div class="line">    <span class="string">"dataSources"</span>: [</div><div class="line">        &#123;</div><div class="line">            <span class="string">"spec"</span>: &#123;</div><div class="line">                <span class="string">"dataSchema"</span>: &#123;</div><div class="line">                    <span class="string">"parser"</span>: &#123;</div><div class="line">                        <span class="string">"type"</span>: <span class="string">"string"</span>,</div><div class="line">                        <span class="string">"parseSpec"</span>: &#123;</div><div class="line">                            <span class="string">"timestampSpec"</span>: &#123;</div><div class="line">                                <span class="string">"format"</span>: <span class="string">"auto"</span>,</div><div class="line">                                <span class="string">"column"</span>: <span class="string">"timestamp"</span></div><div class="line">                            &#125;,</div><div class="line">                            <span class="string">"dimensionsSpec"</span>: &#123;</div><div class="line">                                <span class="string">"dimensions"</span>: [</div><div class="line">                                    <span class="string">"url"</span>,</div><div class="line">                                    <span class="string">"user"</span></div><div class="line">                                ]</div><div class="line">                            &#125;,</div><div class="line">                            <span class="string">"format"</span>: <span class="string">"json"</span></div><div class="line">                        &#125;</div><div class="line">                    &#125;,</div><div class="line">                    <span class="string">"dataSource"</span>: <span class="string">"pageviews"</span>,</div><div class="line">                    <span class="string">"granularitySpec"</span>: &#123;</div><div class="line">                        <span class="string">"segmentGranularity"</span>: <span class="string">"hour"</span>,</div><div class="line">                        <span class="string">"type"</span>: <span class="string">"uniform"</span>,</div><div class="line">                        <span class="string">"queryGranularity"</span>: <span class="string">"none"</span></div><div class="line">                    &#125;,</div><div class="line">                    <span class="string">"metricsSpec"</span>: [</div><div class="line">                        &#123;</div><div class="line">                            <span class="string">"type"</span>: <span class="string">"count"</span>,</div><div class="line">                            <span class="string">"name"</span>: <span class="string">"views"</span></div><div class="line">                        &#125;,</div><div class="line">                        &#123;</div><div class="line">                            <span class="string">"fieldName"</span>: <span class="string">"latencyMs"</span>,</div><div class="line">                            <span class="string">"type"</span>: <span class="string">"doubleSum"</span>,</div><div class="line">                            <span class="string">"name"</span>: <span class="string">"latencyMs"</span></div><div class="line">                        &#125;</div><div class="line">                    ]</div><div class="line">                &#125;,</div><div class="line">                <span class="string">"tuningConfig"</span>: &#123;</div><div class="line">                    <span class="string">"maxRowsInMemory"</span>: <span class="string">"100000"</span>,</div><div class="line">                    <span class="string">"type"</span>: <span class="string">"realtime"</span>,</div><div class="line">                    <span class="string">"windowPeriod"</span>: <span class="string">"PT5M"</span>,</div><div class="line">                    <span class="string">"intermediatePersistPeriod"</span>: <span class="string">"PT5M"</span></div><div class="line">                &#125;</div><div class="line">            &#125;,</div><div class="line">            <span class="string">"properties"</span>: &#123;</div><div class="line">                <span class="string">"topicPattern.priority"</span>: <span class="string">"1"</span>,</div><div class="line">                <span class="string">"topicPattern"</span>: <span class="string">"pageviews"</span></div><div class="line">            &#125;</div><div class="line">        &#125;</div><div class="line">    ],</div><div class="line">    <span class="string">"properties"</span>: &#123;</div><div class="line">        <span class="string">"zookeeper.connect"</span>: <span class="string">"localhost:2181"</span>,</div><div class="line">        <span class="string">"zookeeper.timeout"</span>: <span class="string">"PT20S"</span>,</div><div class="line">        <span class="string">"druid.selectors.indexing.serviceName"</span>: <span class="string">"druid/overlord"</span>,</div><div class="line">        <span class="string">"druid.discovery.curator.path"</span>: <span class="string">"/druid/discovery"</span>,</div><div class="line">        <span class="string">"kafka.zookeeper.connect"</span>: <span class="string">"localhost:2181"</span>,</div><div class="line">        <span class="string">"kafka.group.id"</span>: <span class="string">"tranquility-kafka"</span>,</div><div class="line">        <span class="string">"consumer.numThreads"</span>: <span class="string">"2"</span>,</div><div class="line">        <span class="string">"commit.periodMillis"</span>: <span class="string">"15000"</span>,</div><div class="line">        <span class="string">"reportDropsAsExceptions"</span>: <span class="string">"false"</span></div><div class="line">    &#125;</div><div class="line">&#125;</div></pre></td></tr></table></figure>
-  
-	</div>
+
+    </div>
     
         <!-- css -->
         <style type="text/css">
@@ -495,10 +495,12 @@
 		</p>
 </div>
 </footer>
-    <script src="<%- config.root %>js/jquery-2.0.3.min.js"></script>
-<script src="<%- config.root %>js/jquery.imagesloaded.min.js"></script>
-<script src="<%- config.root %>js/gallery.js"></script>
-<script src="<%- config.root %>js/jquery.qrcode-0.12.0.min.js"></script>
+    <script src="/js/jquery-2.0.3.min.js"></script>
+<script src="/js/jquery.imagesloaded.min.js"></script>
+<script src="/js/gallery.js"></script>
+<script src="/js/jquery.qrcode-0.12.0.min.js"></script>
+<script async src="//dn-lbstatics.qbox.me/busuanzi/2.3/busuanzi.pure.mini.js">
+</script>
 
 <script type="text/javascript">
 $(document).ready(function(){ 
@@ -530,12 +532,7 @@ $(document).ready(function(){
   $(window).scroll(function(){
     o.css("top",Math.max(80,260-$(this).scrollTop()));
   });
-  <% if (is_post() && theme.close_aside) { %>
-        getSize();
-        if (myWidth >= 1024) {
-          c.click();
-        }
-  <% } %>
+  
   $(window).resize(function(){
     getSize(); 
     if (myWidth >= 1024) {
@@ -544,14 +541,14 @@ $(document).ready(function(){
       m.removeClass('moveMain');
       a.css('display', 'block').removeClass('fadeOut');
       o.css('display', 'none');
-      <% if( is_post()&&(page.toc !== false) && theme.toc.aside){ %>
+      
       $('#toc.toc-aside').css('display', 'none');
-      <% } %>  
+        
     }
   });
 });
 </script>
-<% if (is_post()) { %>
+
 <script type="text/javascript">
 $(document).ready(function(){ 
   var ai = $('.article-content>iframe'),
@@ -577,8 +574,8 @@ $(document).ready(function(){
   });
 });
 </script>
-<% } %>
-<% if ((page.layout=='post'||page.layout=='page'||page.layout=='photo')&&!theme.jiathis.enable) { %>
+
+
 <script type="text/javascript">
 $(document).ready(function(){ 
   var $this = $('.share'),
@@ -627,28 +624,14 @@ $(document).ready(function(){
   });
 });   
 </script>
-<% } %>
 
-<% if (theme.duoshuo_shortname && page.comments){ %>
+
+
+
 <script type="text/javascript">
-  var duoshuoQuery = {short_name:"<%= theme.duoshuo_shortname %>"};
-  (function() {
-    var ds = document.createElement('script');
-    ds.type = 'text/javascript';ds.async = true;
-    ds.src = '//7xl6z1.com1.z0.glb.clouddn.com/embed_ua.js';
-    ds.charset = 'UTF-8';
-    (document.getElementsByTagName('head')[0] 
-    || document.getElementsByTagName('body')[0]).appendChild(ds);
-  })();
-</script> 
-<% } %>
-<% if( (config.disqus_shortname || theme.disqus_shortname) && page.comments) { %>
-<script type="text/javascript">
-<% if(config.disqus_shortname){ %>
-var disqus_shortname = '<%= config.disqus_shortname %>';
-<% }else{ %>
-var disqus_shortname = '<%= theme.disqus_shortname %>';
-<% } %>
+
+var disqus_shortname = 'liexing';
+
 (function(){
   var dsq = document.createElement('script');
   dsq.type = 'text/javascript';
@@ -664,32 +647,14 @@ var disqus_shortname = '<%= theme.disqus_shortname %>';
   (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
 }());
 </script>
-<% } %>
 
 
 
-<% if (page.layout=='tags'||page.layout=='categories'){ %>
-<script type="text/javascript">
-$(document).ready(function(){ 
-  var list    = $('.archive-title a'),
-      box     = $('.all-list-box'),
-      first   = $('.archive-title a:first-of-type');
-      box.load(first.attr('data-src').toString()+' #archive-page');
-      first.addClass('current');
-  list.each(function(){
-    $(this).click(function(){
-      var listSrc=$(this).attr('data-src').toString()+' #archive-page';
-      box.load(listSrc);
-      list.removeClass('current');
-      $(this).addClass('current');
-     });  
-    });
-  }); 
-</script>
-<% } %>
-<% if (theme.fancybox){ %>
-<link rel="stylesheet" href="<%- config.root %>fancybox/jquery.fancybox.css" media="screen" type="text/css">
-<script src="<%- config.root %>fancybox/jquery.fancybox.pack.js"></script>
+
+
+
+<link rel="stylesheet" href="/fancybox/jquery.fancybox.css" media="screen" type="text/css">
+<script src="/fancybox/jquery.fancybox.pack.js"></script>
 <script type="text/javascript">
 $(document).ready(function(){ 
   $('.article-content').each(function(i){
@@ -708,23 +673,47 @@ $(document).ready(function(){
   }
 }); 
 </script>
-<% } %>
+
 
 
 <!-- Analytics Begin -->
-<%- partial('analytics') %>
+
+
+
+<script>
+var _hmt = _hmt || [];
+(function() {
+  var hm = document.createElement("script");
+  hm.src = "//hm.baidu.com/hm.js?e6d1f421bbc9962127a50488f9ed37d1";
+  var s = document.getElementsByTagName("script")[0]; 
+  s.parentNode.insertBefore(hm, s);
+})();
+</script>
+
+
+
+<span style="display:none"><script type="text/javascript">var cnzz_protocol = (("https:" == document.location.protocol) ? " https://" : " http://");document.write(unescape("%3Cspan id='cnzz_stat_icon_1256113107'%3E%3C/span%3E%3Cscript src='" + cnzz_protocol + "s23.cnzz.com/z_stat.php%3Fid%3D1256113107' type='text/javascript'%3E%3C/script%3E"));</script></span>
+
+
 <!-- Analytics End -->
 
 <!-- Totop Begin -->
-<%- partial('totop') %>
+
+	<div id="totop">
+	<a title="返回顶部"><img src="/img/scrollup.png"/></a>
+	</div>
+	<script src="/js/totop.js"></script>
+
 <!-- Totop End -->
 
 <!-- MathJax Begin -->
-<%- partial('mathjax') %>
+<!-- mathjax config similar to math.stackexchange -->
+
+
 <!-- MathJax End -->
 
 <!-- Tiny_search Begin -->
-<%- partial('tinysou_search') %>
+
 <!-- Tiny_search End -->
 
   </body>

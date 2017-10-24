@@ -76,9 +76,9 @@
     </header>
     <div id="container">
       <div id="main" class="post" itemscope itemprop="blogPost">
-  
-	<article itemprop="articleBody"> 
-		<header class="article-info clearfix">
+    
+    <article itemprop="articleBody"> 
+        <header class="article-info clearfix">
   <h1 itemprop="name">
     
       <a href="/2016/04/25/druid-querying/" title="Druid Querying" itemprop="url">Druid Querying</a>
@@ -96,16 +96,16 @@
   </p>
 </header>
 
-	<div class="article-content">
-		
-		<div id="toc" class="toc-article">
-			<strong class="toc-title">文章目录</strong>
-		
-			<ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#Timeseries-queries"><span class="toc-number">1.</span> <span class="toc-text">Timeseries queries</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#TopN-queries"><span class="toc-number">2.</span> <span class="toc-text">TopN queries</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#groupBy-Queries"><span class="toc-number">3.</span> <span class="toc-text">groupBy Queries</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#Time-Boundary-Queries"><span class="toc-number">4.</span> <span class="toc-text">Time Boundary Queries</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#Search-Queries"><span class="toc-number">5.</span> <span class="toc-text">Search Queries</span></a></li></ol>
-		
-		</div>
-		
-		<p>Druid的查询都通过向可查询节点（Broker、Historcal或者Realtime）发送HTTP REST风格的请求来获得结果。请求使用JSON格式，通常发送到Broker节点。</p>
+    <div class="article-content">
+        
+        <div id="toc" class="toc-article">
+            <strong class="toc-title">文章目录</strong>
+        
+            <ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#Timeseries-queries"><span class="toc-number">1.</span> <span class="toc-text">Timeseries queries</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#TopN-queries"><span class="toc-number">2.</span> <span class="toc-text">TopN queries</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#groupBy-Queries"><span class="toc-number">3.</span> <span class="toc-text">groupBy Queries</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#Time-Boundary-Queries"><span class="toc-number">4.</span> <span class="toc-text">Time Boundary Queries</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#Search-Queries"><span class="toc-number">5.</span> <span class="toc-text">Search Queries</span></a></li></ol>
+        
+        </div>
+        
+        <p>Druid的查询都通过向可查询节点（Broker、Historcal或者Realtime）发送HTTP REST风格的请求来获得结果。请求使用JSON格式，通常发送到Broker节点。</p>
 <p>Druid的查询分为三类：</p>
 <ul>
 <li>聚合查询（Aggregation Queries）</li>
@@ -401,8 +401,8 @@
 <figure class="highlight json"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div></pre></td><td class="code"><pre><div class="line">&#123;</div><div class="line">  <span class="attr">"queryType"</span>: <span class="string">"search"</span>,</div><div class="line">  <span class="attr">"dataSource"</span>: <span class="string">"sample_datasource"</span>,</div><div class="line">  <span class="attr">"granularity"</span>: <span class="string">"day"</span>,</div><div class="line">  <span class="attr">"searchDimensions"</span>: [</div><div class="line">    <span class="string">"dim1"</span>,</div><div class="line">    <span class="string">"dim2"</span></div><div class="line">  ],</div><div class="line">  <span class="attr">"query"</span>: &#123;</div><div class="line">    <span class="attr">"type"</span>: <span class="string">"insensitive_contains"</span>,</div><div class="line">    <span class="attr">"value"</span>: <span class="string">"Ke"</span></div><div class="line">  &#125;,</div><div class="line">  <span class="attr">"sort"</span> : &#123;</div><div class="line">    <span class="attr">"type"</span>: <span class="string">"lexicographic"</span></div><div class="line">  &#125;,</div><div class="line">  <span class="attr">"intervals"</span>: [</div><div class="line">    <span class="string">"2013-01-01T00:00:00.000/2013-01-03T00:00:00.000"</span></div><div class="line">  ]</div><div class="line">&#125;</div></pre></td></tr></table></figure>
 <p>返回数据如下：</p>
 <figure class="highlight json"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div></pre></td><td class="code"><pre><div class="line">[</div><div class="line">  &#123;</div><div class="line">    <span class="attr">"timestamp"</span>: <span class="string">"2012-01-01T00:00:00.000Z"</span>,</div><div class="line">    <span class="attr">"result"</span>: [</div><div class="line">      &#123;</div><div class="line">        <span class="attr">"dimension"</span>: <span class="string">"dim1"</span>,</div><div class="line">        <span class="attr">"value"</span>: <span class="string">"Ke$ha"</span></div><div class="line">      &#125;,</div><div class="line">      &#123;</div><div class="line">        <span class="attr">"dimension"</span>: <span class="string">"dim2"</span>,</div><div class="line">        <span class="attr">"value"</span>: <span class="string">"Ke$haForPresident"</span></div><div class="line">      &#125;</div><div class="line">    ]</div><div class="line">  &#125;,</div><div class="line">  &#123;</div><div class="line">    <span class="attr">"timestamp"</span>: <span class="string">"2012-01-02T00:00:00.000Z"</span>,</div><div class="line">    <span class="attr">"result"</span>: [</div><div class="line">      &#123;</div><div class="line">        <span class="attr">"dimension"</span>: <span class="string">"dim1"</span>,</div><div class="line">        <span class="attr">"value"</span>: <span class="string">"SomethingThatContainsKe"</span></div><div class="line">      &#125;,</div><div class="line">      &#123;</div><div class="line">        <span class="attr">"dimension"</span>: <span class="string">"dim2"</span>,</div><div class="line">        <span class="attr">"value"</span>: <span class="string">"SomethingElseThatContainsKe"</span></div><div class="line">      &#125;</div><div class="line">    ]</div><div class="line">  &#125;</div><div class="line">]</div></pre></td></tr></table></figure>
-  
-	</div>
+
+    </div>
     
         <!-- css -->
         <style type="text/css">
@@ -731,10 +731,12 @@
 		</p>
 </div>
 </footer>
-    <script src="<%- config.root %>js/jquery-2.0.3.min.js"></script>
-<script src="<%- config.root %>js/jquery.imagesloaded.min.js"></script>
-<script src="<%- config.root %>js/gallery.js"></script>
-<script src="<%- config.root %>js/jquery.qrcode-0.12.0.min.js"></script>
+    <script src="/js/jquery-2.0.3.min.js"></script>
+<script src="/js/jquery.imagesloaded.min.js"></script>
+<script src="/js/gallery.js"></script>
+<script src="/js/jquery.qrcode-0.12.0.min.js"></script>
+<script async src="//dn-lbstatics.qbox.me/busuanzi/2.3/busuanzi.pure.mini.js">
+</script>
 
 <script type="text/javascript">
 $(document).ready(function(){ 
@@ -766,12 +768,7 @@ $(document).ready(function(){
   $(window).scroll(function(){
     o.css("top",Math.max(80,260-$(this).scrollTop()));
   });
-  <% if (is_post() && theme.close_aside) { %>
-        getSize();
-        if (myWidth >= 1024) {
-          c.click();
-        }
-  <% } %>
+  
   $(window).resize(function(){
     getSize(); 
     if (myWidth >= 1024) {
@@ -780,14 +777,14 @@ $(document).ready(function(){
       m.removeClass('moveMain');
       a.css('display', 'block').removeClass('fadeOut');
       o.css('display', 'none');
-      <% if( is_post()&&(page.toc !== false) && theme.toc.aside){ %>
+      
       $('#toc.toc-aside').css('display', 'none');
-      <% } %>  
+        
     }
   });
 });
 </script>
-<% if (is_post()) { %>
+
 <script type="text/javascript">
 $(document).ready(function(){ 
   var ai = $('.article-content>iframe'),
@@ -813,8 +810,8 @@ $(document).ready(function(){
   });
 });
 </script>
-<% } %>
-<% if ((page.layout=='post'||page.layout=='page'||page.layout=='photo')&&!theme.jiathis.enable) { %>
+
+
 <script type="text/javascript">
 $(document).ready(function(){ 
   var $this = $('.share'),
@@ -863,28 +860,14 @@ $(document).ready(function(){
   });
 });   
 </script>
-<% } %>
 
-<% if (theme.duoshuo_shortname && page.comments){ %>
+
+
+
 <script type="text/javascript">
-  var duoshuoQuery = {short_name:"<%= theme.duoshuo_shortname %>"};
-  (function() {
-    var ds = document.createElement('script');
-    ds.type = 'text/javascript';ds.async = true;
-    ds.src = '//7xl6z1.com1.z0.glb.clouddn.com/embed_ua.js';
-    ds.charset = 'UTF-8';
-    (document.getElementsByTagName('head')[0] 
-    || document.getElementsByTagName('body')[0]).appendChild(ds);
-  })();
-</script> 
-<% } %>
-<% if( (config.disqus_shortname || theme.disqus_shortname) && page.comments) { %>
-<script type="text/javascript">
-<% if(config.disqus_shortname){ %>
-var disqus_shortname = '<%= config.disqus_shortname %>';
-<% }else{ %>
-var disqus_shortname = '<%= theme.disqus_shortname %>';
-<% } %>
+
+var disqus_shortname = 'liexing';
+
 (function(){
   var dsq = document.createElement('script');
   dsq.type = 'text/javascript';
@@ -900,32 +883,14 @@ var disqus_shortname = '<%= theme.disqus_shortname %>';
   (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
 }());
 </script>
-<% } %>
 
 
 
-<% if (page.layout=='tags'||page.layout=='categories'){ %>
-<script type="text/javascript">
-$(document).ready(function(){ 
-  var list    = $('.archive-title a'),
-      box     = $('.all-list-box'),
-      first   = $('.archive-title a:first-of-type');
-      box.load(first.attr('data-src').toString()+' #archive-page');
-      first.addClass('current');
-  list.each(function(){
-    $(this).click(function(){
-      var listSrc=$(this).attr('data-src').toString()+' #archive-page';
-      box.load(listSrc);
-      list.removeClass('current');
-      $(this).addClass('current');
-     });  
-    });
-  }); 
-</script>
-<% } %>
-<% if (theme.fancybox){ %>
-<link rel="stylesheet" href="<%- config.root %>fancybox/jquery.fancybox.css" media="screen" type="text/css">
-<script src="<%- config.root %>fancybox/jquery.fancybox.pack.js"></script>
+
+
+
+<link rel="stylesheet" href="/fancybox/jquery.fancybox.css" media="screen" type="text/css">
+<script src="/fancybox/jquery.fancybox.pack.js"></script>
 <script type="text/javascript">
 $(document).ready(function(){ 
   $('.article-content').each(function(i){
@@ -944,23 +909,47 @@ $(document).ready(function(){
   }
 }); 
 </script>
-<% } %>
+
 
 
 <!-- Analytics Begin -->
-<%- partial('analytics') %>
+
+
+
+<script>
+var _hmt = _hmt || [];
+(function() {
+  var hm = document.createElement("script");
+  hm.src = "//hm.baidu.com/hm.js?e6d1f421bbc9962127a50488f9ed37d1";
+  var s = document.getElementsByTagName("script")[0]; 
+  s.parentNode.insertBefore(hm, s);
+})();
+</script>
+
+
+
+<span style="display:none"><script type="text/javascript">var cnzz_protocol = (("https:" == document.location.protocol) ? " https://" : " http://");document.write(unescape("%3Cspan id='cnzz_stat_icon_1256113107'%3E%3C/span%3E%3Cscript src='" + cnzz_protocol + "s23.cnzz.com/z_stat.php%3Fid%3D1256113107' type='text/javascript'%3E%3C/script%3E"));</script></span>
+
+
 <!-- Analytics End -->
 
 <!-- Totop Begin -->
-<%- partial('totop') %>
+
+	<div id="totop">
+	<a title="返回顶部"><img src="/img/scrollup.png"/></a>
+	</div>
+	<script src="/js/totop.js"></script>
+
 <!-- Totop End -->
 
 <!-- MathJax Begin -->
-<%- partial('mathjax') %>
+<!-- mathjax config similar to math.stackexchange -->
+
+
 <!-- MathJax End -->
 
 <!-- Tiny_search Begin -->
-<%- partial('tinysou_search') %>
+
 <!-- Tiny_search End -->
 
   </body>
