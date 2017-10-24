@@ -83,20 +83,17 @@
     <article itemprop="articleBody"> 
         <header class="article-info clearfix">
   <h1 itemprop="name">
-    <% if(item.link) { %>
-      <a href="<%- item.link %>" target="_blank" title="<%= item.title %>"><%= item.title %></a><% } else { %>
-      <a href="<%- config.root %><%- item.path %>" title="<%= item.title %>" itemprop="url"><%= item.title %></a><% } %>
+    
+      <a href="/2016/03/28/druid-quickstart/" title="Druid Quickstart" itemprop="url">Druid Quickstart</a>
   </h1>
   <p class="article-author">By
-       <% if(theme.author.google_plus){ %>
-		<a href="https://plus.google.com/<%=theme.author.google_plus %>?rel=author" title="<%= config.author %>" target="_blank" itemprop="author"><%= config.author %></a>
-		<% }else{ %>
-		<a href="<%= config.root %>about" title="<%= config.author %>" target="_blank" itemprop="author"><%= config.author %></a>
-		<% } %>
+       
+		<a href="/about" title="liexing" target="_blank" itemprop="author">liexing</a>
+		
   <p class="article-time">
-    <time datetime="<%= date_xml(item.date) %>" itemprop="datePublished"> <%= __('datepublished') %> <%= item.date.format(config.date_format) %></time>
+    <time datetime="2016-03-28T10:14:36.000Z" itemprop="datePublished"> 发表于 2016-03-28</time>
 <span id="busuanzi_container_page_pv">
-  viewed <span id="busuanzi_value_page_pv"></span> times
+  &nbspViewed <span id="busuanzi_value_page_pv"></span> times
 </span>
     
   </p>
