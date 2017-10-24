@@ -77,26 +77,64 @@
 </div>
     </header>
     <div id="container">
-      <div id="main" class="<%= item.layout %>" itemscope itemprop="blogPost">
-  <% if (page.layout=='photo' && item.photos && item.photos.length){ %>
-    <%- partial('gallery') %>
-  <% } %>
+      <div id="main" class="post" itemscope itemprop="blogPost">
+  
 	<article itemprop="articleBody"> 
-		<%- partial('header') %>
+		<header class="article-info clearfix">
+  <h1 itemprop="name">
+    
+      <a href="/2016/11/01/statistical-learning-method-perceptron/" title="统计学习方法（笔记）-感知机" itemprop="url">统计学习方法（笔记）-感知机</a>
+  </h1>
+  <p class="article-author">By
+       
+		<a href="/about" title="liexing" target="_blank" itemprop="author">liexing</a>
+		
+  <p class="article-time">
+    <time datetime="2016-11-01T01:54:35.000Z" itemprop="datePublished"> 发表于 2016-11-01</time>
+<span id="busuanzi_container_page_pv">
+  &nbspViewed <span id="busuanzi_value_page_pv"></span> times
+</span>
+    
+  </p>
+</header>
+
 	<div class="article-content">
-		<% if( table&&(item.toc !== false) && theme.toc.article){ %>
+		
 		<div id="toc" class="toc-article">
-			<strong class="toc-title"><%= __('contents') %></strong>
-		<% if(item.list_number == false) {%>
-		<%- toc(item.content,{list_number:false}) %>
-		<% }else{ %>
-			<%- toc(item.content) %>
-		<% } %>
+			<strong class="toc-title">文章目录</strong>
+		
+			<ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link" href="#感知机模型"><span class="toc-number">1.</span> <span class="toc-text">感知机模型</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#感知机学习策略"><span class="toc-number">2.</span> <span class="toc-text">感知机学习策略</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#感知机学习算法"><span class="toc-number">3.</span> <span class="toc-text">感知机学习算法</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#感知机学习算法的对偶形式"><span class="toc-number">4.</span> <span class="toc-text">感知机学习算法的对偶形式</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#算法特点"><span class="toc-number">5.</span> <span class="toc-text">算法特点</span></a></li></ol>
+		
 		</div>
-		<% } %>
-		<%- item.content %>  
+		
+		<p>感知机是二分类的线性分类模型，对应于输入空间中将实例划分为正负两类的分离超平面，属于判别模型。</p>
+<h1 id="感知机模型"><a href="#感知机模型" class="headerlink" title="感知机模型"></a>感知机模型</h1><p>$$f(x)=sign(w·x+b)$$</p>
+<p>其中，w 和 b 为感知机模型参数，$w \in R^n$称为权指或者权指向量，$b \in R$称为偏置，$w·x$表示 w 和 x 的内积。sign 是符号函数，定义为：</p>
+<p>$$sign(x)= \begin {cases} +1,x\geq 0\\ -1,x\lt 0\end {cases}$$</p>
+<p>其中，$f(x)=w·x+b$叫做线性分类器，线性方程$f(x)=0$对应于特征空间中$R^n$的一个超平面 S，其中 w 是其法向量，b 是截距。S 将空间划分为两部分，位于两部分的点被分为正负两类，如图：</p>
+<img alt="感知机模型" src="http://7xl6z1.com1.z0.glb.clouddn.com/static/images/statistical-learning-method/1477967448.jpg">
+<h1 id="感知机学习策略"><a href="#感知机学习策略" class="headerlink" title="感知机学习策略"></a>感知机学习策略</h1><p>能够将数据集的正实例和负实例点完全正确的划分到超平面的两侧，则数据集为线性可分数据集，否则为线性不可分。感知机学习目标是求得一个能够将数据集正实例点和负实例点完全正确分开的分离超平面。</p>
+<p>损失函数选择能对参数 w 和 b 连续可导的函数，即误分类点到 S 的总距离。</p>
+<p>点$(x_0,y_0)$到 S 的距离为：</p>
+<p>$$\frac{1}{||w||}|w·x_0+b|$$</p>
+<p>又，对于误分类点$(x_i,y_i)$来说，$-y_i(w·x_i+b)\gt 0$，因此，对于所有的误分类点集合 M，到超平面总距离为：</p>
+<p>$$-\frac{1}{||w||}\sum_{x_i \in M} y_i(w·x_i+b)$$</p>
+<p>不考虑$\frac{1}{||w||}$，得到感知机学习的损失函数：</p>
+<p>$$L(w,b)=-\sum_{x_i \in M} y_i(w·x_i+b)$$</p>
+<h1 id="感知机学习算法"><a href="#感知机学习算法" class="headerlink" title="感知机学习算法"></a>感知机学习算法</h1><p>感知机学习算法是误分类驱动的，最小化损失函数即可：$\min \limits_{w,b} L(w,b)$，采用梯度下降法求取 w 和 b。</p>
+<p>随机选出误分类点$(x_i,y_i)$，对 w，b 进行更新:</p>
+<p>$$\begin{cases} w \leftarrow w+\eta y_i x_i \\ b \leftarrow b+\eta y_i\end{cases}$$</p>
+<p>式中$\eta (0\lt \eta \le 1)$是步长，也叫学习率。通过迭代使 L(w,b) 不断减小，直至为0。</p>
+<p>可以证明，误分类次数 k 是有上界的，经过有限次搜索可以找到将训练数据完全分开的分离超平面，即如果训练数据集线性可分，则感知机学习算法原始形式迭代是收敛的。</p>
+<h1 id="感知机学习算法的对偶形式"><a href="#感知机学习算法的对偶形式" class="headerlink" title="感知机学习算法的对偶形式"></a>感知机学习算法的对偶形式</h1><p>上述更新 w 和 b 的过程，设修改 n 次，则 w，b 关于$(x_i,y_i)$的增量分别是$\alpha_{i} y_i x_i$和$\alpha_{i} y_i$，这里$\alpha_{i}=n_i\eta$，假设$w_0$和$b_0$均取0，则：</p>
+<p>$$\begin{cases} w = \sum \limits_{i=1}^N \alpha_{i} y_i x_i \\ b = \sum \limits_{i=1}^N \alpha_{i} y_i\end{cases}$$</p>
+<p>这时，如果误分类，即：$y_i(\sum \limits_{j=1}^N \alpha_{j}y_jx_j+b)\leq 0$，则更新：</p>
+<p>$$\begin{cases} \alpha_{i} \leftarrow \alpha_{i} + \eta \\ b \leftarrow b + \eta y_i \end{cases}$$</p>
+<h1 id="算法特点"><a href="#算法特点" class="headerlink" title="算法特点"></a>算法特点</h1><p>当训练数据集线性可分时，感知机学习算法存在无穷多个解，其解由于不同的初始值或不同的迭代顺序而有可能不同。</p>
+<p>样本集线性可分的充要条件是正实例点集所构成的凸壳和负实例点集所构成的凸壳互不相交。</p>
+  
 	</div>
-    <% if (theme.donate) { %>
+    
         <!-- css -->
         <style type="text/css">
             .center {
@@ -144,7 +182,7 @@
             <br>
             <a id="btn_donate" class="btn_donate" target="_self" href="javascript:;" title="Donate 打赏"></a>
             <span class="donate_txt">
-                <%= theme.donate.text %>
+                如果对你有帮助，可以赏我一杯咖啡~
             </span>
                 
             
@@ -157,23 +195,23 @@
             <br>
             ------------------------------------------------------------------------------------------------------------------------------
             <br>
-            <% if(theme.donate.web) { %>
-            <div width="100%" align="center"><div name="dashmain" id="dash-main-id-87895f" class="dash-main-3 87895f-0.99"></div></div>
+            
+            <div width="100%" align="center"><div name="dashmain" id="dash-main-id-879873" class="dash-main-3 879873-0.99"></div></div>
             <script type="text/javascript" charset="utf-8" src="http://www.dashangcloud.com/static/ds.js"></script>
-            <% } %>
+            
 
-            <a href="<%= theme.donate.wechat %>" title="用微信扫一扫哦~" class="fancybox" rel="article0">
-                <img src="<%= theme.donate.wechat %>" title="微信打赏 Donate" height="190px" width="auto"/>
+            <a href="http://7xl6z1.com1.z0.glb.clouddn.com/static/images/theme/reward_wechat.jpg" title="用微信扫一扫哦~" class="fancybox" rel="article0">
+                <img src="http://7xl6z1.com1.z0.glb.clouddn.com/static/images/theme/reward_wechat.jpg" title="微信打赏 Donate" height="190px" width="auto"/>
             </a>
             
             &nbsp;&nbsp;
 
-            <a href="<%= theme.donate.alipay %>" title="用支付宝扫一扫即可~" class="fancybox" rel="article0">
-                <img src="<%= theme.donate.alipay %>" title="支付宝打赏 Donate" height="190px" width="auto"/>
+            <a href="http://7xl6z1.com1.z0.glb.clouddn.com/static/images/theme/reward_alipay.jpg" title="用支付宝扫一扫即可~" class="fancybox" rel="article0">
+                <img src="http://7xl6z1.com1.z0.glb.clouddn.com/static/images/theme/reward_alipay.jpg" title="支付宝打赏 Donate" height="190px" width="auto"/>
             </a>
 
             <span class="donate_txt">
-                <%= theme.donate.text %>
+                如果对你有帮助，可以赏我一杯咖啡~
             </span>
 
         </div>
@@ -201,11 +239,67 @@
         <!-- /donate script -->
     </div>
     <!-- /Donate Module -->
-       <% } %>
-		<%- partial('footer') %>   	       
+       
+		<footer class="article-footer clearfix">
+<div class="article-catetags">
+
+<div class="article-categories">
+  <span></span>
+  <a class="article-category-link" href="/categories/统计学习/">统计学习</a>
+</div>
+
+
+  <div class="article-tags">
+  
+  <span></span> <a href="/tags/笔记/">笔记</a><a href="/tags/统计学习/">统计学习</a><a href="/tags/机器学习/">机器学习</a><a href="/tags/感知机/">感知机</a>
+  </div>
+
+</div>
+
+
+
+	<div class="article-share" id="share">
+	
+	  <div data-url="http://blog.liexing.me/2016/11/01/statistical-learning-method-perceptron/" data-title="统计学习方法（笔记）-感知机 | Liexing&#39;s Blog" data-tsina="1915625641" class="share clearfix">
+	  </div>
+	
+	</div>
+
+
+</footer>
+
+   	       
 	</article>
-	<%- partial('pagination') %>
-	<%- partial('comment') %>
+	
+<nav class="article-nav clearfix">
+ 
+ <div class="prev" >
+ <a href="/2016/11/02/statistical-learning-method-knn/" title="统计学习方法（笔记）-k 近邻法">
+  <strong>上一篇：</strong><br/>
+  <span>
+  统计学习方法（笔记）-k 近邻法</span>
+</a>
+</div>
+
+
+<div class="next">
+<a href="/2016/10/30/statistical-learning-method-intro/"  title="统计学习方法（笔记）-概论">
+ <strong>下一篇：</strong><br/> 
+ <span>统计学习方法（笔记）-概论
+</span>
+</a>
+</div>
+
+</nav>
+
+	
+
+<section id="comments" class="comment">
+  <div id="disqus_thread">
+    <noscript>Please enable JavaScript to view the <a href="//disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
+  </div>
+</section>
+
 </div>  
 
       <div class="openaside"><a class="navbutton" href="#" title="显示侧边栏"></a></div>
@@ -368,12 +462,10 @@
 		</p>
 </div>
 </footer>
-    <script src="/js/jquery-2.0.3.min.js"></script>
-<script src="/js/jquery.imagesloaded.min.js"></script>
-<script src="/js/gallery.js"></script>
-<script src="/js/jquery.qrcode-0.12.0.min.js"></script>
-<script async src="//dn-lbstatics.qbox.me/busuanzi/2.3/busuanzi.pure.mini.js">
-</script>
+    <script src="<%- config.root %>js/jquery-2.0.3.min.js"></script>
+<script src="<%- config.root %>js/jquery.imagesloaded.min.js"></script>
+<script src="<%- config.root %>js/gallery.js"></script>
+<script src="<%- config.root %>js/jquery.qrcode-0.12.0.min.js"></script>
 
 <script type="text/javascript">
 $(document).ready(function(){ 
@@ -405,7 +497,12 @@ $(document).ready(function(){
   $(window).scroll(function(){
     o.css("top",Math.max(80,260-$(this).scrollTop()));
   });
-  
+  <% if (is_post() && theme.close_aside) { %>
+        getSize();
+        if (myWidth >= 1024) {
+          c.click();
+        }
+  <% } %>
   $(window).resize(function(){
     getSize(); 
     if (myWidth >= 1024) {
@@ -414,14 +511,14 @@ $(document).ready(function(){
       m.removeClass('moveMain');
       a.css('display', 'block').removeClass('fadeOut');
       o.css('display', 'none');
-      
+      <% if( is_post()&&(page.toc !== false) && theme.toc.aside){ %>
       $('#toc.toc-aside').css('display', 'none');
-        
+      <% } %>  
     }
   });
 });
 </script>
-
+<% if (is_post()) { %>
 <script type="text/javascript">
 $(document).ready(function(){ 
   var ai = $('.article-content>iframe'),
@@ -447,8 +544,8 @@ $(document).ready(function(){
   });
 });
 </script>
-
-
+<% } %>
+<% if ((page.layout=='post'||page.layout=='page'||page.layout=='photo')&&!theme.jiathis.enable) { %>
 <script type="text/javascript">
 $(document).ready(function(){ 
   var $this = $('.share'),
@@ -497,14 +594,28 @@ $(document).ready(function(){
   });
 });   
 </script>
+<% } %>
 
-
-
-
+<% if (theme.duoshuo_shortname && page.comments){ %>
 <script type="text/javascript">
-
-var disqus_shortname = 'liexing';
-
+  var duoshuoQuery = {short_name:"<%= theme.duoshuo_shortname %>"};
+  (function() {
+    var ds = document.createElement('script');
+    ds.type = 'text/javascript';ds.async = true;
+    ds.src = '//7xl6z1.com1.z0.glb.clouddn.com/embed_ua.js';
+    ds.charset = 'UTF-8';
+    (document.getElementsByTagName('head')[0] 
+    || document.getElementsByTagName('body')[0]).appendChild(ds);
+  })();
+</script> 
+<% } %>
+<% if( (config.disqus_shortname || theme.disqus_shortname) && page.comments) { %>
+<script type="text/javascript">
+<% if(config.disqus_shortname){ %>
+var disqus_shortname = '<%= config.disqus_shortname %>';
+<% }else{ %>
+var disqus_shortname = '<%= theme.disqus_shortname %>';
+<% } %>
 (function(){
   var dsq = document.createElement('script');
   dsq.type = 'text/javascript';
@@ -520,14 +631,32 @@ var disqus_shortname = 'liexing';
   (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
 }());
 </script>
+<% } %>
 
 
 
-
-
-
-<link rel="stylesheet" href="/fancybox/jquery.fancybox.css" media="screen" type="text/css">
-<script src="/fancybox/jquery.fancybox.pack.js"></script>
+<% if (page.layout=='tags'||page.layout=='categories'){ %>
+<script type="text/javascript">
+$(document).ready(function(){ 
+  var list    = $('.archive-title a'),
+      box     = $('.all-list-box'),
+      first   = $('.archive-title a:first-of-type');
+      box.load(first.attr('data-src').toString()+' #archive-page');
+      first.addClass('current');
+  list.each(function(){
+    $(this).click(function(){
+      var listSrc=$(this).attr('data-src').toString()+' #archive-page';
+      box.load(listSrc);
+      list.removeClass('current');
+      $(this).addClass('current');
+     });  
+    });
+  }); 
+</script>
+<% } %>
+<% if (theme.fancybox){ %>
+<link rel="stylesheet" href="<%- config.root %>fancybox/jquery.fancybox.css" media="screen" type="text/css">
+<script src="<%- config.root %>fancybox/jquery.fancybox.pack.js"></script>
 <script type="text/javascript">
 $(document).ready(function(){ 
   $('.article-content').each(function(i){
@@ -546,76 +675,23 @@ $(document).ready(function(){
   }
 }); 
 </script>
-
+<% } %>
 
 
 <!-- Analytics Begin -->
-
-
-
-<script>
-var _hmt = _hmt || [];
-(function() {
-  var hm = document.createElement("script");
-  hm.src = "//hm.baidu.com/hm.js?e6d1f421bbc9962127a50488f9ed37d1";
-  var s = document.getElementsByTagName("script")[0]; 
-  s.parentNode.insertBefore(hm, s);
-})();
-</script>
-
-
-
-<span style="display:none"><script type="text/javascript">var cnzz_protocol = (("https:" == document.location.protocol) ? " https://" : " http://");document.write(unescape("%3Cspan id='cnzz_stat_icon_1256113107'%3E%3C/span%3E%3Cscript src='" + cnzz_protocol + "s23.cnzz.com/z_stat.php%3Fid%3D1256113107' type='text/javascript'%3E%3C/script%3E"));</script></span>
-
-
+<%- partial('analytics') %>
 <!-- Analytics End -->
 
 <!-- Totop Begin -->
-
-	<div id="totop">
-	<a title="返回顶部"><img src="/img/scrollup.png"/></a>
-	</div>
-	<script src="/js/totop.js"></script>
-
+<%- partial('totop') %>
 <!-- Totop End -->
 
 <!-- MathJax Begin -->
-<!-- mathjax config similar to math.stackexchange -->
-
-<script type="text/x-mathjax-config">
-  MathJax.Hub.Config({
-    tex2jax: {
-      inlineMath: [ ['$','$'], ["\\(","\\)"] ],
-      processEscapes: true
-    }
-  });
-</script>
-
-<script type="text/x-mathjax-config">
-    MathJax.Hub.Config({
-      tex2jax: {
-        skipTags: ['script', 'noscript', 'style', 'textarea', 'pre', 'code']
-      }
-    });
-</script>
-
-<script type="text/x-mathjax-config">
-    MathJax.Hub.Queue(function() {
-        var all = MathJax.Hub.getAllJax(), i;
-        for(i=0; i < all.length; i += 1) {
-            all[i].SourceElement().parentNode.className += ' has-jax';
-        }
-    });
-</script>
-
-<script type="text/javascript" src="http://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML">
-</script>
-
-
+<%- partial('mathjax') %>
 <!-- MathJax End -->
 
 <!-- Tiny_search Begin -->
-
+<%- partial('tinysou_search') %>
 <!-- Tiny_search End -->
 
   </body>

@@ -77,26 +77,59 @@
 </div>
     </header>
     <div id="container">
-      <div id="main" class="<%= item.layout %>" itemscope itemprop="blogPost">
-  <% if (page.layout=='photo' && item.photos && item.photos.length){ %>
-    <%- partial('gallery') %>
-  <% } %>
+      <div id="main" class="post" itemscope itemprop="blogPost">
+  
 	<article itemprop="articleBody"> 
-		<%- partial('header') %>
+		<header class="article-info clearfix">
+  <h1 itemprop="name">
+    
+      <a href="/2016/04/15/druid-indexing-service/" title="Druid Indexing Service（索引服务）" itemprop="url">Druid Indexing Service（索引服务）</a>
+  </h1>
+  <p class="article-author">By
+       
+		<a href="/about" title="liexing" target="_blank" itemprop="author">liexing</a>
+		
+  <p class="article-time">
+    <time datetime="2016-04-15T02:47:47.000Z" itemprop="datePublished"> 发表于 2016-04-15</time>
+<span id="busuanzi_container_page_pv">
+  &nbspViewed <span id="busuanzi_value_page_pv"></span> times
+</span>
+    
+  </p>
+</header>
+
 	<div class="article-content">
-		<% if( table&&(item.toc !== false) && theme.toc.article){ %>
+		
 		<div id="toc" class="toc-article">
-			<strong class="toc-title"><%= __('contents') %></strong>
-		<% if(item.list_number == false) {%>
-		<%- toc(item.content,{list_number:false}) %>
-		<% }else{ %>
-			<%- toc(item.content) %>
-		<% } %>
+			<strong class="toc-title">文章目录</strong>
+		
+			<ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#Overlord节点"><span class="toc-number">1.</span> <span class="toc-text">Overlord节点</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#Middle-Manger"><span class="toc-number">2.</span> <span class="toc-text">Middle Manger</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#Peon"><span class="toc-number">3.</span> <span class="toc-text">Peon</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#HTTP-端"><span class="toc-number">4.</span> <span class="toc-text">HTTP 端</span></a></li></ol>
+		
 		</div>
-		<% } %>
-		<%- item.content %>  
+		
+		<p>索引服务是一种用来运行索引相关任务的高可用、分布式的服务。索引服务任务创建或者销毁Druid的段。其架构类似主奴机制。</p>
+<p>索引服务由三个主要部件组成：peon运行单个的任务，Middle Manager组件管理peon，overlord组件控制任务向Middle Manager的分配。Middle Manager和Peon通常运行在同一个节点，Overlord和Middle Manager能运行在相同节点或者多个节点上。</p>
+<p>索引服务的示意图如下：</p>
+<img title="Druid" alt="Druid" src="http://7xl6z1.com1.z0.glb.clouddn.com/static/images/14605158741221.png">
+<h2 id="Overlord节点"><a href="#Overlord节点" class="headerlink" title="Overlord节点"></a>Overlord节点</h2><p>Overlord节点负责接收任务，负责任务的分配，对任务加锁，向调用者返回任务状态。Overlord有两种模式：本地模式或者远程模式。其中本地模式是默认模式。在本地模式下Overlord也负责创建Peon来执行任务，所有的Middle Manager和Peon的配置此时也应当被提供，这种模式一般用于普通的工作流。远程模式中，Overlord和Middle Manager运行在不同的进程中，也可以在不同服务器上运行，如果想让索引服务成为Druid索引的单一端点，推荐使用这种模式。</p>
+<p>可以通过向Overlor节点以POST请求提交JSON对象的方式提交任务：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">http://&lt;OVERLORD_IP&gt;:&lt;port&gt;/druid/indexer/v1/task</div></pre></td></tr></table></figure>
+<p>这将会返回提交的任务id。任务也能通过POST请求来关闭：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">http://&lt;OVERLORD_IP&gt;:&lt;port&gt;/druid/indexer/v1/task/&#123;taskId&#125;/status</div></pre></td></tr></table></figure>
+<p>或者通过GET请求来查询状态：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">http://&lt;OVERLORD_IP&gt;:&lt;port&gt;/druid/indexer/v1/task/&#123;taskId&#125;/segments</div></pre></td></tr></table></figure>
+<p>可以在浏览器中访问</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">http://&lt;OVERLORD_IP&gt;:&lt;port&gt;/console.html</div></pre></td></tr></table></figure>
+<p>来查看任务一些信息。</p>
+<h2 id="Middle-Manger"><a href="#Middle-Manger" class="headerlink" title="Middle Manger"></a>Middle Manger</h2><p>Middle Manger是执行提交任务的工作节点。Middle Manger向运行在独立JVM的Peon发送任务。独立开JVM是因为资源问题与日志隔离。每一个Peon一次只能执行一个任务。一个Middle Manger可以有多个Peon。</p>
+<p>通过<code>io.druid.cli.Main server middleManager</code>来启动Middle Manager。</p>
+<h2 id="Peon"><a href="#Peon" class="headerlink" title="Peon"></a>Peon</h2><p>Peon在独立的JVM中执行单个任务。MiddleManager负责创建Peon来执行任务。Peon很少单独运行。</p>
+<p>除了开发目的，很少独立的运行Peon。通过<code>io.druid.cli.Main internal peon &lt;task_file&gt; &lt;status_file&gt;</code>来独立执行。其中task_file包含了任务的JSON对象。status_file表示在那里输出任务的状态。</p>
+<h2 id="HTTP-端"><a href="#HTTP-端" class="headerlink" title="HTTP 端"></a>HTTP 端</h2><p>可以通过HTTP的GET请求<code>http://&lt;NODE_IP&gt;:&lt;port&gt;/status</code>来获取一些节点的信息，包括版本、载入的扩展、内存使用、总内存数等，比如：</p>
+<figure class="highlight json"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div></pre></td><td class="code"><pre><div class="line">&#123;</div><div class="line">    <span class="attr">"version"</span>: <span class="string">"0.9.0-rc3"</span>,</div><div class="line">    <span class="attr">"modules"</span>: [</div><div class="line">        &#123;</div><div class="line">            <span class="attr">"name"</span>: <span class="string">"io.druid.data.input.avro.AvroExtensionsModule"</span>,</div><div class="line">            <span class="attr">"artifact"</span>: <span class="string">"druid-avro-extensions"</span>,</div><div class="line">            <span class="attr">"version"</span>: <span class="string">"0.9.1-SNAPSHOT"</span></div><div class="line">        &#125;</div><div class="line">    ],</div><div class="line">    <span class="attr">"memory"</span>: &#123;</div><div class="line">        <span class="attr">"maxMemory"</span>: <span class="number">67108864</span>,</div><div class="line">        <span class="attr">"totalMemory"</span>: <span class="number">67108864</span>,</div><div class="line">        <span class="attr">"freeMemory"</span>: <span class="number">32278264</span>,</div><div class="line">        <span class="attr">"usedMemory"</span>: <span class="number">34830600</span></div><div class="line">    &#125;</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+  
 	</div>
-    <% if (theme.donate) { %>
+    
         <!-- css -->
         <style type="text/css">
             .center {
@@ -144,7 +177,7 @@
             <br>
             <a id="btn_donate" class="btn_donate" target="_self" href="javascript:;" title="Donate 打赏"></a>
             <span class="donate_txt">
-                <%= theme.donate.text %>
+                如果对你有帮助，可以赏我一杯咖啡~
             </span>
                 
             
@@ -157,23 +190,23 @@
             <br>
             ------------------------------------------------------------------------------------------------------------------------------
             <br>
-            <% if(theme.donate.web) { %>
-            <div width="100%" align="center"><div name="dashmain" id="dash-main-id-87895f" class="dash-main-3 87895f-0.99"></div></div>
+            
+            <div width="100%" align="center"><div name="dashmain" id="dash-main-id-879873" class="dash-main-3 879873-0.99"></div></div>
             <script type="text/javascript" charset="utf-8" src="http://www.dashangcloud.com/static/ds.js"></script>
-            <% } %>
+            
 
-            <a href="<%= theme.donate.wechat %>" title="用微信扫一扫哦~" class="fancybox" rel="article0">
-                <img src="<%= theme.donate.wechat %>" title="微信打赏 Donate" height="190px" width="auto"/>
+            <a href="http://7xl6z1.com1.z0.glb.clouddn.com/static/images/theme/reward_wechat.jpg" title="用微信扫一扫哦~" class="fancybox" rel="article0">
+                <img src="http://7xl6z1.com1.z0.glb.clouddn.com/static/images/theme/reward_wechat.jpg" title="微信打赏 Donate" height="190px" width="auto"/>
             </a>
             
             &nbsp;&nbsp;
 
-            <a href="<%= theme.donate.alipay %>" title="用支付宝扫一扫即可~" class="fancybox" rel="article0">
-                <img src="<%= theme.donate.alipay %>" title="支付宝打赏 Donate" height="190px" width="auto"/>
+            <a href="http://7xl6z1.com1.z0.glb.clouddn.com/static/images/theme/reward_alipay.jpg" title="用支付宝扫一扫即可~" class="fancybox" rel="article0">
+                <img src="http://7xl6z1.com1.z0.glb.clouddn.com/static/images/theme/reward_alipay.jpg" title="支付宝打赏 Donate" height="190px" width="auto"/>
             </a>
 
             <span class="donate_txt">
-                <%= theme.donate.text %>
+                如果对你有帮助，可以赏我一杯咖啡~
             </span>
 
         </div>
@@ -201,11 +234,67 @@
         <!-- /donate script -->
     </div>
     <!-- /Donate Module -->
-       <% } %>
-		<%- partial('footer') %>   	       
+       
+		<footer class="article-footer clearfix">
+<div class="article-catetags">
+
+<div class="article-categories">
+  <span></span>
+  <a class="article-category-link" href="/categories/Druid/">Druid</a>
+</div>
+
+
+  <div class="article-tags">
+  
+  <span></span> <a href="/tags/分布式/">分布式</a><a href="/tags/Druid/">Druid</a><a href="/tags/实时计算/">实时计算</a>
+  </div>
+
+</div>
+
+
+
+	<div class="article-share" id="share">
+	
+	  <div data-url="http://blog.liexing.me/2016/04/15/druid-indexing-service/" data-title="Druid Indexing Service（索引服务） | Liexing&#39;s Blog" data-tsina="1915625641" class="share clearfix">
+	  </div>
+	
+	</div>
+
+
+</footer>
+
+   	       
 	</article>
-	<%- partial('pagination') %>
-	<%- partial('comment') %>
+	
+<nav class="article-nav clearfix">
+ 
+ <div class="prev" >
+ <a href="/2016/04/20/reindex-between-different-druid-use-and-metadatastorage/" title="使用不同Metadata Storage的Druid集群间转移DataSource">
+  <strong>上一篇：</strong><br/>
+  <span>
+  使用不同Metadata Storage的Druid集群间转移DataSource</span>
+</a>
+</div>
+
+
+<div class="next">
+<a href="/2016/03/28/druid-quickstart/"  title="Druid Quickstart">
+ <strong>下一篇：</strong><br/> 
+ <span>Druid Quickstart
+</span>
+</a>
+</div>
+
+</nav>
+
+	
+
+<section id="comments" class="comment">
+  <div id="disqus_thread">
+    <noscript>Please enable JavaScript to view the <a href="//disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
+  </div>
+</section>
+
 </div>  
 
       <div class="openaside"><a class="navbutton" href="#" title="显示侧边栏"></a></div>
@@ -368,12 +457,10 @@
 		</p>
 </div>
 </footer>
-    <script src="/js/jquery-2.0.3.min.js"></script>
-<script src="/js/jquery.imagesloaded.min.js"></script>
-<script src="/js/gallery.js"></script>
-<script src="/js/jquery.qrcode-0.12.0.min.js"></script>
-<script async src="//dn-lbstatics.qbox.me/busuanzi/2.3/busuanzi.pure.mini.js">
-</script>
+    <script src="<%- config.root %>js/jquery-2.0.3.min.js"></script>
+<script src="<%- config.root %>js/jquery.imagesloaded.min.js"></script>
+<script src="<%- config.root %>js/gallery.js"></script>
+<script src="<%- config.root %>js/jquery.qrcode-0.12.0.min.js"></script>
 
 <script type="text/javascript">
 $(document).ready(function(){ 
@@ -405,7 +492,12 @@ $(document).ready(function(){
   $(window).scroll(function(){
     o.css("top",Math.max(80,260-$(this).scrollTop()));
   });
-  
+  <% if (is_post() && theme.close_aside) { %>
+        getSize();
+        if (myWidth >= 1024) {
+          c.click();
+        }
+  <% } %>
   $(window).resize(function(){
     getSize(); 
     if (myWidth >= 1024) {
@@ -414,14 +506,14 @@ $(document).ready(function(){
       m.removeClass('moveMain');
       a.css('display', 'block').removeClass('fadeOut');
       o.css('display', 'none');
-      
+      <% if( is_post()&&(page.toc !== false) && theme.toc.aside){ %>
       $('#toc.toc-aside').css('display', 'none');
-        
+      <% } %>  
     }
   });
 });
 </script>
-
+<% if (is_post()) { %>
 <script type="text/javascript">
 $(document).ready(function(){ 
   var ai = $('.article-content>iframe'),
@@ -447,8 +539,8 @@ $(document).ready(function(){
   });
 });
 </script>
-
-
+<% } %>
+<% if ((page.layout=='post'||page.layout=='page'||page.layout=='photo')&&!theme.jiathis.enable) { %>
 <script type="text/javascript">
 $(document).ready(function(){ 
   var $this = $('.share'),
@@ -497,14 +589,28 @@ $(document).ready(function(){
   });
 });   
 </script>
+<% } %>
 
-
-
-
+<% if (theme.duoshuo_shortname && page.comments){ %>
 <script type="text/javascript">
-
-var disqus_shortname = 'liexing';
-
+  var duoshuoQuery = {short_name:"<%= theme.duoshuo_shortname %>"};
+  (function() {
+    var ds = document.createElement('script');
+    ds.type = 'text/javascript';ds.async = true;
+    ds.src = '//7xl6z1.com1.z0.glb.clouddn.com/embed_ua.js';
+    ds.charset = 'UTF-8';
+    (document.getElementsByTagName('head')[0] 
+    || document.getElementsByTagName('body')[0]).appendChild(ds);
+  })();
+</script> 
+<% } %>
+<% if( (config.disqus_shortname || theme.disqus_shortname) && page.comments) { %>
+<script type="text/javascript">
+<% if(config.disqus_shortname){ %>
+var disqus_shortname = '<%= config.disqus_shortname %>';
+<% }else{ %>
+var disqus_shortname = '<%= theme.disqus_shortname %>';
+<% } %>
 (function(){
   var dsq = document.createElement('script');
   dsq.type = 'text/javascript';
@@ -520,14 +626,32 @@ var disqus_shortname = 'liexing';
   (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
 }());
 </script>
+<% } %>
 
 
 
-
-
-
-<link rel="stylesheet" href="/fancybox/jquery.fancybox.css" media="screen" type="text/css">
-<script src="/fancybox/jquery.fancybox.pack.js"></script>
+<% if (page.layout=='tags'||page.layout=='categories'){ %>
+<script type="text/javascript">
+$(document).ready(function(){ 
+  var list    = $('.archive-title a'),
+      box     = $('.all-list-box'),
+      first   = $('.archive-title a:first-of-type');
+      box.load(first.attr('data-src').toString()+' #archive-page');
+      first.addClass('current');
+  list.each(function(){
+    $(this).click(function(){
+      var listSrc=$(this).attr('data-src').toString()+' #archive-page';
+      box.load(listSrc);
+      list.removeClass('current');
+      $(this).addClass('current');
+     });  
+    });
+  }); 
+</script>
+<% } %>
+<% if (theme.fancybox){ %>
+<link rel="stylesheet" href="<%- config.root %>fancybox/jquery.fancybox.css" media="screen" type="text/css">
+<script src="<%- config.root %>fancybox/jquery.fancybox.pack.js"></script>
 <script type="text/javascript">
 $(document).ready(function(){ 
   $('.article-content').each(function(i){
@@ -546,47 +670,23 @@ $(document).ready(function(){
   }
 }); 
 </script>
-
+<% } %>
 
 
 <!-- Analytics Begin -->
-
-
-
-<script>
-var _hmt = _hmt || [];
-(function() {
-  var hm = document.createElement("script");
-  hm.src = "//hm.baidu.com/hm.js?e6d1f421bbc9962127a50488f9ed37d1";
-  var s = document.getElementsByTagName("script")[0]; 
-  s.parentNode.insertBefore(hm, s);
-})();
-</script>
-
-
-
-<span style="display:none"><script type="text/javascript">var cnzz_protocol = (("https:" == document.location.protocol) ? " https://" : " http://");document.write(unescape("%3Cspan id='cnzz_stat_icon_1256113107'%3E%3C/span%3E%3Cscript src='" + cnzz_protocol + "s23.cnzz.com/z_stat.php%3Fid%3D1256113107' type='text/javascript'%3E%3C/script%3E"));</script></span>
-
-
+<%- partial('analytics') %>
 <!-- Analytics End -->
 
 <!-- Totop Begin -->
-
-	<div id="totop">
-	<a title="返回顶部"><img src="/img/scrollup.png"/></a>
-	</div>
-	<script src="/js/totop.js"></script>
-
+<%- partial('totop') %>
 <!-- Totop End -->
 
 <!-- MathJax Begin -->
-<!-- mathjax config similar to math.stackexchange -->
-
-
+<%- partial('mathjax') %>
 <!-- MathJax End -->
 
 <!-- Tiny_search Begin -->
-
+<%- partial('tinysou_search') %>
 <!-- Tiny_search End -->
 
   </body>
