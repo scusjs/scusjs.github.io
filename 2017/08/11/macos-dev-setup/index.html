@@ -80,26 +80,120 @@
 </div>
     </header>
     <div id="container">
-      <div id="main" class="<%= item.layout %>" itemscope itemprop="blogPost">
-  <% if (page.layout=='photo' && item.photos && item.photos.length){ %>
-    <%- partial('gallery') %>
-  <% } %>
-	<article itemprop="articleBody"> 
-		<%- partial('header') %>
-	<div class="article-content">
-		<% if( table&&(item.toc !== false) && theme.toc.article){ %>
-		<div id="toc" class="toc-article">
-			<strong class="toc-title"><%= __('contents') %></strong>
-		<% if(item.list_number == false) {%>
-		<%- toc(item.content,{list_number:false}) %>
-		<% }else{ %>
-			<%- toc(item.content) %>
-		<% } %>
-		</div>
-		<% } %>
-		<%- item.content %>  
-	</div>
-    <% if (theme.donate) { %>
+      <div id="main" class="post" itemscope itemprop="blogPost">
+    
+    <article itemprop="articleBody"> 
+        <header class="article-info clearfix">
+  <h1 itemprop="name">
+    
+      <a href="/2017/08/11/macos-dev-setup/" title="macOS 开发配置" itemprop="url">macOS 开发配置</a>
+  </h1>
+  <p class="article-author">By
+       
+		<a href="/about" title="liexing" target="_blank" itemprop="author">liexing</a>
+		
+  <p class="article-time">
+    <time datetime="2017-08-11T15:49:22.000Z" itemprop="datePublished"> 发表于 2017-08-11</time>
+<span id="busuanzi_container_page_pv">
+  &nbspViewed <span id="busuanzi_value_page_pv"></span> times
+</span>
+    
+  </p>
+</header>
+
+    <div class="article-content">
+        
+        <div id="toc" class="toc-article">
+            <strong class="toc-title">文章目录</strong>
+        
+            <ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#基本操作介绍"><span class="toc-number">1.</span> <span class="toc-text">基本操作介绍</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#系统基本配置"><span class="toc-number">2.</span> <span class="toc-text">系统基本配置</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#系统基本介绍"><span class="toc-number">3.</span> <span class="toc-text">系统基本介绍</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#一些介绍"><span class="toc-number">3.1.</span> <span class="toc-text">一些介绍</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#安装软件"><span class="toc-number">3.2.</span> <span class="toc-text">安装软件</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#软件"><span class="toc-number">4.</span> <span class="toc-text">软件</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#iTerm2"><span class="toc-number">4.1.</span> <span class="toc-text">iTerm2</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#Homebrew"><span class="toc-number">4.2.</span> <span class="toc-text">Homebrew</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#Cask"><span class="toc-number">4.2.1.</span> <span class="toc-text">Cask</span></a></li></ol></li><li class="toc-item toc-level-3"><a class="toc-link" href="#fish"><span class="toc-number">4.3.</span> <span class="toc-text">fish</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#ShadowsocksX"><span class="toc-number">4.4.</span> <span class="toc-text">ShadowsocksX</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#Karabiner-Elements"><span class="toc-number">4.5.</span> <span class="toc-text">Karabiner-Elements</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#其他软件"><span class="toc-number">4.6.</span> <span class="toc-text">其他软件</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#其他参考"><span class="toc-number">5.</span> <span class="toc-text">其他参考</span></a></li></ol>
+        
+        </div>
+        
+        <p>某人心心念念的rmbp终于到手了，然而我还在杭州没法帮忙各种配置，这里就写一份教程好了，自己拿去照着撸吧（￣︶￣）↗ </p>
+<p>ps. 毕竟你的是高大上的17带bar rmbp。。。然而，bar的操作我都！不！知！道！</p>
+<p>大概介绍 macOS 的一些基本操作以及常见的软件、开发环境的搭建。</p>
+<h2 id="基本操作介绍"><a href="#基本操作介绍" class="headerlink" title="基本操作介绍"></a>基本操作介绍</h2><ol>
+<li>17的触摸板应该是二段的按压，意思就是分为轻按和重按，按到底会响两次，轻按表示单击，重按表示双击。但是也可以配置成双指按表示双击；</li>
+</ol>
+<ol>
+<li><p>键盘键位，Mac的键位和Windows的不太一样，没有<code>Win</code>那个图标，取而代之的是<code>command</code>（长这样：<code>⌘</code>）但是功能差不多；<code>alt</code>又叫做<code>option</code>（一些地方画成<code>⌥</code>）；退格、<code>del</code>合并为<code>delete</code>；<code>Shift</code>画成<code>⇧</code>，<code>control</code>画成<code>⌃</code>，大小写锁定画成<code>⇪</code></p>
+</li>
+<li><p>一些常用的快捷键：</p>
+<blockquote>
+<ol>
+<li>截屏，默认的截屏快捷键有两种：<code>⌘+shift+control+4</code>（区域截图到剪切板），<code>⌘+shift+control+3</code>（全屏截图到剪切板），<code>⌘+shift+4</code>（区域截图到桌面），<code>⌘+shift+3</code>（全屏截图到桌面）</li>
+<li>复制：<code>⌘+c</code>，粘贴：<code>⌘+v</code>，全选：<code>⌘+a</code></li>
+<li>输入法切换：<code>control+空格</code>（选择上一个输入法），<code>control+option+空格</code>（选择下一个输入法）</li>
+<li>其他自己看<a href="https://support.apple.com/zh-cn/HT201236" target="_blank" rel="external">官方的文档</a></li>
+</ol>
+</blockquote>
+</li>
+</ol>
+<h2 id="系统基本配置"><a href="#系统基本配置" class="headerlink" title="系统基本配置"></a>系统基本配置</h2><ol>
+<li><p>开机首先是各种基本的配置，什么语言呐区域呐用户名呐乱七八糟就不说啦。</p>
+</li>
+<li><p>首先是调整下分辨率。进入系统后，点击桌面左上角的，点击 系统偏好设置-显示器，这里把分辨率调了吧，默认的太太太大了，不仅看着难受，而且因为大，所以显示的东西太少了，怎么愉快的撸代码。</p>
+</li>
+<li><p>设置窗口的左上方，有后退前进的按钮，点击后退可以退回主菜单。</p>
+</li>
+<li><p>其次，在触摸板中把全部的东西都打开吧，rmbp最优秀的就是那个触摸板了。而且17款这么大的触摸板，好好用~ps.建议把“轻点来点按”打开，就不用每次都按下去了。ps. 每一个选项右边都有图示，可以看看。</p>
+</li>
+<li><p>然后打开一些安全设置，不然装不上第三方的软件。找到“安全性与隐私”，点击左下角的🔐并输入密码，以允许后面的修改。然后“允许从以下位置下载的应用”中选择“任何来源”。</p>
+</li>
+<li><p>接着在系统设置的辅助功能中，左边一列选中“鼠标与触控板”，右边点击“触控板选项…”，然后打开启用拖拽-“三指拖拽”，这样，鼠标放在窗口的标题栏，三个手指就能拖动窗口了，非常方便。</p>
+</li>
+<li><p>iCloud 中，登录 iCloud 账户并且开启“查找我的 Mac”选项。</p>
+</li>
+<li><p>Docker（类似 Windows 底部的菜单栏） 配置。建议小一些，放左边或者右边，并且自动隐藏。</p>
+</li>
+<li><p>接着配置网络，网络选项在桌面上面一栏，一个WiFi图标，点击可以选择网络。</p>
+</li>
+<li><p>其他设置：点击电池图标，勾选显示百分比；时间显示日期、星期等</p>
+</li>
+</ol>
+<h2 id="系统基本介绍"><a href="#系统基本介绍" class="headerlink" title="系统基本介绍"></a>系统基本介绍</h2><h3 id="一些介绍"><a href="#一些介绍" class="headerlink" title="一些介绍"></a>一些介绍</h3><ol>
+<li><p>首先 macOS 是基于 Unix 的发行版，所以文件结构、命令上，都和 *nix 系统非常像（但是非常多坑）。</p>
+</li>
+<li><p>点击 Dock 上的 Finder（即 macOS 的资源管理器）<img src="http://7xl6z1.com1.z0.glb.clouddn.com/static/images/macos-dev-setup/1502459911.jpg">，可以看到左边有一栏，里面有个应用程序（/Applications），应用程序放在这里的。然后 macOS 中，用户目录是<code>/Users/username</code>，而不是<code>/home/username</code>，这个需要注意。激活 Finder 的情况下，屏幕左上角会有一排菜单，这个菜单针对每个软件可能不同。一般软件的设置都是<code>软件名-偏好设置</code>中，或者使用<code>⌘+,</code>快捷键打开软件的偏好设置。在显示中是一些显示的选项，对于 Finder 可以打开显示标签页、路径、状态等</p>
+</li>
+<li><p>如果前面触摸板中打开了 Launchpad 的手势，捏拢拇指与其他三个手指即可打开 Launchpad，或者点击 Dock 中的小火箭图标<img src="http://7xl6z1.com1.z0.glb.clouddn.com/static/images/macos-dev-setup/1502460257.jpg">，则能看到所有安装的应用程序，可以两个手指轻扫翻页。</p>
+</li>
+</ol>
+<h3 id="安装软件"><a href="#安装软件" class="headerlink" title="安装软件"></a>安装软件</h3><ol>
+<li>App Store 下载。App Store 中直接下载即可；</li>
+<li>第三方下载安装。下载下来的软件一般是 dmg 格式的或者无格式（解压后）的。dmg 和 exe 类似，打开后，里面一般有个软件图标和一个 Application 文件夹，直接把软件图标拖到 Application 即可。或者直接把下载的无格式（如果是压缩文件，打开即可解压）拖到 Application 即可。</li>
+</ol>
+<h2 id="软件"><a href="#软件" class="headerlink" title="软件"></a>软件</h2><h3 id="iTerm2"><a href="#iTerm2" class="headerlink" title="iTerm2"></a>iTerm2</h3><p> Mac 上传说中最强大的终端工具，主页戳<a href="https://www.iterm2.com/" target="_blank" rel="external">这里</a>。建议把 iTerm2 固定到 Docker，方便打开，双指点按 iTerm 图标-选项-在 Docker 中固定。</p>
+<h3 id="Homebrew"><a href="#Homebrew" class="headerlink" title="Homebrew"></a>Homebrew</h3><p>一个包管理工具，在终端（iTerm）中输入下面语句即可安装。其官网为：<a href="https://brew.sh/" target="_blank" rel="external">点这里</a></p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">/usr/bin/ruby <span class="_">-e</span> <span class="string">"<span class="variable">$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/master/install)</span>"</span></div></pre></td></tr></table></figure>
+<p><code>brew upgrade</code>更新软件包，然后<code>brew install 软件名</code>即可安装一些软件。</p>
+<h4 id="Cask"><a href="#Cask" class="headerlink" title="Cask"></a>Cask</h4><p><a href="https://caskroom.github.io/" target="_blank" rel="external">Homebrew-Cask</a>是 Homebrew 的扩展，用以安装其他一些软件，可以用于安装其他一些软件以前需要使用<code>brew cask</code>来使用 Cask，现在直接使用 Cask 的 tap 即可：</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div></pre></td><td class="code"><pre><div class="line">brew install caskroom/cask/google-chrome <span class="comment">#安装chrome</span></div><div class="line">brew install caskroom/cask/java <span class="comment"># 安装java</span></div><div class="line">brew install caskroom/cask/visual-studio-code<span class="comment">#安装 vs code</span></div><div class="line">brew install caskroom/cask/iina<span class="comment">#安装iina，一个非常棒的视频播放器</span></div><div class="line">brew install maven <span class="comment">#安装maven</span></div><div class="line">brew install you-get youtube-dl <span class="comment">#安装两个视频下载工具</span></div><div class="line">brew install vim <span class="comment">#用 brew 管理 vim，能升级到更新版</span></div></pre></td></tr></table></figure>
+<h3 id="fish"><a href="#fish" class="headerlink" title="fish"></a>fish</h3><p>90后用的 shell~其他常用的还有 zsh。使用 brew 安装即可：</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">brew install fish</div></pre></td></tr></table></figure>
+<p>然后切换默认的 shell 为 fish：</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">chsh <span class="_">-s</span> /usr/<span class="built_in">local</span>/bin/fish</div></pre></td></tr></table></figure>
+<p>安装好后，还有个方便的 fish 管理工具：<a href="http://git.io/oh-my-fish" target="_blank" rel="external">oh my fish</a>，安装命令：</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">curl -L https://get.oh-my.fish | fish</div></pre></td></tr></table></figure>
+<p>然后可以选择<a href="https://github.com/oh-my-fish/oh-my-fish/blob/master/docs/Themes.md" target="_blank" rel="external">主题</a>，我用的 ocean，这么安装：</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line">omf install ocean</div><div class="line">omf theme ocean</div></pre></td></tr></table></figure>
+<p>当然也可以安装其他主题，去上面那个链接选选。。安装好后长这样：</p>
+<img title="Ocean主题" alt="Ocean主题" src="http://7xl6z1.com1.z0.glb.clouddn.com/static/images/macos-dev-setup/1502463526.png">
+<h3 id="ShadowsocksX"><a href="#ShadowsocksX" class="headerlink" title="ShadowsocksX"></a>ShadowsocksX</h3><p><a href="https://github.com/shadowsocks/ShadowsocksX-NG/releases" target="_blank" rel="external">ShadowsocksX</a>这个就不多说了。。。</p>
+<h3 id="Karabiner-Elements"><a href="#Karabiner-Elements" class="headerlink" title="Karabiner-Elements"></a>Karabiner-Elements</h3><p><a href="https://github.com/tekezo/Karabiner-Elements" target="_blank" rel="external">Karabiner-Elements</a> 是一个修改键位的软件，建议用它把 <code>caps lock</code>和<code>control</code>位置替换。因为大小写锁定占据了更好的位置，而 <code>control</code> 是更加频繁使用的一个按键，调换后更方便。</p>
+<img title="Karabiner-Elements" alt="Karabiner-Elements" src="http://7xl6z1.com1.z0.glb.clouddn.com/static/images/macos-dev-setup/1502469911.jpg">
+<h3 id="其他软件"><a href="#其他软件" class="headerlink" title="其他软件"></a>其他软件</h3><p><a href="https://www.jetbrains.com/idea/download/" target="_blank" rel="external">IntelliJ IDEA</a>(不过强烈建议通过<a href="https://www.jetbrains.com/toolbox/app/?fromMenu" target="_blank" rel="external">JetBrains Toolbox</a> 安装)、<br><a href="https://go.microsoft.com/fwlink/p/?LinkID=511647" target="_blank" rel="external">Office 365</a>、<br><a href="http://pinyin.sogou.com/mac/" target="_blank" rel="external">搜狗输入法</a>、<br><a href="http://mac.xunlei.com/" target="_blank" rel="external">迅雷</a>、<br><a href="https://www.alfredapp.com/" target="_blank" rel="external">Alfred</a>（<a href="http://www.alfredworkflow.com" target="_blank" rel="external">这里</a>有一堆工作流工具）、<br><a href="http://bjango.com/" target="_blank" rel="external">iStat</a>、<br><a href="http://mac.guanjia.qq.com/" target="_blank" rel="external">腾讯电脑管家</a>、<br><a href="http://im.qq.com/macqq/" target="_blank" rel="external">QQ</a>、<br><a href="https://mac.weixin.qq.com/" target="_blank" rel="external">微信</a></p>
+<h2 id="其他参考"><a href="#其他参考" class="headerlink" title="其他参考"></a>其他参考</h2><ol>
+<li><a href="https://github.com/hzlzh/Best-App" target="_blank" rel="external">收集&amp;推荐优秀的 Apps/硬件/技巧/周边等</a></li>
+<li><a href="https://wsgzao.github.io/post/mac/" target="_blank" rel="external">Mac新手入门以及常用软件推荐</a></li>
+<li><a href="http://xialeizhou.com/2019/06/23/%E9%AB%98%E6%95%88macbook%E5%B7%A5%E4%BD%9C%E7%8E%AF%E5%A2%83%E9%85%8D%E7%BD%AE/" target="_blank" rel="external">高效macbook工作环境配置</a></li>
+<li><a href="https://www.gitbook.com/book/aaaaaashu/mac-dev-setup/details" target="_blank" rel="external">Mac 开发配置手册</a></li>
+</ol>
+<p>自己折腾去吧~╰(￣▽￣)╭</p>
+
+    </div>
+    
         <!-- css -->
         <style type="text/css">
             .center {
@@ -147,7 +241,7 @@
             <br>
             <a id="btn_donate" class="btn_donate" target="_self" href="javascript:;" title="Donate 打赏"></a>
             <span class="donate_txt">
-                <%= theme.donate.text %>
+                如果对你有帮助，可以赏我一杯咖啡~
             </span>
                 
             
@@ -160,23 +254,23 @@
             <br>
             ------------------------------------------------------------------------------------------------------------------------------
             <br>
-            <% if(theme.donate.web) { %>
+            
             <div width="100%" align="center"><div name="dashmain" id="dash-main-id-879873" class="dash-main-3 879873-0.99"></div></div>
             <script type="text/javascript" charset="utf-8" src="http://www.dashangcloud.com/static/ds.js"></script>
-            <% } %>
+            
 
-            <a href="<%= theme.donate.wechat %>" title="用微信扫一扫哦~" class="fancybox" rel="article0">
-                <img src="<%= theme.donate.wechat %>" title="微信打赏 Donate" height="190px" width="auto"/>
+            <a href="http://7xl6z1.com1.z0.glb.clouddn.com/static/images/theme/reward_wechat.jpg" title="用微信扫一扫哦~" class="fancybox" rel="article0">
+                <img src="http://7xl6z1.com1.z0.glb.clouddn.com/static/images/theme/reward_wechat.jpg" title="微信打赏 Donate" height="190px" width="auto"/>
             </a>
             
             &nbsp;&nbsp;
 
-            <a href="<%= theme.donate.alipay %>" title="用支付宝扫一扫即可~" class="fancybox" rel="article0">
-                <img src="<%= theme.donate.alipay %>" title="支付宝打赏 Donate" height="190px" width="auto"/>
+            <a href="http://7xl6z1.com1.z0.glb.clouddn.com/static/images/theme/reward_alipay.jpg" title="用支付宝扫一扫即可~" class="fancybox" rel="article0">
+                <img src="http://7xl6z1.com1.z0.glb.clouddn.com/static/images/theme/reward_alipay.jpg" title="支付宝打赏 Donate" height="190px" width="auto"/>
             </a>
 
             <span class="donate_txt">
-                <%= theme.donate.text %>
+                如果对你有帮助，可以赏我一杯咖啡~
             </span>
 
         </div>
@@ -204,11 +298,67 @@
         <!-- /donate script -->
     </div>
     <!-- /Donate Module -->
-       <% } %>
-		<%- partial('footer') %>   	       
+       
+		<footer class="article-footer clearfix">
+<div class="article-catetags">
+
+<div class="article-categories">
+  <span></span>
+  <a class="article-category-link" href="/categories/杂/">杂</a>
+</div>
+
+
+  <div class="article-tags">
+  
+  <span></span> <a href="/tags/macOS/">macOS</a><a href="/tags/配置/">配置</a>
+  </div>
+
+</div>
+
+
+
+	<div class="article-share" id="share">
+	
+	  <div data-url="http://blog.liexing.me/2017/08/11/macos-dev-setup/" data-title="macOS 开发配置 | Liexing&#39;s Blog" data-tsina="1915625641" class="share clearfix">
+	  </div>
+	
+	</div>
+
+
+</footer>
+
+   	       
 	</article>
-	<%- partial('pagination') %>
-	<%- partial('comment') %>
+	
+<nav class="article-nav clearfix">
+ 
+ <div class="prev" >
+ <a href="/2017/09/17/java-exception-table/" title="Java 异常表与异常处理原理">
+  <strong>上一篇：</strong><br/>
+  <span>
+  Java 异常表与异常处理原理</span>
+</a>
+</div>
+
+
+<div class="next">
+<a href="/2017/07/31/java-memory-model/"  title="Java 内存模型">
+ <strong>下一篇：</strong><br/> 
+ <span>Java 内存模型
+</span>
+</a>
+</div>
+
+</nav>
+
+	
+
+<section id="comments" class="comment">
+  <div id="disqus_thread">
+    <noscript>Please enable JavaScript to view the <a href="//disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
+  </div>
+</section>
+
 </div>  
 
       <div class="openaside"><a class="navbutton" href="#" title="显示侧边栏"></a></div>
@@ -322,82 +472,65 @@
 </div>
     </div>
     <footer><div id="footer" >
-	<% if(theme.author_img){ %>
+	
 	<div class="line">
 		<span></span>
 		<div class="author"></div>
 	</div>
-	<% } %>
-	<% if(theme.author.intro_line1 || theme.author.intro_line2){ %>
+	
+	
 	<section class="info">
-		<p> <%= theme.author.intro_line1 %> <br/>
-			<%= theme.author.intro_line2 %></p>
+		<p> Hello, I&#39;m Liexing in UCAS. <br/>
+			Stay hungry. Stay foolish.</p>
 	</section>
-	 <% } %>
+	 
 	<div class="social-font" class="clearfix">
-		<% if(theme.author.weibo){ %>
-		<a href="http://weibo.com/<%= theme.author.weibo %>" target="_blank" class="icon-weibo" title="微博"></a>
-		<% } %>
-		<% if(theme.author.github){ %>
-		<a href="https://github.com/<%=theme.author.github %>" target="_blank" class="icon-github" title="github"></a>
-		<% } %>
-		<% if(theme.author.stackoverflow){ %>
-		<a href="http://stackoverflow.com/users/<%=theme.author.stackoverflow %>" target="_blank" class="icon-stack-overflow" title="stackoverflow"></a>
-		<% } %>
-		<% if(theme.author.twitter){ %>
-		<a href="https://twitter.com/<%=theme.author.twitter %>" target="_blank" class="icon-twitter" title="twitter"></a>
-		<% } %>
-		<% if(theme.author.facebook){ %>
-		<a href="https://www.facebook.com/<%=theme.author.facebook %>" target="_blank" class="icon-facebook" title="facebook"></a>
-		<% } %>
-		<% if(theme.author.linkedin){ %>
-		<a href="https://www.linkedin.com/in/<%=theme.author.linkedin %>" target="_blank" class="icon-linkedin" title="linkedin"></a>
-		<% } %>
-		<% if(theme.author.douban){ %>
-		<a href="https://www.douban.com/people/<%=theme.author.douban %>" target="_blank" class="icon-douban" title="豆瓣"></a>
-		<% } %>
-		<% if(theme.author.zhihu){ %>
-		<a href="http://www.zhihu.com/people/<%=theme.author.zhihu %>" target="_blank" class="icon-zhihu" title="知乎"></a>
-		<% } %>
-		<% if(theme.author.google_plus){ %>
-		<a href="https://plus.google.com/<%=theme.author.google_plus %>?rel=author" target="_blank" class="icon-google_plus" title="Google+"></a>
-		<% } %>
-		<% if(theme.author.email){ %>
-		<a href="mailto:<%=theme.author.email %>" target="_blank" class="icon-email" title="Email Me"></a>
-		<% } %>
+		
+		<a href="http://weibo.com/scusjs" target="_blank" class="icon-weibo" title="微博"></a>
+		
+		
+		<a href="https://github.com/scusjs" target="_blank" class="icon-github" title="github"></a>
+		
+		
+		
+		<a href="https://twitter.com/scusjs" target="_blank" class="icon-twitter" title="twitter"></a>
+		
+		
+		
+		<a href="https://www.linkedin.com/in/shenjinsheng" target="_blank" class="icon-linkedin" title="linkedin"></a>
+		
+		
+		<a href="https://www.douban.com/people/58108093" target="_blank" class="icon-douban" title="豆瓣"></a>
+		
+		
+		<a href="http://www.zhihu.com/people/scusjs" target="_blank" class="icon-zhihu" title="知乎"></a>
+		
+		
+		
+		<a href="mailto:i@liexing.me" target="_blank" class="icon-email" title="Email Me"></a>
+		
 	</div>
-			<%  Array.prototype.S=String.fromCharCode(2);
-			  Array.prototype.in_array=function(e){
-    			var r=new RegExp(this.S+e+this.S);
-    			return (r.test(this.S+this.join(this.S)+this.S));
-				};
-				var cc = new Array('by','by-nc','by-nc-nd','by-nc-sa','by-nd','by-sa','zero'); %>
-		<% if (cc.in_array(theme.creative_commons) ) { %>
-				<div class="cc-license">
-          <a href="http://creativecommons.org/licenses/<%= theme.creative_commons %>/4.0" class="cc-opacity" target="_blank">
-            <img src="<%- config.root %>img/cc-<%= theme.creative_commons %>.svg" alt="Creative Commons" />
-          </a>
-        </div>
-    <% } %>
+			
+		
 
 		<p class="copyright">
 		Powered by <a href="http://hexo.io" target="_blank" title="hexo">hexo</a> and Theme by <a href="https://github.com/wuchong/jacman" target="_blank" title="Jacman">Jacman</a> © <span id="busuanzi_container_site_pv">
-    &nbspViewed <span id="busuanzi_value_site_pv"></span> times
+    Viewed <span id="busuanzi_value_site_pv"></span> times
 </span>
-<%= new Date().getFullYear() %> 
-		<% if (config.author) { %>
-		<a href="<%= config.root %>about" target="_blank" title="<%= config.author %>"><%= config.author %></a>
-		<% } else {%>
-		<a href="<%= config.url %>" title="<%= config.title %>"><%= config.title %></a>
-		<% } %>
+2017 
+		
+		<a href="/about" target="_blank" title="liexing">liexing</a>
+		
 		
 		</p>
 </div>
 </footer>
-    <script src="<%- config.root %>js/jquery-2.0.3.min.js"></script>
-<script src="<%- config.root %>js/jquery.imagesloaded.min.js"></script>
-<script src="<%- config.root %>js/gallery.js"></script>
-<script src="<%- config.root %>js/jquery.qrcode-0.12.0.min.js"></script>
+    <script src="/js/jquery-2.0.3.min.js"></script>
+<script src="/js/jquery.imagesloaded.min.js"></script>
+<script src="/js/gallery.js"></script>
+<script src="/js/jquery.qrcode-0.12.0.min.js"></script>
+<script async src="//dn-lbstatics.qbox.me/busuanzi/2.3/busuanzi.pure.mini.js">
+</script>
 
 <script type="text/javascript">
 $(document).ready(function(){ 
@@ -429,12 +562,7 @@ $(document).ready(function(){
   $(window).scroll(function(){
     o.css("top",Math.max(80,260-$(this).scrollTop()));
   });
-  <% if (is_post() && theme.close_aside) { %>
-        getSize();
-        if (myWidth >= 1024) {
-          c.click();
-        }
-  <% } %>
+  
   $(window).resize(function(){
     getSize(); 
     if (myWidth >= 1024) {
@@ -443,14 +571,14 @@ $(document).ready(function(){
       m.removeClass('moveMain');
       a.css('display', 'block').removeClass('fadeOut');
       o.css('display', 'none');
-      <% if( is_post()&&(page.toc !== false) && theme.toc.aside){ %>
+      
       $('#toc.toc-aside').css('display', 'none');
-      <% } %>  
+        
     }
   });
 });
 </script>
-<% if (is_post()) { %>
+
 <script type="text/javascript">
 $(document).ready(function(){ 
   var ai = $('.article-content>iframe'),
@@ -476,8 +604,8 @@ $(document).ready(function(){
   });
 });
 </script>
-<% } %>
-<% if ((page.layout=='post'||page.layout=='page'||page.layout=='photo')&&!theme.jiathis.enable) { %>
+
+
 <script type="text/javascript">
 $(document).ready(function(){ 
   var $this = $('.share'),
@@ -526,28 +654,14 @@ $(document).ready(function(){
   });
 });   
 </script>
-<% } %>
 
-<% if (theme.duoshuo_shortname && page.comments){ %>
+
+
+
 <script type="text/javascript">
-  var duoshuoQuery = {short_name:"<%= theme.duoshuo_shortname %>"};
-  (function() {
-    var ds = document.createElement('script');
-    ds.type = 'text/javascript';ds.async = true;
-    ds.src = '//7xl6z1.com1.z0.glb.clouddn.com/embed_ua.js';
-    ds.charset = 'UTF-8';
-    (document.getElementsByTagName('head')[0] 
-    || document.getElementsByTagName('body')[0]).appendChild(ds);
-  })();
-</script> 
-<% } %>
-<% if( (config.disqus_shortname || theme.disqus_shortname) && page.comments) { %>
-<script type="text/javascript">
-<% if(config.disqus_shortname){ %>
-var disqus_shortname = '<%= config.disqus_shortname %>';
-<% }else{ %>
-var disqus_shortname = '<%= theme.disqus_shortname %>';
-<% } %>
+
+var disqus_shortname = 'liexing';
+
 (function(){
   var dsq = document.createElement('script');
   dsq.type = 'text/javascript';
@@ -563,32 +677,14 @@ var disqus_shortname = '<%= theme.disqus_shortname %>';
   (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
 }());
 </script>
-<% } %>
 
 
 
-<% if (page.layout=='tags'||page.layout=='categories'){ %>
-<script type="text/javascript">
-$(document).ready(function(){ 
-  var list    = $('.archive-title a'),
-      box     = $('.all-list-box'),
-      first   = $('.archive-title a:first-of-type');
-      box.load(first.attr('data-src').toString()+' #archive-page');
-      first.addClass('current');
-  list.each(function(){
-    $(this).click(function(){
-      var listSrc=$(this).attr('data-src').toString()+' #archive-page';
-      box.load(listSrc);
-      list.removeClass('current');
-      $(this).addClass('current');
-     });  
-    });
-  }); 
-</script>
-<% } %>
-<% if (theme.fancybox){ %>
-<link rel="stylesheet" href="<%- config.root %>fancybox/jquery.fancybox.css" media="screen" type="text/css">
-<script src="<%- config.root %>fancybox/jquery.fancybox.pack.js"></script>
+
+
+
+<link rel="stylesheet" href="/fancybox/jquery.fancybox.css" media="screen" type="text/css">
+<script src="/fancybox/jquery.fancybox.pack.js"></script>
 <script type="text/javascript">
 $(document).ready(function(){ 
   $('.article-content').each(function(i){
@@ -607,23 +703,47 @@ $(document).ready(function(){
   }
 }); 
 </script>
-<% } %>
+
 
 
 <!-- Analytics Begin -->
-<%- partial('analytics') %>
+
+
+
+<script>
+var _hmt = _hmt || [];
+(function() {
+  var hm = document.createElement("script");
+  hm.src = "//hm.baidu.com/hm.js?e6d1f421bbc9962127a50488f9ed37d1";
+  var s = document.getElementsByTagName("script")[0]; 
+  s.parentNode.insertBefore(hm, s);
+})();
+</script>
+
+
+
+<span style="display:none"><script type="text/javascript">var cnzz_protocol = (("https:" == document.location.protocol) ? " https://" : " http://");document.write(unescape("%3Cspan id='cnzz_stat_icon_1256113107'%3E%3C/span%3E%3Cscript src='" + cnzz_protocol + "s23.cnzz.com/z_stat.php%3Fid%3D1256113107' type='text/javascript'%3E%3C/script%3E"));</script></span>
+
+
 <!-- Analytics End -->
 
 <!-- Totop Begin -->
-<%- partial('totop') %>
+
+	<div id="totop">
+	<a title="返回顶部"><img src="/img/scrollup.png"/></a>
+	</div>
+	<script src="/js/totop.js"></script>
+
 <!-- Totop End -->
 
 <!-- MathJax Begin -->
-<%- partial('mathjax') %>
+<!-- mathjax config similar to math.stackexchange -->
+
+
 <!-- MathJax End -->
 
 <!-- Tiny_search Begin -->
-<%- partial('tinysou_search') %>
+
 <!-- Tiny_search End -->
 
   </body>
