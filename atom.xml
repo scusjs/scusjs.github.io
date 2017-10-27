@@ -5,7 +5,7 @@
   <link href="/atom.xml" rel="self"/>
   
   <link href="http://blog.liexing.me/"/>
-  <updated>2017-10-24T15:09:46.397Z</updated>
+  <updated>2017-10-27T02:26:21.494Z</updated>
   <id>http://blog.liexing.me/</id>
   
   <author>
@@ -20,7 +20,7 @@
     <link href="http://blog.liexing.me/2017/10/24/deep-learning-weight-initialization/"/>
     <id>http://blog.liexing.me/2017/10/24/deep-learning-weight-initialization/</id>
     <published>2017-10-24T13:14:12.000Z</published>
-    <updated>2017-10-24T15:09:46.397Z</updated>
+    <updated>2017-10-27T02:26:21.494Z</updated>
     
     <content type="html"><![CDATA[<p>调参对深度学习的效果异常重要，甚至经常开玩笑说这是一门调参工程学。而 Weight Initialization 对模型收敛速度和模型质量有重要影响。</p>
 <img title="Deep-Learning" alt="Deep-Learning" width="500" src="http://7xl6z1.com1.z0.glb.clouddn.com/static/images/deep-learning-weight-initialization/1508852329.jpeg">
@@ -35,7 +35,7 @@
 <p>可以看到，随着训练，损失值逐渐变小，但是最终的损失值依然比较高。但是随着层数的增加，会导致梯度消失。如果增大随机初始化的值，比如将0.01变为10，会发现依然会出现梯度消失，参数难以被继续更新。</p>
 <h1 id="Xavier-initialization"><a href="#Xavier-initialization" class="headerlink" title="Xavier initialization"></a>Xavier initialization</h1><p>上述问题可以使用Xavier initialization 解决。Xavier 初始化的基本思想是保持输入和输出的方差一致。即将随机初始化的值乘以缩放因子：$\sqrt{\frac{1}{layers_dims[l-1]}}$。也就是将参数初始化变为：<code>np.random.randn(layers_dims[l], layers_dims[l - 1]) * np.sqrt(1. / layers_dims[l - 1])</code></p>
 <p>Xavier初始化是在线性函数上推导得出的，它能够保持输出在很多层之后依然有着良好的分布，如图为使用 tanh 激活函数后的输出概率分布：<br><img title="Xavier初始化在" alt="Xavier初始化在tanh的输出概率分布" width="600" src="http://7xl6z1.com1.z0.glb.clouddn.com/static/images/deep-learning-weight-initialization/1508856194.jpeg"></p>
-<p>但是其对于 ReLU 的效果并不好，如图：<br><img title="Xavier初始化在ReLU的输出概率分布" alt="Xavier初始化在ReLU的输出概率分布" width="600" src="http://7xl6z1.com1.z0.glb.clouddn.com/static/images/deep-learning-weight-initialization/1508856194.jpeg"></p>
+<p>但是其对于 ReLU 的效果并不好，如图：<br><img title="Xavier初始化在ReLU的输出概率分布" alt="Xavier初始化在ReLU的输出概率分布" width="600" src="http://7xl6z1.com1.z0.glb.clouddn.com/static/images/deep-learning-weight-initialization/1508856336.jpeg"></p>
 <h1 id="He-initialization"><a href="#He-initialization" class="headerlink" title="He initialization"></a>He initialization</h1><p>He 初始化可以解决上面在 ReLU 激活函数时 Xavier 效果不好的问题。其思想是：在ReLU网络中，假定每一层有一半的神经元被激活，另一半为0，所以，要保持方差不变，只需要在 Xavier 的基础上再除以2。即缩放因子变为：$\sqrt{\frac{2}{layers_dims[l-1]}}$，初始化代码为：<code>np.random.randn(layers_dims[l], layers_dims[l - 1]) * np.sqrt(2. / layers_dims[l - 1])</code></p>
 <p>其分布如下图，可见效果很好。<br><img title="He初始化在ReLU的输出概率分布" alt="He初始化在ReLU的输出概率分布" width="600" src="http://7xl6z1.com1.z0.glb.clouddn.com/static/images/deep-learning-weight-initialization/1508856493.jpeg"></p>
 <p>其损失如图所示：<br><img title="He初始化的损失" alt="He初始化的损失" width="600" src="http://7xl6z1.com1.z0.glb.clouddn.com/static/images/deep-learning-weight-initialization/1508856662.jpg"></p>
@@ -843,9 +843,9 @@
       <category term="Cassandra" scheme="http://blog.liexing.me/categories/Cassandra/"/>
     
     
-      <category term="笔记" scheme="http://blog.liexing.me/tags/%E7%AC%94%E8%AE%B0/"/>
-    
       <category term="Cassandra" scheme="http://blog.liexing.me/tags/Cassandra/"/>
+    
+      <category term="笔记" scheme="http://blog.liexing.me/tags/%E7%AC%94%E8%AE%B0/"/>
     
       <category term="分布式" scheme="http://blog.liexing.me/tags/%E5%88%86%E5%B8%83%E5%BC%8F/"/>
     
@@ -879,9 +879,9 @@
       <category term="Cassandra" scheme="http://blog.liexing.me/categories/Cassandra/"/>
     
     
-      <category term="笔记" scheme="http://blog.liexing.me/tags/%E7%AC%94%E8%AE%B0/"/>
-    
       <category term="Cassandra" scheme="http://blog.liexing.me/tags/Cassandra/"/>
+    
+      <category term="笔记" scheme="http://blog.liexing.me/tags/%E7%AC%94%E8%AE%B0/"/>
     
       <category term="分布式" scheme="http://blog.liexing.me/tags/%E5%88%86%E5%B8%83%E5%BC%8F/"/>
     
@@ -1324,11 +1324,11 @@
       <category term="笔记" scheme="http://blog.liexing.me/categories/%E7%AC%94%E8%AE%B0/"/>
     
     
+      <category term="笔记" scheme="http://blog.liexing.me/tags/%E7%AC%94%E8%AE%B0/"/>
+    
       <category term="linux" scheme="http://blog.liexing.me/tags/linux/"/>
     
       <category term="bash" scheme="http://blog.liexing.me/tags/bash/"/>
-    
-      <category term="笔记" scheme="http://blog.liexing.me/tags/%E7%AC%94%E8%AE%B0/"/>
     
   </entry>
   
