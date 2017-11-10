@@ -4,26 +4,24 @@
 <head>
   <meta charset="UTF-8">
   
-    <title>统计学习方法（笔记）-决策树 | Liexing&#39;s Blog</title>
+    <title>写给18岁的自己 | Liexing&#39;s Blog</title>
     <meta name="viewport" content="width=device-width, initial-scale=1,user-scalable=no">
     
     <meta name="author" content="liexing">
     
 
     
-    <meta name="description" content="决策树是一种基本的分类与回归方法。模型可读性强，分类速度快，可以认为是 if-then 规则的集合。 决策树模型与学习分类决策树模型是一种描述对实例进行分类的树形结构。内部节点表示特征或者属性，叶节点表示一个类。分类时，从根节点开始，对实例某一特征进行测试，根据测试结果分配到子节点，递归进行，直到到达叶节点，即为实例所属的类，如图：  可以将决策树看做一个 if-then 规则的集合，并且其路径具">
-<meta name="keywords" content="笔记,统计学习,机器学习,k 邻近法,knn">
+    <meta name="description" content="九月中旬鹏哥给我打电话，让我给新入学的大一新生们写点东西，告诉他们我的大学四年是怎么样走过来的，然而国庆大东北去浪了，这件事情丢得一干二净。昨天鹏哥电话来催账了，才想起这件忘记得差不多的事情。 写给大一的新生，教他们怎么进入这个领域，如何去成长。教别人，这是一件大事。无论是工作，还是读研，亦或是技术上，有些人自己都 Low 得不行，却喜欢到处拼凑成一篇篇的“如何求职”或者“如何读研”的长文，装作">
+<meta name="keywords" content="杂">
 <meta property="og:type" content="article">
-<meta property="og:title" content="统计学习方法（笔记）-决策树">
-<meta property="og:url" content="http://blog.liexing.me/2016/11/07/statistical-learning-method-decision-tree/index.html">
+<meta property="og:title" content="写给18岁的自己">
+<meta property="og:url" content="http://blog.liexing.me/2017/11/10/a-letter-to-18/index.html">
 <meta property="og:site_name" content="Liexing&#39;s Blog">
-<meta property="og:description" content="决策树是一种基本的分类与回归方法。模型可读性强，分类速度快，可以认为是 if-then 规则的集合。 决策树模型与学习分类决策树模型是一种描述对实例进行分类的树形结构。内部节点表示特征或者属性，叶节点表示一个类。分类时，从根节点开始，对实例某一特征进行测试，根据测试结果分配到子节点，递归进行，直到到达叶节点，即为实例所属的类，如图：  可以将决策树看做一个 if-then 规则的集合，并且其路径具">
-<meta property="og:image" content="http://7xl6z1.com1.z0.glb.clouddn.com/static/images/statistical-learning-method/1478508855.jpg">
-<meta property="og:updated_time" content="2017-02-27T11:34:45.000Z">
+<meta property="og:description" content="九月中旬鹏哥给我打电话，让我给新入学的大一新生们写点东西，告诉他们我的大学四年是怎么样走过来的，然而国庆大东北去浪了，这件事情丢得一干二净。昨天鹏哥电话来催账了，才想起这件忘记得差不多的事情。 写给大一的新生，教他们怎么进入这个领域，如何去成长。教别人，这是一件大事。无论是工作，还是读研，亦或是技术上，有些人自己都 Low 得不行，却喜欢到处拼凑成一篇篇的“如何求职”或者“如何读研”的长文，装作">
+<meta property="og:updated_time" content="2017-11-10T08:29:35.342Z">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:title" content="统计学习方法（笔记）-决策树">
-<meta name="twitter:description" content="决策树是一种基本的分类与回归方法。模型可读性强，分类速度快，可以认为是 if-then 规则的集合。 决策树模型与学习分类决策树模型是一种描述对实例进行分类的树形结构。内部节点表示特征或者属性，叶节点表示一个类。分类时，从根节点开始，对实例某一特征进行测试，根据测试结果分配到子节点，递归进行，直到到达叶节点，即为实例所属的类，如图：  可以将决策树看做一个 if-then 规则的集合，并且其路径具">
-<meta name="twitter:image" content="http://7xl6z1.com1.z0.glb.clouddn.com/static/images/statistical-learning-method/1478508855.jpg">
+<meta name="twitter:title" content="写给18岁的自己">
+<meta name="twitter:description" content="九月中旬鹏哥给我打电话，让我给新入学的大一新生们写点东西，告诉他们我的大学四年是怎么样走过来的，然而国庆大东北去浪了，这件事情丢得一干二净。昨天鹏哥电话来催账了，才想起这件忘记得差不多的事情。 写给大一的新生，教他们怎么进入这个领域，如何去成长。教别人，这是一件大事。无论是工作，还是读研，亦或是技术上，有些人自己都 Low 得不行，却喜欢到处拼凑成一篇篇的“如何求职”或者“如何读研”的长文，装作">
 <meta name="twitter:creator" content="@scusjs">
 
     
@@ -83,14 +81,14 @@
         <header class="article-info clearfix">
   <h1 itemprop="name">
     
-      <a href="/2016/11/07/statistical-learning-method-decision-tree/" title="统计学习方法（笔记）-决策树" itemprop="url">统计学习方法（笔记）-决策树</a>
+      <a href="/2017/11/10/a-letter-to-18/" title="写给18岁的自己" itemprop="url">写给18岁的自己</a>
   </h1>
   <p class="article-author">By
        
 		<a href="/about" title="liexing" target="_blank" itemprop="author">liexing</a>
 		
   <p class="article-time">
-    <time datetime="2016-11-07T08:30:01.000Z" itemprop="datePublished"> 发表于 2016-11-07</time>
+    <time datetime="2017-11-10T05:45:35.000Z" itemprop="datePublished"> 发表于 2017-11-10</time>
 <span id="busuanzi_container_page_pv">
   &nbspViewed <span id="busuanzi_value_page_pv"></span> times
 </span>
@@ -103,94 +101,41 @@
         <div id="toc" class="toc-article">
             <strong class="toc-title">文章目录</strong>
         
-            <ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link" href="#决策树模型与学习"><span class="toc-number">1.</span> <span class="toc-text">决策树模型与学习</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#特征选择"><span class="toc-number">2.</span> <span class="toc-text">特征选择</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#ID3-算法"><span class="toc-number">2.1.</span> <span class="toc-text">ID3 算法</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#C4-5-算法"><span class="toc-number">2.2.</span> <span class="toc-text">C4.5 算法</span></a></li></ol></li><li class="toc-item toc-level-1"><a class="toc-link" href="#决策树的剪枝"><span class="toc-number">3.</span> <span class="toc-text">决策树的剪枝</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#CART-算法"><span class="toc-number">4.</span> <span class="toc-text">CART 算法</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#CART-生成"><span class="toc-number">4.1.</span> <span class="toc-text">CART 生成</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#回归树的生成"><span class="toc-number">4.1.1.</span> <span class="toc-text">回归树的生成</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#分类树的生成"><span class="toc-number">4.1.2.</span> <span class="toc-text">分类树的生成</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#CART-剪枝"><span class="toc-number">4.2.</span> <span class="toc-text">CART 剪枝</span></a></li></ol></li></ol>
+            <ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link" href="#引子"><span class="toc-number">1.</span> <span class="toc-text">引子</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#接受"><span class="toc-number">2.</span> <span class="toc-text">接受</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#时间"><span class="toc-number">3.</span> <span class="toc-text">时间</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#自驱动"><span class="toc-number">4.</span> <span class="toc-text">自驱动</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#系统化"><span class="toc-number">5.</span> <span class="toc-text">系统化</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#兴趣点"><span class="toc-number">6.</span> <span class="toc-text">兴趣点</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#目标"><span class="toc-number">7.</span> <span class="toc-text">目标</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#实践"><span class="toc-number">8.</span> <span class="toc-text">实践</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#数学、算法、工程"><span class="toc-number">9.</span> <span class="toc-text">数学、算法、工程</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#不能狂"><span class="toc-number">10.</span> <span class="toc-text">不能狂</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#朋友"><span class="toc-number">11.</span> <span class="toc-text">朋友</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#初心，底线"><span class="toc-number">12.</span> <span class="toc-text">初心，底线</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#精神"><span class="toc-number">13.</span> <span class="toc-text">精神</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#爱情"><span class="toc-number">14.</span> <span class="toc-text">爱情</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#END"><span class="toc-number">15.</span> <span class="toc-text">END</span></a></li></ol>
         
         </div>
         
-        <p>决策树是一种基本的分类与回归方法。模型可读性强，分类速度快，可以认为是 if-then 规则的集合。</p>
-<h1 id="决策树模型与学习"><a href="#决策树模型与学习" class="headerlink" title="决策树模型与学习"></a>决策树模型与学习</h1><p>分类决策树模型是一种描述对实例进行分类的树形结构。内部节点表示特征或者属性，叶节点表示一个类。分类时，从根节点开始，对实例某一特征进行测试，根据测试结果分配到子节点，递归进行，直到到达叶节点，即为实例所属的类，如图：</p>
-<img title="决策树" alt="决策树" src="http://7xl6z1.com1.z0.glb.clouddn.com/static/images/statistical-learning-method/1478508855.jpg">
-<p>可以将决策树看做一个 if-then 规则的集合，并且其路径具有互斥且完备性质。如上图，最终的类别为 Yes 和 No 两类，假设存在数据$x={青少年,是学生}$，首先判断第一个特征，年龄，为青少年，跳转到最左边节点，判断是否是学生，则类别为 Yes。</p>
-<p>决策树还能表示给定特征条件下类的条件概率分布。</p>
-<p>决策树学习本质上是从训练数据集中归纳出一组分类规则。能对训练数据集进行正确分类的决策树可能有多个，也可能没有。需要选择一个与训练数据集矛盾小，有很好泛化能力的决策树。从另一个角度，把决策树学习看做训练数据集估计条件概率模型，基于特种空间划分的类的条件概率模型有无穷多个，我们选择的模型应该对训练数据有很好的拟合，对未知数据有很好的预测。</p>
-<p>决策树的学习损失函数通常是正则化的极大似然函数。从所有可能的决策树中选取最有决策树是 NP 完全问题，所以通常学习算法采用启发式方法，求得次最优的决策树。对于过拟合现象，采用自下而上的剪枝操作，将树变得更简单。决策树的生成只考虑局部最优，剪枝则考虑全局最优。学习常用算法有 ID3、C4.5和 CART。</p>
-<h1 id="特征选择"><a href="#特征选择" class="headerlink" title="特征选择"></a>特征选择</h1><p>特征选择的准则通常是信息增益或者信息增益比。</p>
-<p>熵是表示随机变量的不确定性的度量。设 X 是一个取有限个值的离散随机变量，其概率分布为：</p>
-<p>$$P(X=x_i)=p_i, \quad i=1,2,…,n$$</p>
-<p>随机变量 X 的熵定义为：</p>
-<p>$$H(X)=-\sum \limits_{i=1}^n p_i \log p_i$$</p>
-<p>上式中，若$p_i=0$，定义$0\log 0=0$。对数底可以为2或者 e，这时熵的单位分别为比特或纳特。由定义，熵只依赖于 X 的分布，与 X 的取值无关，所以也可以记为：</p>
-<p>$$H(p)=-\sum \limits_{i=1}^n p_i \log p_i$$</p>
-<p>熵越大，随机变量的不确定性越大，所以：$0 \le H(p) \le \log n$。</p>
-<p>对于随机变量 (X,Y)，其联合概率分布：</p>
-<p>$$P(X=x_i,Y=y_j)=P_{ij},\quad i=1,2,…,n;j=1,2,…,m$$</p>
-<p>条件熵表示在已知随机变量 X 的条件下，变量 Y 的不确定性，定义为 X 给定条件下 Y 的条件概率分布的熵对 X 的数学期望：</p>
-<p>$$H(Y|X)=\sum \limits_{i=1}^n p_iH(Y|X=X_i)$$</p>
-<p>这里$p_i=P(X=x_i), i=1,2,…,n$。</p>
-<p>信息增益表示得知特征 X 的信息而是类 Y 的信息的不确定性减少的程度，也称为互信息。</p>
-<p>特征 A 对训练数据集 D 的信息增益 g(D,A) 定义为集合 D 的经验熵 H(D) 与特征 A 给定条件下 D 的检验条件熵之差，即：</p>
-<p>$$g(D,A)=H(D)-H(D|A)$$</p>
-<p>因此，决策树特征选择的方法可以为：对训练集 D，计算其每个特征的信息增益，并比较它们的大小，选择信息增益最大的特征。</p>
-<p>但是，以信息增益作为划分的特征，可能存在偏向于选择取值较多的特征的问题，因此可以改为使用信息增益比：</p>
-<p>$$g_R(D,A)=\frac {g(D,A)}{H_A(D)}$$</p>
-<p>其中，$H_A(D)=-\sum \limits_{i=1}^n \frac {|D_i|}{|D|}\log_2 \frac {|D_i|}{|D|}$</p>
-<p>#决策树的生成</p>
-<h2 id="ID3-算法"><a href="#ID3-算法" class="headerlink" title="ID3 算法"></a>ID3 算法</h2><p>ID3 核心是在决策树的各个节点上应用信息增益准则选择特征，递归地构建决策树。从根节点开始，对节点计算所有可能的特征的信息增益，选择信息增益最大的特征作为节点的特征，由该特征的不同取值建立子节点。ID3相当于用极大似然法进行概率模型的选择。但是 ID3 算法只有树的生成，所以容易产生过拟合。</p>
-<h2 id="C4-5-算法"><a href="#C4-5-算法" class="headerlink" title="C4.5 算法"></a>C4.5 算法</h2><p>C4.5 与 ID3 类似，但是生成过程，使用的是信息增益比来选择特征。</p>
-<h1 id="决策树的剪枝"><a href="#决策树的剪枝" class="headerlink" title="决策树的剪枝"></a>决策树的剪枝</h1><p>决策树生成过程，可能会导致过拟合。可以使用剪枝对已生成的树进行简化。具体的，剪枝从已生成的树上裁掉一些子树或者叶节点，并将其根节点或父节点作为新的叶节点，从而简化分类树模型。</p>
-<p>决策树的剪枝往往通过极小化决策树整体的损失函数或代价函数来实现。</p>
-<p>设树 T 的叶节点个数为 |T|，t 是树 T 的叶节点，该叶节点有$N_t$个样本点，其中 k 类样本有$N_{tk}$个，$H_{t}(T)$为叶节点 t 上的经验熵，$\alpha \ge 0$为参数，则决策树学习的损失函数为：</p>
-<p>$$C_{\alpha}(T)=\sum \limits_{t=1}^{|T|}N_tH_t(T)+\alpha{T}$$</p>
-<p>其中经验熵：</p>
-<p>$$H_t(T)=-\sum_k \frac{N_{tk}}{N_t}\log \frac{N_{tk}}{N_t}$$</p>
-<p>将损失函数记为：</p>
-<p>$$C_{\alpha}(T)=C(T)+\alpha |T|$$</p>
-<p>其中第一项表示对训练数据的预测误差，|T|表示复杂度，参数$\alpha \ge 0$控制两者间的影响。</p>
-<p>剪枝时，计算每个节点的经验熵，然后递归地从树的叶节点往上回缩。如果一组叶节点回缩到其父节点之前与之后的整体树分别为$T_B$和$T_A$，如果$C_\alpha (T_A) \le C_\alpha(T_B)$则进行剪枝，将父节点变为新的叶节点。</p>
-<p>剪枝算法可以由动态规划算法实现。</p>
-<h1 id="CART-算法"><a href="#CART-算法" class="headerlink" title="CART 算法"></a>CART 算法</h1><p>CART，全称 classification and regression tree，即分类与回归树，既可以用于分类也能用于回归。CART 是在给定输入随机变量 X 条件下输出随机变量 Y 的条件概率分布的学习方法，其假设决策树是二叉树。</p>
-<h2 id="CART-生成"><a href="#CART-生成" class="headerlink" title="CART 生成"></a>CART 生成</h2><p>决策树的生成就是递归地构建儿茶决策树的过程。对回归树用平方误差最小准则，对分类树用基尼指数最小化准则，进行特征选择，生成二叉树。</p>
-<h3 id="回归树的生成"><a href="#回归树的生成" class="headerlink" title="回归树的生成"></a>回归树的生成</h3><p>假设将输入划分为 M 个单元$R_1,R_2,…,R_M$，并且在每个单元$R_m$上有一个固定输出值$c_m$，于是回归树模型可以表示为：</p>
-<p>$$f(x)=\sum_{m=1}^Mc_mI(x \in R_M)$$</p>
-<p>当输入空间划分确定时，可以用平方误差$\sum_\limits{x_i \in R_M}(y_i-f(x_i))^2$来表示回归树对于数据的预测误差，用平方误差最小准则求解每个单元上的最有输出值。采用启发式的方法划分输入空间。</p>
-<p>生成算法为：</p>
-<ol>
-<li><p>选择最优切分变量 j 和切分点 s，求解：</p>
-<p> $$\min \limits_{j,s}[\min \limits_{c_1} \sum_{x_i\in R_1(j,s)}(y_i-c_1)^2 + \min \limits_{c_2} \sum_{x_i\in R_2(j,s)}(y_i-c_2)^2]$$</p>
-<p> 遍历变量 j，对固定的切分变量 j 扫描切分点 s，选择使上式达到最小值的对 (j,s)。</p>
-</li>
-<li><p>对选用的对 (j,s) 换分区域并决定相应的输出值：</p>
-<p> $$R_1(j,s)={x|x^{(j)} \le s}, \quad R_2(j,s)={x|x^{(j)} \gt s}$$</p>
-<p> $$\hat{c_m}=\frac{1}{N_m}\sum_{x_i \in R_m(j,s)}y_i,\quad x\in R_m,\quad m=1,2$$</p>
-</li>
-<li><p>继续对子区域调用1、2步骤，直到满足停止条件。</p>
-</li>
-<li>将输入空间划分为 M 个区域，生成决策树：</li>
-</ol>
-<p>$$f(x)=\sum_{m=1}^{M}\hat{c_m}I(x\in R_m)$$</p>
-<h3 id="分类树的生成"><a href="#分类树的生成" class="headerlink" title="分类树的生成"></a>分类树的生成</h3><p>分类树使用基尼指数选择最优特征，同时决定该特征的最优二值切分点。假设有 K 个分类，样本点属于第 k 类的概率为$p_k$，则概率分布的基尼指数为：</p>
-<p>$$Gini(p)=\sum_{k=1}^{K}p_k(1-p_k)=1-\sum_{k=1}^{K}p_k^2$$</p>
-<p>对于二分类问题，如果样本属于第一类的概率是 p，则：</p>
-<p>$$Gini(p)=2p(1-p)$$</p>
-<p>如果样本 D 根据特征 A 是否取某一可能值$\alpha$被分割成$D_1$和$D_2$两部分，则在特征 A 的条件下，集合 D 的基尼指数为：</p>
-<p>$$Gini(D,A)=\frac{|D_1|}{D}Gini(D_1)+\frac{|D_2|}{D}Gini(D_2)$$</p>
-<p>基尼指数Gini(D,A)表示经 A=a 分割后集合 D 的不确定性。基尼指数值越大，样本集合的不确定性也就越大。</p>
-<p>CART 生成算法为：1. 计算现有特征对数据集 D 的基尼指数，对每一个特征 A，对可能的每个取值$\alpha$的测试为“是”或者“否”将 D 分割成两部分，计算$A=\alpha$ 时的基尼指数；2. 选择基尼指数最小的特征及其对应的且分店作为最优特征和最优切分点，将 D 分配到两个子节点，并递归调用1，2。停止计算的条件是节点中样本个数小雨预定阈值，或者样本集的基尼指数小雨预定阈值，或者没有更多特征。</p>
-<h2 id="CART-剪枝"><a href="#CART-剪枝" class="headerlink" title="CART 剪枝"></a>CART 剪枝</h2><p>对于生成的决策树$T_0$，进行 CART 剪枝：</p>
-<ol>
-<li>设 $k=0,T=T_0$</li>
-<li>设 $\alpha=+\infty$</li>
-<li><p>自下而上对各内部节点 t 计算$C(T_t),|T_t|$以及</p>
-<p> $$g(t)=\frac{C(t)-C(T_t)}{|T_t| - 1}$$</p>
-<p> $$\alpha=\min(\alpha,g(t))$$</p>
-<p> 这里，$T_t$表示以 t 为根节点的字数，$C(T_t)$是对训练数据的预测误差，$|T_t|$是$T_t$的叶节点数量</p>
-</li>
-<li><p>自上而下的访问内部节点 t，如果有$g(t)=\alpha$，进行剪枝，并对叶节点 t 以多数表决法决定其类，得到树 T</p>
-</li>
-<li>设$k=k+1,\alpha_k=\alpha,T_k=T$</li>
-<li>如果 T 不是由根节点单独构成的树，则回到步骤4</li>
-<li>采用交叉验证法在子树序列$T_0,T_1,…,T_n$中选取最优子树$T_\alpha$ </li>
-</ol>
+        <blockquote>
+<p>九月中旬鹏哥给我打电话，让我给新入学的大一新生们写点东西，告诉他们我的大学四年是怎么样走过来的，然而国庆大东北去浪了，这件事情丢得一干二净。昨天鹏哥电话来催账了，才想起这件忘记得差不多的事情。</p>
+<p>写给大一的新生，教他们怎么进入这个领域，如何去成长。教别人，这是一件大事。无论是工作，还是读研，亦或是技术上，有些人自己都 Low 得不行，却喜欢到处拼凑成一篇篇的“如何求职”或者“如何读研”的长文，装作一副过来人的样子到处分享。我不认为我有这个能力去“教”或者是告诉别人应该怎么做，这里只是一个心得，或者是对大学四年的一个总结吧，写个18岁的自己，各位看看就好。</p>
+</blockquote>
+<h1 id="引子"><a href="#引子" class="headerlink" title="引子"></a>引子</h1><p>写给18岁的自己，这是无数的科幻作品的题材吧。希望18岁刚进入大学的懵懂的自己，能在某个晴朗的下午，在景观水渠边漫步，在环形大道上闲逛之时，亦或是在图书馆某个能看到远处风景的角落，读到这封信。</p>
+<p>时间的长河，其实就是一次次的选择过程。18岁的你，已经成年，虽然可以继续任性，但是做的每一个选择，都决定了之后的你，而你做的每一个选择，都基于你来的路，也即你做过的选择。</p>
+<p>这些文字，不可避免的会带有说教的意味，但是这篇文章，毫无说教的目的，只是希望能给18岁的你一些现在的我的一些看法，亦或是现在的我觉得后悔当时没做好的一些东西，希望能够帮到你做得更好。</p>
+<h1 id="接受"><a href="#接受" class="headerlink" title="接受"></a>接受</h1><p>从未想到，现在的我想告诉你的第一点会是这个。但是的确，学会接受，是通往社会的第一个桥梁。18岁的你，一定还是愤慨，为什么高考会如此糟糕，来到了这个之前十多年一直瞧不起的大学，恨不得掐死高考场上的自己。但是，愤慨又有什么用呢？各种班委选拔，学生会、社团的面试，明明觉得自己很优秀，可是却落选了，觉得面试自己的人眼瞎，觉得别人一定用了不知道什么样的非正常手段吧。但是，结果这样，你不爽又有什么用呢？明明自己认真的感情付出，但是却换不回预想的结果，觉得人心险恶。但是，你即使伤心，即使自暴自弃，又有什么用呢？自己认真学习，认真完成作业，但是最终成绩却不如别人玩些小把戏，你会觉得老师一定是傻X。但是你骂老师一顿又有什么用呢？</p>
+<p>18岁了，你会发现，这个学校，这个社会，并不像自己从小长大的环境，这里的一些事，充满了各种不可抗力的因素。不管你是为此多么努力，奋斗是多么艰辛，结果却和付出不成正比。你可以自暴自弃，但是学会接受，以后你可以做得更好。和结果比起来，也许中间的过程，才是对你之后的人生更加重要的。</p>
+<p>也许当年在一本忘了什么名字的书上看到的一句话可以帮助到你：一个人可以被毁灭，但是不能被打败。凡不能毁灭我的，将使我更强大。</p>
+<h1 id="时间"><a href="#时间" class="headerlink" title="时间"></a>时间</h1><p>大学虽然只有四年，但是这四年决定了你今后的高度。如果挥霍掉了，之后你也许10年也补不回来。刚进入大学，脱离了家长老师的严加管教，也许你觉得尽情的玩游戏了，可以尽情的看小说了，可以随便出去玩了。也许室友每天很开心的玩，很让你心动，想和他们一起开黑一起吃鸡。你可以一起玩，但是控制好自己的时间，若干年后看着他们，你会觉得，幸好当年没和他们一样堕落下去。</p>
+<h1 id="自驱动"><a href="#自驱动" class="headerlink" title="自驱动"></a>自驱动</h1><p>上面说的挥霍，是指把时间大量的耗费在玩上面。但是如果你把“玩”当做自己的职业，那即使是游戏，也可以定性为在学习，那么花时间在它身上，又何尝不可。</p>
+<p>大学四年，是你能够连续性的把时间花费在学习上面的最宝贵的阶段。好好珍惜这段时间，系统性的把自己应该掌握的知识学好，这些系统性学习的东西，将会伴随你一生，成为你整个知识体系的主干。在之后的职业生涯中，你学会的各种其他知识、技能、经验，也只是这主干上的枝叶。干之不成，枝叶焉在？</p>
+<p>18岁了，已经没有人在你耳边天天念叨好好学习了，也没有人来守着你学习了。成年的意义，在于自己知道自己应该做什么，应该如何做了。失去了身边的鞭策，你需要学会在心里给自己定一个标杆，一个人或者一个里程碑，不断的去完善自己，去鞭策自己，达到自己的目标。</p>
+<h1 id="系统化"><a href="#系统化" class="headerlink" title="系统化"></a>系统化</h1><p>上面说到花时间学习，但是如果杂乱无章的学，往往会被一个个的散乱的知识点吞噬，事半功倍。你要学会系统的去整理知识点，找出一个个散乱知识点之间的联系，然后有针对的主动去积累学到的知识。而系统化，能够让你知道，什么是主干，什么是枝叶，主干和枝叶之间又是怎么联系起来的。</p>
+<p>时间长河带来的是熵的增加，但是我们存在的意义却是不断积累系统化的知识体系，这是一件很有趣的对抗。18岁的你，应该开始在自己选定的领域里面，主动去积累系统化的知识，积累得越多，越系统，你能够更加透彻的看透这个领域中的迷雾，而你一辈子工作的本质，甚至是人生的本质，也是这个不断积累系统化知识的过程。</p>
+<h1 id="兴趣点"><a href="#兴趣点" class="headerlink" title="兴趣点"></a>兴趣点</h1><p>即使选择了这个专业，也不意味着对这个专业涉及到的所有知识感兴趣。因此需要找到自己的兴趣点，把这个点深挖，做到自己能做的最好。当然这个兴趣点也行会随着时间的变化而变化，但是每到一个点，你应该真正的喜欢它，有一种执着的渴望去钻研，这样就会自然的有自驱动力。<code>如果一个人靠着自制力去抵抗诱惑做某件事，那他还只是寻常人；如果他能够靠着内心对某事的执着追求去做这件事而抵御其他诱惑，这才是圣人</code></p>
+<h1 id="目标"><a href="#目标" class="headerlink" title="目标"></a>目标</h1><p>当你找到了兴趣点，那么你就应该有一个规划。我知道这对于你来说很难，但是你必须对自己有一个长线的规划，比如想要有个什么样的工作。有了这个长线的目标，那么你就能切分一下，比如这个工作，是否需要出国，或者这个工作是否需要读研，来制定一个中期的目标。并且不断的递归，能够制定精确到周或者月的目标更好。这样你就能更加明确的知道，现在应该做什么，做到什么程度了。比如你就能知道，你的更多的精力，是应该放在分数上，亦或是实践上。</p>
+<h1 id="实践"><a href="#实践" class="headerlink" title="实践"></a>实践</h1><p>你选择的专业，是一个理工类的专业，其实更加偏重工程实践。死学知识，你也许可以做到考高分，完成自己诸如考研、保研、留学的目标，但是没有实际的实践能力，会严重制约你之后的工作。书上的东西，自己照着实践一遍，或者是一些小的完整的项目，自己尝试去完成一下。在实践的过程中，你会发现你对一些已经学到的知识，有了更加深刻的了解，亦或是发现一些自己尚不了解的知识，能够通过实践过程来学习。</p>
+<h1 id="数学、算法、工程"><a href="#数学、算法、工程" class="headerlink" title="数学、算法、工程"></a>数学、算法、工程</h1><p>本来想告诉你，数学很重要。又想告诉你，算法很重要。想了下，工程也很重要。遂合并三者，一同告知。</p>
+<p>数学是理工科的灵魂，也许你现在不知道学的乱七八糟的高数、线代、概统、离散等等数学有什么用，觉得认真学专业知识就够了。但是你要知道，你现在学习的专业知识，都是很基础的东西，当你以后涉及到一些更深层面的知识时，没有数学这把刀，没法在迷雾中抽丝剥茧，学到一些本质。</p>
+<p>算法其实可以概括为数学，但是我觉得算法又不同于上面的数学。你可以理解为算法就是 ACM，就是刷各种 OJ。也许你觉得很无聊，但是在刷题的过程中，你对代码本身的理解，包括你的思维能力，都得到的提高。更加俗的来讲，算法能力可能决定了你在这个行业之后的工资水平。</p>
+<p>工程能力，也可以理解为上面的实践能力。是你在代码世界的造物能力。工程能力需要多实践，多思考来培养，需要无数次的尝试，无数次的调试来历练。优秀的工程能力，能够让你的作品经受住各种外在需求的变更，负载起大规模的访问，能够一眼理出庞大系统逻辑。</p>
+<h1 id="不能狂"><a href="#不能狂" class="headerlink" title="不能狂"></a>不能狂</h1><p>也许在某个阶段，你会觉得自己比别人牛逼了，觉得自己实力屌炸。但是记住，牛逼只是相对的，你要和比你弱的比较，那你又怎好意思狂；你要和比你强的比较，你又怎敢狂。不用和别人，和明天的你自己比起来，你也是菜逼，因为如果明天的你不比今天的你强，那你还不菜？</p>
+<h1 id="朋友"><a href="#朋友" class="headerlink" title="朋友"></a>朋友</h1><p>分工和协作，是这个社会重要的两个特点。无论是同事之间，或者是朋友之间，都是一种协作的关系。尝试找到良师益友，能够在你疑惑、迷茫的时候帮助到你，你们能够相互激励，共同进步。也许很多年过后，即使你们相隔千里，但是朋友又永远在你身边。</p>
+<h1 id="初心，底线"><a href="#初心，底线" class="headerlink" title="初心，底线"></a>初心，底线</h1><p><code>世界上有两件事能深深震撼人们的心灵，一件是人们心中崇高的道德准则，另一件是我们头顶灿烂的星空。</code><br>成长过程中，你会有许多讨厌的人，厌烦的行为。也许你会发现这些讨厌的行为，能够在短时间内给你带来一些小利小惠，但是永远坚守自己内心的道德底线，坚持做好自己。<code>如菩萨初心，不与后心俱。</code></p>
+<h1 id="精神"><a href="#精神" class="headerlink" title="精神"></a>精神</h1><p>在成长的途中，有的人会一味地追求着所谓的技术，所谓的知识，缺忽视了自己的内心。我想你应该不会这样，坚持读一些“杂乱”的书挺好的，扩充自己的眼界，学习别人的思想。但是也不要对某些领域有抵触，比如你现在讨厌的历史，在今天的我看来，也挺有趣。你也可以看看电影，<a href="http://www.imdb.com/chart/top" target="_blank" rel="external">IMDB Top 250</a>就不错，电影往往传达出一种思想体系，从这种思想体系中，能更快的了解一种人生。</p>
+<h1 id="爱情"><a href="#爱情" class="headerlink" title="爱情"></a>爱情</h1><p>大学，有很多人心目中纯洁爱情。可以有一份爱情，能够伴着你，使你成为你，但是有些时候也会给你搞一些事。<code>爱是一种甜蜜的痛苦，真诚的爱情永不是走一条平坦的道路的。</code>如果你发现谁让你内心涌动，不用去压抑着自己的内心。但是也不要因为想要爱情而去爱情，这样只会伤害自己。会有属于你的爱情，在之后的路上等着你的，耐心的去迎接它吧。</p>
+<h1 id="END"><a href="#END" class="headerlink" title="END"></a>END</h1><p>啰里啰嗦不小心说了这么一大堆，有太多的话想告诉你，大学四年的种种事，种种经历，都想一股脑的给你塞过来。</p>
+<p>四年很快，谢谢当年的自己成长的如此迅速，你一定想象不到这四年在江安经历的岁月，一定惊讶毕业时候的自己如此超出自己的预期。江安的日夜，明远湖的宁静，二基楼的深邃，这四年的岁月将会助你踏上未来的征程——星辰大海。加油吧！</p>
+<p>2017年11月10日<br>于北京</p>
 
     </div>
     
@@ -304,13 +249,13 @@
 
 <div class="article-categories">
   <span></span>
-  <a class="article-category-link" href="/categories/统计学习/">统计学习</a>
+  <a class="article-category-link" href="/categories/杂/">杂</a>
 </div>
 
 
   <div class="article-tags">
   
-  <span></span> <a href="/tags/笔记/">笔记</a><a href="/tags/统计学习/">统计学习</a><a href="/tags/机器学习/">机器学习</a><a href="/tags/k-邻近法/">k 邻近法</a><a href="/tags/knn/">knn</a>
+  <span></span> <a href="/tags/杂/">杂</a>
   </div>
 
 </div>
@@ -319,7 +264,7 @@
 
 	<div class="article-share" id="share">
 	
-	  <div data-url="http://blog.liexing.me/2016/11/07/statistical-learning-method-decision-tree/" data-title="统计学习方法（笔记）-决策树 | Liexing&#39;s Blog" data-tsina="1915625641" class="share clearfix">
+	  <div data-url="http://blog.liexing.me/2017/11/10/a-letter-to-18/" data-title="写给18岁的自己 | Liexing&#39;s Blog" data-tsina="1915625641" class="share clearfix">
 	  </div>
 	
 	</div>
@@ -332,19 +277,11 @@
 	
 <nav class="article-nav clearfix">
  
- <div class="prev" >
- <a href="/2017/07/13/statistical-learning-method-logistic-regression-maximum-entropy-model/" title="统计学习方法（笔记）-逻辑斯谛回归与最大熵模型">
-  <strong>上一篇：</strong><br/>
-  <span>
-  统计学习方法（笔记）-逻辑斯谛回归与最大熵模型</span>
-</a>
-</div>
-
 
 <div class="next">
-<a href="/2016/11/03/statistical-learning-method-naive-bayes/"  title="统计学习方法（笔记）-朴素贝叶斯法">
+<a href="/2017/10/24/deep-learning-weight-initialization/"  title="调参工程学 - Weight Initialization">
  <strong>下一篇：</strong><br/> 
- <span>统计学习方法（笔记）-朴素贝叶斯法
+ <span>调参工程学 - Weight Initialization
 </span>
 </a>
 </div>
@@ -366,7 +303,7 @@
   <div id="toc" class="toc-aside">
   <strong class="toc-title">文章目录</strong>
  
- <ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link" href="#决策树模型与学习"><span class="toc-number">1.</span> <span class="toc-text">决策树模型与学习</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#特征选择"><span class="toc-number">2.</span> <span class="toc-text">特征选择</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#ID3-算法"><span class="toc-number">2.1.</span> <span class="toc-text">ID3 算法</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#C4-5-算法"><span class="toc-number">2.2.</span> <span class="toc-text">C4.5 算法</span></a></li></ol></li><li class="toc-item toc-level-1"><a class="toc-link" href="#决策树的剪枝"><span class="toc-number">3.</span> <span class="toc-text">决策树的剪枝</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#CART-算法"><span class="toc-number">4.</span> <span class="toc-text">CART 算法</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#CART-生成"><span class="toc-number">4.1.</span> <span class="toc-text">CART 生成</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#回归树的生成"><span class="toc-number">4.1.1.</span> <span class="toc-text">回归树的生成</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#分类树的生成"><span class="toc-number">4.1.2.</span> <span class="toc-text">分类树的生成</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#CART-剪枝"><span class="toc-number">4.2.</span> <span class="toc-text">CART 剪枝</span></a></li></ol></li></ol>
+ <ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link" href="#引子"><span class="toc-number">1.</span> <span class="toc-text">引子</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#接受"><span class="toc-number">2.</span> <span class="toc-text">接受</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#时间"><span class="toc-number">3.</span> <span class="toc-text">时间</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#自驱动"><span class="toc-number">4.</span> <span class="toc-text">自驱动</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#系统化"><span class="toc-number">5.</span> <span class="toc-text">系统化</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#兴趣点"><span class="toc-number">6.</span> <span class="toc-text">兴趣点</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#目标"><span class="toc-number">7.</span> <span class="toc-text">目标</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#实践"><span class="toc-number">8.</span> <span class="toc-text">实践</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#数学、算法、工程"><span class="toc-number">9.</span> <span class="toc-text">数学、算法、工程</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#不能狂"><span class="toc-number">10.</span> <span class="toc-text">不能狂</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#朋友"><span class="toc-number">11.</span> <span class="toc-text">朋友</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#初心，底线"><span class="toc-number">12.</span> <span class="toc-text">初心，底线</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#精神"><span class="toc-number">13.</span> <span class="toc-text">精神</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#爱情"><span class="toc-number">14.</span> <span class="toc-text">爱情</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#END"><span class="toc-number">15.</span> <span class="toc-text">END</span></a></li></ol>
  
   </div>
 
