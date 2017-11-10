@@ -75,97 +75,26 @@
 </div>
     </header>
     <div id="container">
-      <div id="main" class="post" itemscope itemprop="blogPost">
-    
-    <article itemprop="articleBody"> 
-        <header class="article-info clearfix">
-  <h1 itemprop="name">
-    
-      <a href="/2017/09/17/java-exception-table/" title="Java 异常表与异常处理原理" itemprop="url">Java 异常表与异常处理原理</a>
-  </h1>
-  <p class="article-author">By
-       
-		<a href="/about" title="liexing" target="_blank" itemprop="author">liexing</a>
-		
-  <p class="article-time">
-    <time datetime="2017-09-17T07:12:11.000Z" itemprop="datePublished"> 发表于 2017-09-17</time>
-<span id="busuanzi_container_page_pv">
-  &nbspViewed <span id="busuanzi_value_page_pv"></span> times
-</span>
-    
-  </p>
-</header>
-
-    <div class="article-content">
-        
-        <div id="toc" class="toc-article">
-            <strong class="toc-title">文章目录</strong>
-        
-            <ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#异常表"><span class="toc-number">1.</span> <span class="toc-text">异常表</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#异常表结构"><span class="toc-number">2.</span> <span class="toc-text">异常表结构</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#处理异常机制"><span class="toc-number">3.</span> <span class="toc-text">处理异常机制</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#异常处理实例"><span class="toc-number">4.</span> <span class="toc-text">异常处理实例</span></a></li></ol>
-        
-        </div>
-        
-        <p>Java 在代码中通过使用 <code>try{}catch(){}finally{}</code> 块来对异常进行捕获或者处理。但是对于 JVM 来说，是如何处理 try/catch 代码块与异常的呢。</p>
-<p>实际上 Java 编译后，会在代码后附加异常表的形式来实现 Java 的异常处理及 finally 机制（在 JDK1.4.2之前，javac 编译器使用 jsr 和 ret 指令来实现 finally 语句，但是1.4.2之后自动在每段可能的分支路径后将 finally 语句块内容冗余生成一遍来实现。JDK1.7及之后版本，则完全禁止在 Class 文件中使用 jsr 和 ret 指令）。</p>
-<h2 id="异常表"><a href="#异常表" class="headerlink" title="异常表"></a>异常表</h2><p>属性表（attribute_info）可以存在于 Class 文件、字段表、方法表中，用于描述某些场景的专有信息。属性表中有个 Code 属性，该属性在方法表中使用，Java 程序方法体中的代码被编译成的字节码指令存储在 Code 属性中。而异常表（exception_table）则是存储在 Code 属性表中的一个结构，这个结构是可选的。</p>
-<h2 id="异常表结构"><a href="#异常表结构" class="headerlink" title="异常表结构"></a>异常表结构</h2><p>异常表结构如下表所示。它包含四个字段：如果当字节码在第 start_pc 行到 end_pc 行之间（即[start_pc, end_pc)）出现了类型为 catch_type 或者其子类的异常（catch_type 为指向一个 CONSTANT_Class_info 型常量的索引），则跳转到第 handler_pc 行执行。如果 catch_type 为0，表示任意异常情况都需要转到 handler_pc 处进行处理。</p>
-<table>
-<thead>
-<tr>
-<th>类型</th>
-<th>名称</th>
-<th>数量</th>
-</tr>
-</thead>
-<tbody>
-<tr>
-<td>u2</td>
-<td>start_pc</td>
-<td>1</td>
-</tr>
-<tr>
-<td>u2</td>
-<td>end_pc</td>
-<td>1</td>
-</tr>
-<tr>
-<td>u2</td>
-<td>handler_pc</td>
-<td>1</td>
-</tr>
-<tr>
-<td>u2</td>
-<td>catch_type</td>
-<td>1</td>
-</tr>
-</tbody>
-</table>
-<h2 id="处理异常机制"><a href="#处理异常机制" class="headerlink" title="处理异常机制"></a>处理异常机制</h2><p>如上面所说，每个类编译后，都会跟随一个异常表，如果发生异常，首先在异常表中查找对应的行（即代码中相应的 <code>try{}catch(){}</code> 代码块），如果找到，则跳转到异常处理代码执行，如果没有找到，则返回（执行 finally 之后），并 copy 异常的应用给父调用者，接着查询父调用的异常表，以此类推。</p>
-<h2 id="异常处理实例"><a href="#异常处理实例" class="headerlink" title="异常处理实例"></a>异常处理实例</h2><p>对于 Java 源码：</p>
-<figure class="highlight java"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div></pre></td><td class="code"><pre><div class="line"><span class="function"><span class="keyword">public</span> <span class="keyword">int</span> <span class="title">inc</span><span class="params">()</span> </span>&#123;</div><div class="line">    <span class="keyword">int</span> x;</div><div class="line">    <span class="keyword">try</span> &#123;</div><div class="line">        x = <span class="number">1</span>;</div><div class="line">        <span class="keyword">return</span> x;</div><div class="line">    &#125; <span class="keyword">catch</span> (Exception e) &#123;</div><div class="line">        x = <span class="number">2</span>;</div><div class="line">        <span class="keyword">return</span> x;</div><div class="line">    &#125; <span class="keyword">finally</span> &#123;</div><div class="line">        x = <span class="number">3</span>;</div><div class="line">    &#125;</div><div class="line">&#125;</div></pre></td></tr></table></figure>
-<p>将其编译为 ByteCode 字节码：</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div><div class="line">30</div><div class="line">31</div><div class="line">32</div></pre></td><td class="code"><pre><div class="line">public int inc();</div><div class="line">  Code:</div><div class="line">    Stack=1, Locals=5, Args_size=1</div><div class="line">    0:	iconst_1		//try 中的x=1</div><div class="line">    1:	istore_1</div><div class="line">    2:	iload_1		//保存 x 到 returnValue 中</div><div class="line">    3:	istore	4</div><div class="line">    5:	iconst_3		//finally 中的 x=3</div><div class="line">    6:	istore_1</div><div class="line">    7: 	iload		4	//将 returnValue 中的值放到栈顶，准备给 ireturn 返回</div><div class="line">    9:	ireturn</div><div class="line">    10:	astore_2		//给 catch 中的 Exception e 赋值，存储在 Slot 2 中</div><div class="line">    11:	iconst_2		//catch 中的 x=2</div><div class="line">    12:	istore_1</div><div class="line">    13:	iload_1		//保存 x 到 returnValue 中，此时 x=2</div><div class="line">    14:	istore	4</div><div class="line">    16:	iconst_3		//finally 中的 x=3</div><div class="line">    17:	istore_1</div><div class="line">    18:	iload	4	//将 returnValue 中的值放到栈顶，准备给 ireturn 返回</div><div class="line">    20:	ireturn</div><div class="line">    21:	astore_3		//如果出现了不属于 java.lang.Exception 及其子类中的异常则到这里</div><div class="line">    22:	iconst_3		//finally 中的 x=3</div><div class="line">    23:	istore_1</div><div class="line">    24:	aload_3		//将异常放置到栈顶，并抛出</div><div class="line">    25:	athrow</div><div class="line">    </div><div class="line">    </div><div class="line">  Exception table:</div><div class="line">    from		to		target		type</div><div class="line">    0			5		10		Class java/lang/Exception</div><div class="line">    0			5		21		any</div><div class="line">    10		16		21		any</div></pre></td></tr></table></figure>
-<p>首先可以看到，对于 finally，编译器将每个可能出现的分支后都放置了冗余。并且编译器生成了三个异常表记录，从 Java 代码的语义上讲，执行路径分别为：</p>
-<blockquote>
-<ol>
-<li>如果 try 语句块中出现了属于 Exception 及其子类的异常，则跳转到 catch 处理；</li>
-<li>如果 try 语句块中出现了不属于 Exception 及其子类的异常，则跳转到 finally 处理；</li>
-<li>如果 catch 语句块中出现了任何异常，则跳转到 finally 处理。</li>
-</ol>
-</blockquote>
-<p>由此可以分析此段代码可能的返回结果：</p>
-<blockquote>
-<ol>
-<li>如果没有出现异常，返回1；</li>
-<li>如果出现 Exception 异常，返回2；</li>
-<li>如果出现了 Exception 意外的异常，非正常退出，没有返回；</li>
-</ol>
-</blockquote>
-<p>我们来分析字节码：</p>
-<p>首先，0-4行，就是把整数1赋值给 x，并且将此时 x 的值复制一个副本到本地变量表的 Slot 中（即 returnValue），这个 Slot 里面的值在 ireturn 指令执行前会被重新读到栈顶，作为返回值。这是如果没有异常，则执行5-9行，把 x 赋值为3，然后返回 returnValue 中保存的1，方法结束。如果出现异常，读取异常表发现应该执行第10行，pc 寄存器指针转向10行，10-20行就是把2赋值给 x，然后把 x 赋值给 returnValue，再将 x 赋值为3，然后将 returnValue 中的2读到操作栈顶返回。第21行开始是把 x 赋值为3并且将栈顶的异常抛出，方法结束。</p>
-
-    </div>
-    
+      <div id="main" class="<%= item.layout %>" itemscope itemprop="blogPost">
+  <% if (page.layout=='photo' && item.photos && item.photos.length){ %>
+    <%- partial('gallery') %>
+  <% } %>
+	<article itemprop="articleBody"> 
+		<%- partial('header') %>
+	<div class="article-content">
+		<% if( table&&(item.toc !== false) && theme.toc.article){ %>
+		<div id="toc" class="toc-article">
+			<strong class="toc-title"><%= __('contents') %></strong>
+		<% if(item.list_number == false) {%>
+		<%- toc(item.content,{list_number:false}) %>
+		<% }else{ %>
+			<%- toc(item.content) %>
+		<% } %>
+		</div>
+		<% } %>
+		<%- item.content %>  
+	</div>
+    <% if (theme.donate) { %>
         <!-- css -->
         <style type="text/css">
             .center {
@@ -213,7 +142,7 @@
             <br>
             <a id="btn_donate" class="btn_donate" target="_self" href="javascript:;" title="Donate 打赏"></a>
             <span class="donate_txt">
-                如果对你有帮助，可以赏我一杯咖啡~
+                <%= theme.donate.text %>
             </span>
                 
             
@@ -226,23 +155,23 @@
             <br>
             ------------------------------------------------------------------------------------------------------------------------------
             <br>
-            
+            <% if(theme.donate.web) { %>
             <div width="100%" align="center"><div name="dashmain" id="dash-main-id-879873" class="dash-main-3 879873-0.99"></div></div>
             <script type="text/javascript" charset="utf-8" src="http://www.dashangcloud.com/static/ds.js"></script>
-            
+            <% } %>
 
-            <a href="http://7xl6z1.com1.z0.glb.clouddn.com/static/images/theme/reward_wechat.jpg" title="用微信扫一扫哦~" class="fancybox" rel="article0">
-                <img src="http://7xl6z1.com1.z0.glb.clouddn.com/static/images/theme/reward_wechat.jpg" title="微信打赏 Donate" height="190px" width="auto"/>
+            <a href="<%= theme.donate.wechat %>" title="用微信扫一扫哦~" class="fancybox" rel="article0">
+                <img src="<%= theme.donate.wechat %>" title="微信打赏 Donate" height="190px" width="auto"/>
             </a>
             
             &nbsp;&nbsp;
 
-            <a href="http://7xl6z1.com1.z0.glb.clouddn.com/static/images/theme/reward_alipay.jpg" title="用支付宝扫一扫即可~" class="fancybox" rel="article0">
-                <img src="http://7xl6z1.com1.z0.glb.clouddn.com/static/images/theme/reward_alipay.jpg" title="支付宝打赏 Donate" height="190px" width="auto"/>
+            <a href="<%= theme.donate.alipay %>" title="用支付宝扫一扫即可~" class="fancybox" rel="article0">
+                <img src="<%= theme.donate.alipay %>" title="支付宝打赏 Donate" height="190px" width="auto"/>
             </a>
 
             <span class="donate_txt">
-                如果对你有帮助，可以赏我一杯咖啡~
+                <%= theme.donate.text %>
             </span>
 
         </div>
@@ -270,67 +199,11 @@
         <!-- /donate script -->
     </div>
     <!-- /Donate Module -->
-       
-		<footer class="article-footer clearfix">
-<div class="article-catetags">
-
-<div class="article-categories">
-  <span></span>
-  <a class="article-category-link" href="/categories/Java/">Java</a>
-</div>
-
-
-  <div class="article-tags">
-  
-  <span></span> <a href="/tags/JVM/">JVM</a><a href="/tags/异常处理/">异常处理</a><a href="/tags/异常表/">异常表</a>
-  </div>
-
-</div>
-
-
-
-	<div class="article-share" id="share">
-	
-	  <div data-url="http://blog.liexing.me/2017/09/17/java-exception-table/" data-title="Java 异常表与异常处理原理 | Liexing&#39;s Blog" data-tsina="1915625641" class="share clearfix">
-	  </div>
-	
-	</div>
-
-
-</footer>
-
-   	       
+       <% } %>
+		<%- partial('footer') %>   	       
 	</article>
-	
-<nav class="article-nav clearfix">
- 
- <div class="prev" >
- <a href="/2017/10/24/deep-learning-weight-initialization/" title="调参工程学 - Weight Initialization">
-  <strong>上一篇：</strong><br/>
-  <span>
-  调参工程学 - Weight Initialization</span>
-</a>
-</div>
-
-
-<div class="next">
-<a href="/2017/08/11/macos-dev-setup/"  title="macOS 开发配置">
- <strong>下一篇：</strong><br/> 
- <span>macOS 开发配置
-</span>
-</a>
-</div>
-
-</nav>
-
-	
-
-<section id="comments" class="comment">
-  <div id="disqus_thread">
-    <noscript>Please enable JavaScript to view the <a href="//disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
-  </div>
-</section>
-
+	<%- partial('pagination') %>
+	<%- partial('comment') %>
 </div>  
 
       <div class="openaside"><a class="navbutton" href="#" title="显示侧边栏"></a></div>
@@ -497,10 +370,12 @@
 		</p>
 </div>
 </footer>
-    <script src="<%- config.root %>js/jquery-2.0.3.min.js"></script>
-<script src="<%- config.root %>js/jquery.imagesloaded.min.js"></script>
-<script src="<%- config.root %>js/gallery.js"></script>
-<script src="<%- config.root %>js/jquery.qrcode-0.12.0.min.js"></script>
+    <script src="/js/jquery-2.0.3.min.js"></script>
+<script src="/js/jquery.imagesloaded.min.js"></script>
+<script src="/js/gallery.js"></script>
+<script src="/js/jquery.qrcode-0.12.0.min.js"></script>
+<script async src="//dn-lbstatics.qbox.me/busuanzi/2.3/busuanzi.pure.mini.js">
+</script>
 
 <script type="text/javascript">
 $(document).ready(function(){ 
@@ -532,12 +407,7 @@ $(document).ready(function(){
   $(window).scroll(function(){
     o.css("top",Math.max(80,260-$(this).scrollTop()));
   });
-  <% if (is_post() && theme.close_aside) { %>
-        getSize();
-        if (myWidth >= 1024) {
-          c.click();
-        }
-  <% } %>
+  
   $(window).resize(function(){
     getSize(); 
     if (myWidth >= 1024) {
@@ -546,14 +416,14 @@ $(document).ready(function(){
       m.removeClass('moveMain');
       a.css('display', 'block').removeClass('fadeOut');
       o.css('display', 'none');
-      <% if( is_post()&&(page.toc !== false) && theme.toc.aside){ %>
+      
       $('#toc.toc-aside').css('display', 'none');
-      <% } %>  
+        
     }
   });
 });
 </script>
-<% if (is_post()) { %>
+
 <script type="text/javascript">
 $(document).ready(function(){ 
   var ai = $('.article-content>iframe'),
@@ -579,8 +449,8 @@ $(document).ready(function(){
   });
 });
 </script>
-<% } %>
-<% if ((page.layout=='post'||page.layout=='page'||page.layout=='photo')&&!theme.jiathis.enable) { %>
+
+
 <script type="text/javascript">
 $(document).ready(function(){ 
   var $this = $('.share'),
@@ -629,28 +499,14 @@ $(document).ready(function(){
   });
 });   
 </script>
-<% } %>
 
-<% if (theme.duoshuo_shortname && page.comments){ %>
+
+
+
 <script type="text/javascript">
-  var duoshuoQuery = {short_name:"<%= theme.duoshuo_shortname %>"};
-  (function() {
-    var ds = document.createElement('script');
-    ds.type = 'text/javascript';ds.async = true;
-    ds.src = '//7xl6z1.com1.z0.glb.clouddn.com/embed_ua.js';
-    ds.charset = 'UTF-8';
-    (document.getElementsByTagName('head')[0] 
-    || document.getElementsByTagName('body')[0]).appendChild(ds);
-  })();
-</script> 
-<% } %>
-<% if( (config.disqus_shortname || theme.disqus_shortname) && page.comments) { %>
-<script type="text/javascript">
-<% if(config.disqus_shortname){ %>
-var disqus_shortname = '<%= config.disqus_shortname %>';
-<% }else{ %>
-var disqus_shortname = '<%= theme.disqus_shortname %>';
-<% } %>
+
+var disqus_shortname = 'liexing';
+
 (function(){
   var dsq = document.createElement('script');
   dsq.type = 'text/javascript';
@@ -666,32 +522,14 @@ var disqus_shortname = '<%= theme.disqus_shortname %>';
   (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
 }());
 </script>
-<% } %>
 
 
 
-<% if (page.layout=='tags'||page.layout=='categories'){ %>
-<script type="text/javascript">
-$(document).ready(function(){ 
-  var list    = $('.archive-title a'),
-      box     = $('.all-list-box'),
-      first   = $('.archive-title a:first-of-type');
-      box.load(first.attr('data-src').toString()+' #archive-page');
-      first.addClass('current');
-  list.each(function(){
-    $(this).click(function(){
-      var listSrc=$(this).attr('data-src').toString()+' #archive-page';
-      box.load(listSrc);
-      list.removeClass('current');
-      $(this).addClass('current');
-     });  
-    });
-  }); 
-</script>
-<% } %>
-<% if (theme.fancybox){ %>
-<link rel="stylesheet" href="<%- config.root %>fancybox/jquery.fancybox.css" media="screen" type="text/css">
-<script src="<%- config.root %>fancybox/jquery.fancybox.pack.js"></script>
+
+
+
+<link rel="stylesheet" href="/fancybox/jquery.fancybox.css" media="screen" type="text/css">
+<script src="/fancybox/jquery.fancybox.pack.js"></script>
 <script type="text/javascript">
 $(document).ready(function(){ 
   $('.article-content').each(function(i){
@@ -710,23 +548,76 @@ $(document).ready(function(){
   }
 }); 
 </script>
-<% } %>
+
 
 
 <!-- Analytics Begin -->
-<%- partial('analytics') %>
+
+
+
+<script>
+var _hmt = _hmt || [];
+(function() {
+  var hm = document.createElement("script");
+  hm.src = "//hm.baidu.com/hm.js?e6d1f421bbc9962127a50488f9ed37d1";
+  var s = document.getElementsByTagName("script")[0]; 
+  s.parentNode.insertBefore(hm, s);
+})();
+</script>
+
+
+
+<span style="display:none"><script type="text/javascript">var cnzz_protocol = (("https:" == document.location.protocol) ? " https://" : " http://");document.write(unescape("%3Cspan id='cnzz_stat_icon_1256113107'%3E%3C/span%3E%3Cscript src='" + cnzz_protocol + "s23.cnzz.com/z_stat.php%3Fid%3D1256113107' type='text/javascript'%3E%3C/script%3E"));</script></span>
+
+
 <!-- Analytics End -->
 
 <!-- Totop Begin -->
-<%- partial('totop') %>
+
+	<div id="totop">
+	<a title="返回顶部"><img src="/img/scrollup.png"/></a>
+	</div>
+	<script src="/js/totop.js"></script>
+
 <!-- Totop End -->
 
 <!-- MathJax Begin -->
-<%- partial('mathjax') %>
+<!-- mathjax config similar to math.stackexchange -->
+
+<script type="text/x-mathjax-config">
+  MathJax.Hub.Config({
+    tex2jax: {
+      inlineMath: [ ['$','$'], ["\\(","\\)"] ],
+      processEscapes: true
+    }
+  });
+</script>
+
+<script type="text/x-mathjax-config">
+    MathJax.Hub.Config({
+      tex2jax: {
+        skipTags: ['script', 'noscript', 'style', 'textarea', 'pre', 'code']
+      }
+    });
+</script>
+
+<script type="text/x-mathjax-config">
+    MathJax.Hub.Queue(function() {
+        var all = MathJax.Hub.getAllJax(), i;
+        for(i=0; i < all.length; i += 1) {
+            all[i].SourceElement().parentNode.className += ' has-jax';
+        }
+    });
+</script>
+
+<script type="text/javascript" src="http://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML">
+</script>
+
+
 <!-- MathJax End -->
 
 <!-- Tiny_search Begin -->
-<%- partial('tinysou_search') %>
+
 <!-- Tiny_search End -->
 
   </body>

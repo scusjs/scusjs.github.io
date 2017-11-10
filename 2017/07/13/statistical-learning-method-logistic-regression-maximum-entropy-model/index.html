@@ -77,54 +77,26 @@
 </div>
     </header>
     <div id="container">
-      <div id="main" class="post" itemscope itemprop="blogPost">
-    
-    <article itemprop="articleBody"> 
-        <header class="article-info clearfix">
-  <h1 itemprop="name">
-    
-      <a href="/2017/07/13/statistical-learning-method-logistic-regression-maximum-entropy-model/" title="统计学习方法（笔记）-逻辑斯谛回归与最大熵模型" itemprop="url">统计学习方法（笔记）-逻辑斯谛回归与最大熵模型</a>
-  </h1>
-  <p class="article-author">By
-       
-		<a href="/about" title="liexing" target="_blank" itemprop="author">liexing</a>
-		
-  <p class="article-time">
-    <time datetime="2017-07-13T11:29:50.000Z" itemprop="datePublished"> 发表于 2017-07-13</time>
-<span id="busuanzi_container_page_pv">
-  &nbspViewed <span id="busuanzi_value_page_pv"></span> times
-</span>
-    
-  </p>
-</header>
-
-    <div class="article-content">
-        
-        <div id="toc" class="toc-article">
-            <strong class="toc-title">文章目录</strong>
-        
-            <ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link" href="#逻辑斯谛回归模型"><span class="toc-number">1.</span> <span class="toc-text">逻辑斯谛回归模型</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#最大熵模型"><span class="toc-number">2.</span> <span class="toc-text">最大熵模型</span></a></li></ol>
-        
-        </div>
-        
-        <p>逻辑斯谛回归（Logistic regression）是统计学习中的经典<strong>分类方法</strong>，最大熵是概率模型学习的一个准则，将其推广到分类问题得到最大熵模型。逻辑斯谛回归模型与最大熵模型都是属于对数线性模型。</p>
-<h1 id="逻辑斯谛回归模型"><a href="#逻辑斯谛回归模型" class="headerlink" title="逻辑斯谛回归模型"></a>逻辑斯谛回归模型</h1><p>逻辑斯谛分布的分布函数和密度函数如下：</p>
-<p>$$F(x) = P(X &lt;= x) = \frac{1}{1+e^{-(x - \mu) / \gamma}}$$</p>
-<p>$$f(x) = F’(x) = \frac{e^{-(x-\mu) / \gamma}}{\gamma (1+e^{-(x-\mu) / \gamma})^2}$$</p>
-<p>其中$\mu$为位置参数；$\gamma &gt; 0$为形状参数，值越小，分布越集中于$\mu$附近。其分布的密度函数与分布函数如图：</p>
-<img title="逻辑斯谛分布的密度函数与分布函数" alt="逻辑斯谛分布的密度函数与分布函数" src="http://7xl6z1.com1.z0.glb.clouddn.com/static/images/statistical-learning-method/1499954622.jpg">
-<p>二项逻辑斯谛回归模型是如下的条件概率分布：</p>
-<p>$$P(Y=1|x) = \frac{exp(w \cdot x + b)}{1+ exp(w \cdot x + b)}$$<br>$$P(Y=0|x) = \frac{1}{1+ exp(w \cdot x + b)}$$</p>
-<p>逻辑斯谛回归模型是指，输出$Y=1$的对数几率，其是由输入$x$的线性函数表示的模型。可以用极大似然估计法估计模型参数，从而得到逻辑斯谛回归模型。学习过程通常采用的方法是梯度下降法及拟牛顿法。</p>
-<h1 id="最大熵模型"><a href="#最大熵模型" class="headerlink" title="最大熵模型"></a>最大熵模型</h1><p>最大熵原理认为，学习概率模型时，在所有可能的概率模型（分布）中，熵最大的模型是最好的模型。通常用约束条件来确定概率模型的集合，所以最大熵原理也可以表述为在满足约束条件的模型集合汇总选取熵最大的模型。最大熵模型的学习可以形式化为约束最优化问题：</p>
-<p>$$\max_{P \in C} H(P) = - \sum_{x,y}\tilde{P}(x)p(y|x)logP(y|x)$$<br>$$s.t. \qquad E_p(f_i) = E_\tilde{p}(f_i) $$<br>$$\qquad \sum_yP(y|x)=1$$</p>
-<p>最大熵模型是由以下条件概率分布表示的分类模型：</p>
-<p>$$P_w(y|x) = \frac{1}{Z_w(x)}exp(\sum_{i=1}^{n}w_if_i(x,y))$$<br>$$Z_w(x)=\sum_yexp(\sum_{i=1}^{n}w_if_i(x,y))$$</p>
-<p>其中$Z_w(x)$是规范化因子，$f_i$为特征函数，$w_i$为特征的权值。</p>
-<p>逻辑斯谛回归模型与最大熵模型都属于对数线性模型。二者的学习一般采用极大似然估计，或正则化的极大似然估计。逻辑斯谛回归模型及最大熵模型学习可以形式化为无约束最优化问题。求解该最优化问题的算法有改进的迭代尺度法、梯度下降法、拟牛顿法。</p>
-
-    </div>
-    
+      <div id="main" class="<%= item.layout %>" itemscope itemprop="blogPost">
+  <% if (page.layout=='photo' && item.photos && item.photos.length){ %>
+    <%- partial('gallery') %>
+  <% } %>
+	<article itemprop="articleBody"> 
+		<%- partial('header') %>
+	<div class="article-content">
+		<% if( table&&(item.toc !== false) && theme.toc.article){ %>
+		<div id="toc" class="toc-article">
+			<strong class="toc-title"><%= __('contents') %></strong>
+		<% if(item.list_number == false) {%>
+		<%- toc(item.content,{list_number:false}) %>
+		<% }else{ %>
+			<%- toc(item.content) %>
+		<% } %>
+		</div>
+		<% } %>
+		<%- item.content %>  
+	</div>
+    <% if (theme.donate) { %>
         <!-- css -->
         <style type="text/css">
             .center {
@@ -172,7 +144,7 @@
             <br>
             <a id="btn_donate" class="btn_donate" target="_self" href="javascript:;" title="Donate 打赏"></a>
             <span class="donate_txt">
-                如果对你有帮助，可以赏我一杯咖啡~
+                <%= theme.donate.text %>
             </span>
                 
             
@@ -185,23 +157,23 @@
             <br>
             ------------------------------------------------------------------------------------------------------------------------------
             <br>
-            
+            <% if(theme.donate.web) { %>
             <div width="100%" align="center"><div name="dashmain" id="dash-main-id-879873" class="dash-main-3 879873-0.99"></div></div>
             <script type="text/javascript" charset="utf-8" src="http://www.dashangcloud.com/static/ds.js"></script>
-            
+            <% } %>
 
-            <a href="http://7xl6z1.com1.z0.glb.clouddn.com/static/images/theme/reward_wechat.jpg" title="用微信扫一扫哦~" class="fancybox" rel="article0">
-                <img src="http://7xl6z1.com1.z0.glb.clouddn.com/static/images/theme/reward_wechat.jpg" title="微信打赏 Donate" height="190px" width="auto"/>
+            <a href="<%= theme.donate.wechat %>" title="用微信扫一扫哦~" class="fancybox" rel="article0">
+                <img src="<%= theme.donate.wechat %>" title="微信打赏 Donate" height="190px" width="auto"/>
             </a>
             
             &nbsp;&nbsp;
 
-            <a href="http://7xl6z1.com1.z0.glb.clouddn.com/static/images/theme/reward_alipay.jpg" title="用支付宝扫一扫即可~" class="fancybox" rel="article0">
-                <img src="http://7xl6z1.com1.z0.glb.clouddn.com/static/images/theme/reward_alipay.jpg" title="支付宝打赏 Donate" height="190px" width="auto"/>
+            <a href="<%= theme.donate.alipay %>" title="用支付宝扫一扫即可~" class="fancybox" rel="article0">
+                <img src="<%= theme.donate.alipay %>" title="支付宝打赏 Donate" height="190px" width="auto"/>
             </a>
 
             <span class="donate_txt">
-                如果对你有帮助，可以赏我一杯咖啡~
+                <%= theme.donate.text %>
             </span>
 
         </div>
@@ -229,67 +201,11 @@
         <!-- /donate script -->
     </div>
     <!-- /Donate Module -->
-       
-		<footer class="article-footer clearfix">
-<div class="article-catetags">
-
-<div class="article-categories">
-  <span></span>
-  <a class="article-category-link" href="/categories/统计学习/">统计学习</a>
-</div>
-
-
-  <div class="article-tags">
-  
-  <span></span> <a href="/tags/笔记/">笔记</a><a href="/tags/统计学习/">统计学习</a><a href="/tags/机器学习/">机器学习</a><a href="/tags/逻辑斯谛回归/">逻辑斯谛回归</a><a href="/tags/最大熵模型/">最大熵模型</a>
-  </div>
-
-</div>
-
-
-
-	<div class="article-share" id="share">
-	
-	  <div data-url="http://blog.liexing.me/2017/07/13/statistical-learning-method-logistic-regression-maximum-entropy-model/" data-title="统计学习方法（笔记）-逻辑斯谛回归与最大熵模型 | Liexing&#39;s Blog" data-tsina="1915625641" class="share clearfix">
-	  </div>
-	
-	</div>
-
-
-</footer>
-
-   	       
+       <% } %>
+		<%- partial('footer') %>   	       
 	</article>
-	
-<nav class="article-nav clearfix">
- 
- <div class="prev" >
- <a href="/2017/07/31/java-memory-model/" title="Java 内存模型">
-  <strong>上一篇：</strong><br/>
-  <span>
-  Java 内存模型</span>
-</a>
-</div>
-
-
-<div class="next">
-<a href="/2016/11/07/statistical-learning-method-decision-tree/"  title="统计学习方法（笔记）-决策树">
- <strong>下一篇：</strong><br/> 
- <span>统计学习方法（笔记）-决策树
-</span>
-</a>
-</div>
-
-</nav>
-
-	
-
-<section id="comments" class="comment">
-  <div id="disqus_thread">
-    <noscript>Please enable JavaScript to view the <a href="//disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
-  </div>
-</section>
-
+	<%- partial('pagination') %>
+	<%- partial('comment') %>
 </div>  
 
       <div class="openaside"><a class="navbutton" href="#" title="显示侧边栏"></a></div>
@@ -456,10 +372,12 @@
 		</p>
 </div>
 </footer>
-    <script src="<%- config.root %>js/jquery-2.0.3.min.js"></script>
-<script src="<%- config.root %>js/jquery.imagesloaded.min.js"></script>
-<script src="<%- config.root %>js/gallery.js"></script>
-<script src="<%- config.root %>js/jquery.qrcode-0.12.0.min.js"></script>
+    <script src="/js/jquery-2.0.3.min.js"></script>
+<script src="/js/jquery.imagesloaded.min.js"></script>
+<script src="/js/gallery.js"></script>
+<script src="/js/jquery.qrcode-0.12.0.min.js"></script>
+<script async src="//dn-lbstatics.qbox.me/busuanzi/2.3/busuanzi.pure.mini.js">
+</script>
 
 <script type="text/javascript">
 $(document).ready(function(){ 
@@ -491,12 +409,7 @@ $(document).ready(function(){
   $(window).scroll(function(){
     o.css("top",Math.max(80,260-$(this).scrollTop()));
   });
-  <% if (is_post() && theme.close_aside) { %>
-        getSize();
-        if (myWidth >= 1024) {
-          c.click();
-        }
-  <% } %>
+  
   $(window).resize(function(){
     getSize(); 
     if (myWidth >= 1024) {
@@ -505,14 +418,14 @@ $(document).ready(function(){
       m.removeClass('moveMain');
       a.css('display', 'block').removeClass('fadeOut');
       o.css('display', 'none');
-      <% if( is_post()&&(page.toc !== false) && theme.toc.aside){ %>
+      
       $('#toc.toc-aside').css('display', 'none');
-      <% } %>  
+        
     }
   });
 });
 </script>
-<% if (is_post()) { %>
+
 <script type="text/javascript">
 $(document).ready(function(){ 
   var ai = $('.article-content>iframe'),
@@ -538,8 +451,8 @@ $(document).ready(function(){
   });
 });
 </script>
-<% } %>
-<% if ((page.layout=='post'||page.layout=='page'||page.layout=='photo')&&!theme.jiathis.enable) { %>
+
+
 <script type="text/javascript">
 $(document).ready(function(){ 
   var $this = $('.share'),
@@ -588,28 +501,14 @@ $(document).ready(function(){
   });
 });   
 </script>
-<% } %>
 
-<% if (theme.duoshuo_shortname && page.comments){ %>
+
+
+
 <script type="text/javascript">
-  var duoshuoQuery = {short_name:"<%= theme.duoshuo_shortname %>"};
-  (function() {
-    var ds = document.createElement('script');
-    ds.type = 'text/javascript';ds.async = true;
-    ds.src = '//7xl6z1.com1.z0.glb.clouddn.com/embed_ua.js';
-    ds.charset = 'UTF-8';
-    (document.getElementsByTagName('head')[0] 
-    || document.getElementsByTagName('body')[0]).appendChild(ds);
-  })();
-</script> 
-<% } %>
-<% if( (config.disqus_shortname || theme.disqus_shortname) && page.comments) { %>
-<script type="text/javascript">
-<% if(config.disqus_shortname){ %>
-var disqus_shortname = '<%= config.disqus_shortname %>';
-<% }else{ %>
-var disqus_shortname = '<%= theme.disqus_shortname %>';
-<% } %>
+
+var disqus_shortname = 'liexing';
+
 (function(){
   var dsq = document.createElement('script');
   dsq.type = 'text/javascript';
@@ -625,32 +524,14 @@ var disqus_shortname = '<%= theme.disqus_shortname %>';
   (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
 }());
 </script>
-<% } %>
 
 
 
-<% if (page.layout=='tags'||page.layout=='categories'){ %>
-<script type="text/javascript">
-$(document).ready(function(){ 
-  var list    = $('.archive-title a'),
-      box     = $('.all-list-box'),
-      first   = $('.archive-title a:first-of-type');
-      box.load(first.attr('data-src').toString()+' #archive-page');
-      first.addClass('current');
-  list.each(function(){
-    $(this).click(function(){
-      var listSrc=$(this).attr('data-src').toString()+' #archive-page';
-      box.load(listSrc);
-      list.removeClass('current');
-      $(this).addClass('current');
-     });  
-    });
-  }); 
-</script>
-<% } %>
-<% if (theme.fancybox){ %>
-<link rel="stylesheet" href="<%- config.root %>fancybox/jquery.fancybox.css" media="screen" type="text/css">
-<script src="<%- config.root %>fancybox/jquery.fancybox.pack.js"></script>
+
+
+
+<link rel="stylesheet" href="/fancybox/jquery.fancybox.css" media="screen" type="text/css">
+<script src="/fancybox/jquery.fancybox.pack.js"></script>
 <script type="text/javascript">
 $(document).ready(function(){ 
   $('.article-content').each(function(i){
@@ -669,23 +550,76 @@ $(document).ready(function(){
   }
 }); 
 </script>
-<% } %>
+
 
 
 <!-- Analytics Begin -->
-<%- partial('analytics') %>
+
+
+
+<script>
+var _hmt = _hmt || [];
+(function() {
+  var hm = document.createElement("script");
+  hm.src = "//hm.baidu.com/hm.js?e6d1f421bbc9962127a50488f9ed37d1";
+  var s = document.getElementsByTagName("script")[0]; 
+  s.parentNode.insertBefore(hm, s);
+})();
+</script>
+
+
+
+<span style="display:none"><script type="text/javascript">var cnzz_protocol = (("https:" == document.location.protocol) ? " https://" : " http://");document.write(unescape("%3Cspan id='cnzz_stat_icon_1256113107'%3E%3C/span%3E%3Cscript src='" + cnzz_protocol + "s23.cnzz.com/z_stat.php%3Fid%3D1256113107' type='text/javascript'%3E%3C/script%3E"));</script></span>
+
+
 <!-- Analytics End -->
 
 <!-- Totop Begin -->
-<%- partial('totop') %>
+
+	<div id="totop">
+	<a title="返回顶部"><img src="/img/scrollup.png"/></a>
+	</div>
+	<script src="/js/totop.js"></script>
+
 <!-- Totop End -->
 
 <!-- MathJax Begin -->
-<%- partial('mathjax') %>
+<!-- mathjax config similar to math.stackexchange -->
+
+<script type="text/x-mathjax-config">
+  MathJax.Hub.Config({
+    tex2jax: {
+      inlineMath: [ ['$','$'], ["\\(","\\)"] ],
+      processEscapes: true
+    }
+  });
+</script>
+
+<script type="text/x-mathjax-config">
+    MathJax.Hub.Config({
+      tex2jax: {
+        skipTags: ['script', 'noscript', 'style', 'textarea', 'pre', 'code']
+      }
+    });
+</script>
+
+<script type="text/x-mathjax-config">
+    MathJax.Hub.Queue(function() {
+        var all = MathJax.Hub.getAllJax(), i;
+        for(i=0; i < all.length; i += 1) {
+            all[i].SourceElement().parentNode.className += ' has-jax';
+        }
+    });
+</script>
+
+<script type="text/javascript" src="http://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML">
+</script>
+
+
 <!-- MathJax End -->
 
 <!-- Tiny_search Begin -->
-<%- partial('tinysou_search') %>
+
 <!-- Tiny_search End -->
 
   </body>
