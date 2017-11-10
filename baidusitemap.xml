@@ -5,7 +5,7 @@
     
   <url>
     <loc>http://blog.liexing.me/2017/11/10/a-letter-to-18/</loc>
-    <lastmod>2017-11-10T08:35:03.120Z</lastmod>
+    <lastmod>2017-11-10T08:45:59.636Z</lastmod>
     <data>
         <display>
         <title>写给18岁的自己</title>
@@ -144,18 +144,20 @@
     
     
   <url>
-    <loc>http://blog.liexing.me/2016/04/15/druid-indexing-service/</loc>
+    <loc>http://blog.liexing.me/2016/05/19/druid-indexing-service-process-analysis/</loc>
     <lastmod>2017-02-27T11:34:45.000Z</lastmod>
     <data>
         <display>
-        <title>Druid Indexing Service（索引服务）</title>
-        <pubTime>2016-04-15T02:47:47.000Z</pubTime>
+        <title>Druid Indexing Service过程分析</title>
+        <pubTime>2016-05-19T10:21:48.000Z</pubTime>
         
         <tag>分布式</tag>
          
         <tag>Druid</tag>
          
         <tag>实时计算</tag>
+         
+        <tag>源码分析</tag>
          
          
            
@@ -168,25 +170,25 @@
 
     
   <url>
-    <loc>http://blog.liexing.me/2016/04/25/druid-querying/</loc>
+    <loc>http://blog.liexing.me/2016/08/25/cassandra-architecture-in-brief/</loc>
     <lastmod>2017-02-27T11:34:45.000Z</lastmod>
     <data>
         <display>
-        <title>Druid Querying</title>
-        <pubTime>2016-04-25T08:42:33.000Z</pubTime>
+        <title>Cassandra 架构简述</title>
+        <pubTime>2016-08-25T13:25:01.000Z</pubTime>
         
+        <tag>Cassandra</tag>
+         
         <tag>笔记</tag>
          
         <tag>分布式</tag>
          
-        <tag>Druid</tag>
-         
-        <tag>实时计算</tag>
+        <tag>NOSQL</tag>
          
          
            
              
-              <breadCrumb title="Druid" url="http://blog.liexing.me/categories/Druid/"/>
+              <breadCrumb title="Cassandra" url="http://blog.liexing.me/categories/Cassandra/"/>
           
         </display>
     </data>
@@ -218,58 +220,6 @@
 
     
   <url>
-    <loc>http://blog.liexing.me/2016/08/25/cassandra-architecture-in-brief/</loc>
-    <lastmod>2017-02-27T11:34:45.000Z</lastmod>
-    <data>
-        <display>
-        <title>Cassandra 架构简述</title>
-        <pubTime>2016-08-25T13:25:01.000Z</pubTime>
-        
-        <tag>笔记</tag>
-         
-        <tag>Cassandra</tag>
-         
-        <tag>分布式</tag>
-         
-        <tag>NOSQL</tag>
-         
-         
-           
-             
-              <breadCrumb title="Cassandra" url="http://blog.liexing.me/categories/Cassandra/"/>
-          
-        </display>
-    </data>
-    </url>
-
-    
-  <url>
-    <loc>http://blog.liexing.me/2016/09/08/cassandra-architecture/</loc>
-    <lastmod>2017-02-27T11:34:45.000Z</lastmod>
-    <data>
-        <display>
-        <title>Cassandra 架构</title>
-        <pubTime>2016-09-08T07:54:29.000Z</pubTime>
-        
-        <tag>笔记</tag>
-         
-        <tag>Cassandra</tag>
-         
-        <tag>分布式</tag>
-         
-        <tag>NOSQL</tag>
-         
-         
-           
-             
-              <breadCrumb title="Cassandra" url="http://blog.liexing.me/categories/Cassandra/"/>
-          
-        </display>
-    </data>
-    </url>
-
-    
-  <url>
     <loc>http://blog.liexing.me/2016/01/05/longest-common-subsequence/</loc>
     <lastmod>2017-02-27T11:34:45.000Z</lastmod>
     <data>
@@ -294,6 +244,56 @@
 
     
   <url>
+    <loc>http://blog.liexing.me/2016/09/08/cassandra-architecture/</loc>
+    <lastmod>2017-02-27T11:34:45.000Z</lastmod>
+    <data>
+        <display>
+        <title>Cassandra 架构</title>
+        <pubTime>2016-09-08T07:54:29.000Z</pubTime>
+        
+        <tag>Cassandra</tag>
+         
+        <tag>笔记</tag>
+         
+        <tag>分布式</tag>
+         
+        <tag>NOSQL</tag>
+         
+         
+           
+             
+              <breadCrumb title="Cassandra" url="http://blog.liexing.me/categories/Cassandra/"/>
+          
+        </display>
+    </data>
+    </url>
+
+    
+  <url>
+    <loc>http://blog.liexing.me/2016/04/15/druid-indexing-service/</loc>
+    <lastmod>2017-02-27T11:34:45.000Z</lastmod>
+    <data>
+        <display>
+        <title>Druid Indexing Service（索引服务）</title>
+        <pubTime>2016-04-15T02:47:47.000Z</pubTime>
+        
+        <tag>分布式</tag>
+         
+        <tag>Druid</tag>
+         
+        <tag>实时计算</tag>
+         
+         
+           
+             
+              <breadCrumb title="Druid" url="http://blog.liexing.me/categories/Druid/"/>
+          
+        </display>
+    </data>
+    </url>
+
+    
+  <url>
     <loc>http://blog.liexing.me/2016/04/21/auto-ssh-to-server/</loc>
     <lastmod>2017-02-27T11:34:45.000Z</lastmod>
     <data>
@@ -301,11 +301,11 @@
         <title>SSH 自动连接脚本</title>
         <pubTime>2016-04-21T07:50:30.000Z</pubTime>
         
+        <tag>笔记</tag>
+         
         <tag>linux</tag>
          
         <tag>bash</tag>
-         
-        <tag>笔记</tag>
          
          
            
@@ -318,19 +318,23 @@
 
     
   <url>
-    <loc>http://blog.liexing.me/2015/09/01/oh-my-hexo/</loc>
+    <loc>http://blog.liexing.me/2016/06/16/druid-command-line-hadoop-indexer/</loc>
     <lastmod>2017-02-27T11:34:45.000Z</lastmod>
     <data>
         <display>
-        <title>Oh My Hexo</title>
-        <pubTime>2015-08-31T17:04:30.000Z</pubTime>
+        <title>Druid Command Line Hadoop Indexer启动流程</title>
+        <pubTime>2016-06-16T09:23:16.000Z</pubTime>
         
-        <tag>hexo</tag>
+        <tag>分布式</tag>
+         
+        <tag>Druid</tag>
+         
+        <tag>实时计算</tag>
          
          
            
              
-              <breadCrumb title="建站相关" url="http://blog.liexing.me/categories/%E5%BB%BA%E7%AB%99%E7%9B%B8%E5%85%B3/"/>
+              <breadCrumb title="Druid" url="http://blog.liexing.me/categories/Druid/"/>
           
         </display>
     </data>
@@ -355,34 +359,6 @@
            
              
               <breadCrumb title="Druid" url="http://blog.liexing.me/categories/Druid/"/>
-          
-        </display>
-    </data>
-    </url>
-
-    
-  <url>
-    <loc>http://blog.liexing.me/2016/11/07/statistical-learning-method-decision-tree/</loc>
-    <lastmod>2017-02-27T11:34:45.000Z</lastmod>
-    <data>
-        <display>
-        <title>统计学习方法（笔记）-决策树</title>
-        <pubTime>2016-11-07T08:30:01.000Z</pubTime>
-        
-        <tag>笔记</tag>
-         
-        <tag>统计学习</tag>
-         
-        <tag>机器学习</tag>
-         
-        <tag>k 邻近法</tag>
-         
-        <tag>knn</tag>
-         
-         
-           
-             
-              <breadCrumb title="统计学习" url="http://blog.liexing.me/categories/%E7%BB%9F%E8%AE%A1%E5%AD%A6%E4%B9%A0/"/>
           
         </display>
     </data>
@@ -442,13 +418,43 @@
 
     
   <url>
-    <loc>http://blog.liexing.me/2016/06/16/druid-command-line-hadoop-indexer/</loc>
+    <loc>http://blog.liexing.me/2016/11/07/statistical-learning-method-decision-tree/</loc>
     <lastmod>2017-02-27T11:34:45.000Z</lastmod>
     <data>
         <display>
-        <title>Druid Command Line Hadoop Indexer启动流程</title>
-        <pubTime>2016-06-16T09:23:16.000Z</pubTime>
+        <title>统计学习方法（笔记）-决策树</title>
+        <pubTime>2016-11-07T08:30:01.000Z</pubTime>
         
+        <tag>笔记</tag>
+         
+        <tag>统计学习</tag>
+         
+        <tag>机器学习</tag>
+         
+        <tag>k 邻近法</tag>
+         
+        <tag>knn</tag>
+         
+         
+           
+             
+              <breadCrumb title="统计学习" url="http://blog.liexing.me/categories/%E7%BB%9F%E8%AE%A1%E5%AD%A6%E4%B9%A0/"/>
+          
+        </display>
+    </data>
+    </url>
+
+    
+  <url>
+    <loc>http://blog.liexing.me/2016/04/25/druid-querying/</loc>
+    <lastmod>2017-02-27T11:34:45.000Z</lastmod>
+    <data>
+        <display>
+        <title>Druid Querying</title>
+        <pubTime>2016-04-25T08:42:33.000Z</pubTime>
+        
+        <tag>笔记</tag>
+         
         <tag>分布式</tag>
          
         <tag>Druid</tag>
@@ -517,32 +523,26 @@
     </url>
 
     
+    
+    
+    
   <url>
-    <loc>http://blog.liexing.me/2016/05/19/druid-indexing-service-process-analysis/</loc>
+    <loc>http://blog.liexing.me/2015/09/01/oh-my-hexo/</loc>
     <lastmod>2017-02-27T11:34:45.000Z</lastmod>
     <data>
         <display>
-        <title>Druid Indexing Service过程分析</title>
-        <pubTime>2016-05-19T10:21:48.000Z</pubTime>
+        <title>Oh My Hexo</title>
+        <pubTime>2015-08-31T17:04:30.000Z</pubTime>
         
-        <tag>分布式</tag>
-         
-        <tag>Druid</tag>
-         
-        <tag>实时计算</tag>
-         
-        <tag>源码分析</tag>
+        <tag>hexo</tag>
          
          
            
              
-              <breadCrumb title="Druid" url="http://blog.liexing.me/categories/Druid/"/>
+              <breadCrumb title="建站相关" url="http://blog.liexing.me/categories/%E5%BB%BA%E7%AB%99%E7%9B%B8%E5%85%B3/"/>
           
         </display>
     </data>
     </url>
 
-    
-    
-    
 </urlset>
