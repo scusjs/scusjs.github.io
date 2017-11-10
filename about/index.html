@@ -75,26 +75,38 @@
 </div>
         </header>
         <div id="container">
-          <div id="main" class="<%= item.layout %>" itemscope itemprop="blogPost">
-  <% if (page.layout=='photo' && item.photos && item.photos.length){ %>
-    <%- partial('gallery') %>
-  <% } %>
-	<article itemprop="articleBody"> 
-		<%- partial('header') %>
-	<div class="article-content">
-		<% if( table&&(item.toc !== false) && theme.toc.article){ %>
-		<div id="toc" class="toc-article">
-			<strong class="toc-title"><%= __('contents') %></strong>
-		<% if(item.list_number == false) {%>
-		<%- toc(item.content,{list_number:false}) %>
-		<% }else{ %>
-			<%- toc(item.content) %>
-		<% } %>
-		</div>
-		<% } %>
-		<%- item.content %>  
-	</div>
-    <% if (theme.donate) { %>
+          <div id="main" class="page" itemscope itemprop="blogPost">
+    
+    <article itemprop="articleBody"> 
+        <header class="article-info clearfix">
+  <h1 itemprop="name">
+    
+      <a href="/about/index.html" title="关于我" itemprop="url">关于我</a>
+  </h1>
+  <p class="article-author">By
+       
+		<a href="/about" title="liexing" target="_blank" itemprop="author">liexing</a>
+		
+  <p class="article-time">
+    <time datetime="2015-08-18T09:54:27.000Z" itemprop="datePublished"> 发表于 2015-08-18</time>
+<span id="busuanzi_container_page_pv">
+  &nbspViewed <span id="busuanzi_value_page_pv"></span> times
+</span>
+    
+  </p>
+</header>
+
+    <div class="article-content">
+        
+        <p>列星，源于《公羊传·庄公七年》，花名。</p>
+<p>本名沈津生，毕业于四川大学软件学院，现就读中国科学院大学。</p>
+<p>折腾爱好者，不折腾会死星人。手贱晚期、作死晚期、代码洁癖晚期、懒癌晚期患者。</p>
+<p>活跃于<a href="http://www.v2ex.com/member/scusjs" target="_blank" rel="external">V2EX</a>、<a href="http://www.zhihu.com/people/scusjs" target="_blank" rel="external">知乎</a>等社区。</p>
+<p>2008年9月-2011年6月 四川省乐山一中<br>2011年9月-2015年6月 四川大学软件学院<br>2015年9月-至今 中国科学院</p>
+<p>2014年6月-2014年8月 阿里巴巴淘宝事业部 数据研发<br>2014年10月-2015年4月 百度LBS 数据挖掘<br>2016年3月-2016年6月 滴滴出行机器学习&amp;大数据研究院 数据研发</p>
+
+    </div>
+    
         <!-- css -->
         <style type="text/css">
             .center {
@@ -142,7 +154,7 @@
             <br>
             <a id="btn_donate" class="btn_donate" target="_self" href="javascript:;" title="Donate 打赏"></a>
             <span class="donate_txt">
-                <%= theme.donate.text %>
+                如果对你有帮助，可以赏我一杯咖啡~
             </span>
                 
             
@@ -155,23 +167,23 @@
             <br>
             ------------------------------------------------------------------------------------------------------------------------------
             <br>
-            <% if(theme.donate.web) { %>
+            
             <div width="100%" align="center"><div name="dashmain" id="dash-main-id-879873" class="dash-main-3 879873-0.99"></div></div>
             <script type="text/javascript" charset="utf-8" src="http://www.dashangcloud.com/static/ds.js"></script>
-            <% } %>
+            
 
-            <a href="<%= theme.donate.wechat %>" title="用微信扫一扫哦~" class="fancybox" rel="article0">
-                <img src="<%= theme.donate.wechat %>" title="微信打赏 Donate" height="190px" width="auto"/>
+            <a href="http://7xl6z1.com1.z0.glb.clouddn.com/static/images/theme/reward_wechat.jpg" title="用微信扫一扫哦~" class="fancybox" rel="article0">
+                <img src="http://7xl6z1.com1.z0.glb.clouddn.com/static/images/theme/reward_wechat.jpg" title="微信打赏 Donate" height="190px" width="auto"/>
             </a>
             
             &nbsp;&nbsp;
 
-            <a href="<%= theme.donate.alipay %>" title="用支付宝扫一扫即可~" class="fancybox" rel="article0">
-                <img src="<%= theme.donate.alipay %>" title="支付宝打赏 Donate" height="190px" width="auto"/>
+            <a href="http://7xl6z1.com1.z0.glb.clouddn.com/static/images/theme/reward_alipay.jpg" title="用支付宝扫一扫即可~" class="fancybox" rel="article0">
+                <img src="http://7xl6z1.com1.z0.glb.clouddn.com/static/images/theme/reward_alipay.jpg" title="支付宝打赏 Donate" height="190px" width="auto"/>
             </a>
 
             <span class="donate_txt">
-                <%= theme.donate.text %>
+                如果对你有帮助，可以赏我一杯咖啡~
             </span>
 
         </div>
@@ -199,11 +211,36 @@
         <!-- /donate script -->
     </div>
     <!-- /Donate Module -->
-       <% } %>
-		<%- partial('footer') %>   	       
+       
+		<footer class="article-footer clearfix">
+<div class="article-catetags">
+
+
+</div>
+
+
+
+	<div class="article-share" id="share">
+	
+	  <div data-url="http://blog.liexing.me/about/index.html" data-title="关于我 | Liexing&#39;s Blog" data-tsina="1915625641" class="share clearfix">
+	  </div>
+	
+	</div>
+
+
+</footer>
+
+   	       
 	</article>
-	<%- partial('pagination') %>
-	<%- partial('comment') %>
+	
+	
+
+<section id="comments" class="comment">
+  <div id="disqus_thread">
+    <noscript>Please enable JavaScript to view the <a href="//disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
+  </div>
+</section>
+
 </div>  
 
         </div>

@@ -75,26 +75,53 @@
 </div>
     </header>
     <div id="container">
-      <div id="main" class="<%= item.layout %>" itemscope itemprop="blogPost">
-  <% if (page.layout=='photo' && item.photos && item.photos.length){ %>
-    <%- partial('gallery') %>
-  <% } %>
-	<article itemprop="articleBody"> 
-		<%- partial('header') %>
-	<div class="article-content">
-		<% if( table&&(item.toc !== false) && theme.toc.article){ %>
-		<div id="toc" class="toc-article">
-			<strong class="toc-title"><%= __('contents') %></strong>
-		<% if(item.list_number == false) {%>
-		<%- toc(item.content,{list_number:false}) %>
-		<% }else{ %>
-			<%- toc(item.content) %>
-		<% } %>
-		</div>
-		<% } %>
-		<%- item.content %>  
-	</div>
-    <% if (theme.donate) { %>
+      <div id="main" class="post" itemscope itemprop="blogPost">
+    
+    <article itemprop="articleBody"> 
+        <header class="article-info clearfix">
+  <h1 itemprop="name">
+    
+      <a href="/2016/05/19/druid-indexing-service-process-analysis/" title="Druid Indexing Service过程分析" itemprop="url">Druid Indexing Service过程分析</a>
+  </h1>
+  <p class="article-author">By
+       
+		<a href="/about" title="liexing" target="_blank" itemprop="author">liexing</a>
+		
+  <p class="article-time">
+    <time datetime="2016-05-19T10:21:48.000Z" itemprop="datePublished"> 发表于 2016-05-19</time>
+<span id="busuanzi_container_page_pv">
+  &nbspViewed <span id="busuanzi_value_page_pv"></span> times
+</span>
+    
+  </p>
+</header>
+
+    <div class="article-content">
+        
+        <div id="toc" class="toc-article">
+            <strong class="toc-title">文章目录</strong>
+        
+            
+        
+        </div>
+        
+        <p>Indexing Task提交到Overlord节点后，首先创建Task对象：<br><figure class="highlight java"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">Task indexTask = <span class="keyword">new</span> io.druid.indexing.common.task.IndexTask(...);</div></pre></td></tr></table></figure></p>
+<p>之后通过<code>TaskStorageQueryAdapter</code>的<code>getStatus</code>方法查看刚才创建的任务是否已经存在与任务队列里面：</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">final</span> Optional&lt;TaskStatus&gt; preRunTaskStatus = tsqa.getStatus(indexTask.getId());</div></pre></td></tr></table></figure>
+<p>其中，tsqa为<code>TaskStorageQueryAdapter</code>的一个实例，<code>getStatus()</code>的返回为任务的状态，由<code>com.google.common.base.Optional</code>封装，其状态有三种类型，RUNNING，SUCCESS和FAILED。如果队列里面没有这个任务，则<code>preRunTaskStatus.isPresent()==false</code>。</p>
+<p>接着往<code>taskQueue</code>中加入任务。<code>taskQueue</code>是<code>io.druid.indexing.overlord.TaskQueue</code>一个实例，用来维护队列列表。首先检查任务队列是否启动状态，如果不是活动状态则启动它，之后向队列中添加任务：</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">if</span> (!taskQueue.isActive()) &#123;</div><div class="line">    taskQueue.start();</div><div class="line">&#125;</div><div class="line">taskQueue.add(indexTask);</div></pre></td></tr></table></figure>
+<p>加入到taskQueue队列中的任务按照FIFO顺序由<code>io.druid.indexing.overlord.TaskRunner</code>执行（除非下一个任务没有准备好，则跳过）。其中<code>TaskRunner</code>接口有三种实现方式：</p>
+<blockquote>
+<p>io.druid.indexing.overlord.ForkingTaskRunner<br>io.druid.indexing.overlord.RemoteTaskRunner<br>io.druid.indexing.overlord.ThreadPoolTaskRunner</p>
+</blockquote>
+<p><code>ForkingTaskRunner</code>为使用“internal peon”方式的时候执行任务的形式，在独立的进程中执行任务。<br><code>RemoteTaskRunner</code>在工作节点上执行任务，使用Zookeeper来管理和分配任务，使用HTTP来进行IPC通信。<br><code>ThreadPoolTaskRunner</code>则是通过线程池执行，使用ExecutorService在一个JVM线程中执行任务。</p>
+<p>任务执行后，返回<code>ListenableFuture&lt;TaskStatus&gt;</code>。通过：</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">taskStorage.getStatus(indexTask.getId()).get()</div></pre></td></tr></table></figure>
+<p>获取任务的状态，其中<code>taskStorage</code>是<code>io.druid.indexing.overlord.TaskStorage</code>一个实例，用于保存任务的状态。</p>
+
+    </div>
+    
         <!-- css -->
         <style type="text/css">
             .center {
@@ -142,7 +169,7 @@
             <br>
             <a id="btn_donate" class="btn_donate" target="_self" href="javascript:;" title="Donate 打赏"></a>
             <span class="donate_txt">
-                <%= theme.donate.text %>
+                如果对你有帮助，可以赏我一杯咖啡~
             </span>
                 
             
@@ -155,23 +182,23 @@
             <br>
             ------------------------------------------------------------------------------------------------------------------------------
             <br>
-            <% if(theme.donate.web) { %>
+            
             <div width="100%" align="center"><div name="dashmain" id="dash-main-id-879873" class="dash-main-3 879873-0.99"></div></div>
             <script type="text/javascript" charset="utf-8" src="http://www.dashangcloud.com/static/ds.js"></script>
-            <% } %>
+            
 
-            <a href="<%= theme.donate.wechat %>" title="用微信扫一扫哦~" class="fancybox" rel="article0">
-                <img src="<%= theme.donate.wechat %>" title="微信打赏 Donate" height="190px" width="auto"/>
+            <a href="http://7xl6z1.com1.z0.glb.clouddn.com/static/images/theme/reward_wechat.jpg" title="用微信扫一扫哦~" class="fancybox" rel="article0">
+                <img src="http://7xl6z1.com1.z0.glb.clouddn.com/static/images/theme/reward_wechat.jpg" title="微信打赏 Donate" height="190px" width="auto"/>
             </a>
             
             &nbsp;&nbsp;
 
-            <a href="<%= theme.donate.alipay %>" title="用支付宝扫一扫即可~" class="fancybox" rel="article0">
-                <img src="<%= theme.donate.alipay %>" title="支付宝打赏 Donate" height="190px" width="auto"/>
+            <a href="http://7xl6z1.com1.z0.glb.clouddn.com/static/images/theme/reward_alipay.jpg" title="用支付宝扫一扫即可~" class="fancybox" rel="article0">
+                <img src="http://7xl6z1.com1.z0.glb.clouddn.com/static/images/theme/reward_alipay.jpg" title="支付宝打赏 Donate" height="190px" width="auto"/>
             </a>
 
             <span class="donate_txt">
-                <%= theme.donate.text %>
+                如果对你有帮助，可以赏我一杯咖啡~
             </span>
 
         </div>
@@ -199,11 +226,67 @@
         <!-- /donate script -->
     </div>
     <!-- /Donate Module -->
-       <% } %>
-		<%- partial('footer') %>   	       
+       
+		<footer class="article-footer clearfix">
+<div class="article-catetags">
+
+<div class="article-categories">
+  <span></span>
+  <a class="article-category-link" href="/categories/Druid/">Druid</a>
+</div>
+
+
+  <div class="article-tags">
+  
+  <span></span> <a href="/tags/分布式/">分布式</a><a href="/tags/Druid/">Druid</a><a href="/tags/实时计算/">实时计算</a><a href="/tags/源码分析/">源码分析</a>
+  </div>
+
+</div>
+
+
+
+	<div class="article-share" id="share">
+	
+	  <div data-url="http://blog.liexing.me/2016/05/19/druid-indexing-service-process-analysis/" data-title="Druid Indexing Service过程分析 | Liexing&#39;s Blog" data-tsina="1915625641" class="share clearfix">
+	  </div>
+	
+	</div>
+
+
+</footer>
+
+   	       
 	</article>
-	<%- partial('pagination') %>
-	<%- partial('comment') %>
+	
+<nav class="article-nav clearfix">
+ 
+ <div class="prev" >
+ <a href="/2016/06/16/druid-command-line-hadoop-indexer/" title="Druid Command Line Hadoop Indexer启动流程">
+  <strong>上一篇：</strong><br/>
+  <span>
+  Druid Command Line Hadoop Indexer启动流程</span>
+</a>
+</div>
+
+
+<div class="next">
+<a href="/2016/04/25/druid-querying/"  title="Druid Querying">
+ <strong>下一篇：</strong><br/> 
+ <span>Druid Querying
+</span>
+</a>
+</div>
+
+</nav>
+
+	
+
+<section id="comments" class="comment">
+  <div id="disqus_thread">
+    <noscript>Please enable JavaScript to view the <a href="//disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
+  </div>
+</section>
+
 </div>  
 
       <div class="openaside"><a class="navbutton" href="#" title="显示侧边栏"></a></div>
