@@ -75,26 +75,48 @@
 </div>
     </header>
     <div id="container">
-      <div id="main" class="<%= item.layout %>" itemscope itemprop="blogPost">
-  <% if (page.layout=='photo' && item.photos && item.photos.length){ %>
-    <%- partial('gallery') %>
-  <% } %>
-	<article itemprop="articleBody"> 
-		<%- partial('header') %>
-	<div class="article-content">
-		<% if( table&&(item.toc !== false) && theme.toc.article){ %>
-		<div id="toc" class="toc-article">
-			<strong class="toc-title"><%= __('contents') %></strong>
-		<% if(item.list_number == false) {%>
-		<%- toc(item.content,{list_number:false}) %>
-		<% }else{ %>
-			<%- toc(item.content) %>
-		<% } %>
-		</div>
-		<% } %>
-		<%- item.content %>  
-	</div>
-    <% if (theme.donate) { %>
+      <div id="main" class="post" itemscope itemprop="blogPost">
+    
+    <article itemprop="articleBody"> 
+        <header class="article-info clearfix">
+  <h1 itemprop="name">
+    
+      <a href="/2016/04/21/auto-ssh-to-server/" title="SSH 自动连接脚本" itemprop="url">SSH 自动连接脚本</a>
+  </h1>
+  <p class="article-author">By
+       
+		<a href="/about" title="liexing" target="_blank" itemprop="author">liexing</a>
+		
+  <p class="article-time">
+    <time datetime="2016-04-21T07:50:30.000Z" itemprop="datePublished"> 发表于 2016-04-21</time>
+<span id="busuanzi_container_page_pv">
+  &nbspViewed <span id="busuanzi_value_page_pv"></span> times
+</span>
+    
+  </p>
+</header>
+
+    <div class="article-content">
+        
+        <div id="toc" class="toc-article">
+            <strong class="toc-title">文章目录</strong>
+        
+            
+        
+        </div>
+        
+        <p>公司开发跳转机不支持免密登录，各个主机自动生成的密码忒恶心~所以使用expect进行跳转登录，做了个伪自动的脚本。但是这个方法目前<strong>需要把密码保存在本地</strong>。</p>
+<p>使用awk读取配置信息，expect登录主机。</p>
+<p>主机配置hostlist：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line">hostalias	user@hostname	password</div><div class="line">testhost	root@ip	hostpassword</div></pre></td></tr></table></figure>
+<p>跳转脚本jump.sh:</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div></pre></td><td class="code"><pre><div class="line"><span class="meta">#!/bin/bash</span></div><div class="line">HOSTALIAS=<span class="variable">$1</span></div><div class="line">host=`awk -v hostalias=<span class="variable">$HOSTALIAS</span> <span class="string">'$1==hostalias&#123;printf $2&#125;'</span> hostlist`</div><div class="line">password=`awk -v hostalias=<span class="variable">$HOSTALIAS</span> <span class="string">'$1==hostalias&#123;printf $3&#125;'</span> hostlist`</div><div class="line">./exp.sh <span class="variable">$host</span> <span class="variable">$password</span></div></pre></td></tr></table></figure>
+<p>expect登录脚本：</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div></pre></td><td class="code"><pre><div class="line"><span class="comment">#!/usr/bin/expect -f</span></div><div class="line"><span class="built_in">set</span> host [lindex <span class="variable">$argv</span> 0]</div><div class="line"><span class="built_in">set</span> password [lindex <span class="variable">$argv</span> 1]</div><div class="line">spawn ssh <span class="variable">$host</span></div><div class="line">expect <span class="string">"password:"</span></div><div class="line">send <span class="string">"<span class="variable">$password</span>\r"</span></div><div class="line">interact</div></pre></td></tr></table></figure>
+<p>可以将jump.sh脚本加入PATH。</p>
+
+    </div>
+    
         <!-- css -->
         <style type="text/css">
             .center {
@@ -142,7 +164,7 @@
             <br>
             <a id="btn_donate" class="btn_donate" target="_self" href="javascript:;" title="Donate 打赏"></a>
             <span class="donate_txt">
-                <%= theme.donate.text %>
+                如果对你有帮助，可以赏我一杯咖啡~
             </span>
                 
             
@@ -155,23 +177,23 @@
             <br>
             ------------------------------------------------------------------------------------------------------------------------------
             <br>
-            <% if(theme.donate.web) { %>
+            
             <div width="100%" align="center"><div name="dashmain" id="dash-main-id-879873" class="dash-main-3 879873-0.99"></div></div>
             <script type="text/javascript" charset="utf-8" src="http://www.dashangcloud.com/static/ds.js"></script>
-            <% } %>
+            
 
-            <a href="<%= theme.donate.wechat %>" title="用微信扫一扫哦~" class="fancybox" rel="article0">
-                <img src="<%= theme.donate.wechat %>" title="微信打赏 Donate" height="190px" width="auto"/>
+            <a href="http://7xl6z1.com1.z0.glb.clouddn.com/static/images/theme/reward_wechat.jpg" title="用微信扫一扫哦~" class="fancybox" rel="article0">
+                <img src="http://7xl6z1.com1.z0.glb.clouddn.com/static/images/theme/reward_wechat.jpg" title="微信打赏 Donate" height="190px" width="auto"/>
             </a>
             
             &nbsp;&nbsp;
 
-            <a href="<%= theme.donate.alipay %>" title="用支付宝扫一扫即可~" class="fancybox" rel="article0">
-                <img src="<%= theme.donate.alipay %>" title="支付宝打赏 Donate" height="190px" width="auto"/>
+            <a href="http://7xl6z1.com1.z0.glb.clouddn.com/static/images/theme/reward_alipay.jpg" title="用支付宝扫一扫即可~" class="fancybox" rel="article0">
+                <img src="http://7xl6z1.com1.z0.glb.clouddn.com/static/images/theme/reward_alipay.jpg" title="支付宝打赏 Donate" height="190px" width="auto"/>
             </a>
 
             <span class="donate_txt">
-                <%= theme.donate.text %>
+                如果对你有帮助，可以赏我一杯咖啡~
             </span>
 
         </div>
@@ -199,11 +221,67 @@
         <!-- /donate script -->
     </div>
     <!-- /Donate Module -->
-       <% } %>
-		<%- partial('footer') %>   	       
+       
+		<footer class="article-footer clearfix">
+<div class="article-catetags">
+
+<div class="article-categories">
+  <span></span>
+  <a class="article-category-link" href="/categories/笔记/">笔记</a>
+</div>
+
+
+  <div class="article-tags">
+  
+  <span></span> <a href="/tags/linux/">linux</a><a href="/tags/bash/">bash</a><a href="/tags/笔记/">笔记</a>
+  </div>
+
+</div>
+
+
+
+	<div class="article-share" id="share">
+	
+	  <div data-url="http://blog.liexing.me/2016/04/21/auto-ssh-to-server/" data-title="SSH 自动连接脚本 | Liexing&#39;s Blog" data-tsina="1915625641" class="share clearfix">
+	  </div>
+	
+	</div>
+
+
+</footer>
+
+   	       
 	</article>
-	<%- partial('pagination') %>
-	<%- partial('comment') %>
+	
+<nav class="article-nav clearfix">
+ 
+ <div class="prev" >
+ <a href="/2016/04/25/druid-querying/" title="Druid Querying">
+  <strong>上一篇：</strong><br/>
+  <span>
+  Druid Querying</span>
+</a>
+</div>
+
+
+<div class="next">
+<a href="/2016/04/20/reindex-between-different-druid-use-and-metadatastorage/"  title="使用不同Metadata Storage的Druid集群间转移DataSource">
+ <strong>下一篇：</strong><br/> 
+ <span>使用不同Metadata Storage的Druid集群间转移DataSource
+</span>
+</a>
+</div>
+
+</nav>
+
+	
+
+<section id="comments" class="comment">
+  <div id="disqus_thread">
+    <noscript>Please enable JavaScript to view the <a href="//disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
+  </div>
+</section>
+
 </div>  
 
       <div class="openaside"><a class="navbutton" href="#" title="显示侧边栏"></a></div>
@@ -370,10 +448,12 @@
 		</p>
 </div>
 </footer>
-    <script src="<%- config.root %>js/jquery-2.0.3.min.js"></script>
-<script src="<%- config.root %>js/jquery.imagesloaded.min.js"></script>
-<script src="<%- config.root %>js/gallery.js"></script>
-<script src="<%- config.root %>js/jquery.qrcode-0.12.0.min.js"></script>
+    <script src="/js/jquery-2.0.3.min.js"></script>
+<script src="/js/jquery.imagesloaded.min.js"></script>
+<script src="/js/gallery.js"></script>
+<script src="/js/jquery.qrcode-0.12.0.min.js"></script>
+<script async src="//dn-lbstatics.qbox.me/busuanzi/2.3/busuanzi.pure.mini.js">
+</script>
 
 <script type="text/javascript">
 $(document).ready(function(){ 
@@ -405,12 +485,7 @@ $(document).ready(function(){
   $(window).scroll(function(){
     o.css("top",Math.max(80,260-$(this).scrollTop()));
   });
-  <% if (is_post() && theme.close_aside) { %>
-        getSize();
-        if (myWidth >= 1024) {
-          c.click();
-        }
-  <% } %>
+  
   $(window).resize(function(){
     getSize(); 
     if (myWidth >= 1024) {
@@ -419,14 +494,14 @@ $(document).ready(function(){
       m.removeClass('moveMain');
       a.css('display', 'block').removeClass('fadeOut');
       o.css('display', 'none');
-      <% if( is_post()&&(page.toc !== false) && theme.toc.aside){ %>
+      
       $('#toc.toc-aside').css('display', 'none');
-      <% } %>  
+        
     }
   });
 });
 </script>
-<% if (is_post()) { %>
+
 <script type="text/javascript">
 $(document).ready(function(){ 
   var ai = $('.article-content>iframe'),
@@ -452,8 +527,8 @@ $(document).ready(function(){
   });
 });
 </script>
-<% } %>
-<% if ((page.layout=='post'||page.layout=='page'||page.layout=='photo')&&!theme.jiathis.enable) { %>
+
+
 <script type="text/javascript">
 $(document).ready(function(){ 
   var $this = $('.share'),
@@ -502,28 +577,14 @@ $(document).ready(function(){
   });
 });   
 </script>
-<% } %>
 
-<% if (theme.duoshuo_shortname && page.comments){ %>
+
+
+
 <script type="text/javascript">
-  var duoshuoQuery = {short_name:"<%= theme.duoshuo_shortname %>"};
-  (function() {
-    var ds = document.createElement('script');
-    ds.type = 'text/javascript';ds.async = true;
-    ds.src = '//7xl6z1.com1.z0.glb.clouddn.com/embed_ua.js';
-    ds.charset = 'UTF-8';
-    (document.getElementsByTagName('head')[0] 
-    || document.getElementsByTagName('body')[0]).appendChild(ds);
-  })();
-</script> 
-<% } %>
-<% if( (config.disqus_shortname || theme.disqus_shortname) && page.comments) { %>
-<script type="text/javascript">
-<% if(config.disqus_shortname){ %>
-var disqus_shortname = '<%= config.disqus_shortname %>';
-<% }else{ %>
-var disqus_shortname = '<%= theme.disqus_shortname %>';
-<% } %>
+
+var disqus_shortname = 'liexing';
+
 (function(){
   var dsq = document.createElement('script');
   dsq.type = 'text/javascript';
@@ -539,32 +600,14 @@ var disqus_shortname = '<%= theme.disqus_shortname %>';
   (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
 }());
 </script>
-<% } %>
 
 
 
-<% if (page.layout=='tags'||page.layout=='categories'){ %>
-<script type="text/javascript">
-$(document).ready(function(){ 
-  var list    = $('.archive-title a'),
-      box     = $('.all-list-box'),
-      first   = $('.archive-title a:first-of-type');
-      box.load(first.attr('data-src').toString()+' #archive-page');
-      first.addClass('current');
-  list.each(function(){
-    $(this).click(function(){
-      var listSrc=$(this).attr('data-src').toString()+' #archive-page';
-      box.load(listSrc);
-      list.removeClass('current');
-      $(this).addClass('current');
-     });  
-    });
-  }); 
-</script>
-<% } %>
-<% if (theme.fancybox){ %>
-<link rel="stylesheet" href="<%- config.root %>fancybox/jquery.fancybox.css" media="screen" type="text/css">
-<script src="<%- config.root %>fancybox/jquery.fancybox.pack.js"></script>
+
+
+
+<link rel="stylesheet" href="/fancybox/jquery.fancybox.css" media="screen" type="text/css">
+<script src="/fancybox/jquery.fancybox.pack.js"></script>
 <script type="text/javascript">
 $(document).ready(function(){ 
   $('.article-content').each(function(i){
@@ -583,23 +626,47 @@ $(document).ready(function(){
   }
 }); 
 </script>
-<% } %>
+
 
 
 <!-- Analytics Begin -->
-<%- partial('analytics') %>
+
+
+
+<script>
+var _hmt = _hmt || [];
+(function() {
+  var hm = document.createElement("script");
+  hm.src = "//hm.baidu.com/hm.js?e6d1f421bbc9962127a50488f9ed37d1";
+  var s = document.getElementsByTagName("script")[0]; 
+  s.parentNode.insertBefore(hm, s);
+})();
+</script>
+
+
+
+<span style="display:none"><script type="text/javascript">var cnzz_protocol = (("https:" == document.location.protocol) ? " https://" : " http://");document.write(unescape("%3Cspan id='cnzz_stat_icon_1256113107'%3E%3C/span%3E%3Cscript src='" + cnzz_protocol + "s23.cnzz.com/z_stat.php%3Fid%3D1256113107' type='text/javascript'%3E%3C/script%3E"));</script></span>
+
+
 <!-- Analytics End -->
 
 <!-- Totop Begin -->
-<%- partial('totop') %>
+
+	<div id="totop">
+	<a title="返回顶部"><img src="/img/scrollup.png"/></a>
+	</div>
+	<script src="/js/totop.js"></script>
+
 <!-- Totop End -->
 
 <!-- MathJax Begin -->
-<%- partial('mathjax') %>
+<!-- mathjax config similar to math.stackexchange -->
+
+
 <!-- MathJax End -->
 
 <!-- Tiny_search Begin -->
-<%- partial('tinysou_search') %>
+
 <!-- Tiny_search End -->
 
   </body>
