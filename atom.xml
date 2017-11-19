@@ -5,7 +5,7 @@
   <link href="/atom.xml" rel="self"/>
   
   <link href="http://blog.liexing.me/"/>
-  <updated>2017-11-19T11:45:41.382Z</updated>
+  <updated>2017-11-19T11:50:26.396Z</updated>
   <id>http://blog.liexing.me/</id>
   
   <author>
@@ -20,7 +20,7 @@
     <link href="http://blog.liexing.me/2017/11/16/optimizing-gradient-descent/"/>
     <id>http://blog.liexing.me/2017/11/16/optimizing-gradient-descent/</id>
     <published>2017-11-16T15:43:31.000Z</published>
-    <updated>2017-11-19T11:45:41.382Z</updated>
+    <updated>2017-11-19T11:50:26.396Z</updated>
     
     <content type="html"><![CDATA[<p>梯度下降是一个最优化算法。在深度学习中，通过梯度下降来找到损失函数的（局部）最小值，进而获得各个参数的值。</p>
 <p>梯度下降最直观的解释如图所示，在山上某处，沿着最陡的方向向下，直到能到达的最低点。</p>
@@ -72,10 +72,10 @@
 <p>在梯度下降算法中，如果学习速率选择较大，对于陡峭方向（维度）的优化，会来回的抖动，但是如果学习速率选择较小，那么对于平缓方向（维度），会异常缓慢，非常像下图：</p>
 <img src="http://7xl6z1.com1.z0.glb.clouddn.com/static/images/optimizing-gradient-descent/1511087223.jpg">
 <p>即上面所说的第三条，如果不同维度选择的学习速率一样，可能导致陡峭维度的收敛图像来回摆动。因此很显然，我们应该尽可能的约束掉这样的维度的学习，而尽可能的往我们的目标方向前进。</p>
-<h2 id="指数加权平均"><a href="#指数加权平均" class="headerlink" title="指数加权平均"></a>指数加权平均</h2><p>对于一组连续的数值，比如温度，可能变化（波动）较大，如下图的蓝色点。如果我们想要拟合温度，我们需要一个较为平缓的曲线（红色）。</p>
+<h3 id="指数加权平均"><a href="#指数加权平均" class="headerlink" title="指数加权平均"></a>指数加权平均</h3><p>对于一组连续的数值，比如温度，可能变化（波动）较大，如下图的蓝色点。如果我们想要拟合温度，我们需要一个较为平缓的曲线（红色）。</p>
 <img src="http://7xl6z1.com1.z0.glb.clouddn.com/static/images/optimizing-gradient-descent/1511087506.jpg">
 <p>如何求得这个平缓的曲线呢？我们应该想到，尽可能的平均一下前后的温度。指数平均加权是这样的思路，一个时刻的值，与上一个时刻有关（二者的加权平均）。即：$V_t = \beta V_{t-1} + (1 - \beta)\theta_t$，这里，$\theta_t$表示 t 时刻的测量值（即蓝色的点），$V_{t-1}$表示上一个时刻的计算值（即红色曲线的上一个值），$\theta$为加权参数。</p>
-<h2 id="Momentum-梯度下降"><a href="#Momentum-梯度下降" class="headerlink" title="Momentum 梯度下降"></a>Momentum 梯度下降</h2><p>借助指数加权平均的思想，我们可以解决上面的抖动问题。即在SGD的基础上，加上了上一步的梯度：</p>
+<h3 id="Momentum-梯度下降"><a href="#Momentum-梯度下降" class="headerlink" title="Momentum 梯度下降"></a>Momentum 梯度下降</h3><p>借助指数加权平均的思想，我们可以解决上面的抖动问题。即在SGD的基础上，加上了上一步的梯度：</p>
 <p>$$v_t = \gamma v_{t-1} + (1 - \gamma)\nabla_{\theta}{J(\theta)}$$<br>$$\theta = \theta - \alpha v_t$$</p>
 <p>其中$\gamma$通常设为0.9。由于目标函数在Y方向上摇摆，所以前后两次计算的梯度在Y方向上相反，所以相加后相互抵消，而X方向上梯度方向不变，所以X方向的梯度是累加的，其效果就是损失函数在Y方向上的震荡减小了，而更加迅速地从X方向接近最优点。如图所示：</p>
 <img alt="momentum梯度下降" width="400" src="http://7xl6z1.com1.z0.glb.clouddn.com/static/images/optimizing-gradient-descent/1511088235.jpg">

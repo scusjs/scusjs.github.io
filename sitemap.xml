@@ -4,7 +4,7 @@
   <url>
     <loc>http://blog.liexing.me/2017/11/16/optimizing-gradient-descent/</loc>
     
-    <lastmod>2017-11-19T11:45:41.382Z</lastmod>
+    <lastmod>2017-11-19T11:50:26.396Z</lastmod>
     
   </url>
   
@@ -58,20 +58,6 @@
   </url>
   
   <url>
-    <loc>http://blog.liexing.me/2016/04/25/druid-querying/</loc>
-    
-    <lastmod>2017-02-27T11:34:45.000Z</lastmod>
-    
-  </url>
-  
-  <url>
-    <loc>http://blog.liexing.me/2016/03/28/druid-quickstart/</loc>
-    
-    <lastmod>2017-02-27T11:34:45.000Z</lastmod>
-    
-  </url>
-  
-  <url>
     <loc>http://blog.liexing.me/2016/01/05/longest-common-subsequence/</loc>
     
     <lastmod>2017-02-27T11:34:45.000Z</lastmod>
@@ -79,7 +65,7 @@
   </url>
   
   <url>
-    <loc>http://blog.liexing.me/2016/09/08/cassandra-architecture/</loc>
+    <loc>http://blog.liexing.me/2016/03/28/druid-quickstart/</loc>
     
     <lastmod>2017-02-27T11:34:45.000Z</lastmod>
     
@@ -100,7 +86,21 @@
   </url>
   
   <url>
+    <loc>http://blog.liexing.me/2016/09/08/cassandra-architecture/</loc>
+    
+    <lastmod>2017-02-27T11:34:45.000Z</lastmod>
+    
+  </url>
+  
+  <url>
     <loc>http://blog.liexing.me/2016/06/16/druid-command-line-hadoop-indexer/</loc>
+    
+    <lastmod>2017-02-27T11:34:45.000Z</lastmod>
+    
+  </url>
+  
+  <url>
+    <loc>http://blog.liexing.me/2016/05/19/druid-indexing-service-process-analysis/</loc>
     
     <lastmod>2017-02-27T11:34:45.000Z</lastmod>
     
@@ -142,14 +142,7 @@
   </url>
   
   <url>
-    <loc>http://blog.liexing.me/2016/05/19/druid-indexing-service-process-analysis/</loc>
-    
-    <lastmod>2017-02-27T11:34:45.000Z</lastmod>
-    
-  </url>
-  
-  <url>
-    <loc>http://blog.liexing.me/2016/11/01/statistical-learning-method-perceptron/</loc>
+    <loc>http://blog.liexing.me/2016/04/15/druid-indexing-service/</loc>
     
     <lastmod>2017-02-27T11:34:45.000Z</lastmod>
     
@@ -163,14 +156,14 @@
   </url>
   
   <url>
-    <loc>http://blog.liexing.me/categories/index.html</loc>
+    <loc>http://blog.liexing.me/2016/11/01/statistical-learning-method-perceptron/</loc>
     
     <lastmod>2017-02-27T11:34:45.000Z</lastmod>
     
   </url>
   
   <url>
-    <loc>http://blog.liexing.me/2016/04/15/druid-indexing-service/</loc>
+    <loc>http://blog.liexing.me/2016/04/25/druid-querying/</loc>
     
     <lastmod>2017-02-27T11:34:45.000Z</lastmod>
     
@@ -178,6 +171,13 @@
   
   <url>
     <loc>http://blog.liexing.me/search/index.html</loc>
+    
+    <lastmod>2017-02-27T11:34:45.000Z</lastmod>
+    
+  </url>
+  
+  <url>
+    <loc>http://blog.liexing.me/categories/index.html</loc>
     
     <lastmod>2017-02-27T11:34:45.000Z</lastmod>
     
