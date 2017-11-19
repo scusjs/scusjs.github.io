@@ -75,52 +75,26 @@
 </div>
     </header>
     <div id="container">
-      <div id="main" class="post" itemscope itemprop="blogPost">
-    
-    <article itemprop="articleBody"> 
-        <header class="article-info clearfix">
-  <h1 itemprop="name">
-    
-      <a href="/2016/04/20/reindex-between-different-druid-use-and-metadatastorage/" title="使用不同Metadata Storage的Druid集群间转移DataSource" itemprop="url">使用不同Metadata Storage的Druid集群间转移DataSource</a>
-  </h1>
-  <p class="article-author">By
-       
-		<a href="/about" title="liexing" target="_blank" itemprop="author">liexing</a>
-		
-  <p class="article-time">
-    <time datetime="2016-04-20T10:19:58.000Z" itemprop="datePublished"> 发表于 2016-04-20</time>
-<span id="busuanzi_container_page_pv">
-  &nbspViewed <span id="busuanzi_value_page_pv"></span> times
-</span>
-    
-  </p>
-</header>
-
-    <div class="article-content">
-        
-        <div id="toc" class="toc-article">
-            <strong class="toc-title">文章目录</strong>
-        
-            
-        
-        </div>
-        
-        <p>在Druid中读取已有的数据比较简单，有很多方法可以使用，<a href="http://druid.io/docs/0.9.0/ingestion/update-existing-data.html" target="_blank" rel="external">详见这里</a>。但是如果不同的Druid集群使用了不同的Metadata Storage，迁移任务首先回去找datasource下的segments，但是由于旧的Druid集群把相关信息保存在其他地方，这将会导致找不到Segments。</p>
-<p>因此考虑将旧集群中需要转移的datasource的metadata转到新集群的Metadata Storage。假设两个集群均使用MySQL作为Metadata Storage。</p>
-<p>首先将满足条件的segments数据导出：</p>
-<figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">mysql -uroot -p <span class="_">-e</span> <span class="string">'select * from druid.druid_segments where datasource="datasourcename";'</span> &gt; ./segments.metadata.sql</div></pre></td></tr></table></figure>
-<p>然后在新集群的MySQL终端中执行下面语句将数据导入：</p>
-<figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">load data <span class="built_in">local</span> infile <span class="string">'path_to_sql/segments.metadata.sql'</span> INTO TABLE druid.druid_segments FIELDS TERMINATED BY <span class="string">'\t'</span>;</div></pre></td></tr></table></figure>
-<p>然后执行Hadoop Index任务即可，部分配置如下：</p>
-<figure class="highlight"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div></pre></td><td class="code"><pre><div class="line">&#123;</div><div class="line">  "type" : "index_hadoop",</div><div class="line">  "spec" : &#123;</div><div class="line">    "ioConfig" : &#123;</div><div class="line">      "type" : "hadoop",</div><div class="line">      "inputSpec" : &#123;</div><div class="line">        "type" : "dataSource",</div><div class="line">        "ingestionSpec" : &#123;</div><div class="line">          "dataSource" : "datasourcename",</div><div class="line">          "interval" : "2016-04-09T00:00:00+08:00/P1D"</div><div class="line">        &#125;</div><div class="line">      &#125;</div><div class="line">    &#125;,</div><div class="line">    ...</div><div class="line">&#125;</div></pre></td></tr></table></figure>
-<p>向overlord提交任务：</p>
-<figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">curl -X <span class="string">'POST'</span> -H <span class="string">'Content-Type:application/json'</span> <span class="_">-d</span> @task_config.json &lt;overlord_host&gt;:&lt;port&gt;/druid/indexer/v1/task</div></pre></td></tr></table></figure>
-<blockquote>
-<p>注：此方法适用于两个集群使用相同的Deep Storage，否则还需要迁移Deep Storage中存储的Segments。</p>
-</blockquote>
-
-    </div>
-    
+      <div id="main" class="<%= item.layout %>" itemscope itemprop="blogPost">
+  <% if (page.layout=='photo' && item.photos && item.photos.length){ %>
+    <%- partial('gallery') %>
+  <% } %>
+	<article itemprop="articleBody"> 
+		<%- partial('header') %>
+	<div class="article-content">
+		<% if( table&&(item.toc !== false) && theme.toc.article){ %>
+		<div id="toc" class="toc-article">
+			<strong class="toc-title"><%= __('contents') %></strong>
+		<% if(item.list_number == false) {%>
+		<%- toc(item.content,{list_number:false}) %>
+		<% }else{ %>
+			<%- toc(item.content) %>
+		<% } %>
+		</div>
+		<% } %>
+		<%- item.content %>  
+	</div>
+    <% if (theme.donate) { %>
         <!-- css -->
         <style type="text/css">
             .center {
@@ -168,7 +142,7 @@
             <br>
             <a id="btn_donate" class="btn_donate" target="_self" href="javascript:;" title="Donate 打赏"></a>
             <span class="donate_txt">
-                如果对你有帮助，可以赏我一杯咖啡~
+                <%= theme.donate.text %>
             </span>
                 
             
@@ -181,23 +155,23 @@
             <br>
             ------------------------------------------------------------------------------------------------------------------------------
             <br>
-            
+            <% if(theme.donate.web) { %>
             <div width="100%" align="center"><div name="dashmain" id="dash-main-id-879873" class="dash-main-3 879873-0.99"></div></div>
             <script type="text/javascript" charset="utf-8" src="http://www.dashangcloud.com/static/ds.js"></script>
-            
+            <% } %>
 
-            <a href="http://7xl6z1.com1.z0.glb.clouddn.com/static/images/theme/reward_wechat.jpg" title="用微信扫一扫哦~" class="fancybox" rel="article0">
-                <img src="http://7xl6z1.com1.z0.glb.clouddn.com/static/images/theme/reward_wechat.jpg" title="微信打赏 Donate" height="190px" width="auto"/>
+            <a href="<%= theme.donate.wechat %>" title="用微信扫一扫哦~" class="fancybox" rel="article0">
+                <img src="<%= theme.donate.wechat %>" title="微信打赏 Donate" height="190px" width="auto"/>
             </a>
             
             &nbsp;&nbsp;
 
-            <a href="http://7xl6z1.com1.z0.glb.clouddn.com/static/images/theme/reward_alipay.jpg" title="用支付宝扫一扫即可~" class="fancybox" rel="article0">
-                <img src="http://7xl6z1.com1.z0.glb.clouddn.com/static/images/theme/reward_alipay.jpg" title="支付宝打赏 Donate" height="190px" width="auto"/>
+            <a href="<%= theme.donate.alipay %>" title="用支付宝扫一扫即可~" class="fancybox" rel="article0">
+                <img src="<%= theme.donate.alipay %>" title="支付宝打赏 Donate" height="190px" width="auto"/>
             </a>
 
             <span class="donate_txt">
-                如果对你有帮助，可以赏我一杯咖啡~
+                <%= theme.donate.text %>
             </span>
 
         </div>
@@ -225,67 +199,11 @@
         <!-- /donate script -->
     </div>
     <!-- /Donate Module -->
-       
-		<footer class="article-footer clearfix">
-<div class="article-catetags">
-
-<div class="article-categories">
-  <span></span>
-  <a class="article-category-link" href="/categories/Druid/">Druid</a>
-</div>
-
-
-  <div class="article-tags">
-  
-  <span></span> <a href="/tags/分布式/">分布式</a><a href="/tags/Druid/">Druid</a><a href="/tags/实时计算/">实时计算</a>
-  </div>
-
-</div>
-
-
-
-	<div class="article-share" id="share">
-	
-	  <div data-url="http://blog.liexing.me/2016/04/20/reindex-between-different-druid-use-and-metadatastorage/" data-title="使用不同Metadata Storage的Druid集群间转移DataSource | Liexing&#39;s Blog" data-tsina="1915625641" class="share clearfix">
-	  </div>
-	
-	</div>
-
-
-</footer>
-
-   	       
+       <% } %>
+		<%- partial('footer') %>   	       
 	</article>
-	
-<nav class="article-nav clearfix">
- 
- <div class="prev" >
- <a href="/2016/04/21/auto-ssh-to-server/" title="SSH 自动连接脚本">
-  <strong>上一篇：</strong><br/>
-  <span>
-  SSH 自动连接脚本</span>
-</a>
-</div>
-
-
-<div class="next">
-<a href="/2016/04/15/druid-indexing-service/"  title="Druid Indexing Service（索引服务）">
- <strong>下一篇：</strong><br/> 
- <span>Druid Indexing Service（索引服务）
-</span>
-</a>
-</div>
-
-</nav>
-
-	
-
-<section id="comments" class="comment">
-  <div id="disqus_thread">
-    <noscript>Please enable JavaScript to view the <a href="//disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
-  </div>
-</section>
-
+	<%- partial('pagination') %>
+	<%- partial('comment') %>
 </div>  
 
       <div class="openaside"><a class="navbutton" href="#" title="显示侧边栏"></a></div>
@@ -337,7 +255,7 @@
           
         
           
-            <li><a href="/categories/深度学习/" title="深度学习">深度学习<sup>1</sup></a></li>
+            <li><a href="/categories/深度学习/" title="深度学习">深度学习<sup>2</sup></a></li>
           
         
           
@@ -384,7 +302,7 @@
   <div class="tagcloudlist">
     <p class="asidetitle">标签云</p>
     <div class="tagcloudlist clearfix">
-       <a href="/tags/Cassandra/" style="font-size: 12.5px;">Cassandra</a> <a href="/tags/Druid/" style="font-size: 15px;">Druid</a> <a href="/tags/JVM/" style="font-size: 10px;">JVM</a> <a href="/tags/Java/" style="font-size: 10px;">Java</a> <a href="/tags/LCS/" style="font-size: 10px;">LCS</a> <a href="/tags/NOSQL/" style="font-size: 12.5px;">NOSQL</a> <a href="/tags/Weight-initialization/" style="font-size: 10px;">Weight initialization</a> <a href="/tags/algorithms/" style="font-size: 10px;">algorithms</a> <a href="/tags/bash/" style="font-size: 10px;">bash</a> <a href="/tags/dynamic-programming/" style="font-size: 10px;">dynamic programming</a> <a href="/tags/hexo/" style="font-size: 10px;">hexo</a> <a href="/tags/k-邻近法/" style="font-size: 12.5px;">k 邻近法</a> <a href="/tags/knn/" style="font-size: 12.5px;">knn</a> <a href="/tags/linux/" style="font-size: 10px;">linux</a> <a href="/tags/macOS/" style="font-size: 10px;">macOS</a> <a href="/tags/内存模型/" style="font-size: 10px;">内存模型</a> <a href="/tags/分布式/" style="font-size: 17.5px;">分布式</a> <a href="/tags/多线程/" style="font-size: 10px;">多线程</a> <a href="/tags/实时计算/" style="font-size: 15px;">实时计算</a> <a href="/tags/异常处理/" style="font-size: 10px;">异常处理</a> <a href="/tags/异常表/" style="font-size: 10px;">异常表</a> <a href="/tags/感知机/" style="font-size: 10px;">感知机</a> <a href="/tags/最大熵模型/" style="font-size: 10px;">最大熵模型</a> <a href="/tags/朴素贝叶斯/" style="font-size: 10px;">朴素贝叶斯</a> <a href="/tags/机器学习/" style="font-size: 15px;">机器学习</a> <a href="/tags/杂/" style="font-size: 10px;">杂</a> <a href="/tags/深度学习/" style="font-size: 10px;">深度学习</a> <a href="/tags/源码分析/" style="font-size: 10px;">源码分析</a> <a href="/tags/笔记/" style="font-size: 20px;">笔记</a> <a href="/tags/统计学习/" style="font-size: 15px;">统计学习</a> <a href="/tags/调参/" style="font-size: 10px;">调参</a> <a href="/tags/逻辑斯谛回归/" style="font-size: 10px;">逻辑斯谛回归</a> <a href="/tags/配置/" style="font-size: 10px;">配置</a>
+       <a href="/tags/Adam/" style="font-size: 10px;">Adam</a> <a href="/tags/BGD/" style="font-size: 10px;">BGD</a> <a href="/tags/Cassandra/" style="font-size: 12.5px;">Cassandra</a> <a href="/tags/Druid/" style="font-size: 15px;">Druid</a> <a href="/tags/JVM/" style="font-size: 10px;">JVM</a> <a href="/tags/Java/" style="font-size: 10px;">Java</a> <a href="/tags/LCS/" style="font-size: 10px;">LCS</a> <a href="/tags/Momentum/" style="font-size: 10px;">Momentum</a> <a href="/tags/NOSQL/" style="font-size: 12.5px;">NOSQL</a> <a href="/tags/SGD/" style="font-size: 10px;">SGD</a> <a href="/tags/Weight-initialization/" style="font-size: 10px;">Weight initialization</a> <a href="/tags/algorithms/" style="font-size: 10px;">algorithms</a> <a href="/tags/bash/" style="font-size: 10px;">bash</a> <a href="/tags/dynamic-programming/" style="font-size: 10px;">dynamic programming</a> <a href="/tags/hexo/" style="font-size: 10px;">hexo</a> <a href="/tags/k-邻近法/" style="font-size: 12.5px;">k 邻近法</a> <a href="/tags/knn/" style="font-size: 12.5px;">knn</a> <a href="/tags/linux/" style="font-size: 10px;">linux</a> <a href="/tags/macOS/" style="font-size: 10px;">macOS</a> <a href="/tags/内存模型/" style="font-size: 10px;">内存模型</a> <a href="/tags/分布式/" style="font-size: 17.5px;">分布式</a> <a href="/tags/多线程/" style="font-size: 10px;">多线程</a> <a href="/tags/实时计算/" style="font-size: 15px;">实时计算</a> <a href="/tags/异常处理/" style="font-size: 10px;">异常处理</a> <a href="/tags/异常表/" style="font-size: 10px;">异常表</a> <a href="/tags/感知机/" style="font-size: 10px;">感知机</a> <a href="/tags/最大熵模型/" style="font-size: 10px;">最大熵模型</a> <a href="/tags/朴素贝叶斯/" style="font-size: 10px;">朴素贝叶斯</a> <a href="/tags/机器学习/" style="font-size: 15px;">机器学习</a> <a href="/tags/杂/" style="font-size: 10px;">杂</a> <a href="/tags/梯度下降/" style="font-size: 10px;">梯度下降</a> <a href="/tags/深度学习/" style="font-size: 12.5px;">深度学习</a> <a href="/tags/源码分析/" style="font-size: 10px;">源码分析</a> <a href="/tags/笔记/" style="font-size: 20px;">笔记</a> <a href="/tags/统计学习/" style="font-size: 15px;">统计学习</a> <a href="/tags/调参/" style="font-size: 12.5px;">调参</a> <a href="/tags/逻辑斯谛回归/" style="font-size: 10px;">逻辑斯谛回归</a> <a href="/tags/配置/" style="font-size: 10px;">配置</a>
     </div>
   </div>
 
@@ -452,12 +370,10 @@
 		</p>
 </div>
 </footer>
-    <script src="/js/jquery-2.0.3.min.js"></script>
-<script src="/js/jquery.imagesloaded.min.js"></script>
-<script src="/js/gallery.js"></script>
-<script src="/js/jquery.qrcode-0.12.0.min.js"></script>
-<script async src="//dn-lbstatics.qbox.me/busuanzi/2.3/busuanzi.pure.mini.js">
-</script>
+    <script src="<%- config.root %>js/jquery-2.0.3.min.js"></script>
+<script src="<%- config.root %>js/jquery.imagesloaded.min.js"></script>
+<script src="<%- config.root %>js/gallery.js"></script>
+<script src="<%- config.root %>js/jquery.qrcode-0.12.0.min.js"></script>
 
 <script type="text/javascript">
 $(document).ready(function(){ 
@@ -489,7 +405,12 @@ $(document).ready(function(){
   $(window).scroll(function(){
     o.css("top",Math.max(80,260-$(this).scrollTop()));
   });
-  
+  <% if (is_post() && theme.close_aside) { %>
+        getSize();
+        if (myWidth >= 1024) {
+          c.click();
+        }
+  <% } %>
   $(window).resize(function(){
     getSize(); 
     if (myWidth >= 1024) {
@@ -498,14 +419,14 @@ $(document).ready(function(){
       m.removeClass('moveMain');
       a.css('display', 'block').removeClass('fadeOut');
       o.css('display', 'none');
-      
+      <% if( is_post()&&(page.toc !== false) && theme.toc.aside){ %>
       $('#toc.toc-aside').css('display', 'none');
-        
+      <% } %>  
     }
   });
 });
 </script>
-
+<% if (is_post()) { %>
 <script type="text/javascript">
 $(document).ready(function(){ 
   var ai = $('.article-content>iframe'),
@@ -531,8 +452,8 @@ $(document).ready(function(){
   });
 });
 </script>
-
-
+<% } %>
+<% if ((page.layout=='post'||page.layout=='page'||page.layout=='photo')&&!theme.jiathis.enable) { %>
 <script type="text/javascript">
 $(document).ready(function(){ 
   var $this = $('.share'),
@@ -581,14 +502,28 @@ $(document).ready(function(){
   });
 });   
 </script>
+<% } %>
 
-
-
-
+<% if (theme.duoshuo_shortname && page.comments){ %>
 <script type="text/javascript">
-
-var disqus_shortname = 'liexing';
-
+  var duoshuoQuery = {short_name:"<%= theme.duoshuo_shortname %>"};
+  (function() {
+    var ds = document.createElement('script');
+    ds.type = 'text/javascript';ds.async = true;
+    ds.src = '//7xl6z1.com1.z0.glb.clouddn.com/embed_ua.js';
+    ds.charset = 'UTF-8';
+    (document.getElementsByTagName('head')[0] 
+    || document.getElementsByTagName('body')[0]).appendChild(ds);
+  })();
+</script> 
+<% } %>
+<% if( (config.disqus_shortname || theme.disqus_shortname) && page.comments) { %>
+<script type="text/javascript">
+<% if(config.disqus_shortname){ %>
+var disqus_shortname = '<%= config.disqus_shortname %>';
+<% }else{ %>
+var disqus_shortname = '<%= theme.disqus_shortname %>';
+<% } %>
 (function(){
   var dsq = document.createElement('script');
   dsq.type = 'text/javascript';
@@ -604,14 +539,32 @@ var disqus_shortname = 'liexing';
   (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
 }());
 </script>
+<% } %>
 
 
 
-
-
-
-<link rel="stylesheet" href="/fancybox/jquery.fancybox.css" media="screen" type="text/css">
-<script src="/fancybox/jquery.fancybox.pack.js"></script>
+<% if (page.layout=='tags'||page.layout=='categories'){ %>
+<script type="text/javascript">
+$(document).ready(function(){ 
+  var list    = $('.archive-title a'),
+      box     = $('.all-list-box'),
+      first   = $('.archive-title a:first-of-type');
+      box.load(first.attr('data-src').toString()+' #archive-page');
+      first.addClass('current');
+  list.each(function(){
+    $(this).click(function(){
+      var listSrc=$(this).attr('data-src').toString()+' #archive-page';
+      box.load(listSrc);
+      list.removeClass('current');
+      $(this).addClass('current');
+     });  
+    });
+  }); 
+</script>
+<% } %>
+<% if (theme.fancybox){ %>
+<link rel="stylesheet" href="<%- config.root %>fancybox/jquery.fancybox.css" media="screen" type="text/css">
+<script src="<%- config.root %>fancybox/jquery.fancybox.pack.js"></script>
 <script type="text/javascript">
 $(document).ready(function(){ 
   $('.article-content').each(function(i){
@@ -630,47 +583,23 @@ $(document).ready(function(){
   }
 }); 
 </script>
-
+<% } %>
 
 
 <!-- Analytics Begin -->
-
-
-
-<script>
-var _hmt = _hmt || [];
-(function() {
-  var hm = document.createElement("script");
-  hm.src = "//hm.baidu.com/hm.js?e6d1f421bbc9962127a50488f9ed37d1";
-  var s = document.getElementsByTagName("script")[0]; 
-  s.parentNode.insertBefore(hm, s);
-})();
-</script>
-
-
-
-<span style="display:none"><script type="text/javascript">var cnzz_protocol = (("https:" == document.location.protocol) ? " https://" : " http://");document.write(unescape("%3Cspan id='cnzz_stat_icon_1256113107'%3E%3C/span%3E%3Cscript src='" + cnzz_protocol + "s23.cnzz.com/z_stat.php%3Fid%3D1256113107' type='text/javascript'%3E%3C/script%3E"));</script></span>
-
-
+<%- partial('analytics') %>
 <!-- Analytics End -->
 
 <!-- Totop Begin -->
-
-	<div id="totop">
-	<a title="返回顶部"><img src="/img/scrollup.png"/></a>
-	</div>
-	<script src="/js/totop.js"></script>
-
+<%- partial('totop') %>
 <!-- Totop End -->
 
 <!-- MathJax Begin -->
-<!-- mathjax config similar to math.stackexchange -->
-
-
+<%- partial('mathjax') %>
 <!-- MathJax End -->
 
 <!-- Tiny_search Begin -->
-
+<%- partial('tinysou_search') %>
 <!-- Tiny_search End -->
 
   </body>

@@ -75,100 +75,26 @@
 </div>
     </header>
     <div id="container">
-      <div id="main" class="post" itemscope itemprop="blogPost">
-    
-    <article itemprop="articleBody"> 
-        <header class="article-info clearfix">
-  <h1 itemprop="name">
-    
-      <a href="/2016/01/05/longest-common-subsequence/" title="最长公共子序列问题" itemprop="url">最长公共子序列问题</a>
-  </h1>
-  <p class="article-author">By
-       
-		<a href="/about" title="liexing" target="_blank" itemprop="author">liexing</a>
-		
-  <p class="article-time">
-    <time datetime="2016-01-05T09:35:23.000Z" itemprop="datePublished"> 发表于 2016-01-05</time>
-<span id="busuanzi_container_page_pv">
-  &nbspViewed <span id="busuanzi_value_page_pv"></span> times
-</span>
-    
-  </p>
-</header>
-
-    <div class="article-content">
-        
-        <div id="toc" class="toc-article">
-            <strong class="toc-title">文章目录</strong>
-        
-            <ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#刻画最长公共子序列特征"><span class="toc-number">1.</span> <span class="toc-text">刻画最长公共子序列特征</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#一个递归解"><span class="toc-number">2.</span> <span class="toc-text">一个递归解</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#计算-LCS-的长度"><span class="toc-number">3.</span> <span class="toc-text">计算 LCS 的长度</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#构造-LCS"><span class="toc-number">4.</span> <span class="toc-text">构造 LCS</span></a></li></ol>
-        
-        </div>
-        
-        <p>首先定义子序列，形式化定义为：给定一个序列$X=\{x_1,x_2,…,x_m\}$，另一个序列$Z=\{z_1,z_2,…,z_k\}$满足如下条件时称为X的子序列，即存在一个严格递增的X的下标序列$\{i_1,i_2,…,i_k\}$，对所有$j=1,2,…,k$，满足，$x_{i_j} = z_j$例如，$Z=\{B,C,D,B\}$是$X=\{A,B,C,B,D,A,B\}$的子序列，对应的下标序列为$\{2,3,5,7\}$。</p>
-<p>给定两个序列 X 和 Y，如果 Z 既是 X 的子序列，也是 Y 的子序列，则称它是 X 和 Y 的公共子序列。</p>
-<p>求两个序列的最长公共子序列，可以使用动态规划求解。</p>
-<h2 id="刻画最长公共子序列特征"><a href="#刻画最长公共子序列特征" class="headerlink" title="刻画最长公共子序列特征"></a>刻画最长公共子序列特征</h2><p>（LCS 的最优子结构）令$X=\{x_1,x_2,…,x_m\}$和$Y=\{y_1,y_2,…,y_n\}$为两个序列，$Z=\{z_1,z_2,…,z_k\}$为 X 和 Y 的任意 LCS。</p>
-<ol>
-<li>如果$x_m = y_n$，则$z_k=x_m=y_n$，且$Z_{k-1}$是$X_{m-1}$和$Y_{n-1}$的一个 LCS；</li>
-<li>如果$x_m \neq y_n$，那么$z_k \neq x_m$意味着 Z 是$X_{m-1}$和 Y 的一个 LCS；</li>
-<li>如果$x_m \neq y_n$，那么$z_k \neq y_n$意味着 Z 是$Y_{n-1}$和 Y 的一个 LCS。</li>
-</ol>
-<h2 id="一个递归解"><a href="#一个递归解" class="headerlink" title="一个递归解"></a>一个递归解</h2><p>定义$c[i,j]$表示$X_i$和$Y_j$的 LCS 长度，根据最优子结构性质易得：<br>$\begin{equation}\label{Dirichlet}<br>c[i,j]=\begin{cases}<br>0, &amp; \text{ 若 } i=1或i=0\\<br>c[i-1,j-1] + 1, &amp; \text{ 若 } i,j >0且x_i = y_j\\<br>max(c[i-1,j], c[i,j-1]), &amp; \text{ 若 } i,j >0且x_i \neq y_j<br>\end{cases}\end{equation}$</p>
-<h2 id="计算-LCS-的长度"><a href="#计算-LCS-的长度" class="headerlink" title="计算 LCS 的长度"></a>计算 LCS 的长度</h2><p>由上式可以很容易写出一个指数时间的递归算法来计算。但是 LCS 问题只有$\Theta (mn)$个子问题，可以使用动态规划自底向上计算。运行时间为$\Theta (mn)$。</p>
-<p>假设一个表格C，c[i,j]表示$A_i$和$B_j$的最长 LCS。</p>
-<p>C++实现代码如下：</p>
-<pre><code>#include &lt;iostream&gt;
-#include &lt;vector&gt;
-
-using namespace std;
-
-void get_lcs(string x, string y, vector&lt;vector&lt;int&gt;&gt; &amp;c) {
-    for (int i = 0; i &lt; x.size(); ++i)
-        for (int j = 0; j &lt; y.size(); ++j) {
-            if (x[i] == y[j])
-                c[i + 1][j + 1] = c[i][j] + 1;
-            else
-                c[i + 1][j + 1] = c[i][j + 1] &gt; c[i + 1][j] ? c[i][j + 1] : c[i + 1][j];
-        }
-}
-
-void print_lcs(string x, vector&lt;vector&lt;int&gt;&gt; c) {
-    int i = c.size() - 1;
-    int j = c[0].size() -1;
-    string result = &quot;&quot;;
-    while (i &gt; 0 &amp;&amp; j &gt; 0) {
-        if (c[i][j] &gt; c[i - 1][j] &amp;&amp; c[i][j] &gt; c[i][j - 1]) {
-            i--;
-            j--;
-            result = result + x[i];
-        }
-        else if (c[i][j] &gt; c[i - 1][j]) {
-            j--;
-        }
-        else
-            i--;
-    }
-    cout &lt;&lt; result;
-}
-
-int main() {
-    string x = &quot;10010101&quot;;
-    string y = &quot;010110110&quot;;
-    vector&lt;vector&lt;int&gt;&gt; c;
-    for (int i = 0; i &lt;= x.size(); ++i) {
-        vector&lt;int&gt; tmp;
-        tmp.resize(y.size() + 1);
-        c.push_back(tmp);
-    }
-    get_lcs(x, y, c);
-    print_lcs(x, c);
-    return 0;
-}
-</code></pre><h2 id="构造-LCS"><a href="#构造-LCS" class="headerlink" title="构造 LCS"></a>构造 LCS</h2><p>上面代码 print_lcs()函数构造 LCS。从 i，j 取最大值开始，由于每个c[i,j]只依赖于其他三项，c[i-1,j]，c[i,j-1]，c[i-1,j-1]，所以可以在$O(1)$的时间内判断出来使用了哪一项。</p>
-
-    </div>
-    
+      <div id="main" class="<%= item.layout %>" itemscope itemprop="blogPost">
+  <% if (page.layout=='photo' && item.photos && item.photos.length){ %>
+    <%- partial('gallery') %>
+  <% } %>
+	<article itemprop="articleBody"> 
+		<%- partial('header') %>
+	<div class="article-content">
+		<% if( table&&(item.toc !== false) && theme.toc.article){ %>
+		<div id="toc" class="toc-article">
+			<strong class="toc-title"><%= __('contents') %></strong>
+		<% if(item.list_number == false) {%>
+		<%- toc(item.content,{list_number:false}) %>
+		<% }else{ %>
+			<%- toc(item.content) %>
+		<% } %>
+		</div>
+		<% } %>
+		<%- item.content %>  
+	</div>
+    <% if (theme.donate) { %>
         <!-- css -->
         <style type="text/css">
             .center {
@@ -216,7 +142,7 @@ int main() {
             <br>
             <a id="btn_donate" class="btn_donate" target="_self" href="javascript:;" title="Donate 打赏"></a>
             <span class="donate_txt">
-                如果对你有帮助，可以赏我一杯咖啡~
+                <%= theme.donate.text %>
             </span>
                 
             
@@ -229,23 +155,23 @@ int main() {
             <br>
             ------------------------------------------------------------------------------------------------------------------------------
             <br>
-            
+            <% if(theme.donate.web) { %>
             <div width="100%" align="center"><div name="dashmain" id="dash-main-id-879873" class="dash-main-3 879873-0.99"></div></div>
             <script type="text/javascript" charset="utf-8" src="http://www.dashangcloud.com/static/ds.js"></script>
-            
+            <% } %>
 
-            <a href="http://7xl6z1.com1.z0.glb.clouddn.com/static/images/theme/reward_wechat.jpg" title="用微信扫一扫哦~" class="fancybox" rel="article0">
-                <img src="http://7xl6z1.com1.z0.glb.clouddn.com/static/images/theme/reward_wechat.jpg" title="微信打赏 Donate" height="190px" width="auto"/>
+            <a href="<%= theme.donate.wechat %>" title="用微信扫一扫哦~" class="fancybox" rel="article0">
+                <img src="<%= theme.donate.wechat %>" title="微信打赏 Donate" height="190px" width="auto"/>
             </a>
             
             &nbsp;&nbsp;
 
-            <a href="http://7xl6z1.com1.z0.glb.clouddn.com/static/images/theme/reward_alipay.jpg" title="用支付宝扫一扫即可~" class="fancybox" rel="article0">
-                <img src="http://7xl6z1.com1.z0.glb.clouddn.com/static/images/theme/reward_alipay.jpg" title="支付宝打赏 Donate" height="190px" width="auto"/>
+            <a href="<%= theme.donate.alipay %>" title="用支付宝扫一扫即可~" class="fancybox" rel="article0">
+                <img src="<%= theme.donate.alipay %>" title="支付宝打赏 Donate" height="190px" width="auto"/>
             </a>
 
             <span class="donate_txt">
-                如果对你有帮助，可以赏我一杯咖啡~
+                <%= theme.donate.text %>
             </span>
 
         </div>
@@ -273,67 +199,11 @@ int main() {
         <!-- /donate script -->
     </div>
     <!-- /Donate Module -->
-       
-		<footer class="article-footer clearfix">
-<div class="article-catetags">
-
-<div class="article-categories">
-  <span></span>
-  <a class="article-category-link" href="/categories/算法/">算法</a>
-</div>
-
-
-  <div class="article-tags">
-  
-  <span></span> <a href="/tags/algorithms/">algorithms</a><a href="/tags/LCS/">LCS</a><a href="/tags/dynamic-programming/">dynamic programming</a>
-  </div>
-
-</div>
-
-
-
-	<div class="article-share" id="share">
-	
-	  <div data-url="http://blog.liexing.me/2016/01/05/longest-common-subsequence/" data-title="最长公共子序列问题 | Liexing&#39;s Blog" data-tsina="1915625641" class="share clearfix">
-	  </div>
-	
-	</div>
-
-
-</footer>
-
-   	       
+       <% } %>
+		<%- partial('footer') %>   	       
 	</article>
-	
-<nav class="article-nav clearfix">
- 
- <div class="prev" >
- <a href="/2016/03/28/druid-quickstart/" title="Druid Quickstart">
-  <strong>上一篇：</strong><br/>
-  <span>
-  Druid Quickstart</span>
-</a>
-</div>
-
-
-<div class="next">
-<a href="/2015/09/01/oh-my-hexo/"  title="Oh My Hexo">
- <strong>下一篇：</strong><br/> 
- <span>Oh My Hexo
-</span>
-</a>
-</div>
-
-</nav>
-
-	
-
-<section id="comments" class="comment">
-  <div id="disqus_thread">
-    <noscript>Please enable JavaScript to view the <a href="//disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
-  </div>
-</section>
-
+	<%- partial('pagination') %>
+	<%- partial('comment') %>
 </div>  
 
       <div class="openaside"><a class="navbutton" href="#" title="显示侧边栏"></a></div>
@@ -385,7 +255,7 @@ int main() {
           
         
           
-            <li><a href="/categories/深度学习/" title="深度学习">深度学习<sup>1</sup></a></li>
+            <li><a href="/categories/深度学习/" title="深度学习">深度学习<sup>2</sup></a></li>
           
         
           
@@ -432,7 +302,7 @@ int main() {
   <div class="tagcloudlist">
     <p class="asidetitle">标签云</p>
     <div class="tagcloudlist clearfix">
-       <a href="/tags/Cassandra/" style="font-size: 12.5px;">Cassandra</a> <a href="/tags/Druid/" style="font-size: 15px;">Druid</a> <a href="/tags/JVM/" style="font-size: 10px;">JVM</a> <a href="/tags/Java/" style="font-size: 10px;">Java</a> <a href="/tags/LCS/" style="font-size: 10px;">LCS</a> <a href="/tags/NOSQL/" style="font-size: 12.5px;">NOSQL</a> <a href="/tags/Weight-initialization/" style="font-size: 10px;">Weight initialization</a> <a href="/tags/algorithms/" style="font-size: 10px;">algorithms</a> <a href="/tags/bash/" style="font-size: 10px;">bash</a> <a href="/tags/dynamic-programming/" style="font-size: 10px;">dynamic programming</a> <a href="/tags/hexo/" style="font-size: 10px;">hexo</a> <a href="/tags/k-邻近法/" style="font-size: 12.5px;">k 邻近法</a> <a href="/tags/knn/" style="font-size: 12.5px;">knn</a> <a href="/tags/linux/" style="font-size: 10px;">linux</a> <a href="/tags/macOS/" style="font-size: 10px;">macOS</a> <a href="/tags/内存模型/" style="font-size: 10px;">内存模型</a> <a href="/tags/分布式/" style="font-size: 17.5px;">分布式</a> <a href="/tags/多线程/" style="font-size: 10px;">多线程</a> <a href="/tags/实时计算/" style="font-size: 15px;">实时计算</a> <a href="/tags/异常处理/" style="font-size: 10px;">异常处理</a> <a href="/tags/异常表/" style="font-size: 10px;">异常表</a> <a href="/tags/感知机/" style="font-size: 10px;">感知机</a> <a href="/tags/最大熵模型/" style="font-size: 10px;">最大熵模型</a> <a href="/tags/朴素贝叶斯/" style="font-size: 10px;">朴素贝叶斯</a> <a href="/tags/机器学习/" style="font-size: 15px;">机器学习</a> <a href="/tags/杂/" style="font-size: 10px;">杂</a> <a href="/tags/深度学习/" style="font-size: 10px;">深度学习</a> <a href="/tags/源码分析/" style="font-size: 10px;">源码分析</a> <a href="/tags/笔记/" style="font-size: 20px;">笔记</a> <a href="/tags/统计学习/" style="font-size: 15px;">统计学习</a> <a href="/tags/调参/" style="font-size: 10px;">调参</a> <a href="/tags/逻辑斯谛回归/" style="font-size: 10px;">逻辑斯谛回归</a> <a href="/tags/配置/" style="font-size: 10px;">配置</a>
+       <a href="/tags/Adam/" style="font-size: 10px;">Adam</a> <a href="/tags/BGD/" style="font-size: 10px;">BGD</a> <a href="/tags/Cassandra/" style="font-size: 12.5px;">Cassandra</a> <a href="/tags/Druid/" style="font-size: 15px;">Druid</a> <a href="/tags/JVM/" style="font-size: 10px;">JVM</a> <a href="/tags/Java/" style="font-size: 10px;">Java</a> <a href="/tags/LCS/" style="font-size: 10px;">LCS</a> <a href="/tags/Momentum/" style="font-size: 10px;">Momentum</a> <a href="/tags/NOSQL/" style="font-size: 12.5px;">NOSQL</a> <a href="/tags/SGD/" style="font-size: 10px;">SGD</a> <a href="/tags/Weight-initialization/" style="font-size: 10px;">Weight initialization</a> <a href="/tags/algorithms/" style="font-size: 10px;">algorithms</a> <a href="/tags/bash/" style="font-size: 10px;">bash</a> <a href="/tags/dynamic-programming/" style="font-size: 10px;">dynamic programming</a> <a href="/tags/hexo/" style="font-size: 10px;">hexo</a> <a href="/tags/k-邻近法/" style="font-size: 12.5px;">k 邻近法</a> <a href="/tags/knn/" style="font-size: 12.5px;">knn</a> <a href="/tags/linux/" style="font-size: 10px;">linux</a> <a href="/tags/macOS/" style="font-size: 10px;">macOS</a> <a href="/tags/内存模型/" style="font-size: 10px;">内存模型</a> <a href="/tags/分布式/" style="font-size: 17.5px;">分布式</a> <a href="/tags/多线程/" style="font-size: 10px;">多线程</a> <a href="/tags/实时计算/" style="font-size: 15px;">实时计算</a> <a href="/tags/异常处理/" style="font-size: 10px;">异常处理</a> <a href="/tags/异常表/" style="font-size: 10px;">异常表</a> <a href="/tags/感知机/" style="font-size: 10px;">感知机</a> <a href="/tags/最大熵模型/" style="font-size: 10px;">最大熵模型</a> <a href="/tags/朴素贝叶斯/" style="font-size: 10px;">朴素贝叶斯</a> <a href="/tags/机器学习/" style="font-size: 15px;">机器学习</a> <a href="/tags/杂/" style="font-size: 10px;">杂</a> <a href="/tags/梯度下降/" style="font-size: 10px;">梯度下降</a> <a href="/tags/深度学习/" style="font-size: 12.5px;">深度学习</a> <a href="/tags/源码分析/" style="font-size: 10px;">源码分析</a> <a href="/tags/笔记/" style="font-size: 20px;">笔记</a> <a href="/tags/统计学习/" style="font-size: 15px;">统计学习</a> <a href="/tags/调参/" style="font-size: 12.5px;">调参</a> <a href="/tags/逻辑斯谛回归/" style="font-size: 10px;">逻辑斯谛回归</a> <a href="/tags/配置/" style="font-size: 10px;">配置</a>
     </div>
   </div>
 
@@ -500,12 +370,10 @@ int main() {
 		</p>
 </div>
 </footer>
-    <script src="/js/jquery-2.0.3.min.js"></script>
-<script src="/js/jquery.imagesloaded.min.js"></script>
-<script src="/js/gallery.js"></script>
-<script src="/js/jquery.qrcode-0.12.0.min.js"></script>
-<script async src="//dn-lbstatics.qbox.me/busuanzi/2.3/busuanzi.pure.mini.js">
-</script>
+    <script src="<%- config.root %>js/jquery-2.0.3.min.js"></script>
+<script src="<%- config.root %>js/jquery.imagesloaded.min.js"></script>
+<script src="<%- config.root %>js/gallery.js"></script>
+<script src="<%- config.root %>js/jquery.qrcode-0.12.0.min.js"></script>
 
 <script type="text/javascript">
 $(document).ready(function(){ 
@@ -537,7 +405,12 @@ $(document).ready(function(){
   $(window).scroll(function(){
     o.css("top",Math.max(80,260-$(this).scrollTop()));
   });
-  
+  <% if (is_post() && theme.close_aside) { %>
+        getSize();
+        if (myWidth >= 1024) {
+          c.click();
+        }
+  <% } %>
   $(window).resize(function(){
     getSize(); 
     if (myWidth >= 1024) {
@@ -546,14 +419,14 @@ $(document).ready(function(){
       m.removeClass('moveMain');
       a.css('display', 'block').removeClass('fadeOut');
       o.css('display', 'none');
-      
+      <% if( is_post()&&(page.toc !== false) && theme.toc.aside){ %>
       $('#toc.toc-aside').css('display', 'none');
-        
+      <% } %>  
     }
   });
 });
 </script>
-
+<% if (is_post()) { %>
 <script type="text/javascript">
 $(document).ready(function(){ 
   var ai = $('.article-content>iframe'),
@@ -579,8 +452,8 @@ $(document).ready(function(){
   });
 });
 </script>
-
-
+<% } %>
+<% if ((page.layout=='post'||page.layout=='page'||page.layout=='photo')&&!theme.jiathis.enable) { %>
 <script type="text/javascript">
 $(document).ready(function(){ 
   var $this = $('.share'),
@@ -629,14 +502,28 @@ $(document).ready(function(){
   });
 });   
 </script>
+<% } %>
 
-
-
-
+<% if (theme.duoshuo_shortname && page.comments){ %>
 <script type="text/javascript">
-
-var disqus_shortname = 'liexing';
-
+  var duoshuoQuery = {short_name:"<%= theme.duoshuo_shortname %>"};
+  (function() {
+    var ds = document.createElement('script');
+    ds.type = 'text/javascript';ds.async = true;
+    ds.src = '//7xl6z1.com1.z0.glb.clouddn.com/embed_ua.js';
+    ds.charset = 'UTF-8';
+    (document.getElementsByTagName('head')[0] 
+    || document.getElementsByTagName('body')[0]).appendChild(ds);
+  })();
+</script> 
+<% } %>
+<% if( (config.disqus_shortname || theme.disqus_shortname) && page.comments) { %>
+<script type="text/javascript">
+<% if(config.disqus_shortname){ %>
+var disqus_shortname = '<%= config.disqus_shortname %>';
+<% }else{ %>
+var disqus_shortname = '<%= theme.disqus_shortname %>';
+<% } %>
 (function(){
   var dsq = document.createElement('script');
   dsq.type = 'text/javascript';
@@ -652,14 +539,32 @@ var disqus_shortname = 'liexing';
   (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
 }());
 </script>
+<% } %>
 
 
 
-
-
-
-<link rel="stylesheet" href="/fancybox/jquery.fancybox.css" media="screen" type="text/css">
-<script src="/fancybox/jquery.fancybox.pack.js"></script>
+<% if (page.layout=='tags'||page.layout=='categories'){ %>
+<script type="text/javascript">
+$(document).ready(function(){ 
+  var list    = $('.archive-title a'),
+      box     = $('.all-list-box'),
+      first   = $('.archive-title a:first-of-type');
+      box.load(first.attr('data-src').toString()+' #archive-page');
+      first.addClass('current');
+  list.each(function(){
+    $(this).click(function(){
+      var listSrc=$(this).attr('data-src').toString()+' #archive-page';
+      box.load(listSrc);
+      list.removeClass('current');
+      $(this).addClass('current');
+     });  
+    });
+  }); 
+</script>
+<% } %>
+<% if (theme.fancybox){ %>
+<link rel="stylesheet" href="<%- config.root %>fancybox/jquery.fancybox.css" media="screen" type="text/css">
+<script src="<%- config.root %>fancybox/jquery.fancybox.pack.js"></script>
 <script type="text/javascript">
 $(document).ready(function(){ 
   $('.article-content').each(function(i){
@@ -678,76 +583,23 @@ $(document).ready(function(){
   }
 }); 
 </script>
-
+<% } %>
 
 
 <!-- Analytics Begin -->
-
-
-
-<script>
-var _hmt = _hmt || [];
-(function() {
-  var hm = document.createElement("script");
-  hm.src = "//hm.baidu.com/hm.js?e6d1f421bbc9962127a50488f9ed37d1";
-  var s = document.getElementsByTagName("script")[0]; 
-  s.parentNode.insertBefore(hm, s);
-})();
-</script>
-
-
-
-<span style="display:none"><script type="text/javascript">var cnzz_protocol = (("https:" == document.location.protocol) ? " https://" : " http://");document.write(unescape("%3Cspan id='cnzz_stat_icon_1256113107'%3E%3C/span%3E%3Cscript src='" + cnzz_protocol + "s23.cnzz.com/z_stat.php%3Fid%3D1256113107' type='text/javascript'%3E%3C/script%3E"));</script></span>
-
-
+<%- partial('analytics') %>
 <!-- Analytics End -->
 
 <!-- Totop Begin -->
-
-	<div id="totop">
-	<a title="返回顶部"><img src="/img/scrollup.png"/></a>
-	</div>
-	<script src="/js/totop.js"></script>
-
+<%- partial('totop') %>
 <!-- Totop End -->
 
 <!-- MathJax Begin -->
-<!-- mathjax config similar to math.stackexchange -->
-
-<script type="text/x-mathjax-config">
-  MathJax.Hub.Config({
-    tex2jax: {
-      inlineMath: [ ['$','$'], ["\\(","\\)"] ],
-      processEscapes: true
-    }
-  });
-</script>
-
-<script type="text/x-mathjax-config">
-    MathJax.Hub.Config({
-      tex2jax: {
-        skipTags: ['script', 'noscript', 'style', 'textarea', 'pre', 'code']
-      }
-    });
-</script>
-
-<script type="text/x-mathjax-config">
-    MathJax.Hub.Queue(function() {
-        var all = MathJax.Hub.getAllJax(), i;
-        for(i=0; i < all.length; i += 1) {
-            all[i].SourceElement().parentNode.className += ' has-jax';
-        }
-    });
-</script>
-
-<script type="text/javascript" src="http://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML">
-</script>
-
-
+<%- partial('mathjax') %>
 <!-- MathJax End -->
 
 <!-- Tiny_search Begin -->
-
+<%- partial('tinysou_search') %>
 <!-- Tiny_search End -->
 
   </body>
