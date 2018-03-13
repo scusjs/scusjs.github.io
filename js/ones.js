@@ -1,5 +1,5 @@
 $(function(){
-    $.ajax("http://wq.liexing.me:8080/api/one", {
+    $.ajax("//wq.liexing.me/api/one", {
         type: 'post',
         data:{
             sk: "6666666666666666"
