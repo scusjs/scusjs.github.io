@@ -12,7 +12,7 @@
 
     
     <meta name="description" content="Cassandra被设计来在多个节点中处理大量的数据负载，并且没有单点故障。它的架构建立在认为系统能够并且可能发生故障的基础上。 节点使用gossip这个点对点的算法来在集群中交换自身和其他节点的状态信息。 每个节点上，顺序追加的commit log文件，捕获节点的写入动作来确保数据的持续性。数据在叫做memtable的内存结构中索引和写入，这个结构类似于回写式缓存。每当内存数据结构写满时，数据被">
-<meta name="keywords" content="Cassandra,笔记,分布式,NOSQL">
+<meta name="keywords" content="笔记,Cassandra,分布式,NOSQL">
 <meta property="og:type" content="article">
 <meta property="og:title" content="Cassandra 架构简述">
 <meta property="og:url" content="http://blog.liexing.me/2016/08/25/cassandra-architecture-in-brief/index.html">
@@ -49,7 +49,7 @@
 			
 			<div id="textlogo">
 				<h1 class="site-name"><a href="/" title="Liexing&#39;s Blog">Liexing&#39;s Blog</a></h1>
-				<h2 class="blog-motto">不疯魔，不成佛</h2>
+				<h2 class="blog-motto"><span id="ones">不疯魔，不成佛</span></h2>
 			</div>
 			<div class="navbar"><a class="navbutton navmobile" href="#" title="菜单">
 			</a></div>
@@ -74,6 +74,7 @@
 				</ul>
 			</nav>			
 </div>
+
     </header>
     <div id="container">
       <div id="main" class="post" itemscope itemprop="blogPost">
@@ -227,7 +228,7 @@
 
   <div class="article-tags">
   
-  <span></span> <a href="/tags/Cassandra/">Cassandra</a><a href="/tags/笔记/">笔记</a><a href="/tags/分布式/">分布式</a><a href="/tags/NOSQL/">NOSQL</a>
+  <span></span> <a href="/tags/笔记/">笔记</a><a href="/tags/Cassandra/">Cassandra</a><a href="/tags/分布式/">分布式</a><a href="/tags/NOSQL/">NOSQL</a>
   </div>
 
 </div>
@@ -446,8 +447,8 @@
 <script src="/js/jquery.imagesloaded.min.js"></script>
 <script src="/js/gallery.js"></script>
 <script src="/js/jquery.qrcode-0.12.0.min.js"></script>
-<script async src="//dn-lbstatics.qbox.me/busuanzi/2.3/busuanzi.pure.mini.js">
-</script>
+<script async src="//dn-lbstatics.qbox.me/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+<script async src="/js/ones.js"></script>
 
 <script type="text/javascript">
 $(document).ready(function(){ 

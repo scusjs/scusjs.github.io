@@ -1094,9 +1094,9 @@
       <category term="Cassandra" scheme="http://blog.liexing.me/categories/Cassandra/"/>
     
     
-      <category term="Cassandra" scheme="http://blog.liexing.me/tags/Cassandra/"/>
-    
       <category term="笔记" scheme="http://blog.liexing.me/tags/%E7%AC%94%E8%AE%B0/"/>
+    
+      <category term="Cassandra" scheme="http://blog.liexing.me/tags/Cassandra/"/>
     
       <category term="分布式" scheme="http://blog.liexing.me/tags/%E5%88%86%E5%B8%83%E5%BC%8F/"/>
     
@@ -1130,9 +1130,9 @@
       <category term="Cassandra" scheme="http://blog.liexing.me/categories/Cassandra/"/>
     
     
-      <category term="Cassandra" scheme="http://blog.liexing.me/tags/Cassandra/"/>
-    
       <category term="笔记" scheme="http://blog.liexing.me/tags/%E7%AC%94%E8%AE%B0/"/>
+    
+      <category term="Cassandra" scheme="http://blog.liexing.me/tags/Cassandra/"/>
     
       <category term="分布式" scheme="http://blog.liexing.me/tags/%E5%88%86%E5%B8%83%E5%BC%8F/"/>
     
@@ -1575,11 +1575,11 @@
       <category term="笔记" scheme="http://blog.liexing.me/categories/%E7%AC%94%E8%AE%B0/"/>
     
     
-      <category term="笔记" scheme="http://blog.liexing.me/tags/%E7%AC%94%E8%AE%B0/"/>
-    
       <category term="linux" scheme="http://blog.liexing.me/tags/linux/"/>
     
       <category term="bash" scheme="http://blog.liexing.me/tags/bash/"/>
+    
+      <category term="笔记" scheme="http://blog.liexing.me/tags/%E7%AC%94%E8%AE%B0/"/>
     
   </entry>
   
