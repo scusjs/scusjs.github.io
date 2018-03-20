@@ -4,26 +4,30 @@
 <head>
   <meta charset="UTF-8">
   
-    <title>Druid Indexing Service（索引服务） | Liexing&#39;s Blog</title>
+    <title>跨域访问踩坑日志 | Liexing&#39;s Blog</title>
     <meta name="viewport" content="width=device-width, initial-scale=1,user-scalable=no">
     
     <meta name="author" content="liexing">
     
 
     
-    <meta name="description" content="Indexing Service 是 Druid 的一个核心组件，用来对数据进行索引，控制Druid的段的产生以及销毁。">
-<meta name="keywords" content="分布式,Druid,实时计算">
+    <meta name="description" content="关于 CORS 踩的一些坑，以及介绍了一些Spring中CORS相关的代码">
+<meta name="keywords" content="跨域,Spring Boot,踩坑日志">
 <meta property="og:type" content="article">
-<meta property="og:title" content="Druid Indexing Service（索引服务）">
-<meta property="og:url" content="http://blog.liexing.me/2016/04/15/druid-indexing-service/index.html">
+<meta property="og:title" content="跨域访问踩坑日志">
+<meta property="og:url" content="http://blog.liexing.me/2018/03/20/cross-domain-debug-record/index.html">
 <meta property="og:site_name" content="Liexing&#39;s Blog">
-<meta property="og:description" content="Indexing Service 是 Druid 的一个核心组件，用来对数据进行索引，控制Druid的段的产生以及销毁。">
-<meta property="og:image" content="http://7xl6z1.com1.z0.glb.clouddn.com/static/images/14605158741221.png">
-<meta property="og:updated_time" content="2017-02-27T11:34:45.000Z">
+<meta property="og:description" content="关于 CORS 踩的一些坑，以及介绍了一些Spring中CORS相关的代码">
+<meta property="og:image" content="http://7xl6z1.com1.z0.glb.clouddn.com/static/images/cross-domain-debug-record/1521556978.jpg">
+<meta property="og:image" content="http://7xl6z1.com1.z0.glb.clouddn.com/static/images/cross-domain-debug-record/1521557592.png">
+<meta property="og:image" content="http://7xl6z1.com1.z0.glb.clouddn.com/static/images/cross-domain-debug-record/1521558256.jpg">
+<meta property="og:image" content="http://7xl6z1.com1.z0.glb.clouddn.com/static/images/cross-domain-debug-record/1521558645.jpg">
+<meta property="og:image" content="http://7xl6z1.com1.z0.glb.clouddn.com/static/images/cross-domain-debug-record/1521558994.jpg">
+<meta property="og:updated_time" content="2018-03-20T15:41:36.387Z">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:title" content="Druid Indexing Service（索引服务）">
-<meta name="twitter:description" content="Indexing Service 是 Druid 的一个核心组件，用来对数据进行索引，控制Druid的段的产生以及销毁。">
-<meta name="twitter:image" content="http://7xl6z1.com1.z0.glb.clouddn.com/static/images/14605158741221.png">
+<meta name="twitter:title" content="跨域访问踩坑日志">
+<meta name="twitter:description" content="关于 CORS 踩的一些坑，以及介绍了一些Spring中CORS相关的代码">
+<meta name="twitter:image" content="http://7xl6z1.com1.z0.glb.clouddn.com/static/images/cross-domain-debug-record/1521556978.jpg">
 <meta name="twitter:creator" content="@scusjs">
 
     
@@ -85,14 +89,14 @@
         <header class="article-info clearfix">
   <h1 itemprop="name">
     
-      <a href="/2016/04/15/druid-indexing-service/" title="Druid Indexing Service（索引服务）" itemprop="url">Druid Indexing Service（索引服务）</a>
+      <a href="/2018/03/20/cross-domain-debug-record/" title="跨域访问踩坑日志" itemprop="url">跨域访问踩坑日志</a>
   </h1>
   <p class="article-author">By
        
 		<a href="/about" title="liexing" target="_blank" itemprop="author">liexing</a>
 		
   <p class="article-time">
-    <time datetime="2016-04-15T02:47:47.000Z" itemprop="datePublished"> 发表于 2016-04-15</time>
+    <time datetime="2018-03-20T12:39:49.000Z" itemprop="datePublished"> 发表于 2018-03-20</time>
 <span id="busuanzi_container_page_pv">
   &nbspViewed <span id="busuanzi_value_page_pv"><i class="fa fa-spinner fa-spin"></i></span> times
 </span>
@@ -105,30 +109,32 @@
         <div id="toc" class="toc-article">
             <strong class="toc-title">文章目录</strong>
         
-            <ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#Overlord节点"><span class="toc-number">1.</span> <span class="toc-text">Overlord节点</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#Middle-Manger"><span class="toc-number">2.</span> <span class="toc-text">Middle Manger</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#Peon"><span class="toc-number">3.</span> <span class="toc-text">Peon</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#HTTP-端"><span class="toc-number">4.</span> <span class="toc-text">HTTP 端</span></a></li></ol>
+            <ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#CORS-基本概念"><span class="toc-number">1.</span> <span class="toc-text">CORS 基本概念</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#服务端对跨域请求的识别"><span class="toc-number">2.</span> <span class="toc-text">服务端对跨域请求的识别</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#浏览器对CORS的操作"><span class="toc-number">3.</span> <span class="toc-text">浏览器对CORS的操作</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#Postman-的坑"><span class="toc-number">4.</span> <span class="toc-text">Postman 的坑</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#Spring中CORS相关操作"><span class="toc-number">5.</span> <span class="toc-text">Spring中CORS相关操作</span></a></li></ol>
         
         </div>
         
-        <p>索引服务是一种用来运行索引相关任务的高可用、分布式的服务。索引服务任务创建或者销毁Druid的段。其架构类似主奴机制。</p>
-<p>索引服务由三个主要部件组成：peon运行单个的任务，Middle Manager组件管理peon，overlord组件控制任务向Middle Manager的分配。Middle Manager和Peon通常运行在同一个节点，Overlord和Middle Manager能运行在相同节点或者多个节点上。</p>
-<p>索引服务的示意图如下：</p>
-<img title="Druid" alt="Druid" src="http://7xl6z1.com1.z0.glb.clouddn.com/static/images/14605158741221.png">
-<h2 id="Overlord节点"><a href="#Overlord节点" class="headerlink" title="Overlord节点"></a>Overlord节点</h2><p>Overlord节点负责接收任务，负责任务的分配，对任务加锁，向调用者返回任务状态。Overlord有两种模式：本地模式或者远程模式。其中本地模式是默认模式。在本地模式下Overlord也负责创建Peon来执行任务，所有的Middle Manager和Peon的配置此时也应当被提供，这种模式一般用于普通的工作流。远程模式中，Overlord和Middle Manager运行在不同的进程中，也可以在不同服务器上运行，如果想让索引服务成为Druid索引的单一端点，推荐使用这种模式。</p>
-<p>可以通过向Overlor节点以POST请求提交JSON对象的方式提交任务：</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">http://&lt;OVERLORD_IP&gt;:&lt;port&gt;/druid/indexer/v1/task</div></pre></td></tr></table></figure>
-<p>这将会返回提交的任务id。任务也能通过POST请求来关闭：</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">http://&lt;OVERLORD_IP&gt;:&lt;port&gt;/druid/indexer/v1/task/&#123;taskId&#125;/status</div></pre></td></tr></table></figure>
-<p>或者通过GET请求来查询状态：</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">http://&lt;OVERLORD_IP&gt;:&lt;port&gt;/druid/indexer/v1/task/&#123;taskId&#125;/segments</div></pre></td></tr></table></figure>
-<p>可以在浏览器中访问</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">http://&lt;OVERLORD_IP&gt;:&lt;port&gt;/console.html</div></pre></td></tr></table></figure>
-<p>来查看任务一些信息。</p>
-<h2 id="Middle-Manger"><a href="#Middle-Manger" class="headerlink" title="Middle Manger"></a>Middle Manger</h2><p>Middle Manger是执行提交任务的工作节点。Middle Manger向运行在独立JVM的Peon发送任务。独立开JVM是因为资源问题与日志隔离。每一个Peon一次只能执行一个任务。一个Middle Manger可以有多个Peon。</p>
-<p>通过<code>io.druid.cli.Main server middleManager</code>来启动Middle Manager。</p>
-<h2 id="Peon"><a href="#Peon" class="headerlink" title="Peon"></a>Peon</h2><p>Peon在独立的JVM中执行单个任务。MiddleManager负责创建Peon来执行任务。Peon很少单独运行。</p>
-<p>除了开发目的，很少独立的运行Peon。通过<code>io.druid.cli.Main internal peon &lt;task_file&gt; &lt;status_file&gt;</code>来独立执行。其中task_file包含了任务的JSON对象。status_file表示在那里输出任务的状态。</p>
-<h2 id="HTTP-端"><a href="#HTTP-端" class="headerlink" title="HTTP 端"></a>HTTP 端</h2><p>可以通过HTTP的GET请求<code>http://&lt;NODE_IP&gt;:&lt;port&gt;/status</code>来获取一些节点的信息，包括版本、载入的扩展、内存使用、总内存数等，比如：</p>
-<figure class="highlight json"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div></pre></td><td class="code"><pre><div class="line">&#123;</div><div class="line">    <span class="attr">"version"</span>: <span class="string">"0.9.0-rc3"</span>,</div><div class="line">    <span class="attr">"modules"</span>: [</div><div class="line">        &#123;</div><div class="line">            <span class="attr">"name"</span>: <span class="string">"io.druid.data.input.avro.AvroExtensionsModule"</span>,</div><div class="line">            <span class="attr">"artifact"</span>: <span class="string">"druid-avro-extensions"</span>,</div><div class="line">            <span class="attr">"version"</span>: <span class="string">"0.9.1-SNAPSHOT"</span></div><div class="line">        &#125;</div><div class="line">    ],</div><div class="line">    <span class="attr">"memory"</span>: &#123;</div><div class="line">        <span class="attr">"maxMemory"</span>: <span class="number">67108864</span>,</div><div class="line">        <span class="attr">"totalMemory"</span>: <span class="number">67108864</span>,</div><div class="line">        <span class="attr">"freeMemory"</span>: <span class="number">32278264</span>,</div><div class="line">        <span class="attr">"usedMemory"</span>: <span class="number">34830600</span></div><div class="line">    &#125;</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+        <blockquote><p>拨开云雾见天日 守得云开见月明</p>
+<footer><strong>我也不知道是谁说的</strong></footer></blockquote>
+<p>终于把毕设撸完了，我的毕设刚好值10斤肉。赶论文这段时间无比的想撸代码，第一版写完赶紧的写了一晚上 bug，愉快的熬到了半夜。效果见本站左上角，后端调用了韩寒的“一个”，每天都是不一样的话，后端主要是 Spring 那一套。计划最近写一些常用的接口并且开放出来。</p>
+<p>在过程中遇到一个坑，尽管用了<code>@CrossOrigin</code>注解，但是返回内容依然没有Access-Control-Allow-Origin头部，postman上没有（之前写 PHP，在 nginx 中直接对接口调用加上了这个头，所以。。。嗯是我太菜），ajax去访问也没有（这里是我自己脑抽了，后面讲），导致前端无法跨域访问，但是神奇的是，如果任务起在我电脑上，同一个局域网上室友的电脑上 postman 返回正常，微笑脸。。。嗯情况大概就是这样，然后这个 bug 调了我一晚。</p>
+<h2 id="CORS-基本概念"><a href="#CORS-基本概念" class="headerlink" title="CORS 基本概念"></a>CORS 基本概念</h2><p>这里首先说一下<a href="https://www.w3.org/TR/cors/" target="_blank" rel="external">CORS</a>，CORS是一个 W3C的标准，全称是跨域资源共享（Cross-origin resource sharing）。CORS需要服务器返回的数据头部包含相应的信息，CORS在客户端是浏览器自动支持的（IE 走开），如果浏览器收到服务器返回数据中包含了对应的头部，则可以使用其数据。对于简单请求（HEAD、GET、POST 方法之一，并且请求的头部不能超出如Accept、Accept-Language、Content-Language、Last-Event-ID、Content-Type这几个字段，并且Content-Type只限于application/x-www-form-urlencoded、multipart/form-data、text/plain这三个值），浏览器会自动在请求中增加一个 <code>Origin</code>字段，对于非简单请求，浏览器会提前进行一次“预检”请求（请求方法为OPTIONS）查询服务器一些信息，然后再发送加上了<code>Origin</code>字段的正常请求。比如发送一个<code>PUT</code>请求，浏览器首先发送“预检”请求：<br><figure class="highlight http"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">OPTIONS</span> <span class="string">/cors</span> HTTP/1.1</div><div class="line"><span class="attribute">Origin</span>: https://api.liexing.me</div><div class="line"><span class="attribute">Access-Control-Request-Method</span>: PUT</div><div class="line"><span class="attribute">Access-Control-Request-Headers</span>: X-Custom-Header</div><div class="line"><span class="attribute">Host</span>: api.liexing.me</div><div class="line"><span class="attribute">Accept-Language</span>: zh-CN,zh;q=0.9,en;q=0.8</div><div class="line"><span class="attribute">Connection</span>: keep-alive</div><div class="line"><span class="attribute">User-Agent</span>: Mozilla/5.0...</div></pre></td></tr></table></figure></p>
+<p>“预检”请求用来向服务器确认，当前网页所在的域名是否在服务器的许可名单之中，以及可以使用哪些HTTP动词和头信息字段。只有得到肯定答复，浏览器才会发出正式的请求。<code>Access-Control-Request-Method</code>用来询问是否支持该方法，<code>Access-Control-Request-Headers</code>用来指定浏览器CORS请求会额外发送的头信息字段。如果服务器确认了请求，则做出回应：<br><figure class="highlight http"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div></pre></td><td class="code"><pre><div class="line">HTTP/1.1 <span class="number">200</span> OK</div><div class="line"><span class="attribute">Date</span>: Thu, 20 Mar 2018 22:30:39 GMT</div><div class="line"><span class="attribute">Server</span>: Apache/2.0.61 (Unix)</div><div class="line"><span class="attribute">Access-Control-Allow-Origin</span>: *</div><div class="line"><span class="attribute">Access-Control-Allow-Methods</span>: GET, POST, PUT</div><div class="line"><span class="attribute">Access-Control-Allow-Headers</span>: X-Custom-Header</div><div class="line"><span class="attribute">Content-Type</span>: text/html; charset=utf-8</div><div class="line"><span class="attribute">Content-Encoding</span>: gzip</div><div class="line"><span class="attribute">Content-Length</span>: 0</div><div class="line"><span class="attribute">Keep-Alive</span>: timeout=2, max=100</div><div class="line"><span class="attribute">Connection</span>: Keep-Alive</div><div class="line"><span class="attribute">Content-Type</span>: text/plain</div></pre></td></tr></table></figure></p>
+<p>其中，<code>Access-Control-Allow-Origin</code>即为允许访问的域名，可以为*或者域名，<code>Access-Control-Allow-Methods</code>表示允许跨域的方法，<code>Access-Control-Allow-Headers</code>为允许跨域需要的头部。</p>
+<p>在预检通过之后，会发送正常的<code>PUT</code>请求，并且在头部自动添加<code>Origin</code> 字段，服务器对这个请求需要校验是否含有<code>Access-Control-Allow-Headers</code>标注的头部，是否是允许的方法以及来源域名，如果都通过则返回会带上<code>Access-Control-Allow-Origin</code>，这时候浏览器才能使用。</p>
+<h2 id="服务端对跨域请求的识别"><a href="#服务端对跨域请求的识别" class="headerlink" title="服务端对跨域请求的识别"></a>服务端对跨域请求的识别</h2><p>在<a href="https://www.w3.org/TR/cors/" target="_blank" rel="external">CORS</a>的文档中可以看到这样一句话：</p>
+<blockquote>
+<p>Server-side applications are enabled to discover that an HTTP request was deemed a cross-origin request by the user agent, through the Origin header.</p>
+</blockquote>
+<p>这是第一个坑，当然这是我自己的问题，因为之前写PHP时候，为了方便，直接在通过Nginx代理中加上一个<code>Access-Control-Allow-Origin</code>头部，而 Spring Boot 对于 CORS 是按照标准来的，这里后面会说。</p>
+<h2 id="浏览器对CORS的操作"><a href="#浏览器对CORS的操作" class="headerlink" title="浏览器对CORS的操作"></a>浏览器对CORS的操作</h2><p>前面说了，浏览器在跨域访问时，会自动加上一个<code>Origin</code>头部来标注来源，这也是后端识别跨域访问的判定标准。而我在写 js 时（嗯我就是前端渣，不然咋会掉坑），域名没有加上协议，即 <code>https://</code>或者<code>//</code>，尽管浏览器给了我提示，然而我瞎了，而且还认为是浏览器 bug 换了一堆浏览器。</p>
+<img title="浏览器对于协议缺失的报错" alt="浏览器对于协议缺失的报错" width="600" src="http://7xl6z1.com1.z0.glb.clouddn.com/static/images/cross-domain-debug-record/1521556978.jpg">
+<h2 id="Postman-的坑"><a href="#Postman-的坑" class="headerlink" title="Postman 的坑"></a>Postman 的坑</h2><p>这下来了让我当时无比懵逼的一个坑了，就是我的 Postman 是 app 版本（Mac）的，我室友的是 Chrome 的应用版，而Chrome 应用版本的Postman在请求时，会加上一个<code>Origin</code>字段，而 app 版的不会，因此这也算为啥我室友电脑上没事╭(╯^╰)╮</p>
+<img title="Chrome应用版postman" alt="Chrome应用版postman" width="600" src="http://7xl6z1.com1.z0.glb.clouddn.com/static/images/cross-domain-debug-record/1521557592.png">
+<img title="app版postman" alt="app应用版postman" width="600" src="http://7xl6z1.com1.z0.glb.clouddn.com/static/images/cross-domain-debug-record/1521558256.jpg">
+<p>从上面两个图可以看出，不同版本的 postman 发送的请求头部会有不同。</p>
+<h2 id="Spring中CORS相关操作"><a href="#Spring中CORS相关操作" class="headerlink" title="Spring中CORS相关操作"></a>Spring中CORS相关操作</h2><p>Spring 中，检查是否是CORS只是看<code>Origin</code>头部，即完全按照W3C标准。Spring 通过<code>org.springframework.web.cors</code>中的<code>CorsUtils.isCorsRequest</code>来判断，如下图。<br><img title="Spring中判断CORS" alt="Spring中判断CORS" width="600" src="http://7xl6z1.com1.z0.glb.clouddn.com/static/images/cross-domain-debug-record/1521558645.jpg"></p>
+<p>对于 CORS 的各种操作，会在<code>org.springframework.web.cors</code>中进行，比如在<code>org.springframework.web.cors.reactive</code>中的<code>DefaultCorsProcessor。handleInternal</code>对 CORS 请求的返回进行各种校验并且添加头部操作，如下图。<br><img title="Spring中添加CORS头" alt="Spring中添加CORS头" width="600" src="http://7xl6z1.com1.z0.glb.clouddn.com/static/images/cross-domain-debug-record/1521558994.jpg"></p>
+<p>anyway，总结一下这次的坑，首先是自己懒没看CORS详细的规范，以及习惯性的自己用错了都加上跨域的头部；其次是自己傻ajax写错了，导致一直以为是后端代码的问题；最后是postman太坑，室友的电脑上正常我的电脑错误，导致我懵逼了半天。嗯就这样。</p>
 
     </div>
     
@@ -237,13 +243,13 @@
 
 <div class="article-categories">
   <span></span>
-  <a class="article-category-link" href="/categories/Druid/">Druid</a>
+  <a class="article-category-link" href="/categories/笔记/">笔记</a>
 </div>
 
 
   <div class="article-tags">
   
-  <span></span> <a href="/tags/分布式/">分布式</a><a href="/tags/Druid/">Druid</a><a href="/tags/实时计算/">实时计算</a>
+  <span></span> <a href="/tags/跨域/">跨域</a><a href="/tags/Spring-Boot/">Spring Boot</a><a href="/tags/踩坑日志/">踩坑日志</a>
   </div>
 
 </div>
@@ -252,7 +258,7 @@
 
 	<div class="article-share" id="share">
 	
-	  <div data-url="http://blog.liexing.me/2016/04/15/druid-indexing-service/" data-title="Druid Indexing Service（索引服务） | Liexing&#39;s Blog" data-tsina="1915625641" class="share clearfix">
+	  <div data-url="http://blog.liexing.me/2018/03/20/cross-domain-debug-record/" data-title="跨域访问踩坑日志 | Liexing&#39;s Blog" data-tsina="1915625641" class="share clearfix">
 	  </div>
 	
 	</div>
@@ -265,19 +271,11 @@
 	
 <nav class="article-nav clearfix">
  
- <div class="prev" >
- <a href="/2016/04/20/reindex-between-different-druid-use-and-metadatastorage/" title="使用不同Metadata Storage的Druid集群间转移DataSource">
-  <strong>上一篇：</strong><br/>
-  <span>
-  使用不同Metadata Storage的Druid集群间转移DataSource</span>
-</a>
-</div>
-
 
 <div class="next">
-<a href="/2016/03/28/druid-quickstart/"  title="Druid Quickstart">
+<a href="/2017/12/20/art-generation-with-neural-style-transfer/"  title="风格迁移-生成图片">
  <strong>下一篇：</strong><br/> 
- <span>Druid Quickstart
+ <span>风格迁移-生成图片
 </span>
 </a>
 </div>
@@ -299,7 +297,7 @@
   <div id="toc" class="toc-aside">
   <strong class="toc-title">文章目录</strong>
  
- <ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#Overlord节点"><span class="toc-number">1.</span> <span class="toc-text">Overlord节点</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#Middle-Manger"><span class="toc-number">2.</span> <span class="toc-text">Middle Manger</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#Peon"><span class="toc-number">3.</span> <span class="toc-text">Peon</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#HTTP-端"><span class="toc-number">4.</span> <span class="toc-text">HTTP 端</span></a></li></ol>
+ <ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#CORS-基本概念"><span class="toc-number">1.</span> <span class="toc-text">CORS 基本概念</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#服务端对跨域请求的识别"><span class="toc-number">2.</span> <span class="toc-text">服务端对跨域请求的识别</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#浏览器对CORS的操作"><span class="toc-number">3.</span> <span class="toc-text">浏览器对CORS的操作</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#Postman-的坑"><span class="toc-number">4.</span> <span class="toc-text">Postman 的坑</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#Spring中CORS相关操作"><span class="toc-number">5.</span> <span class="toc-text">Spring中CORS相关操作</span></a></li></ol>
  
   </div>
 

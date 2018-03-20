@@ -5,7 +5,7 @@
   <link href="/atom.xml" rel="self"/>
   
   <link href="http://blog.liexing.me/"/>
-  <updated>2017-12-21T03:38:48.628Z</updated>
+  <updated>2018-03-20T15:41:36.387Z</updated>
   <id>http://blog.liexing.me/</id>
   
   <author>
@@ -14,6 +14,54 @@
   </author>
   
   <generator uri="http://hexo.io/">Hexo</generator>
+  
+  <entry>
+    <title>跨域访问踩坑日志</title>
+    <link href="http://blog.liexing.me/2018/03/20/cross-domain-debug-record/"/>
+    <id>http://blog.liexing.me/2018/03/20/cross-domain-debug-record/</id>
+    <published>2018-03-20T12:39:49.000Z</published>
+    <updated>2018-03-20T15:41:36.387Z</updated>
+    
+    <content type="html"><![CDATA[<blockquote><p>拨开云雾见天日 守得云开见月明</p>
+<footer><strong>我也不知道是谁说的</strong></footer></blockquote>
+<p>终于把毕设撸完了，我的毕设刚好值10斤肉。赶论文这段时间无比的想撸代码，第一版写完赶紧的写了一晚上 bug，愉快的熬到了半夜。效果见本站左上角，后端调用了韩寒的“一个”，每天都是不一样的话，后端主要是 Spring 那一套。计划最近写一些常用的接口并且开放出来。</p>
+<p>在过程中遇到一个坑，尽管用了<code>@CrossOrigin</code>注解，但是返回内容依然没有Access-Control-Allow-Origin头部，postman上没有（之前写 PHP，在 nginx 中直接对接口调用加上了这个头，所以。。。嗯是我太菜），ajax去访问也没有（这里是我自己脑抽了，后面讲），导致前端无法跨域访问，但是神奇的是，如果任务起在我电脑上，同一个局域网上室友的电脑上 postman 返回正常，微笑脸。。。嗯情况大概就是这样，然后这个 bug 调了我一晚。</p>
+<h2 id="CORS-基本概念"><a href="#CORS-基本概念" class="headerlink" title="CORS 基本概念"></a>CORS 基本概念</h2><p>这里首先说一下<a href="https://www.w3.org/TR/cors/" target="_blank" rel="external">CORS</a>，CORS是一个 W3C的标准，全称是跨域资源共享（Cross-origin resource sharing）。CORS需要服务器返回的数据头部包含相应的信息，CORS在客户端是浏览器自动支持的（IE 走开），如果浏览器收到服务器返回数据中包含了对应的头部，则可以使用其数据。对于简单请求（HEAD、GET、POST 方法之一，并且请求的头部不能超出如Accept、Accept-Language、Content-Language、Last-Event-ID、Content-Type这几个字段，并且Content-Type只限于application/x-www-form-urlencoded、multipart/form-data、text/plain这三个值），浏览器会自动在请求中增加一个 <code>Origin</code>字段，对于非简单请求，浏览器会提前进行一次“预检”请求（请求方法为OPTIONS）查询服务器一些信息，然后再发送加上了<code>Origin</code>字段的正常请求。比如发送一个<code>PUT</code>请求，浏览器首先发送“预检”请求：<br><figure class="highlight http"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">OPTIONS</span> <span class="string">/cors</span> HTTP/1.1</div><div class="line"><span class="attribute">Origin</span>: https://api.liexing.me</div><div class="line"><span class="attribute">Access-Control-Request-Method</span>: PUT</div><div class="line"><span class="attribute">Access-Control-Request-Headers</span>: X-Custom-Header</div><div class="line"><span class="attribute">Host</span>: api.liexing.me</div><div class="line"><span class="attribute">Accept-Language</span>: zh-CN,zh;q=0.9,en;q=0.8</div><div class="line"><span class="attribute">Connection</span>: keep-alive</div><div class="line"><span class="attribute">User-Agent</span>: Mozilla/5.0...</div></pre></td></tr></table></figure></p>
+<p>“预检”请求用来向服务器确认，当前网页所在的域名是否在服务器的许可名单之中，以及可以使用哪些HTTP动词和头信息字段。只有得到肯定答复，浏览器才会发出正式的请求。<code>Access-Control-Request-Method</code>用来询问是否支持该方法，<code>Access-Control-Request-Headers</code>用来指定浏览器CORS请求会额外发送的头信息字段。如果服务器确认了请求，则做出回应：<br><figure class="highlight http"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div></pre></td><td class="code"><pre><div class="line">HTTP/1.1 <span class="number">200</span> OK</div><div class="line"><span class="attribute">Date</span>: Thu, 20 Mar 2018 22:30:39 GMT</div><div class="line"><span class="attribute">Server</span>: Apache/2.0.61 (Unix)</div><div class="line"><span class="attribute">Access-Control-Allow-Origin</span>: *</div><div class="line"><span class="attribute">Access-Control-Allow-Methods</span>: GET, POST, PUT</div><div class="line"><span class="attribute">Access-Control-Allow-Headers</span>: X-Custom-Header</div><div class="line"><span class="attribute">Content-Type</span>: text/html; charset=utf-8</div><div class="line"><span class="attribute">Content-Encoding</span>: gzip</div><div class="line"><span class="attribute">Content-Length</span>: 0</div><div class="line"><span class="attribute">Keep-Alive</span>: timeout=2, max=100</div><div class="line"><span class="attribute">Connection</span>: Keep-Alive</div><div class="line"><span class="attribute">Content-Type</span>: text/plain</div></pre></td></tr></table></figure></p>
+<p>其中，<code>Access-Control-Allow-Origin</code>即为允许访问的域名，可以为*或者域名，<code>Access-Control-Allow-Methods</code>表示允许跨域的方法，<code>Access-Control-Allow-Headers</code>为允许跨域需要的头部。</p>
+<p>在预检通过之后，会发送正常的<code>PUT</code>请求，并且在头部自动添加<code>Origin</code> 字段，服务器对这个请求需要校验是否含有<code>Access-Control-Allow-Headers</code>标注的头部，是否是允许的方法以及来源域名，如果都通过则返回会带上<code>Access-Control-Allow-Origin</code>，这时候浏览器才能使用。</p>
+<h2 id="服务端对跨域请求的识别"><a href="#服务端对跨域请求的识别" class="headerlink" title="服务端对跨域请求的识别"></a>服务端对跨域请求的识别</h2><p>在<a href="https://www.w3.org/TR/cors/" target="_blank" rel="external">CORS</a>的文档中可以看到这样一句话：</p>
+<blockquote>
+<p>Server-side applications are enabled to discover that an HTTP request was deemed a cross-origin request by the user agent, through the Origin header.</p>
+</blockquote>
+<p>这是第一个坑，当然这是我自己的问题，因为之前写PHP时候，为了方便，直接在通过Nginx代理中加上一个<code>Access-Control-Allow-Origin</code>头部，而 Spring Boot 对于 CORS 是按照标准来的，这里后面会说。</p>
+<h2 id="浏览器对CORS的操作"><a href="#浏览器对CORS的操作" class="headerlink" title="浏览器对CORS的操作"></a>浏览器对CORS的操作</h2><p>前面说了，浏览器在跨域访问时，会自动加上一个<code>Origin</code>头部来标注来源，这也是后端识别跨域访问的判定标准。而我在写 js 时（嗯我就是前端渣，不然咋会掉坑），域名没有加上协议，即 <code>https://</code>或者<code>//</code>，尽管浏览器给了我提示，然而我瞎了，而且还认为是浏览器 bug 换了一堆浏览器。</p>
+<img title="浏览器对于协议缺失的报错" alt="浏览器对于协议缺失的报错" width="600" src="http://7xl6z1.com1.z0.glb.clouddn.com/static/images/cross-domain-debug-record/1521556978.jpg">
+<h2 id="Postman-的坑"><a href="#Postman-的坑" class="headerlink" title="Postman 的坑"></a>Postman 的坑</h2><p>这下来了让我当时无比懵逼的一个坑了，就是我的 Postman 是 app 版本（Mac）的，我室友的是 Chrome 的应用版，而Chrome 应用版本的Postman在请求时，会加上一个<code>Origin</code>字段，而 app 版的不会，因此这也算为啥我室友电脑上没事╭(╯^╰)╮</p>
+<img title="Chrome应用版postman" alt="Chrome应用版postman" width="600" src="http://7xl6z1.com1.z0.glb.clouddn.com/static/images/cross-domain-debug-record/1521557592.png">
+<img title="app版postman" alt="app应用版postman" width="600" src="http://7xl6z1.com1.z0.glb.clouddn.com/static/images/cross-domain-debug-record/1521558256.jpg">
+<p>从上面两个图可以看出，不同版本的 postman 发送的请求头部会有不同。</p>
+<h2 id="Spring中CORS相关操作"><a href="#Spring中CORS相关操作" class="headerlink" title="Spring中CORS相关操作"></a>Spring中CORS相关操作</h2><p>Spring 中，检查是否是CORS只是看<code>Origin</code>头部，即完全按照W3C标准。Spring 通过<code>org.springframework.web.cors</code>中的<code>CorsUtils.isCorsRequest</code>来判断，如下图。<br><img title="Spring中判断CORS" alt="Spring中判断CORS" width="600" src="http://7xl6z1.com1.z0.glb.clouddn.com/static/images/cross-domain-debug-record/1521558645.jpg"></p>
+<p>对于 CORS 的各种操作，会在<code>org.springframework.web.cors</code>中进行，比如在<code>org.springframework.web.cors.reactive</code>中的<code>DefaultCorsProcessor。handleInternal</code>对 CORS 请求的返回进行各种校验并且添加头部操作，如下图。<br><img title="Spring中添加CORS头" alt="Spring中添加CORS头" width="600" src="http://7xl6z1.com1.z0.glb.clouddn.com/static/images/cross-domain-debug-record/1521558994.jpg"></p>
+<p>anyway，总结一下这次的坑，首先是自己懒没看CORS详细的规范，以及习惯性的自己用错了都加上跨域的头部；其次是自己傻ajax写错了，导致一直以为是后端代码的问题；最后是postman太坑，室友的电脑上正常我的电脑错误，导致我懵逼了半天。嗯就这样。</p>
+]]></content>
+    
+    <summary type="html">
+    
+      关于 CORS 踩的一些坑，以及介绍了一些Spring中CORS相关的代码
+    
+    </summary>
+    
+      <category term="笔记" scheme="http://blog.liexing.me/categories/%E7%AC%94%E8%AE%B0/"/>
+    
+    
+      <category term="跨域" scheme="http://blog.liexing.me/tags/%E8%B7%A8%E5%9F%9F/"/>
+    
+      <category term="Spring Boot" scheme="http://blog.liexing.me/tags/Spring-Boot/"/>
+    
+      <category term="踩坑日志" scheme="http://blog.liexing.me/tags/%E8%B8%A9%E5%9D%91%E6%97%A5%E5%BF%97/"/>
+    
+  </entry>
   
   <entry>
     <title>风格迁移-生成图片</title>
@@ -1580,45 +1628,6 @@
       <category term="bash" scheme="http://blog.liexing.me/tags/bash/"/>
     
       <category term="笔记" scheme="http://blog.liexing.me/tags/%E7%AC%94%E8%AE%B0/"/>
-    
-  </entry>
-  
-  <entry>
-    <title>使用不同Metadata Storage的Druid集群间转移DataSource</title>
-    <link href="http://blog.liexing.me/2016/04/20/reindex-between-different-druid-use-and-metadatastorage/"/>
-    <id>http://blog.liexing.me/2016/04/20/reindex-between-different-druid-use-and-metadatastorage/</id>
-    <published>2016-04-20T10:19:58.000Z</published>
-    <updated>2017-02-27T11:34:45.000Z</updated>
-    
-    <content type="html"><![CDATA[<p>在Druid中读取已有的数据比较简单，有很多方法可以使用，<a href="http://druid.io/docs/0.9.0/ingestion/update-existing-data.html" target="_blank" rel="external">详见这里</a>。但是如果不同的Druid集群使用了不同的Metadata Storage，迁移任务首先回去找datasource下的segments，但是由于旧的Druid集群把相关信息保存在其他地方，这将会导致找不到Segments。</p>
-<p>因此考虑将旧集群中需要转移的datasource的metadata转到新集群的Metadata Storage。假设两个集群均使用MySQL作为Metadata Storage。</p>
-<p>首先将满足条件的segments数据导出：</p>
-<figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">mysql -uroot -p <span class="_">-e</span> <span class="string">'select * from druid.druid_segments where datasource="datasourcename";'</span> &gt; ./segments.metadata.sql</div></pre></td></tr></table></figure>
-<p>然后在新集群的MySQL终端中执行下面语句将数据导入：</p>
-<figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">load data <span class="built_in">local</span> infile <span class="string">'path_to_sql/segments.metadata.sql'</span> INTO TABLE druid.druid_segments FIELDS TERMINATED BY <span class="string">'\t'</span>;</div></pre></td></tr></table></figure>
-<p>然后执行Hadoop Index任务即可，部分配置如下：</p>
-<figure class="highlight"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div></pre></td><td class="code"><pre><div class="line">&#123;</div><div class="line">  "type" : "index_hadoop",</div><div class="line">  "spec" : &#123;</div><div class="line">    "ioConfig" : &#123;</div><div class="line">      "type" : "hadoop",</div><div class="line">      "inputSpec" : &#123;</div><div class="line">        "type" : "dataSource",</div><div class="line">        "ingestionSpec" : &#123;</div><div class="line">          "dataSource" : "datasourcename",</div><div class="line">          "interval" : "2016-04-09T00:00:00+08:00/P1D"</div><div class="line">        &#125;</div><div class="line">      &#125;</div><div class="line">    &#125;,</div><div class="line">    ...</div><div class="line">&#125;</div></pre></td></tr></table></figure>
-<p>向overlord提交任务：</p>
-<figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">curl -X <span class="string">'POST'</span> -H <span class="string">'Content-Type:application/json'</span> <span class="_">-d</span> @task_config.json &lt;overlord_host&gt;:&lt;port&gt;/druid/indexer/v1/task</div></pre></td></tr></table></figure>
-<blockquote>
-<p>注：此方法适用于两个集群使用相同的Deep Storage，否则还需要迁移Deep Storage中存储的Segments。</p>
-</blockquote>
-]]></content>
-    
-    <summary type="html">
-    
-      &lt;p&gt;在Druid中读取已有的数据比较简单，有很多方法可以使用，&lt;a href=&quot;http://druid.io/docs/0.9.0/ingestion/update-existing-data.html&quot; target=&quot;_blank&quot; rel=&quot;external&quot;&gt;详见这里
-    
-    </summary>
-    
-      <category term="Druid" scheme="http://blog.liexing.me/categories/Druid/"/>
-    
-    
-      <category term="分布式" scheme="http://blog.liexing.me/tags/%E5%88%86%E5%B8%83%E5%BC%8F/"/>
-    
-      <category term="Druid" scheme="http://blog.liexing.me/tags/Druid/"/>
-    
-      <category term="实时计算" scheme="http://blog.liexing.me/tags/%E5%AE%9E%E6%97%B6%E8%AE%A1%E7%AE%97/"/>
     
   </entry>
   

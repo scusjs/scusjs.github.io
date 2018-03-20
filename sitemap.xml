@@ -2,6 +2,13 @@
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
   
   <url>
+    <loc>http://blog.liexing.me/2018/03/20/cross-domain-debug-record/</loc>
+    
+    <lastmod>2018-03-20T15:41:36.387Z</lastmod>
+    
+  </url>
+  
+  <url>
     <loc>http://blog.liexing.me/2017/12/20/art-generation-with-neural-style-transfer/</loc>
     
     <lastmod>2017-12-21T03:38:48.628Z</lastmod>
@@ -72,21 +79,7 @@
   </url>
   
   <url>
-    <loc>http://blog.liexing.me/2016/04/21/auto-ssh-to-server/</loc>
-    
-    <lastmod>2017-02-27T11:34:45.000Z</lastmod>
-    
-  </url>
-  
-  <url>
     <loc>http://blog.liexing.me/2016/03/28/druid-quickstart/</loc>
-    
-    <lastmod>2017-02-27T11:34:45.000Z</lastmod>
-    
-  </url>
-  
-  <url>
-    <loc>http://blog.liexing.me/2016/01/05/longest-common-subsequence/</loc>
     
     <lastmod>2017-02-27T11:34:45.000Z</lastmod>
     
@@ -107,6 +100,20 @@
   </url>
   
   <url>
+    <loc>http://blog.liexing.me/tags/index.html</loc>
+    
+    <lastmod>2017-02-27T11:34:45.000Z</lastmod>
+    
+  </url>
+  
+  <url>
+    <loc>http://blog.liexing.me/2016/04/21/auto-ssh-to-server/</loc>
+    
+    <lastmod>2017-02-27T11:34:45.000Z</lastmod>
+    
+  </url>
+  
+  <url>
     <loc>http://blog.liexing.me/2015/09/01/oh-my-hexo/</loc>
     
     <lastmod>2017-02-27T11:34:45.000Z</lastmod>
@@ -121,6 +128,13 @@
   </url>
   
   <url>
+    <loc>http://blog.liexing.me/2016/04/20/reindex-between-different-druid-use-and-metadatastorage/</loc>
+    
+    <lastmod>2017-02-27T11:34:45.000Z</lastmod>
+    
+  </url>
+  
+  <url>
     <loc>http://blog.liexing.me/2016/11/07/statistical-learning-method-decision-tree/</loc>
     
     <lastmod>2017-02-27T11:34:45.000Z</lastmod>
@@ -128,7 +142,7 @@
   </url>
   
   <url>
-    <loc>http://blog.liexing.me/2016/11/02/statistical-learning-method-knn/</loc>
+    <loc>http://blog.liexing.me/2016/10/30/statistical-learning-method-intro/</loc>
     
     <lastmod>2017-02-27T11:34:45.000Z</lastmod>
     
@@ -142,7 +156,7 @@
   </url>
   
   <url>
-    <loc>http://blog.liexing.me/2016/10/30/statistical-learning-method-intro/</loc>
+    <loc>http://blog.liexing.me/2016/11/02/statistical-learning-method-knn/</loc>
     
     <lastmod>2017-02-27T11:34:45.000Z</lastmod>
     
@@ -163,7 +177,7 @@
   </url>
   
   <url>
-    <loc>http://blog.liexing.me/2016/04/15/druid-indexing-service/</loc>
+    <loc>http://blog.liexing.me/categories/index.html</loc>
     
     <lastmod>2017-02-27T11:34:45.000Z</lastmod>
     
@@ -177,21 +191,14 @@
   </url>
   
   <url>
-    <loc>http://blog.liexing.me/tags/index.html</loc>
+    <loc>http://blog.liexing.me/2016/04/15/druid-indexing-service/</loc>
     
     <lastmod>2017-02-27T11:34:45.000Z</lastmod>
     
   </url>
   
   <url>
-    <loc>http://blog.liexing.me/categories/index.html</loc>
-    
-    <lastmod>2017-02-27T11:34:45.000Z</lastmod>
-    
-  </url>
-  
-  <url>
-    <loc>http://blog.liexing.me/2016/04/20/reindex-between-different-druid-use-and-metadatastorage/</loc>
+    <loc>http://blog.liexing.me/2016/01/05/longest-common-subsequence/</loc>
     
     <lastmod>2017-02-27T11:34:45.000Z</lastmod>
     
