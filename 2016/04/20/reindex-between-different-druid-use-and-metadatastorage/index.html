@@ -18,6 +18,7 @@
 <meta property="og:url" content="http://blog.liexing.me/2016/04/20/reindex-between-different-druid-use-and-metadatastorage/index.html">
 <meta property="og:site_name" content="Liexing&#39;s Blog">
 <meta property="og:description" content="在Druid中读取已有的数据比较简单，有很多方法可以使用，详见这里。但是如果不同的Druid集群使用了不同的Metadata Storage，迁移任务首先回去找datasource下的segments，但是由于旧的Druid集群把相关信息保存在其他地方，这将会导致找不到Segments。 因此考虑将旧集群中需要转移的datasource的metadata转到新集群的Metadata Storage">
+<meta property="og:locale" content="zh-CN">
 <meta property="og:updated_time" content="2017-02-27T11:34:45.000Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="使用不同Metadata Storage的Druid集群间转移DataSource">
@@ -92,7 +93,7 @@
   <p class="article-time">
     <time datetime="2016-04-20T10:19:58.000Z" itemprop="datePublished"> 发表于 2016-04-20</time>
 <span id="busuanzi_container_page_pv">
-  &nbspViewed <span id="busuanzi_value_page_pv"><i class="fa fa-spinner fa-spin"></i></span> times
+  &nbsp<i class="fa fa-eye"></i> <span id="busuanzi_value_page_pv"><i class="fa fa-spinner fa-spin"></i></span>
 </span>
     
   </p>
@@ -107,16 +108,16 @@
         
         </div>
         
-        <p>在Druid中读取已有的数据比较简单，有很多方法可以使用，<a href="http://druid.io/docs/0.9.0/ingestion/update-existing-data.html" target="_blank" rel="external">详见这里</a>。但是如果不同的Druid集群使用了不同的Metadata Storage，迁移任务首先回去找datasource下的segments，但是由于旧的Druid集群把相关信息保存在其他地方，这将会导致找不到Segments。</p>
+        <p>在Druid中读取已有的数据比较简单，有很多方法可以使用，<a href="http://druid.io/docs/0.9.0/ingestion/update-existing-data.html" target="_blank" rel="noopener">详见这里</a>。但是如果不同的Druid集群使用了不同的Metadata Storage，迁移任务首先回去找datasource下的segments，但是由于旧的Druid集群把相关信息保存在其他地方，这将会导致找不到Segments。</p>
 <p>因此考虑将旧集群中需要转移的datasource的metadata转到新集群的Metadata Storage。假设两个集群均使用MySQL作为Metadata Storage。</p>
 <p>首先将满足条件的segments数据导出：</p>
-<figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">mysql -uroot -p <span class="_">-e</span> <span class="string">'select * from druid.druid_segments where datasource="datasourcename";'</span> &gt; ./segments.metadata.sql</div></pre></td></tr></table></figure>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">mysql -uroot -p <span class="_">-e</span> <span class="string">'select * from druid.druid_segments where datasource="datasourcename";'</span> &gt; ./segments.metadata.sql</span><br></pre></td></tr></table></figure>
 <p>然后在新集群的MySQL终端中执行下面语句将数据导入：</p>
-<figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">load data <span class="built_in">local</span> infile <span class="string">'path_to_sql/segments.metadata.sql'</span> INTO TABLE druid.druid_segments FIELDS TERMINATED BY <span class="string">'\t'</span>;</div></pre></td></tr></table></figure>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">load data <span class="built_in">local</span> infile <span class="string">'path_to_sql/segments.metadata.sql'</span> INTO TABLE druid.druid_segments FIELDS TERMINATED BY <span class="string">'\t'</span>;</span><br></pre></td></tr></table></figure>
 <p>然后执行Hadoop Index任务即可，部分配置如下：</p>
-<figure class="highlight"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div></pre></td><td class="code"><pre><div class="line">&#123;</div><div class="line">  "type" : "index_hadoop",</div><div class="line">  "spec" : &#123;</div><div class="line">    "ioConfig" : &#123;</div><div class="line">      "type" : "hadoop",</div><div class="line">      "inputSpec" : &#123;</div><div class="line">        "type" : "dataSource",</div><div class="line">        "ingestionSpec" : &#123;</div><div class="line">          "dataSource" : "datasourcename",</div><div class="line">          "interval" : "2016-04-09T00:00:00+08:00/P1D"</div><div class="line">        &#125;</div><div class="line">      &#125;</div><div class="line">    &#125;,</div><div class="line">    ...</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<figure class="highlight"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br></pre></td><td class="code"><pre><span class="line">&#123;</span><br><span class="line">  <span class="attr">"type"</span> : <span class="string">"index_hadoop"</span>,</span><br><span class="line">  <span class="attr">"spec"</span> : &#123;</span><br><span class="line">    <span class="attr">"ioConfig"</span> : &#123;</span><br><span class="line">      <span class="attr">"type"</span> : <span class="string">"hadoop"</span>,</span><br><span class="line">      <span class="attr">"inputSpec"</span> : &#123;</span><br><span class="line">        <span class="attr">"type"</span> : <span class="string">"dataSource"</span>,</span><br><span class="line">        <span class="attr">"ingestionSpec"</span> : &#123;</span><br><span class="line">          <span class="attr">"dataSource"</span> : <span class="string">"datasourcename"</span>,</span><br><span class="line">          <span class="attr">"interval"</span> : <span class="string">"2016-04-09T00:00:00+08:00/P1D"</span></span><br><span class="line">        &#125;</span><br><span class="line">      &#125;</span><br><span class="line">    &#125;,</span><br><span class="line">    ...</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
 <p>向overlord提交任务：</p>
-<figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">curl -X <span class="string">'POST'</span> -H <span class="string">'Content-Type:application/json'</span> <span class="_">-d</span> @task_config.json &lt;overlord_host&gt;:&lt;port&gt;/druid/indexer/v1/task</div></pre></td></tr></table></figure>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">curl -X <span class="string">'POST'</span> -H <span class="string">'Content-Type:application/json'</span> <span class="_">-d</span> @task_config.json &lt;overlord_host&gt;:&lt;port&gt;/druid/indexer/v1/task</span><br></pre></td></tr></table></figure>
 <blockquote>
 <p>注：此方法适用于两个集群使用相同的Deep Storage，否则还需要迁移Deep Storage中存储的Segments。</p>
 </blockquote>
@@ -322,7 +323,7 @@
           
         
           
-            <li><a href="/categories/Java/" title="Java">Java<sup>1</sup></a></li>
+            <li><a href="/categories/Java/" title="Java">Java<sup>2</sup></a></li>
           
         
           
@@ -338,7 +339,7 @@
           
         
           
-            <li><a href="/categories/笔记/" title="笔记">笔记<sup>2</sup></a></li>
+            <li><a href="/categories/笔记/" title="笔记">笔记<sup>3</sup></a></li>
           
         
           
@@ -381,7 +382,7 @@
   <div class="tagcloudlist">
     <p class="asidetitle">标签云</p>
     <div class="tagcloudlist clearfix">
-       <a href="/tags/Adam/" style="font-size: 10px;">Adam</a> <a href="/tags/BGD/" style="font-size: 10px;">BGD</a> <a href="/tags/Cassandra/" style="font-size: 12px;">Cassandra</a> <a href="/tags/Druid/" style="font-size: 16px;">Druid</a> <a href="/tags/JVM/" style="font-size: 10px;">JVM</a> <a href="/tags/Java/" style="font-size: 10px;">Java</a> <a href="/tags/LCS/" style="font-size: 10px;">LCS</a> <a href="/tags/Momentum/" style="font-size: 10px;">Momentum</a> <a href="/tags/NOSQL/" style="font-size: 12px;">NOSQL</a> <a href="/tags/SGD/" style="font-size: 10px;">SGD</a> <a href="/tags/Spring-Boot/" style="font-size: 10px;">Spring Boot</a> <a href="/tags/Sytle-Transfer/" style="font-size: 10px;">Sytle Transfer</a> <a href="/tags/Weight-initialization/" style="font-size: 10px;">Weight initialization</a> <a href="/tags/algorithms/" style="font-size: 10px;">algorithms</a> <a href="/tags/bash/" style="font-size: 10px;">bash</a> <a href="/tags/dynamic-programming/" style="font-size: 10px;">dynamic programming</a> <a href="/tags/hexo/" style="font-size: 10px;">hexo</a> <a href="/tags/k-邻近法/" style="font-size: 12px;">k 邻近法</a> <a href="/tags/knn/" style="font-size: 12px;">knn</a> <a href="/tags/linux/" style="font-size: 10px;">linux</a> <a href="/tags/macOS/" style="font-size: 10px;">macOS</a> <a href="/tags/内存模型/" style="font-size: 10px;">内存模型</a> <a href="/tags/分布式/" style="font-size: 18px;">分布式</a> <a href="/tags/多线程/" style="font-size: 10px;">多线程</a> <a href="/tags/实时计算/" style="font-size: 16px;">实时计算</a> <a href="/tags/异常处理/" style="font-size: 10px;">异常处理</a> <a href="/tags/异常表/" style="font-size: 10px;">异常表</a> <a href="/tags/感知机/" style="font-size: 10px;">感知机</a> <a href="/tags/最大熵模型/" style="font-size: 10px;">最大熵模型</a> <a href="/tags/朴素贝叶斯/" style="font-size: 10px;">朴素贝叶斯</a> <a href="/tags/机器学习/" style="font-size: 16px;">机器学习</a> <a href="/tags/杂/" style="font-size: 10px;">杂</a> <a href="/tags/梯度下降/" style="font-size: 10px;">梯度下降</a> <a href="/tags/深度学习/" style="font-size: 14px;">深度学习</a> <a href="/tags/源码分析/" style="font-size: 10px;">源码分析</a> <a href="/tags/生成/" style="font-size: 10px;">生成</a> <a href="/tags/笔记/" style="font-size: 20px;">笔记</a> <a href="/tags/统计学习/" style="font-size: 16px;">统计学习</a> <a href="/tags/调参/" style="font-size: 12px;">调参</a> <a href="/tags/跨域/" style="font-size: 10px;">跨域</a> <a href="/tags/踩坑日志/" style="font-size: 10px;">踩坑日志</a> <a href="/tags/逻辑斯谛回归/" style="font-size: 10px;">逻辑斯谛回归</a> <a href="/tags/配置/" style="font-size: 10px;">配置</a> <a href="/tags/风格迁移/" style="font-size: 10px;">风格迁移</a>
+       <a href="/tags/Adam/" style="font-size: 10px;">Adam</a> <a href="/tags/BGD/" style="font-size: 10px;">BGD</a> <a href="/tags/Cassandra/" style="font-size: 12px;">Cassandra</a> <a href="/tags/Druid/" style="font-size: 16px;">Druid</a> <a href="/tags/JVM/" style="font-size: 10px;">JVM</a> <a href="/tags/Java/" style="font-size: 10px;">Java</a> <a href="/tags/LCS/" style="font-size: 10px;">LCS</a> <a href="/tags/Momentum/" style="font-size: 10px;">Momentum</a> <a href="/tags/MySQL/" style="font-size: 10px;">MySQL</a> <a href="/tags/NOSQL/" style="font-size: 12px;">NOSQL</a> <a href="/tags/SGD/" style="font-size: 10px;">SGD</a> <a href="/tags/Spring-Boot/" style="font-size: 10px;">Spring Boot</a> <a href="/tags/Sytle-Transfer/" style="font-size: 10px;">Sytle Transfer</a> <a href="/tags/Weight-initialization/" style="font-size: 10px;">Weight initialization</a> <a href="/tags/algorithms/" style="font-size: 10px;">algorithms</a> <a href="/tags/bash/" style="font-size: 10px;">bash</a> <a href="/tags/dynamic-programming/" style="font-size: 10px;">dynamic programming</a> <a href="/tags/hexo/" style="font-size: 10px;">hexo</a> <a href="/tags/k-邻近法/" style="font-size: 12px;">k 邻近法</a> <a href="/tags/knn/" style="font-size: 12px;">knn</a> <a href="/tags/linux/" style="font-size: 10px;">linux</a> <a href="/tags/macOS/" style="font-size: 10px;">macOS</a> <a href="/tags/utf8/" style="font-size: 10px;">utf8</a> <a href="/tags/utf8mb4/" style="font-size: 10px;">utf8mb4</a> <a href="/tags/内存模型/" style="font-size: 10px;">内存模型</a> <a href="/tags/分布式/" style="font-size: 18px;">分布式</a> <a href="/tags/多线程/" style="font-size: 10px;">多线程</a> <a href="/tags/实时计算/" style="font-size: 16px;">实时计算</a> <a href="/tags/异常处理/" style="font-size: 10px;">异常处理</a> <a href="/tags/异常表/" style="font-size: 10px;">异常表</a> <a href="/tags/感知机/" style="font-size: 10px;">感知机</a> <a href="/tags/最大熵模型/" style="font-size: 10px;">最大熵模型</a> <a href="/tags/朴素贝叶斯/" style="font-size: 10px;">朴素贝叶斯</a> <a href="/tags/机器学习/" style="font-size: 16px;">机器学习</a> <a href="/tags/杂/" style="font-size: 10px;">杂</a> <a href="/tags/梯度下降/" style="font-size: 10px;">梯度下降</a> <a href="/tags/深度学习/" style="font-size: 14px;">深度学习</a> <a href="/tags/源码分析/" style="font-size: 10px;">源码分析</a> <a href="/tags/生成/" style="font-size: 10px;">生成</a> <a href="/tags/笔记/" style="font-size: 20px;">笔记</a> <a href="/tags/统计学习/" style="font-size: 16px;">统计学习</a> <a href="/tags/编码/" style="font-size: 10px;">编码</a> <a href="/tags/调参/" style="font-size: 12px;">调参</a> <a href="/tags/跨域/" style="font-size: 10px;">跨域</a> <a href="/tags/踩坑日志/" style="font-size: 10px;">踩坑日志</a> <a href="/tags/逻辑斯谛回归/" style="font-size: 10px;">逻辑斯谛回归</a> <a href="/tags/配置/" style="font-size: 10px;">配置</a> <a href="/tags/风格迁移/" style="font-size: 10px;">风格迁移</a>
     </div>
   </div>
 
@@ -438,8 +439,12 @@
 		
 
 		<p class="copyright">
-		Powered by <a href="http://hexo.io" target="_blank" title="hexo">hexo</a> and Theme by <a href="https://github.com/wuchong/jacman" target="_blank" title="Jacman">Jacman</a> © <span id="busuanzi_container_site_pv">
-    Viewed <span id="busuanzi_value_site_pv"></span> times
+		Powered by <a href="http://hexo.io" target="_blank" title="hexo">hexo</a> and Theme by <a href="https://github.com/wuchong/jacman" target="_blank" title="Jacman">Jacman</a> © 
+<span id="busuanzi_container_site_pv">
+  &nbsp<i class="fa fa-eye"></i> <span id="busuanzi_value_site_pv"><i class="fa fa-spinner fa-spin"></i></span>
+</span>
+<span id="busuanzi_container_site_uv">
+  &nbsp<i class="fa fa-user"></i> <span id="busuanzi_value_site_uv"><i class="fa fa-spinner fa-spin"></i></span>
 </span>
 2018 
 		

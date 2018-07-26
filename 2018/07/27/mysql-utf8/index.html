@@ -1,0 +1,747 @@
+
+ <!DOCTYPE HTML>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+  
+    <title>MySQL utf8之坑 | Liexing&#39;s Blog</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1,user-scalable=no">
+    
+    <meta name="author" content="liexing">
+    
+
+    
+    <meta name="description" content="最近遇到几个项目被MySQL的utf8编码坑，想起之前编码问题被坑的惨痛教训，记录一下，警示自己。 曾几何时，每次建库都选utf8，觉得自己比那些用乱七八糟编码的人不知道酷到哪里去了。直到好多年前的某次课程设计做项目的时候，愉快的建了个用户表： 12345CREATE TABLE `test_user` (  `id` int(11) unsigned NOT NULL AUTO_INCREMEN">
+<meta name="keywords" content="MySQL,utf8,编码,utf8mb4">
+<meta property="og:type" content="article">
+<meta property="og:title" content="MySQL utf8之坑">
+<meta property="og:url" content="http://blog.liexing.me/2018/07/27/mysql-utf8/index.html">
+<meta property="og:site_name" content="Liexing&#39;s Blog">
+<meta property="og:description" content="最近遇到几个项目被MySQL的utf8编码坑，想起之前编码问题被坑的惨痛教训，记录一下，警示自己。 曾几何时，每次建库都选utf8，觉得自己比那些用乱七八糟编码的人不知道酷到哪里去了。直到好多年前的某次课程设计做项目的时候，愉快的建了个用户表： 12345CREATE TABLE `test_user` (  `id` int(11) unsigned NOT NULL AUTO_INCREMEN">
+<meta property="og:locale" content="zh-CN">
+<meta property="og:image" content="http://7xl6z1.com1.z0.glb.clouddn.com/static/images/mysql-utf8/15323992645548.jpg">
+<meta property="og:image" content="http://7xl6z1.com1.z0.glb.clouddn.com/static/images/mysql-utf8/15324047157494.jpg">
+<meta property="og:image" content="http://7xl6z1.com1.z0.glb.clouddn.com/static/images/mysql-utf8/15324047308992.jpg">
+<meta property="og:image" content="http://7xl6z1.com1.z0.glb.clouddn.com/static/images/mysql-utf8/15324055064000.jpg">
+<meta property="og:updated_time" content="2018-07-26T16:30:39.935Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="MySQL utf8之坑">
+<meta name="twitter:description" content="最近遇到几个项目被MySQL的utf8编码坑，想起之前编码问题被坑的惨痛教训，记录一下，警示自己。 曾几何时，每次建库都选utf8，觉得自己比那些用乱七八糟编码的人不知道酷到哪里去了。直到好多年前的某次课程设计做项目的时候，愉快的建了个用户表： 12345CREATE TABLE `test_user` (  `id` int(11) unsigned NOT NULL AUTO_INCREMEN">
+<meta name="twitter:image" content="http://7xl6z1.com1.z0.glb.clouddn.com/static/images/mysql-utf8/15323992645548.jpg">
+<meta name="twitter:creator" content="@scusjs">
+
+    
+    <link rel="alternative" href="/atom.xml" title="Liexing&#39;s Blog" type="application/atom+xml">
+    
+    
+    <link rel="icon" href="/img/favicon.ico">
+    
+    
+    <link rel="apple-touch-icon" href="/img/favicon.jpg">
+    <link rel="apple-touch-icon-precomposed" href="/img/favicon.jpg">
+    
+    <link rel="stylesheet" href="//cdn.bootcss.com/font-awesome/4.3.0/css/font-awesome.min.css">
+    <link rel="stylesheet" href="/css/style.css">
+</head>
+
+  <body>
+    <header>
+      
+<div>
+		
+			<div id="imglogo">
+				<a href="/"><img src="/img/logo.png" alt="Liexing&#39;s Blog" title="Liexing&#39;s Blog"/></a>
+			</div>
+			
+			<div id="textlogo">
+				<h1 class="site-name"><a href="/" title="Liexing&#39;s Blog">Liexing&#39;s Blog</a></h1>
+				<h2 class="blog-motto"><span id="ones">不疯魔，不成佛</span></h2>
+			</div>
+			<div class="navbar"><a class="navbutton navmobile" href="#" title="菜单">
+			</a></div>
+			<nav class="animated">
+				<ul>
+					<ul>
+					 
+						<li><a href="/">主页 | Home</a></li>
+					
+						<li><a href="/archives">归档 | Archives</a></li>
+					
+						<li><a href="/about">简介 | About</a></li>
+					
+					<li>
+ 					
+					<form class="search" action="/search/index.html" method="get" accept-charset="utf-8">
+						<label>Search</label>
+						<input type="search" id="search" autocomplete="off" name="q" maxlength="20" placeholder="搜索" />
+					</form>
+					
+					</li>
+				</ul>
+			</nav>			
+</div>
+
+    </header>
+    <div id="container">
+      <div id="main" class="post" itemscope itemprop="blogPost">
+    
+    <article itemprop="articleBody"> 
+        <header class="article-info clearfix">
+  <h1 itemprop="name">
+    
+      <a href="/2018/07/27/mysql-utf8/" title="MySQL utf8之坑" itemprop="url">MySQL utf8之坑</a>
+  </h1>
+  <p class="article-author">By
+       
+		<a href="/about" title="liexing" target="_blank" itemprop="author">liexing</a>
+		
+  <p class="article-time">
+    <time datetime="2018-07-26T16:19:19.000Z" itemprop="datePublished"> 发表于 2018-07-27</time>
+<span id="busuanzi_container_page_pv">
+  &nbsp<i class="fa fa-eye"></i> <span id="busuanzi_value_page_pv"><i class="fa fa-spinner fa-spin"></i></span>
+</span>
+    
+  </p>
+</header>
+
+    <div class="article-content">
+        
+        <div id="toc" class="toc-article">
+            <strong class="toc-title">文章目录</strong>
+        
+            <ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#MySQL的UTF8编码是什么？"><span class="toc-number">1.</span> <span class="toc-text">MySQL的UTF8编码是什么？</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#MySQL-UTF8问题简史"><span class="toc-number">2.</span> <span class="toc-text">MySQL UTF8问题简史</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#啥是UTF8"><span class="toc-number">3.</span> <span class="toc-text">啥是UTF8</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#utf8mb4-unicode-ci-和-utf8mb4-general-ci"><span class="toc-number">4.</span> <span class="toc-text">utf8mb4_unicode_ci 和 utf8mb4_general_ci</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#准确性"><span class="toc-number">4.1.</span> <span class="toc-text">准确性</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#性能"><span class="toc-number">4.2.</span> <span class="toc-text">性能</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#MySQL用错编码怎么救"><span class="toc-number">5.</span> <span class="toc-text">MySQL用错编码怎么救</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#其他坑"><span class="toc-number">6.</span> <span class="toc-text">其他坑</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#参考"><span class="toc-number">7.</span> <span class="toc-text">参考</span></a></li></ol>
+        
+        </div>
+        
+        <p>最近遇到几个项目被MySQL的utf8编码坑，想起之前编码问题被坑的惨痛教训，记录一下，警示自己。</p>
+<p>曾几何时，每次建库都选utf8，觉得自己比那些用乱七八糟编码的人不知道酷到哪里去了。直到好多年前的某次课程设计做项目的时候，愉快的建了个用户表：</p>
+<figure class="highlight sql"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">CREATE</span> <span class="keyword">TABLE</span> <span class="string">`test_user`</span> (</span><br><span class="line">  <span class="string">`id`</span> <span class="built_in">int</span>(<span class="number">11</span>) <span class="keyword">unsigned</span> <span class="keyword">NOT</span> <span class="literal">NULL</span> AUTO_INCREMENT,</span><br><span class="line">  <span class="string">`name`</span> <span class="built_in">varchar</span>(<span class="number">32</span>) <span class="keyword">DEFAULT</span> <span class="literal">NULL</span>,</span><br><span class="line">  PRIMARY <span class="keyword">KEY</span> (<span class="string">`id`</span>)</span><br><span class="line">) <span class="keyword">ENGINE</span>=<span class="keyword">InnoDB</span> <span class="keyword">DEFAULT</span> <span class="keyword">CHARSET</span>=utf8;</span><br></pre></td></tr></table></figure>
+<p>然后愉快的新增用户：<code>INSERT INTO test_user(</code>name<code>) VALUES(&quot;我是😁&quot;)</code>，接着愉快的反思人生：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">Incorrect string value: &apos;\xF0\x9F\x98\x81&apos; for column &apos;name&apos; at row 1</span><br></pre></td></tr></table></figure>
+<p>我是谁？我来自哪里？我在干嘛？难道是我代码里面的字符集用错了？不对啊我所有地方都用的utf8啊……</p>
+<h2 id="MySQL的UTF8编码是什么？"><a href="#MySQL的UTF8编码是什么？" class="headerlink" title="MySQL的UTF8编码是什么？"></a>MySQL的UTF8编码是什么？</h2><p>首先来看官方文档：</p>
+<blockquote>
+<p>The character set named utf8 uses a maximum of three bytes per character and contains only BMP characters. The utf8mb4 character set uses a maximum of four bytes per character supports supplementary characters:</p>
+<p> For a BMP character, utf8 and utf8mb4 have identical storage characteristics: same code values, same encoding, same length.<br> For a supplementary character, utf8 cannot store the character at all, whereas utf8mb4 requires four bytes to store it. Because utf8 cannot store the character at all, you have no supplementary characters in utf8 columns and need not worry about converting characters or losing data when upgrading utf8 data from older versions of MySQL.</p>
+</blockquote>
+<p>我们再看看维基百科对UTF8编码的解释：</p>
+<blockquote>
+<p>UTF-8 is a variable width character encoding capable of encoding all 1,112,064 valid code points in Unicode using one to four 8-bit bytes.</p>
+</blockquote>
+<img src="http://7xl6z1.com1.z0.glb.clouddn.com/static/images/mysql-utf8/15323992645548.jpg">
+<p>可以看出，MySQL中的utf8实质上不是标准的UTF8。MySQL中，utf8对每个字符最多使用三个字节来表示，所以一些emoji甚至是一些生僻汉字就存不下来了，比如“𡋾”。</p>
+<p>MySQL一直不承认这是一个bug，他们在2010年发布了“utf8mb4”字符集来绕过这个问题，在MySQL中，utf8mb4才应该是标准的utf8编码，并且官方很鸡贼的偷偷在最新的文档中加上了，算是认识到错误了吧：</p>
+<blockquote>
+<p>utf8 is an alias for the utf8mb3 character set.<br>The utf8mb3 character set will be replaced by utf8mb4 in some future MySQL version. Although utf8 is currently an alias for utf8mb3, at that point utf8 will become a reference to utf8mb4. To avoid ambiguity about the meaning of utf8, consider specifying utf8mb4 explicitly for character set references instead of utf8.</p>
+</blockquote>
+<h2 id="MySQL-UTF8问题简史"><a href="#MySQL-UTF8问题简史" class="headerlink" title="MySQL UTF8问题简史"></a>MySQL UTF8问题简史</h2><p>MySQL从4.1版本开始支持utf8，即2003年，但是现在的utf8标准（<a href="https://tools.ietf.org/html/rfc3629" target="_blank" rel="noopener">RFC 3629</a>)是在其后发布的。MySQL在2002年3月28日的4.1预览版中使用了旧版的utf8标准（<a href="https://tools.ietf.org/html/rfc2279" target="_blank" rel="noopener">RFC 2279</a>)，该标准最多支持每个字符6个字节，同年9月MySQL调整其<a href="https://github.com/mysql/mysql-server/commit/43a506c0ced0e6ea101d3ab8b4b423ce3fa327d0" target="_blank" rel="noopener">utf8字符集最多支持3字节</a>，而这个调整可能只是为了优化空间（05年前推荐使用CHAR类字段，而一个utf8的CHAR将会占用6字节长度）和时间性能（05年前在MySQL中使用CHAR字段会有更优的速度）。嗯可以在GitHub中看到大家对这个坑的吐槽：<br><img src="http://7xl6z1.com1.z0.glb.clouddn.com/static/images/mysql-utf8/15324047157494.jpg"><br><img src="http://7xl6z1.com1.z0.glb.clouddn.com/static/images/mysql-utf8/15324047308992.jpg"></p>
+<p>但是这个字符编码发布出来，就不能轻易的修改，因为如果已经有用户开始使用了，就需要这些用户重新构建其数据库。</p>
+<p>怎么补救呢？在上面最新文档中可以看出，他们将当前的utf8作为utf8mb3的别名，并且在将来的某一天会把utf8重新作为utf8mb4别名，这样来解决这个多年的巨坑。</p>
+<h2 id="啥是UTF8"><a href="#啥是UTF8" class="headerlink" title="啥是UTF8"></a>啥是UTF8</h2><p>略</p>
+<img src="http://7xl6z1.com1.z0.glb.clouddn.com/static/images/mysql-utf8/15324055064000.jpg">
+<h2 id="utf8mb4-unicode-ci-和-utf8mb4-general-ci"><a href="#utf8mb4-unicode-ci-和-utf8mb4-general-ci" class="headerlink" title="utf8mb4_unicode_ci 和 utf8mb4_general_ci"></a>utf8mb4_unicode_ci 和 utf8mb4_general_ci</h2><p>字符除了存储，还需要排序或者比较，这个操作与编码字符集有关，称为collation，与utf8mb4对应的是utf8mb4_unicode_ci 和 utf8mb4_general_ci这两个collation。</p>
+<h3 id="准确性"><a href="#准确性" class="headerlink" title="准确性"></a>准确性</h3><p>utf8mb4_unicode_ci 是基于标准Unicode来进行排序比较的，能保持在各个语言之间的精确排序；</p>
+<p>utf8mb4_general_ci 并不基于Unicode排序规则，因此在某些特殊语言或者字符上的排序结果可能不是所期望的。</p>
+<h3 id="性能"><a href="#性能" class="headerlink" title="性能"></a>性能</h3><p>utf8mb4_general_ci 在比较和排序时更快，因为其实现了一些性能更好的操作，但是在现代服务器上，这种性能提升几乎可以忽略不计。</p>
+<p>utf8mb4_unicode_ci 使用Unicode的规则进行排序和比较，其排序规则为了处理一些特殊字符，实现更加复杂。</p>
+<p>现在基本没有理由继续使用utf8mb4_general_ci了，因为其带来的性能差异很小，远不如更好的数据设计，比如使用索引等等。</p>
+<h2 id="MySQL用错编码怎么救"><a href="#MySQL用错编码怎么救" class="headerlink" title="MySQL用错编码怎么救"></a>MySQL用错编码怎么救</h2><ol>
+<li>备份，不然崩了就只有删库跑路了；</li>
+<li>升级MySQL服务端到5.3.3及以上版本，以支持utf8md4；</li>
+<li><p>将数据库、表、列的字符编码、collation改为utf8md4:</p>
+ <figure class="highlight sql"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"># For each database:</span><br><span class="line"><span class="keyword">ALTER</span> <span class="keyword">DATABASE</span> database_name <span class="built_in">CHARACTER</span> <span class="keyword">SET</span> = utf8mb4 <span class="keyword">COLLATE</span> = utf8mb4_unicode_ci;</span><br><span class="line"># For each table:</span><br><span class="line"><span class="keyword">ALTER</span> <span class="keyword">TABLE</span> table_name <span class="keyword">CONVERT</span> <span class="keyword">TO</span> <span class="built_in">CHARACTER</span> <span class="keyword">SET</span> utf8mb4 <span class="keyword">COLLATE</span> utf8mb4_unicode_ci;</span><br><span class="line"># For each column:</span><br><span class="line"><span class="keyword">ALTER</span> <span class="keyword">TABLE</span> table_name <span class="keyword">CHANGE</span> column_name column_name <span class="built_in">VARCHAR</span>(<span class="keyword">length</span>) <span class="built_in">CHARACTER</span> <span class="keyword">SET</span> utf8mb4 <span class="keyword">COLLATE</span> utf8mb4_unicode_ci;</span><br></pre></td></tr></table></figure>
+</li>
+<li><p>检查列和索引键的最大长度；</p>
+</li>
+<li>修改连接、客户端、服务端的字符集；</li>
+<li>修复和优化所有的表，以免出现一些莫名其妙的错误，可以使用如下的方式： <figure class="highlight sql"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"># For each table</span><br><span class="line"><span class="keyword">REPAIR</span> <span class="keyword">TABLE</span> table_name;</span><br><span class="line"><span class="keyword">OPTIMIZE</span> <span class="keyword">TABLE</span> table_name;</span><br></pre></td></tr></table></figure>
+</li>
+</ol>
+<pre><code>或者是使用`mysqlcheck`工具：
+
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">$ mysqlcheck -u root -p --auto-repair --optimize --all-databases</span><br></pre></td></tr></table></figure>
+</code></pre><h2 id="其他坑"><a href="#其他坑" class="headerlink" title="其他坑"></a>其他坑</h2><p><a href="https://mp.weixin.qq.com/s/ns9eRxjXZfUPNSpfgGA7UA" target="_blank" rel="noopener">MySQL表字段字符集不同导致的索引失效问题</a></p>
+<h2 id="参考"><a href="#参考" class="headerlink" title="参考"></a>参考</h2><ul>
+<li><a href="https://medium.com/@adamhooper/in-mysql-never-use-utf8-use-utf8mb4-11761243e434" target="_blank" rel="noopener">https://medium.com/@adamhooper/in-mysql-never-use-utf8-use-utf8mb4-11761243e434</a></li>
+<li><a href="https://dev.mysql.com/doc/refman/8.0/en/charset-unicode-utf8.html" target="_blank" rel="noopener">https://dev.mysql.com/doc/refman/8.0/en/charset-unicode-utf8.html</a></li>
+<li><a href="https://www.joelonsoftware.com/2003/10/08/the-absolute-minimum-every-software-developer-absolutely-positively-must-know-about-unicode-and-character-sets-no-excuses/" target="_blank" rel="noopener">https://www.joelonsoftware.com/2003/10/08/the-absolute-minimum-every-software-developer-absolutely-positively-must-know-about-unicode-and-character-sets-no-excuses/</a></li>
+<li><a href="https://stackoverflow.com/questions/766809/whats-the-difference-between-utf8-general-ci-and-utf8-unicode-ci" target="_blank" rel="noopener">https://stackoverflow.com/questions/766809/whats-the-difference-between-utf8-general-ci-and-utf8-unicode-ci</a></li>
+<li><a href="https://mathiasbynens.be/notes/mysql-utf8mb4#utf8-to-utf8mb4" target="_blank" rel="noopener">https://mathiasbynens.be/notes/mysql-utf8mb4#utf8-to-utf8mb4</a></li>
+</ul>
+
+    </div>
+    
+        <!-- css -->
+        <style type="text/css">
+            .center {
+                text-align: center;
+            }
+            .hidden {
+                display: none;
+            }
+            .donate_bar a.btn_donate{
+                display: inline-block;
+                width: 82px;
+                height: 82px;
+                background: url("http://7xl6z1.com1.z0.glb.clouddn.com/static/images/theme/btn_reward.gif") no-repeat;
+                _background: url("http://7xl6z1.com1.z0.glb.clouddn.com/static/images/theme/btn_reward.gif") no-repeat;
+
+                <!-- http://7xl6z1.com1.z0.glb.clouddn.com/static/images/theme/btn_reward.gif
+                     因为本 hexo 生成的博客所用的 theme 的 a:hover 带动画效果，
+                     为了在让打赏按钮显示效果正常 而 添加了以下几行 css，
+                     嵌入其它博客时不一定要它们。 -->
+                -webkit-transition: background 0s;
+                -moz-transition: background 0s;
+                -o-transition: background 0s;
+                -ms-transition: background 0s;
+                transition: background 0s;
+                <!-- /让打赏按钮的效果显示正常 而 添加的几行 css 到此结束 -->
+            }
+
+            .donate_bar a.btn_donate:hover{ background-position: 0px -82px;}
+            .donate_bar .donate_txt {
+                display: block;
+                color: #9d9d9d;
+                font: 14px/2 "Microsoft Yahei";
+            }
+            .bold{ font-weight: bold; }
+            .border {
+                border-bottom: 2px solid #dbdbdb
+            }
+        </style>
+        <!-- /css -->
+
+        <!-- Donate Module -->
+        <div id="donate_module">
+
+        <!-- btn_donate & tips -->
+        <div class="border"><br></div><br><br>
+        <div id="donate_board" class="donate_bar center">
+            <a id="btn_donate" class="btn_donate" target="_self" href="javascript:;" title="Donate 打赏"></a>
+            <span class="donate_txt">
+                如果对你有帮助，可以赏我一杯咖啡~
+            </span>
+                
+            
+        </div>
+        <!-- /btn_donate & tips -->
+
+        <!-- donate guide -->
+        
+        <div id="donate_guide" class="donate_bar center hidden">
+            
+
+            <a href="http://7xl6z1.com1.z0.glb.clouddn.com/static/images/theme/reward_wechat.jpg" title="用微信扫一扫哦~" class="fancybox" rel="article0">
+                <img src="http://7xl6z1.com1.z0.glb.clouddn.com/static/images/theme/reward_wechat.jpg" title="微信打赏 Donate" height="190px" width="auto"/>
+            </a>
+            
+            &nbsp;&nbsp;
+
+            <a href="http://7xl6z1.com1.z0.glb.clouddn.com/static/images/theme/reward_alipay.jpg" title="用支付宝扫一扫即可~" class="fancybox" rel="article0">
+                <img src="http://7xl6z1.com1.z0.glb.clouddn.com/static/images/theme/reward_alipay.jpg" title="支付宝打赏 Donate" height="190px" width="auto"/>
+            </a>
+
+            <span class="donate_txt">
+                如果对你有帮助，可以赏我一杯咖啡~
+            </span>
+
+        </div>
+        <!-- /donate guide -->
+
+        <!-- donate script -->
+        <script type="text/javascript">
+            document.getElementById('btn_donate').onclick = function() {
+                $('#donate_board').addClass('hidden');
+            $('#donate_guide').removeClass('hidden');
+            }
+
+            function donate_on_web(){
+                $('#donate').submit();
+            }
+
+            var original_window_onload = window.onload;
+            window.onload = function () {
+                if (original_window_onload) {
+                    original_window_onload();
+                }
+                document.getElementById('donate_board_wdg').className = 'hidden';
+            }
+        </script>
+        <!-- /donate script -->
+    </div>
+    <!-- /Donate Module -->
+       
+		<footer class="article-footer clearfix">
+<div class="article-catetags">
+
+<div class="article-categories">
+  <span></span>
+  <a class="article-category-link" href="/categories/笔记/">笔记</a>
+</div>
+
+
+  <div class="article-tags">
+  
+  <span></span> <a href="/tags/MySQL/">MySQL</a><a href="/tags/utf8/">utf8</a><a href="/tags/编码/">编码</a><a href="/tags/utf8mb4/">utf8mb4</a>
+  </div>
+
+</div>
+
+
+
+	<div class="article-share" id="share">
+	
+	  <div data-url="http://blog.liexing.me/2018/07/27/mysql-utf8/" data-title="MySQL utf8之坑 | Liexing&#39;s Blog" data-tsina="1915625641" class="share clearfix">
+	  </div>
+	
+	</div>
+
+
+</footer>
+
+   	       
+	</article>
+	
+<nav class="article-nav clearfix">
+ 
+
+<div class="next">
+<a href="/2018/03/20/cross-domain-debug-record/"  title="跨域访问踩坑日志">
+ <strong>下一篇：</strong><br/> 
+ <span>跨域访问踩坑日志
+</span>
+</a>
+</div>
+
+</nav>
+
+	
+
+<section id="comments" class="comment">
+  <div id="disqus_thread">
+    <noscript>Please enable JavaScript to view the <a href="//disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
+  </div>
+</section>
+
+</div>  
+
+      <div class="openaside"><a class="navbutton" href="#" title="显示侧边栏"></a></div>
+
+  <div id="toc" class="toc-aside">
+  <strong class="toc-title">文章目录</strong>
+ 
+ <ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#MySQL的UTF8编码是什么？"><span class="toc-number">1.</span> <span class="toc-text">MySQL的UTF8编码是什么？</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#MySQL-UTF8问题简史"><span class="toc-number">2.</span> <span class="toc-text">MySQL UTF8问题简史</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#啥是UTF8"><span class="toc-number">3.</span> <span class="toc-text">啥是UTF8</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#utf8mb4-unicode-ci-和-utf8mb4-general-ci"><span class="toc-number">4.</span> <span class="toc-text">utf8mb4_unicode_ci 和 utf8mb4_general_ci</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#准确性"><span class="toc-number">4.1.</span> <span class="toc-text">准确性</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#性能"><span class="toc-number">4.2.</span> <span class="toc-text">性能</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#MySQL用错编码怎么救"><span class="toc-number">5.</span> <span class="toc-text">MySQL用错编码怎么救</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#其他坑"><span class="toc-number">6.</span> <span class="toc-text">其他坑</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#参考"><span class="toc-number">7.</span> <span class="toc-text">参考</span></a></li></ol>
+ 
+  </div>
+
+<div id="asidepart">
+<div class="closeaside"><a class="closebutton" href="#" title="隐藏侧边栏"></a></div>
+<aside class="clearfix">
+
+  
+<div class="github-card">
+<p class="asidetitle">Github 名片</p>
+<div class="github-card" data-github="scusjs" data-width="220" data-height="119" data-theme="medium">
+<script type="text/javascript" src="//cdn.jsdelivr.net/github-cards/latest/widget.js" ></script>
+</div>
+  </div>
+
+
+
+  
+<div class="categorieslist">
+    <p class="asidetitle">分类</p>
+        <ul>
+        
+          
+            <li><a href="/categories/Cassandra/" title="Cassandra">Cassandra<sup>2</sup></a></li>
+          
+        
+          
+            <li><a href="/categories/Druid/" title="Druid">Druid<sup>6</sup></a></li>
+          
+        
+          
+            <li><a href="/categories/Java/" title="Java">Java<sup>2</sup></a></li>
+          
+        
+          
+            <li><a href="/categories/建站相关/" title="建站相关">建站相关<sup>1</sup></a></li>
+          
+        
+          
+            <li><a href="/categories/杂/" title="杂">杂<sup>2</sup></a></li>
+          
+        
+          
+            <li><a href="/categories/深度学习/" title="深度学习">深度学习<sup>3</sup></a></li>
+          
+        
+          
+            <li><a href="/categories/笔记/" title="笔记">笔记<sup>3</sup></a></li>
+          
+        
+          
+            <li><a href="/categories/算法/" title="算法">算法<sup>1</sup></a></li>
+          
+        
+          
+            <li><a href="/categories/统计学习/" title="统计学习">统计学习<sup>6</sup></a></li>
+          
+        
+        </ul>
+</div>
+
+
+
+  <div class="linkslist">
+  <p class="asidetitle">友情链接</p>
+    <ul>
+        
+          <li>
+            
+            	<a href="http://yaccc.github.io" target="_blank" title="">浮生若梦</a>
+            
+          </li>
+        
+          <li>
+            
+            	<a href="https://amaoamao.github.io" target="_blank" title="">mBoke</a>
+            
+          </li>
+        
+    </ul>
+</div>
+
+  <div class="rsspart">
+	<a href="/atom.xml" target="_blank" title="rss">RSS 订阅</a>
+</div>
+
+  
+  <div class="tagcloudlist">
+    <p class="asidetitle">标签云</p>
+    <div class="tagcloudlist clearfix">
+       <a href="/tags/Adam/" style="font-size: 10px;">Adam</a> <a href="/tags/BGD/" style="font-size: 10px;">BGD</a> <a href="/tags/Cassandra/" style="font-size: 12px;">Cassandra</a> <a href="/tags/Druid/" style="font-size: 16px;">Druid</a> <a href="/tags/JVM/" style="font-size: 10px;">JVM</a> <a href="/tags/Java/" style="font-size: 10px;">Java</a> <a href="/tags/LCS/" style="font-size: 10px;">LCS</a> <a href="/tags/Momentum/" style="font-size: 10px;">Momentum</a> <a href="/tags/MySQL/" style="font-size: 10px;">MySQL</a> <a href="/tags/NOSQL/" style="font-size: 12px;">NOSQL</a> <a href="/tags/SGD/" style="font-size: 10px;">SGD</a> <a href="/tags/Spring-Boot/" style="font-size: 10px;">Spring Boot</a> <a href="/tags/Sytle-Transfer/" style="font-size: 10px;">Sytle Transfer</a> <a href="/tags/Weight-initialization/" style="font-size: 10px;">Weight initialization</a> <a href="/tags/algorithms/" style="font-size: 10px;">algorithms</a> <a href="/tags/bash/" style="font-size: 10px;">bash</a> <a href="/tags/dynamic-programming/" style="font-size: 10px;">dynamic programming</a> <a href="/tags/hexo/" style="font-size: 10px;">hexo</a> <a href="/tags/k-邻近法/" style="font-size: 12px;">k 邻近法</a> <a href="/tags/knn/" style="font-size: 12px;">knn</a> <a href="/tags/linux/" style="font-size: 10px;">linux</a> <a href="/tags/macOS/" style="font-size: 10px;">macOS</a> <a href="/tags/utf8/" style="font-size: 10px;">utf8</a> <a href="/tags/utf8mb4/" style="font-size: 10px;">utf8mb4</a> <a href="/tags/内存模型/" style="font-size: 10px;">内存模型</a> <a href="/tags/分布式/" style="font-size: 18px;">分布式</a> <a href="/tags/多线程/" style="font-size: 10px;">多线程</a> <a href="/tags/实时计算/" style="font-size: 16px;">实时计算</a> <a href="/tags/异常处理/" style="font-size: 10px;">异常处理</a> <a href="/tags/异常表/" style="font-size: 10px;">异常表</a> <a href="/tags/感知机/" style="font-size: 10px;">感知机</a> <a href="/tags/最大熵模型/" style="font-size: 10px;">最大熵模型</a> <a href="/tags/朴素贝叶斯/" style="font-size: 10px;">朴素贝叶斯</a> <a href="/tags/机器学习/" style="font-size: 16px;">机器学习</a> <a href="/tags/杂/" style="font-size: 10px;">杂</a> <a href="/tags/梯度下降/" style="font-size: 10px;">梯度下降</a> <a href="/tags/深度学习/" style="font-size: 14px;">深度学习</a> <a href="/tags/源码分析/" style="font-size: 10px;">源码分析</a> <a href="/tags/生成/" style="font-size: 10px;">生成</a> <a href="/tags/笔记/" style="font-size: 20px;">笔记</a> <a href="/tags/统计学习/" style="font-size: 16px;">统计学习</a> <a href="/tags/编码/" style="font-size: 10px;">编码</a> <a href="/tags/调参/" style="font-size: 12px;">调参</a> <a href="/tags/跨域/" style="font-size: 10px;">跨域</a> <a href="/tags/踩坑日志/" style="font-size: 10px;">踩坑日志</a> <a href="/tags/逻辑斯谛回归/" style="font-size: 10px;">逻辑斯谛回归</a> <a href="/tags/配置/" style="font-size: 10px;">配置</a> <a href="/tags/风格迁移/" style="font-size: 10px;">风格迁移</a>
+    </div>
+  </div>
+
+
+  <div class="weiboshow">
+  <p class="asidetitle">新浪微博</p>
+    <iframe width="100%" height="119" class="share_self"  frameborder="0" scrolling="no" src="//widget.weibo.com/weiboshow/index.php?language=&width=0&height=119&fansRow=2&ptype=1&speed=0&skin=9&isTitle=1&noborder=1&isWeibo=0&isFans=0&uid=1915625641&verifier=00e07be0&dpc=1"></iframe>
+</div>
+
+
+</aside>
+</div>
+    </div>
+    <footer><div id="footer" >
+	
+	<div class="line">
+		<span></span>
+		<div class="author"></div>
+	</div>
+	
+	
+	<section class="info">
+		<p> Hello, I&#39;m Liexing in UCAS. <br/>
+			Stay hungry. Stay foolish.</p>
+	</section>
+	 
+	<div class="social-font" class="clearfix">
+		
+		<a href="http://weibo.com/scusjs" target="_blank" class="icon-weibo" title="微博"></a>
+		
+		
+		<a href="https://github.com/scusjs" target="_blank" class="icon-github" title="github"></a>
+		
+		
+		
+		<a href="https://twitter.com/scusjs" target="_blank" class="icon-twitter" title="twitter"></a>
+		
+		
+		
+		<a href="https://www.linkedin.com/in/shenjinsheng" target="_blank" class="icon-linkedin" title="linkedin"></a>
+		
+		
+		<a href="https://www.douban.com/people/58108093" target="_blank" class="icon-douban" title="豆瓣"></a>
+		
+		
+		<a href="http://www.zhihu.com/people/scusjs" target="_blank" class="icon-zhihu" title="知乎"></a>
+		
+		
+		
+		<a href="mailto:i@liexing.me" target="_blank" class="icon-email" title="Email Me"></a>
+		
+	</div>
+			
+		
+
+		<p class="copyright">
+		Powered by <a href="http://hexo.io" target="_blank" title="hexo">hexo</a> and Theme by <a href="https://github.com/wuchong/jacman" target="_blank" title="Jacman">Jacman</a> © 
+<span id="busuanzi_container_site_pv">
+  &nbsp<i class="fa fa-eye"></i> <span id="busuanzi_value_site_pv"><i class="fa fa-spinner fa-spin"></i></span>
+</span>
+<span id="busuanzi_container_site_uv">
+  &nbsp<i class="fa fa-user"></i> <span id="busuanzi_value_site_uv"><i class="fa fa-spinner fa-spin"></i></span>
+</span>
+2018 
+		
+		<a href="/about" target="_blank" title="liexing">liexing</a>
+		
+		
+		</p>
+</div>
+</footer>
+    <script src="/js/jquery-2.0.3.min.js"></script>
+<script src="/js/jquery.imagesloaded.min.js"></script>
+<script src="/js/gallery.js"></script>
+<script src="/js/jquery.qrcode-0.12.0.min.js"></script>
+<script async src="//dn-lbstatics.qbox.me/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+<script async src="/js/ones.js"></script>
+
+<script type="text/javascript">
+$(document).ready(function(){ 
+  $('.navbar').click(function(){
+    $('header nav').toggleClass('shownav');
+  });
+  var myWidth = 0;
+  function getSize(){
+    if( typeof( window.innerWidth ) == 'number' ) {
+      myWidth = window.innerWidth;
+    } else if( document.documentElement && document.documentElement.clientWidth) {
+      myWidth = document.documentElement.clientWidth;
+    };
+  };
+  var m = $('#main'),
+      a = $('#asidepart'),
+      c = $('.closeaside'),
+      o = $('.openaside');
+  c.click(function(){
+    a.addClass('fadeOut').css('display', 'none');
+    o.css('display', 'block').addClass('fadeIn');
+    m.addClass('moveMain');
+  });
+  o.click(function(){
+    o.css('display', 'none').removeClass('beforeFadeIn');
+    a.css('display', 'block').removeClass('fadeOut').addClass('fadeIn');      
+    m.removeClass('moveMain');
+  });
+  $(window).scroll(function(){
+    o.css("top",Math.max(80,260-$(this).scrollTop()));
+  });
+  
+  $(window).resize(function(){
+    getSize(); 
+    if (myWidth >= 1024) {
+      $('header nav').removeClass('shownav');
+    }else{
+      m.removeClass('moveMain');
+      a.css('display', 'block').removeClass('fadeOut');
+      o.css('display', 'none');
+      
+      $('#toc.toc-aside').css('display', 'none');
+        
+    }
+  });
+});
+</script>
+
+<script type="text/javascript">
+$(document).ready(function(){ 
+  var ai = $('.article-content>iframe'),
+      ae = $('.article-content>embed'),
+      t  = $('#toc'),
+      ta = $('#toc.toc-aside'),
+      o  = $('.openaside'),
+      c  = $('.closeaside');
+  if(ai.length>0){
+    ai.wrap('<div class="video-container" />');
+  };
+  if(ae.length>0){
+   ae.wrap('<div class="video-container" />');
+  };
+  c.click(function(){
+    ta.css('display', 'block').addClass('fadeIn');
+  });
+  o.click(function(){
+    ta.css('display', 'none');
+  });
+  $(window).scroll(function(){
+    ta.css("top",Math.max(140,320-$(this).scrollTop()));
+  });
+});
+</script>
+
+
+<script type="text/javascript">
+$(document).ready(function(){ 
+  var $this = $('.share'),
+      url = $this.attr('data-url'),
+      encodedUrl = encodeURIComponent(url),
+      title = $this.attr('data-title'),
+      tsina = $this.attr('data-tsina'),
+      description = $this.attr('description');
+  var html = [
+  '<div class="hoverqrcode clearfix"></div>',
+  '<a class="overlay" id="qrcode"></a>',
+  '<a href="https://www.facebook.com/sharer.php?u=' + encodedUrl + '" class="article-share-facebook" target="_blank" title="Facebook"></a>',
+  '<a href="https://twitter.com/intent/tweet?url=' + encodedUrl + '" class="article-share-twitter" target="_blank" title="Twitter"></a>',
+  '<a href="#qrcode" class="article-share-qrcode" title="微信"></a>',
+  '<a href="http://widget.renren.com/dialog/share?resourceUrl=' + encodedUrl + '&srcUrl=' + encodedUrl + '&title=' + title +'" class="article-share-renren" target="_blank" title="人人"></a>',
+  '<a href="http://service.weibo.com/share/share.php?title='+title+'&url='+encodedUrl +'&ralateUid='+ tsina +'&searchPic=true&style=number' +'" class="article-share-weibo" target="_blank" title="微博"></a>',
+  '<span title="Share to"></span>'
+  ].join('');
+  $this.append(html);
+
+  $('.hoverqrcode').hide();
+
+  var myWidth = 0;
+  function updatehoverqrcode(){
+    if( typeof( window.innerWidth ) == 'number' ) {
+      myWidth = window.innerWidth;
+    } else if( document.documentElement && document.documentElement.clientWidth) {
+      myWidth = document.documentElement.clientWidth;
+    };
+    var qrsize = myWidth > 1024 ? 200:100;
+    var options = {render: 'image', size: qrsize, fill: '#2ca6cb', text: url, radius: 0.5, quiet: 1};
+    var p = $('.article-share-qrcode').position();
+    $('.hoverqrcode').empty().css('width', qrsize).css('height', qrsize)
+                          .css('left', p.left-qrsize/2+20).css('top', p.top-qrsize-10)
+                          .qrcode(options);
+  };
+  $(window).resize(function(){
+    $('.hoverqrcode').hide();
+  });
+  $('.article-share-qrcode').click(function(){
+    updatehoverqrcode();
+    $('.hoverqrcode').toggle();
+  });
+  $('.article-share-qrcode').hover(function(){}, function(){
+      $('.hoverqrcode').hide();
+  });
+});   
+</script>
+
+
+
+
+<script type="text/javascript">
+
+var disqus_shortname = 'liexing';
+
+(function(){
+  var dsq = document.createElement('script');
+  dsq.type = 'text/javascript';
+  dsq.async = true;
+  dsq.src = '//' + disqus_shortname + '.disqus.com/embed.js';
+  (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+}());
+(function(){
+  var dsq = document.createElement('script');
+  dsq.type = 'text/javascript';
+  dsq.async = true;
+  dsq.src = '//' + disqus_shortname + '.disqus.com/count.js';
+  (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+}());
+</script>
+
+
+
+
+
+
+<link rel="stylesheet" href="/fancybox/jquery.fancybox.css" media="screen" type="text/css">
+<script src="/fancybox/jquery.fancybox.pack.js"></script>
+<script type="text/javascript">
+$(document).ready(function(){ 
+  $('.article-content').each(function(i){
+    $(this).find('img').each(function(){
+      if ($(this).parent().hasClass('fancybox')) return;
+      var alt = this.alt;
+      if (alt) $(this).after('<span class="caption">' + alt + '</span>');
+      $(this).wrap('<a href="' + this.src + '" title="' + alt + '" class="fancybox"></a>');
+    });
+    $(this).find('.fancybox').each(function(){
+      $(this).attr('rel', 'article' + i);
+    });
+  });
+  if($.fancybox){
+    $('.fancybox').fancybox();
+  }
+}); 
+</script>
+
+
+
+<!-- Analytics Begin -->
+
+
+
+<script>
+var _hmt = _hmt || [];
+(function() {
+  var hm = document.createElement("script");
+  hm.src = "//hm.baidu.com/hm.js?e6d1f421bbc9962127a50488f9ed37d1";
+  var s = document.getElementsByTagName("script")[0]; 
+  s.parentNode.insertBefore(hm, s);
+})();
+</script>
+
+
+
+<span style="display:none"><script type="text/javascript">var cnzz_protocol = (("https:" == document.location.protocol) ? " https://" : " http://");document.write(unescape("%3Cspan id='cnzz_stat_icon_1256113107'%3E%3C/span%3E%3Cscript src='" + cnzz_protocol + "s23.cnzz.com/z_stat.php%3Fid%3D1256113107' type='text/javascript'%3E%3C/script%3E"));</script></span>
+
+
+<!-- Analytics End -->
+
+<!-- Totop Begin -->
+
+	<div id="totop">
+	<a title="返回顶部"><img src="/img/scrollup.png"/></a>
+	</div>
+	<script src="/js/totop.js"></script>
+
+<!-- Totop End -->
+
+<!-- MathJax Begin -->
+<!-- mathjax config similar to math.stackexchange -->
+
+<script type="text/x-mathjax-config">
+  MathJax.Hub.Config({
+    tex2jax: {
+      inlineMath: [ ['$','$'], ["\\(","\\)"] ],
+      processEscapes: true
+    }
+  });
+</script>
+
+<script type="text/x-mathjax-config">
+    MathJax.Hub.Config({
+      tex2jax: {
+        skipTags: ['script', 'noscript', 'style', 'textarea', 'pre', 'code']
+      }
+    });
+</script>
+
+<script type="text/x-mathjax-config">
+    MathJax.Hub.Queue(function() {
+        var all = MathJax.Hub.getAllJax(), i;
+        for(i=0; i < all.length; i += 1) {
+            all[i].SourceElement().parentNode.className += ' has-jax';
+        }
+    });
+</script>
+
+<script type="text/javascript" src="http://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML">
+</script>
+
+
+<!-- MathJax End -->
+
+<!-- Tiny_search Begin -->
+
+<!-- Tiny_search End -->
+
+  </body>
+</html>

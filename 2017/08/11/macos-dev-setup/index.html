@@ -18,6 +18,7 @@
 <meta property="og:url" content="http://blog.liexing.me/2017/08/11/macos-dev-setup/index.html">
 <meta property="og:site_name" content="Liexing&#39;s Blog">
 <meta property="og:description" content="某人心心念念的rmbp终于到手了，然而我还在杭州没法帮忙各种配置，这里就写一份教程好了，自己拿去照着撸吧（￣︶￣）↗  ps. 毕竟你的是高大上的17带bar rmbp。。。然而，bar的操作我都！不！知！道！ 大概介绍 macOS 的一些基本操作以及常见的软件、开发环境的搭建。 基本操作介绍 17的触摸板应该是二段的按压，意思就是分为轻按和重按，按到底会响两次，轻按表示单击，重按表示双击。但是也">
+<meta property="og:locale" content="zh-CN">
 <meta property="og:image" content="http://7xl6z1.com1.z0.glb.clouddn.com/static/images/macos-dev-setup/1502459911.jpg">
 <meta property="og:image" content="http://7xl6z1.com1.z0.glb.clouddn.com/static/images/macos-dev-setup/1502460257.jpg">
 <meta property="og:image" content="http://7xl6z1.com1.z0.glb.clouddn.com/static/images/macos-dev-setup/1502463526.png">
@@ -97,7 +98,7 @@
   <p class="article-time">
     <time datetime="2017-08-11T15:49:22.000Z" itemprop="datePublished"> 发表于 2017-08-11</time>
 <span id="busuanzi_container_page_pv">
-  &nbspViewed <span id="busuanzi_value_page_pv"><i class="fa fa-spinner fa-spin"></i></span> times
+  &nbsp<i class="fa fa-eye"></i> <span id="busuanzi_value_page_pv"><i class="fa fa-spinner fa-spin"></i></span>
 </span>
     
   </p>
@@ -127,7 +128,7 @@
 <li>截屏，默认的截屏快捷键有两种：<code>⌘+shift+control+4</code>（区域截图到剪切板），<code>⌘+shift+control+3</code>（全屏截图到剪切板），<code>⌘+shift+4</code>（区域截图到桌面），<code>⌘+shift+3</code>（全屏截图到桌面）</li>
 <li>复制：<code>⌘+c</code>，粘贴：<code>⌘+v</code>，全选：<code>⌘+a</code></li>
 <li>输入法切换：<code>control+空格</code>（选择上一个输入法），<code>control+option+空格</code>（选择下一个输入法）</li>
-<li>其他自己看<a href="https://support.apple.com/zh-cn/HT201236" target="_blank" rel="external">官方的文档</a></li>
+<li>其他自己看<a href="https://support.apple.com/zh-cn/HT201236" target="_blank" rel="noopener">官方的文档</a></li>
 </ol>
 </blockquote>
 </li>
@@ -166,31 +167,31 @@
 <li>App Store 下载。App Store 中直接下载即可；</li>
 <li>第三方下载安装。下载下来的软件一般是 dmg 格式的或者无格式（解压后）的。dmg 和 exe 类似，打开后，里面一般有个软件图标和一个 Application 文件夹，直接把软件图标拖到 Application 即可。或者直接把下载的无格式（如果是压缩文件，打开即可解压）拖到 Application 即可。</li>
 </ol>
-<h2 id="软件"><a href="#软件" class="headerlink" title="软件"></a>软件</h2><h3 id="iTerm2"><a href="#iTerm2" class="headerlink" title="iTerm2"></a>iTerm2</h3><p> Mac 上传说中最强大的终端工具，主页戳<a href="https://www.iterm2.com/" target="_blank" rel="external">这里</a>。建议把 iTerm2 固定到 Docker，方便打开，双指点按 iTerm 图标-选项-在 Docker 中固定。</p>
-<h3 id="Homebrew"><a href="#Homebrew" class="headerlink" title="Homebrew"></a>Homebrew</h3><p>一个包管理工具，在终端（iTerm）中输入下面语句即可安装。其官网为：<a href="https://brew.sh/" target="_blank" rel="external">点这里</a></p>
-<figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">/usr/bin/ruby <span class="_">-e</span> <span class="string">"<span class="variable">$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/master/install)</span>"</span></div></pre></td></tr></table></figure>
+<h2 id="软件"><a href="#软件" class="headerlink" title="软件"></a>软件</h2><h3 id="iTerm2"><a href="#iTerm2" class="headerlink" title="iTerm2"></a>iTerm2</h3><p> Mac 上传说中最强大的终端工具，主页戳<a href="https://www.iterm2.com/" target="_blank" rel="noopener">这里</a>。建议把 iTerm2 固定到 Docker，方便打开，双指点按 iTerm 图标-选项-在 Docker 中固定。</p>
+<h3 id="Homebrew"><a href="#Homebrew" class="headerlink" title="Homebrew"></a>Homebrew</h3><p>一个包管理工具，在终端（iTerm）中输入下面语句即可安装。其官网为：<a href="https://brew.sh/" target="_blank" rel="noopener">点这里</a></p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">/usr/bin/ruby <span class="_">-e</span> <span class="string">"<span class="variable">$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/master/install)</span>"</span></span><br></pre></td></tr></table></figure>
 <p><code>brew upgrade</code>更新软件包，然后<code>brew install 软件名</code>即可安装一些软件。</p>
-<h4 id="Cask"><a href="#Cask" class="headerlink" title="Cask"></a>Cask</h4><p><a href="https://caskroom.github.io/" target="_blank" rel="external">Homebrew-Cask</a>是 Homebrew 的扩展，用以安装其他一些软件，可以用于安装其他一些软件以前需要使用<code>brew cask</code>来使用 Cask，现在直接使用 Cask 的 tap 即可：</p>
-<figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div></pre></td><td class="code"><pre><div class="line">brew install caskroom/cask/google-chrome <span class="comment">#安装chrome</span></div><div class="line">brew install caskroom/cask/java <span class="comment"># 安装java</span></div><div class="line">brew install caskroom/cask/visual-studio-code<span class="comment">#安装 vs code</span></div><div class="line">brew install caskroom/cask/iina<span class="comment">#安装iina，一个非常棒的视频播放器</span></div><div class="line">brew install maven <span class="comment">#安装maven</span></div><div class="line">brew install you-get youtube-dl <span class="comment">#安装两个视频下载工具</span></div><div class="line">brew install vim <span class="comment">#用 brew 管理 vim，能升级到更新版</span></div></pre></td></tr></table></figure>
+<h4 id="Cask"><a href="#Cask" class="headerlink" title="Cask"></a>Cask</h4><p><a href="https://caskroom.github.io/" target="_blank" rel="noopener">Homebrew-Cask</a>是 Homebrew 的扩展，用以安装其他一些软件，可以用于安装其他一些软件以前需要使用<code>brew cask</code>来使用 Cask，现在直接使用 Cask 的 tap 即可：</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">brew install caskroom/cask/google-chrome <span class="comment">#安装chrome</span></span><br><span class="line">brew install caskroom/cask/java <span class="comment"># 安装java</span></span><br><span class="line">brew install caskroom/cask/visual-studio-code<span class="comment">#安装 vs code</span></span><br><span class="line">brew install caskroom/cask/iina<span class="comment">#安装iina，一个非常棒的视频播放器</span></span><br><span class="line">brew install maven <span class="comment">#安装maven</span></span><br><span class="line">brew install you-get youtube-dl <span class="comment">#安装两个视频下载工具</span></span><br><span class="line">brew install vim <span class="comment">#用 brew 管理 vim，能升级到更新版</span></span><br></pre></td></tr></table></figure>
 <h3 id="fish"><a href="#fish" class="headerlink" title="fish"></a>fish</h3><p>90后用的 shell~其他常用的还有 zsh。使用 brew 安装即可：</p>
-<figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">brew install fish</div></pre></td></tr></table></figure>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">brew install fish</span><br></pre></td></tr></table></figure>
 <p>然后切换默认的 shell 为 fish：</p>
-<figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">chsh <span class="_">-s</span> /usr/<span class="built_in">local</span>/bin/fish</div></pre></td></tr></table></figure>
-<p>安装好后，还有个方便的 fish 管理工具：<a href="http://git.io/oh-my-fish" target="_blank" rel="external">oh my fish</a>，安装命令：</p>
-<figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">curl -L https://get.oh-my.fish | fish</div></pre></td></tr></table></figure>
-<p>然后可以选择<a href="https://github.com/oh-my-fish/oh-my-fish/blob/master/docs/Themes.md" target="_blank" rel="external">主题</a>，我用的 ocean，这么安装：</p>
-<figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line">omf install ocean</div><div class="line">omf theme ocean</div></pre></td></tr></table></figure>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">chsh <span class="_">-s</span> /usr/<span class="built_in">local</span>/bin/fish</span><br></pre></td></tr></table></figure>
+<p>安装好后，还有个方便的 fish 管理工具：<a href="http://git.io/oh-my-fish" target="_blank" rel="noopener">oh my fish</a>，安装命令：</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">curl -L https://get.oh-my.fish | fish</span><br></pre></td></tr></table></figure>
+<p>然后可以选择<a href="https://github.com/oh-my-fish/oh-my-fish/blob/master/docs/Themes.md" target="_blank" rel="noopener">主题</a>，我用的 ocean，这么安装：</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">omf install ocean</span><br><span class="line">omf theme ocean</span><br></pre></td></tr></table></figure>
 <p>当然也可以安装其他主题，去上面那个链接选选。。安装好后长这样：</p>
 <img title="Ocean主题" alt="Ocean主题" src="http://7xl6z1.com1.z0.glb.clouddn.com/static/images/macos-dev-setup/1502463526.png">
-<h3 id="ShadowsocksX"><a href="#ShadowsocksX" class="headerlink" title="ShadowsocksX"></a>ShadowsocksX</h3><p><a href="https://github.com/shadowsocks/ShadowsocksX-NG/releases" target="_blank" rel="external">ShadowsocksX</a>这个就不多说了。。。</p>
-<h3 id="Karabiner-Elements"><a href="#Karabiner-Elements" class="headerlink" title="Karabiner-Elements"></a>Karabiner-Elements</h3><p><a href="https://github.com/tekezo/Karabiner-Elements" target="_blank" rel="external">Karabiner-Elements</a> 是一个修改键位的软件，建议用它把 <code>caps lock</code>和<code>control</code>位置替换。因为大小写锁定占据了更好的位置，而 <code>control</code> 是更加频繁使用的一个按键，调换后更方便。</p>
+<h3 id="ShadowsocksX"><a href="#ShadowsocksX" class="headerlink" title="ShadowsocksX"></a>ShadowsocksX</h3><p><a href="https://github.com/shadowsocks/ShadowsocksX-NG/releases" target="_blank" rel="noopener">ShadowsocksX</a>这个就不多说了。。。</p>
+<h3 id="Karabiner-Elements"><a href="#Karabiner-Elements" class="headerlink" title="Karabiner-Elements"></a>Karabiner-Elements</h3><p><a href="https://github.com/tekezo/Karabiner-Elements" target="_blank" rel="noopener">Karabiner-Elements</a> 是一个修改键位的软件，建议用它把 <code>caps lock</code>和<code>control</code>位置替换。因为大小写锁定占据了更好的位置，而 <code>control</code> 是更加频繁使用的一个按键，调换后更方便。</p>
 <img title="Karabiner-Elements" alt="Karabiner-Elements" src="http://7xl6z1.com1.z0.glb.clouddn.com/static/images/macos-dev-setup/1502469911.jpg">
-<h3 id="其他软件"><a href="#其他软件" class="headerlink" title="其他软件"></a>其他软件</h3><p><a href="https://www.jetbrains.com/idea/download/" target="_blank" rel="external">IntelliJ IDEA</a>(不过强烈建议通过<a href="https://www.jetbrains.com/toolbox/app/?fromMenu" target="_blank" rel="external">JetBrains Toolbox</a> 安装)、<br><a href="https://go.microsoft.com/fwlink/p/?LinkID=511647" target="_blank" rel="external">Office 365</a>、<br><a href="http://pinyin.sogou.com/mac/" target="_blank" rel="external">搜狗输入法</a>、<br><a href="http://mac.xunlei.com/" target="_blank" rel="external">迅雷</a>、<br><a href="https://www.alfredapp.com/" target="_blank" rel="external">Alfred</a>（<a href="http://www.alfredworkflow.com" target="_blank" rel="external">这里</a>有一堆工作流工具）、<br><a href="http://bjango.com/" target="_blank" rel="external">iStat</a>、<br><a href="http://mac.guanjia.qq.com/" target="_blank" rel="external">腾讯电脑管家</a>、<br><a href="http://im.qq.com/macqq/" target="_blank" rel="external">QQ</a>、<br><a href="https://mac.weixin.qq.com/" target="_blank" rel="external">微信</a></p>
+<h3 id="其他软件"><a href="#其他软件" class="headerlink" title="其他软件"></a>其他软件</h3><p><a href="https://www.jetbrains.com/idea/download/" target="_blank" rel="noopener">IntelliJ IDEA</a>(不过强烈建议通过<a href="https://www.jetbrains.com/toolbox/app/?fromMenu" target="_blank" rel="noopener">JetBrains Toolbox</a> 安装)、<br><a href="https://go.microsoft.com/fwlink/p/?LinkID=511647" target="_blank" rel="noopener">Office 365</a>、<br><a href="http://pinyin.sogou.com/mac/" target="_blank" rel="noopener">搜狗输入法</a>、<br><a href="http://mac.xunlei.com/" target="_blank" rel="noopener">迅雷</a>、<br><a href="https://www.alfredapp.com/" target="_blank" rel="noopener">Alfred</a>（<a href="http://www.alfredworkflow.com" target="_blank" rel="noopener">这里</a>有一堆工作流工具）、<br><a href="http://bjango.com/" target="_blank" rel="noopener">iStat</a>、<br><a href="http://mac.guanjia.qq.com/" target="_blank" rel="noopener">腾讯电脑管家</a>、<br><a href="http://im.qq.com/macqq/" target="_blank" rel="noopener">QQ</a>、<br><a href="https://mac.weixin.qq.com/" target="_blank" rel="noopener">微信</a></p>
 <h2 id="其他参考"><a href="#其他参考" class="headerlink" title="其他参考"></a>其他参考</h2><ol>
-<li><a href="https://github.com/hzlzh/Best-App" target="_blank" rel="external">收集&amp;推荐优秀的 Apps/硬件/技巧/周边等</a></li>
-<li><a href="https://wsgzao.github.io/post/mac/" target="_blank" rel="external">Mac新手入门以及常用软件推荐</a></li>
-<li><a href="http://xialeizhou.com/2019/06/23/%E9%AB%98%E6%95%88macbook%E5%B7%A5%E4%BD%9C%E7%8E%AF%E5%A2%83%E9%85%8D%E7%BD%AE/" target="_blank" rel="external">高效macbook工作环境配置</a></li>
-<li><a href="https://www.gitbook.com/book/aaaaaashu/mac-dev-setup/details" target="_blank" rel="external">Mac 开发配置手册</a></li>
+<li><a href="https://github.com/hzlzh/Best-App" target="_blank" rel="noopener">收集&amp;推荐优秀的 Apps/硬件/技巧/周边等</a></li>
+<li><a href="https://wsgzao.github.io/post/mac/" target="_blank" rel="noopener">Mac新手入门以及常用软件推荐</a></li>
+<li><a href="http://xialeizhou.com/2019/06/23/%E9%AB%98%E6%95%88macbook%E5%B7%A5%E4%BD%9C%E7%8E%AF%E5%A2%83%E9%85%8D%E7%BD%AE/" target="_blank" rel="noopener">高效macbook工作环境配置</a></li>
+<li><a href="https://www.gitbook.com/book/aaaaaashu/mac-dev-setup/details" target="_blank" rel="noopener">Mac 开发配置手册</a></li>
 </ol>
 <p>自己折腾去吧~╰(￣▽￣)╭</p>
 
@@ -395,7 +396,7 @@
           
         
           
-            <li><a href="/categories/Java/" title="Java">Java<sup>1</sup></a></li>
+            <li><a href="/categories/Java/" title="Java">Java<sup>2</sup></a></li>
           
         
           
@@ -411,7 +412,7 @@
           
         
           
-            <li><a href="/categories/笔记/" title="笔记">笔记<sup>2</sup></a></li>
+            <li><a href="/categories/笔记/" title="笔记">笔记<sup>3</sup></a></li>
           
         
           
@@ -454,7 +455,7 @@
   <div class="tagcloudlist">
     <p class="asidetitle">标签云</p>
     <div class="tagcloudlist clearfix">
-       <a href="/tags/Adam/" style="font-size: 10px;">Adam</a> <a href="/tags/BGD/" style="font-size: 10px;">BGD</a> <a href="/tags/Cassandra/" style="font-size: 12px;">Cassandra</a> <a href="/tags/Druid/" style="font-size: 16px;">Druid</a> <a href="/tags/JVM/" style="font-size: 10px;">JVM</a> <a href="/tags/Java/" style="font-size: 10px;">Java</a> <a href="/tags/LCS/" style="font-size: 10px;">LCS</a> <a href="/tags/Momentum/" style="font-size: 10px;">Momentum</a> <a href="/tags/NOSQL/" style="font-size: 12px;">NOSQL</a> <a href="/tags/SGD/" style="font-size: 10px;">SGD</a> <a href="/tags/Spring-Boot/" style="font-size: 10px;">Spring Boot</a> <a href="/tags/Sytle-Transfer/" style="font-size: 10px;">Sytle Transfer</a> <a href="/tags/Weight-initialization/" style="font-size: 10px;">Weight initialization</a> <a href="/tags/algorithms/" style="font-size: 10px;">algorithms</a> <a href="/tags/bash/" style="font-size: 10px;">bash</a> <a href="/tags/dynamic-programming/" style="font-size: 10px;">dynamic programming</a> <a href="/tags/hexo/" style="font-size: 10px;">hexo</a> <a href="/tags/k-邻近法/" style="font-size: 12px;">k 邻近法</a> <a href="/tags/knn/" style="font-size: 12px;">knn</a> <a href="/tags/linux/" style="font-size: 10px;">linux</a> <a href="/tags/macOS/" style="font-size: 10px;">macOS</a> <a href="/tags/内存模型/" style="font-size: 10px;">内存模型</a> <a href="/tags/分布式/" style="font-size: 18px;">分布式</a> <a href="/tags/多线程/" style="font-size: 10px;">多线程</a> <a href="/tags/实时计算/" style="font-size: 16px;">实时计算</a> <a href="/tags/异常处理/" style="font-size: 10px;">异常处理</a> <a href="/tags/异常表/" style="font-size: 10px;">异常表</a> <a href="/tags/感知机/" style="font-size: 10px;">感知机</a> <a href="/tags/最大熵模型/" style="font-size: 10px;">最大熵模型</a> <a href="/tags/朴素贝叶斯/" style="font-size: 10px;">朴素贝叶斯</a> <a href="/tags/机器学习/" style="font-size: 16px;">机器学习</a> <a href="/tags/杂/" style="font-size: 10px;">杂</a> <a href="/tags/梯度下降/" style="font-size: 10px;">梯度下降</a> <a href="/tags/深度学习/" style="font-size: 14px;">深度学习</a> <a href="/tags/源码分析/" style="font-size: 10px;">源码分析</a> <a href="/tags/生成/" style="font-size: 10px;">生成</a> <a href="/tags/笔记/" style="font-size: 20px;">笔记</a> <a href="/tags/统计学习/" style="font-size: 16px;">统计学习</a> <a href="/tags/调参/" style="font-size: 12px;">调参</a> <a href="/tags/跨域/" style="font-size: 10px;">跨域</a> <a href="/tags/踩坑日志/" style="font-size: 10px;">踩坑日志</a> <a href="/tags/逻辑斯谛回归/" style="font-size: 10px;">逻辑斯谛回归</a> <a href="/tags/配置/" style="font-size: 10px;">配置</a> <a href="/tags/风格迁移/" style="font-size: 10px;">风格迁移</a>
+       <a href="/tags/Adam/" style="font-size: 10px;">Adam</a> <a href="/tags/BGD/" style="font-size: 10px;">BGD</a> <a href="/tags/Cassandra/" style="font-size: 12px;">Cassandra</a> <a href="/tags/Druid/" style="font-size: 16px;">Druid</a> <a href="/tags/JVM/" style="font-size: 10px;">JVM</a> <a href="/tags/Java/" style="font-size: 10px;">Java</a> <a href="/tags/LCS/" style="font-size: 10px;">LCS</a> <a href="/tags/Momentum/" style="font-size: 10px;">Momentum</a> <a href="/tags/MySQL/" style="font-size: 10px;">MySQL</a> <a href="/tags/NOSQL/" style="font-size: 12px;">NOSQL</a> <a href="/tags/SGD/" style="font-size: 10px;">SGD</a> <a href="/tags/Spring-Boot/" style="font-size: 10px;">Spring Boot</a> <a href="/tags/Sytle-Transfer/" style="font-size: 10px;">Sytle Transfer</a> <a href="/tags/Weight-initialization/" style="font-size: 10px;">Weight initialization</a> <a href="/tags/algorithms/" style="font-size: 10px;">algorithms</a> <a href="/tags/bash/" style="font-size: 10px;">bash</a> <a href="/tags/dynamic-programming/" style="font-size: 10px;">dynamic programming</a> <a href="/tags/hexo/" style="font-size: 10px;">hexo</a> <a href="/tags/k-邻近法/" style="font-size: 12px;">k 邻近法</a> <a href="/tags/knn/" style="font-size: 12px;">knn</a> <a href="/tags/linux/" style="font-size: 10px;">linux</a> <a href="/tags/macOS/" style="font-size: 10px;">macOS</a> <a href="/tags/utf8/" style="font-size: 10px;">utf8</a> <a href="/tags/utf8mb4/" style="font-size: 10px;">utf8mb4</a> <a href="/tags/内存模型/" style="font-size: 10px;">内存模型</a> <a href="/tags/分布式/" style="font-size: 18px;">分布式</a> <a href="/tags/多线程/" style="font-size: 10px;">多线程</a> <a href="/tags/实时计算/" style="font-size: 16px;">实时计算</a> <a href="/tags/异常处理/" style="font-size: 10px;">异常处理</a> <a href="/tags/异常表/" style="font-size: 10px;">异常表</a> <a href="/tags/感知机/" style="font-size: 10px;">感知机</a> <a href="/tags/最大熵模型/" style="font-size: 10px;">最大熵模型</a> <a href="/tags/朴素贝叶斯/" style="font-size: 10px;">朴素贝叶斯</a> <a href="/tags/机器学习/" style="font-size: 16px;">机器学习</a> <a href="/tags/杂/" style="font-size: 10px;">杂</a> <a href="/tags/梯度下降/" style="font-size: 10px;">梯度下降</a> <a href="/tags/深度学习/" style="font-size: 14px;">深度学习</a> <a href="/tags/源码分析/" style="font-size: 10px;">源码分析</a> <a href="/tags/生成/" style="font-size: 10px;">生成</a> <a href="/tags/笔记/" style="font-size: 20px;">笔记</a> <a href="/tags/统计学习/" style="font-size: 16px;">统计学习</a> <a href="/tags/编码/" style="font-size: 10px;">编码</a> <a href="/tags/调参/" style="font-size: 12px;">调参</a> <a href="/tags/跨域/" style="font-size: 10px;">跨域</a> <a href="/tags/踩坑日志/" style="font-size: 10px;">踩坑日志</a> <a href="/tags/逻辑斯谛回归/" style="font-size: 10px;">逻辑斯谛回归</a> <a href="/tags/配置/" style="font-size: 10px;">配置</a> <a href="/tags/风格迁移/" style="font-size: 10px;">风格迁移</a>
     </div>
   </div>
 
@@ -511,8 +512,12 @@
 		
 
 		<p class="copyright">
-		Powered by <a href="http://hexo.io" target="_blank" title="hexo">hexo</a> and Theme by <a href="https://github.com/wuchong/jacman" target="_blank" title="Jacman">Jacman</a> © <span id="busuanzi_container_site_pv">
-    Viewed <span id="busuanzi_value_site_pv"></span> times
+		Powered by <a href="http://hexo.io" target="_blank" title="hexo">hexo</a> and Theme by <a href="https://github.com/wuchong/jacman" target="_blank" title="Jacman">Jacman</a> © 
+<span id="busuanzi_container_site_pv">
+  &nbsp<i class="fa fa-eye"></i> <span id="busuanzi_value_site_pv"><i class="fa fa-spinner fa-spin"></i></span>
+</span>
+<span id="busuanzi_container_site_uv">
+  &nbsp<i class="fa fa-user"></i> <span id="busuanzi_value_site_uv"><i class="fa fa-spinner fa-spin"></i></span>
 </span>
 2018 
 		

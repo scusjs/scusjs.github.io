@@ -18,6 +18,7 @@
 <meta property="og:url" content="http://blog.liexing.me/2016/11/07/statistical-learning-method-decision-tree/index.html">
 <meta property="og:site_name" content="Liexing&#39;s Blog">
 <meta property="og:description" content="决策树是一种基本的分类与回归方法。模型可读性强，分类速度快，可以认为是 if-then 规则的集合。 决策树模型与学习分类决策树模型是一种描述对实例进行分类的树形结构。内部节点表示特征或者属性，叶节点表示一个类。分类时，从根节点开始，对实例某一特征进行测试，根据测试结果分配到子节点，递归进行，直到到达叶节点，即为实例所属的类，如图：  可以将决策树看做一个 if-then 规则的集合，并且其路径具">
+<meta property="og:locale" content="zh-CN">
 <meta property="og:image" content="http://7xl6z1.com1.z0.glb.clouddn.com/static/images/statistical-learning-method/1478508855.jpg">
 <meta property="og:updated_time" content="2017-02-27T11:34:45.000Z">
 <meta name="twitter:card" content="summary">
@@ -94,7 +95,7 @@
   <p class="article-time">
     <time datetime="2016-11-07T08:30:01.000Z" itemprop="datePublished"> 发表于 2016-11-07</time>
 <span id="busuanzi_container_page_pv">
-  &nbspViewed <span id="busuanzi_value_page_pv"><i class="fa fa-spinner fa-spin"></i></span> times
+  &nbsp<i class="fa fa-eye"></i> <span id="busuanzi_value_page_pv"><i class="fa fa-spinner fa-spin"></i></span>
 </span>
     
   </p>
@@ -125,7 +126,7 @@
 <p>$$H(p)=-\sum \limits_{i=1}^n p_i \log p_i$$</p>
 <p>熵越大，随机变量的不确定性越大，所以：$0 \le H(p) \le \log n$。</p>
 <p>对于随机变量 (X,Y)，其联合概率分布：</p>
-<p>$$P(X=x_i,Y=y_j)=P_{ij},\quad i=1,2,…,n;j=1,2,…,m$$</p>
+<p>$$P(X=x_i,Y=y<em>j)=P</em>{ij},\quad i=1,2,…,n;j=1,2,…,m$$</p>
 <p>条件熵表示在已知随机变量 X 的条件下，变量 Y 的不确定性，定义为 X 给定条件下 Y 的条件概率分布的熵对 X 的数学期望：</p>
 <p>$$H(Y|X)=\sum \limits_{i=1}^n p_iH(Y|X=X_i)$$</p>
 <p>这里$p_i=P(X=x_i), i=1,2,…,n$。</p>
@@ -135,20 +136,20 @@
 <p>因此，决策树特征选择的方法可以为：对训练集 D，计算其每个特征的信息增益，并比较它们的大小，选择信息增益最大的特征。</p>
 <p>但是，以信息增益作为划分的特征，可能存在偏向于选择取值较多的特征的问题，因此可以改为使用信息增益比：</p>
 <p>$$g_R(D,A)=\frac {g(D,A)}{H_A(D)}$$</p>
-<p>其中，$H_A(D)=-\sum \limits_{i=1}^n \frac {|D_i|}{|D|}\log_2 \frac {|D_i|}{|D|}$</p>
+<p>其中，$H<em>A(D)=-\sum \limits</em>{i=1}^n \frac {|D_i|}{|D|}\log_2 \frac {|D_i|}{|D|}$</p>
 <p>#决策树的生成</p>
 <h2 id="ID3-算法"><a href="#ID3-算法" class="headerlink" title="ID3 算法"></a>ID3 算法</h2><p>ID3 核心是在决策树的各个节点上应用信息增益准则选择特征，递归地构建决策树。从根节点开始，对节点计算所有可能的特征的信息增益，选择信息增益最大的特征作为节点的特征，由该特征的不同取值建立子节点。ID3相当于用极大似然法进行概率模型的选择。但是 ID3 算法只有树的生成，所以容易产生过拟合。</p>
 <h2 id="C4-5-算法"><a href="#C4-5-算法" class="headerlink" title="C4.5 算法"></a>C4.5 算法</h2><p>C4.5 与 ID3 类似，但是生成过程，使用的是信息增益比来选择特征。</p>
 <h1 id="决策树的剪枝"><a href="#决策树的剪枝" class="headerlink" title="决策树的剪枝"></a>决策树的剪枝</h1><p>决策树生成过程，可能会导致过拟合。可以使用剪枝对已生成的树进行简化。具体的，剪枝从已生成的树上裁掉一些子树或者叶节点，并将其根节点或父节点作为新的叶节点，从而简化分类树模型。</p>
 <p>决策树的剪枝往往通过极小化决策树整体的损失函数或代价函数来实现。</p>
-<p>设树 T 的叶节点个数为 |T|，t 是树 T 的叶节点，该叶节点有$N_t$个样本点，其中 k 类样本有$N_{tk}$个，$H_{t}(T)$为叶节点 t 上的经验熵，$\alpha \ge 0$为参数，则决策树学习的损失函数为：</p>
-<p>$$C_{\alpha}(T)=\sum \limits_{t=1}^{|T|}N_tH_t(T)+\alpha{T}$$</p>
+<p>设树 T 的叶节点个数为 |T|，t 是树 T 的叶节点，该叶节点有$N<em>t$个样本点，其中 k 类样本有$N</em>{tk}$个，$H_{t}(T)$为叶节点 t 上的经验熵，$\alpha \ge 0$为参数，则决策树学习的损失函数为：</p>
+<p>$$C<em>{\alpha}(T)=\sum \limits</em>{t=1}^{|T|}N_tH_t(T)+\alpha{T}$$</p>
 <p>其中经验熵：</p>
-<p>$$H_t(T)=-\sum_k \frac{N_{tk}}{N_t}\log \frac{N_{tk}}{N_t}$$</p>
+<p>$$H_t(T)=-\sum<em>k \frac{N</em>{tk}}{N<em>t}\log \frac{N</em>{tk}}{N_t}$$</p>
 <p>将损失函数记为：</p>
 <p>$$C_{\alpha}(T)=C(T)+\alpha |T|$$</p>
 <p>其中第一项表示对训练数据的预测误差，|T|表示复杂度，参数$\alpha \ge 0$控制两者间的影响。</p>
-<p>剪枝时，计算每个节点的经验熵，然后递归地从树的叶节点往上回缩。如果一组叶节点回缩到其父节点之前与之后的整体树分别为$T_B$和$T_A$，如果$C_\alpha (T_A) \le C_\alpha(T_B)$则进行剪枝，将父节点变为新的叶节点。</p>
+<p>剪枝时，计算每个节点的经验熵，然后递归地从树的叶节点往上回缩。如果一组叶节点回缩到其父节点之前与之后的整体树分别为$T_B$和$T<em>A$，如果$C</em>\alpha (T<em>A) \le C</em>\alpha(T_B)$则进行剪枝，将父节点变为新的叶节点。</p>
 <p>剪枝算法可以由动态规划算法实现。</p>
 <h1 id="CART-算法"><a href="#CART-算法" class="headerlink" title="CART 算法"></a>CART 算法</h1><p>CART，全称 classification and regression tree，即分类与回归树，既可以用于分类也能用于回归。CART 是在给定输入随机变量 X 条件下输出随机变量 Y 的条件概率分布的学习方法，其假设决策树是二叉树。</p>
 <h2 id="CART-生成"><a href="#CART-生成" class="headerlink" title="CART 生成"></a>CART 生成</h2><p>决策树的生成就是递归地构建儿茶决策树的过程。对回归树用平方误差最小准则，对分类树用基尼指数最小化准则，进行特征选择，生成二叉树。</p>
@@ -158,12 +159,12 @@
 <p>生成算法为：</p>
 <ol>
 <li><p>选择最优切分变量 j 和切分点 s，求解：</p>
-<p> $$\min \limits_{j,s}[\min \limits_{c_1} \sum_{x_i\in R_1(j,s)}(y_i-c_1)^2 + \min \limits_{c_2} \sum_{x_i\in R_2(j,s)}(y_i-c_2)^2]$$</p>
+<p> $$\min \limits<em>{j,s}[\min \limits</em>{c<em>1} \sum</em>{x_i\in R_1(j,s)}(y_i-c<em>1)^2 + \min \limits</em>{c<em>2} \sum</em>{x_i\in R_2(j,s)}(y_i-c_2)^2]$$</p>
 <p> 遍历变量 j，对固定的切分变量 j 扫描切分点 s，选择使上式达到最小值的对 (j,s)。</p>
 </li>
 <li><p>对选用的对 (j,s) 换分区域并决定相应的输出值：</p>
 <p> $$R_1(j,s)={x|x^{(j)} \le s}, \quad R_2(j,s)={x|x^{(j)} \gt s}$$</p>
-<p> $$\hat{c_m}=\frac{1}{N_m}\sum_{x_i \in R_m(j,s)}y_i,\quad x\in R_m,\quad m=1,2$$</p>
+<p> $$\hat{c_m}=\frac{1}{N<em>m}\sum</em>{x_i \in R_m(j,s)}y_i,\quad x\in R_m,\quad m=1,2$$</p>
 </li>
 <li><p>继续对子区域调用1、2步骤，直到满足停止条件。</p>
 </li>
@@ -171,7 +172,7 @@
 </ol>
 <p>$$f(x)=\sum_{m=1}^{M}\hat{c_m}I(x\in R_m)$$</p>
 <h3 id="分类树的生成"><a href="#分类树的生成" class="headerlink" title="分类树的生成"></a>分类树的生成</h3><p>分类树使用基尼指数选择最优特征，同时决定该特征的最优二值切分点。假设有 K 个分类，样本点属于第 k 类的概率为$p_k$，则概率分布的基尼指数为：</p>
-<p>$$Gini(p)=\sum_{k=1}^{K}p_k(1-p_k)=1-\sum_{k=1}^{K}p_k^2$$</p>
+<p>$$Gini(p)=\sum_{k=1}^{K}p_k(1-p<em>k)=1-\sum</em>{k=1}^{K}p_k^2$$</p>
 <p>对于二分类问题，如果样本属于第一类的概率是 p，则：</p>
 <p>$$Gini(p)=2p(1-p)$$</p>
 <p>如果样本 D 根据特征 A 是否取某一可能值$\alpha$被分割成$D_1$和$D_2$两部分，则在特征 A 的条件下，集合 D 的基尼指数为：</p>
@@ -191,7 +192,7 @@
 </li>
 <li>设$k=k+1,\alpha_k=\alpha,T_k=T$</li>
 <li>如果 T 不是由根节点单独构成的树，则回到步骤4</li>
-<li>采用交叉验证法在子树序列$T_0,T_1,…,T_n$中选取最优子树$T_\alpha$ </li>
+<li>采用交叉验证法在子树序列$T_0,T_1,…,T<em>n$中选取最优子树$T</em>\alpha$ </li>
 </ol>
 
     </div>
@@ -395,7 +396,7 @@
           
         
           
-            <li><a href="/categories/Java/" title="Java">Java<sup>1</sup></a></li>
+            <li><a href="/categories/Java/" title="Java">Java<sup>2</sup></a></li>
           
         
           
@@ -411,7 +412,7 @@
           
         
           
-            <li><a href="/categories/笔记/" title="笔记">笔记<sup>2</sup></a></li>
+            <li><a href="/categories/笔记/" title="笔记">笔记<sup>3</sup></a></li>
           
         
           
@@ -454,7 +455,7 @@
   <div class="tagcloudlist">
     <p class="asidetitle">标签云</p>
     <div class="tagcloudlist clearfix">
-       <a href="/tags/Adam/" style="font-size: 10px;">Adam</a> <a href="/tags/BGD/" style="font-size: 10px;">BGD</a> <a href="/tags/Cassandra/" style="font-size: 12px;">Cassandra</a> <a href="/tags/Druid/" style="font-size: 16px;">Druid</a> <a href="/tags/JVM/" style="font-size: 10px;">JVM</a> <a href="/tags/Java/" style="font-size: 10px;">Java</a> <a href="/tags/LCS/" style="font-size: 10px;">LCS</a> <a href="/tags/Momentum/" style="font-size: 10px;">Momentum</a> <a href="/tags/NOSQL/" style="font-size: 12px;">NOSQL</a> <a href="/tags/SGD/" style="font-size: 10px;">SGD</a> <a href="/tags/Spring-Boot/" style="font-size: 10px;">Spring Boot</a> <a href="/tags/Sytle-Transfer/" style="font-size: 10px;">Sytle Transfer</a> <a href="/tags/Weight-initialization/" style="font-size: 10px;">Weight initialization</a> <a href="/tags/algorithms/" style="font-size: 10px;">algorithms</a> <a href="/tags/bash/" style="font-size: 10px;">bash</a> <a href="/tags/dynamic-programming/" style="font-size: 10px;">dynamic programming</a> <a href="/tags/hexo/" style="font-size: 10px;">hexo</a> <a href="/tags/k-邻近法/" style="font-size: 12px;">k 邻近法</a> <a href="/tags/knn/" style="font-size: 12px;">knn</a> <a href="/tags/linux/" style="font-size: 10px;">linux</a> <a href="/tags/macOS/" style="font-size: 10px;">macOS</a> <a href="/tags/内存模型/" style="font-size: 10px;">内存模型</a> <a href="/tags/分布式/" style="font-size: 18px;">分布式</a> <a href="/tags/多线程/" style="font-size: 10px;">多线程</a> <a href="/tags/实时计算/" style="font-size: 16px;">实时计算</a> <a href="/tags/异常处理/" style="font-size: 10px;">异常处理</a> <a href="/tags/异常表/" style="font-size: 10px;">异常表</a> <a href="/tags/感知机/" style="font-size: 10px;">感知机</a> <a href="/tags/最大熵模型/" style="font-size: 10px;">最大熵模型</a> <a href="/tags/朴素贝叶斯/" style="font-size: 10px;">朴素贝叶斯</a> <a href="/tags/机器学习/" style="font-size: 16px;">机器学习</a> <a href="/tags/杂/" style="font-size: 10px;">杂</a> <a href="/tags/梯度下降/" style="font-size: 10px;">梯度下降</a> <a href="/tags/深度学习/" style="font-size: 14px;">深度学习</a> <a href="/tags/源码分析/" style="font-size: 10px;">源码分析</a> <a href="/tags/生成/" style="font-size: 10px;">生成</a> <a href="/tags/笔记/" style="font-size: 20px;">笔记</a> <a href="/tags/统计学习/" style="font-size: 16px;">统计学习</a> <a href="/tags/调参/" style="font-size: 12px;">调参</a> <a href="/tags/跨域/" style="font-size: 10px;">跨域</a> <a href="/tags/踩坑日志/" style="font-size: 10px;">踩坑日志</a> <a href="/tags/逻辑斯谛回归/" style="font-size: 10px;">逻辑斯谛回归</a> <a href="/tags/配置/" style="font-size: 10px;">配置</a> <a href="/tags/风格迁移/" style="font-size: 10px;">风格迁移</a>
+       <a href="/tags/Adam/" style="font-size: 10px;">Adam</a> <a href="/tags/BGD/" style="font-size: 10px;">BGD</a> <a href="/tags/Cassandra/" style="font-size: 12px;">Cassandra</a> <a href="/tags/Druid/" style="font-size: 16px;">Druid</a> <a href="/tags/JVM/" style="font-size: 10px;">JVM</a> <a href="/tags/Java/" style="font-size: 10px;">Java</a> <a href="/tags/LCS/" style="font-size: 10px;">LCS</a> <a href="/tags/Momentum/" style="font-size: 10px;">Momentum</a> <a href="/tags/MySQL/" style="font-size: 10px;">MySQL</a> <a href="/tags/NOSQL/" style="font-size: 12px;">NOSQL</a> <a href="/tags/SGD/" style="font-size: 10px;">SGD</a> <a href="/tags/Spring-Boot/" style="font-size: 10px;">Spring Boot</a> <a href="/tags/Sytle-Transfer/" style="font-size: 10px;">Sytle Transfer</a> <a href="/tags/Weight-initialization/" style="font-size: 10px;">Weight initialization</a> <a href="/tags/algorithms/" style="font-size: 10px;">algorithms</a> <a href="/tags/bash/" style="font-size: 10px;">bash</a> <a href="/tags/dynamic-programming/" style="font-size: 10px;">dynamic programming</a> <a href="/tags/hexo/" style="font-size: 10px;">hexo</a> <a href="/tags/k-邻近法/" style="font-size: 12px;">k 邻近法</a> <a href="/tags/knn/" style="font-size: 12px;">knn</a> <a href="/tags/linux/" style="font-size: 10px;">linux</a> <a href="/tags/macOS/" style="font-size: 10px;">macOS</a> <a href="/tags/utf8/" style="font-size: 10px;">utf8</a> <a href="/tags/utf8mb4/" style="font-size: 10px;">utf8mb4</a> <a href="/tags/内存模型/" style="font-size: 10px;">内存模型</a> <a href="/tags/分布式/" style="font-size: 18px;">分布式</a> <a href="/tags/多线程/" style="font-size: 10px;">多线程</a> <a href="/tags/实时计算/" style="font-size: 16px;">实时计算</a> <a href="/tags/异常处理/" style="font-size: 10px;">异常处理</a> <a href="/tags/异常表/" style="font-size: 10px;">异常表</a> <a href="/tags/感知机/" style="font-size: 10px;">感知机</a> <a href="/tags/最大熵模型/" style="font-size: 10px;">最大熵模型</a> <a href="/tags/朴素贝叶斯/" style="font-size: 10px;">朴素贝叶斯</a> <a href="/tags/机器学习/" style="font-size: 16px;">机器学习</a> <a href="/tags/杂/" style="font-size: 10px;">杂</a> <a href="/tags/梯度下降/" style="font-size: 10px;">梯度下降</a> <a href="/tags/深度学习/" style="font-size: 14px;">深度学习</a> <a href="/tags/源码分析/" style="font-size: 10px;">源码分析</a> <a href="/tags/生成/" style="font-size: 10px;">生成</a> <a href="/tags/笔记/" style="font-size: 20px;">笔记</a> <a href="/tags/统计学习/" style="font-size: 16px;">统计学习</a> <a href="/tags/编码/" style="font-size: 10px;">编码</a> <a href="/tags/调参/" style="font-size: 12px;">调参</a> <a href="/tags/跨域/" style="font-size: 10px;">跨域</a> <a href="/tags/踩坑日志/" style="font-size: 10px;">踩坑日志</a> <a href="/tags/逻辑斯谛回归/" style="font-size: 10px;">逻辑斯谛回归</a> <a href="/tags/配置/" style="font-size: 10px;">配置</a> <a href="/tags/风格迁移/" style="font-size: 10px;">风格迁移</a>
     </div>
   </div>
 
@@ -511,8 +512,12 @@
 		
 
 		<p class="copyright">
-		Powered by <a href="http://hexo.io" target="_blank" title="hexo">hexo</a> and Theme by <a href="https://github.com/wuchong/jacman" target="_blank" title="Jacman">Jacman</a> © <span id="busuanzi_container_site_pv">
-    Viewed <span id="busuanzi_value_site_pv"></span> times
+		Powered by <a href="http://hexo.io" target="_blank" title="hexo">hexo</a> and Theme by <a href="https://github.com/wuchong/jacman" target="_blank" title="Jacman">Jacman</a> © 
+<span id="busuanzi_container_site_pv">
+  &nbsp<i class="fa fa-eye"></i> <span id="busuanzi_value_site_pv"><i class="fa fa-spinner fa-spin"></i></span>
+</span>
+<span id="busuanzi_container_site_uv">
+  &nbsp<i class="fa fa-user"></i> <span id="busuanzi_value_site_uv"><i class="fa fa-spinner fa-spin"></i></span>
 </span>
 2018 
 		

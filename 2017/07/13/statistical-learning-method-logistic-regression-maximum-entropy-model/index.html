@@ -18,6 +18,7 @@
 <meta property="og:url" content="http://blog.liexing.me/2017/07/13/statistical-learning-method-logistic-regression-maximum-entropy-model/index.html">
 <meta property="og:site_name" content="Liexing&#39;s Blog">
 <meta property="og:description" content="逻辑斯谛回归（Logistic regression）是统计学习中的经典分类方法，最大熵是概率模型学习的一个准则，将其推广到分类问题得到最大熵模型。逻辑斯谛回归模型与最大熵模型都是属于对数线性模型。 逻辑斯谛回归模型逻辑斯谛分布的分布函数和密度函数如下： $$F(x) = P(X &amp;lt;= x) = \frac{1}{1+e^{-(x - \mu) / \gamma}}$$ $$f(x) = F">
+<meta property="og:locale" content="zh-CN">
 <meta property="og:image" content="http://7xl6z1.com1.z0.glb.clouddn.com/static/images/statistical-learning-method/1499954622.jpg">
 <meta property="og:updated_time" content="2017-07-13T14:06:14.000Z">
 <meta name="twitter:card" content="summary">
@@ -94,7 +95,7 @@
   <p class="article-time">
     <time datetime="2017-07-13T11:29:50.000Z" itemprop="datePublished"> 发表于 2017-07-13</time>
 <span id="busuanzi_container_page_pv">
-  &nbspViewed <span id="busuanzi_value_page_pv"><i class="fa fa-spinner fa-spin"></i></span> times
+  &nbsp<i class="fa fa-eye"></i> <span id="busuanzi_value_page_pv"><i class="fa fa-spinner fa-spin"></i></span>
 </span>
     
   </p>
@@ -119,9 +120,9 @@
 <p>$$P(Y=1|x) = \frac{exp(w \cdot x + b)}{1+ exp(w \cdot x + b)}$$<br>$$P(Y=0|x) = \frac{1}{1+ exp(w \cdot x + b)}$$</p>
 <p>逻辑斯谛回归模型是指，输出$Y=1$的对数几率，其是由输入$x$的线性函数表示的模型。可以用极大似然估计法估计模型参数，从而得到逻辑斯谛回归模型。学习过程通常采用的方法是梯度下降法及拟牛顿法。</p>
 <h1 id="最大熵模型"><a href="#最大熵模型" class="headerlink" title="最大熵模型"></a>最大熵模型</h1><p>最大熵原理认为，学习概率模型时，在所有可能的概率模型（分布）中，熵最大的模型是最好的模型。通常用约束条件来确定概率模型的集合，所以最大熵原理也可以表述为在满足约束条件的模型集合汇总选取熵最大的模型。最大熵模型的学习可以形式化为约束最优化问题：</p>
-<p>$$\max_{P \in C} H(P) = - \sum_{x,y}\tilde{P}(x)p(y|x)logP(y|x)$$<br>$$s.t. \qquad E_p(f_i) = E_\tilde{p}(f_i) $$<br>$$\qquad \sum_yP(y|x)=1$$</p>
+<p>$$\max<em>{P \in C} H(P) = - \sum</em>{x,y}\tilde{P}(x)p(y|x)logP(y|x)$$<br>$$s.t. \qquad E_p(f<em>i) = E</em>\tilde{p}(f_i) $$<br>$$\qquad \sum_yP(y|x)=1$$</p>
 <p>最大熵模型是由以下条件概率分布表示的分类模型：</p>
-<p>$$P_w(y|x) = \frac{1}{Z_w(x)}exp(\sum_{i=1}^{n}w_if_i(x,y))$$<br>$$Z_w(x)=\sum_yexp(\sum_{i=1}^{n}w_if_i(x,y))$$</p>
+<p>$$P_w(y|x) = \frac{1}{Z<em>w(x)}exp(\sum</em>{i=1}^{n}w_if_i(x,y))$$<br>$$Z_w(x)=\sum<em>yexp(\sum</em>{i=1}^{n}w_if_i(x,y))$$</p>
 <p>其中$Z_w(x)$是规范化因子，$f_i$为特征函数，$w_i$为特征的权值。</p>
 <p>逻辑斯谛回归模型与最大熵模型都属于对数线性模型。二者的学习一般采用极大似然估计，或正则化的极大似然估计。逻辑斯谛回归模型及最大熵模型学习可以形式化为无约束最优化问题。求解该最优化问题的算法有改进的迭代尺度法、梯度下降法、拟牛顿法。</p>
 
@@ -326,7 +327,7 @@
           
         
           
-            <li><a href="/categories/Java/" title="Java">Java<sup>1</sup></a></li>
+            <li><a href="/categories/Java/" title="Java">Java<sup>2</sup></a></li>
           
         
           
@@ -342,7 +343,7 @@
           
         
           
-            <li><a href="/categories/笔记/" title="笔记">笔记<sup>2</sup></a></li>
+            <li><a href="/categories/笔记/" title="笔记">笔记<sup>3</sup></a></li>
           
         
           
@@ -385,7 +386,7 @@
   <div class="tagcloudlist">
     <p class="asidetitle">标签云</p>
     <div class="tagcloudlist clearfix">
-       <a href="/tags/Adam/" style="font-size: 10px;">Adam</a> <a href="/tags/BGD/" style="font-size: 10px;">BGD</a> <a href="/tags/Cassandra/" style="font-size: 12px;">Cassandra</a> <a href="/tags/Druid/" style="font-size: 16px;">Druid</a> <a href="/tags/JVM/" style="font-size: 10px;">JVM</a> <a href="/tags/Java/" style="font-size: 10px;">Java</a> <a href="/tags/LCS/" style="font-size: 10px;">LCS</a> <a href="/tags/Momentum/" style="font-size: 10px;">Momentum</a> <a href="/tags/NOSQL/" style="font-size: 12px;">NOSQL</a> <a href="/tags/SGD/" style="font-size: 10px;">SGD</a> <a href="/tags/Spring-Boot/" style="font-size: 10px;">Spring Boot</a> <a href="/tags/Sytle-Transfer/" style="font-size: 10px;">Sytle Transfer</a> <a href="/tags/Weight-initialization/" style="font-size: 10px;">Weight initialization</a> <a href="/tags/algorithms/" style="font-size: 10px;">algorithms</a> <a href="/tags/bash/" style="font-size: 10px;">bash</a> <a href="/tags/dynamic-programming/" style="font-size: 10px;">dynamic programming</a> <a href="/tags/hexo/" style="font-size: 10px;">hexo</a> <a href="/tags/k-邻近法/" style="font-size: 12px;">k 邻近法</a> <a href="/tags/knn/" style="font-size: 12px;">knn</a> <a href="/tags/linux/" style="font-size: 10px;">linux</a> <a href="/tags/macOS/" style="font-size: 10px;">macOS</a> <a href="/tags/内存模型/" style="font-size: 10px;">内存模型</a> <a href="/tags/分布式/" style="font-size: 18px;">分布式</a> <a href="/tags/多线程/" style="font-size: 10px;">多线程</a> <a href="/tags/实时计算/" style="font-size: 16px;">实时计算</a> <a href="/tags/异常处理/" style="font-size: 10px;">异常处理</a> <a href="/tags/异常表/" style="font-size: 10px;">异常表</a> <a href="/tags/感知机/" style="font-size: 10px;">感知机</a> <a href="/tags/最大熵模型/" style="font-size: 10px;">最大熵模型</a> <a href="/tags/朴素贝叶斯/" style="font-size: 10px;">朴素贝叶斯</a> <a href="/tags/机器学习/" style="font-size: 16px;">机器学习</a> <a href="/tags/杂/" style="font-size: 10px;">杂</a> <a href="/tags/梯度下降/" style="font-size: 10px;">梯度下降</a> <a href="/tags/深度学习/" style="font-size: 14px;">深度学习</a> <a href="/tags/源码分析/" style="font-size: 10px;">源码分析</a> <a href="/tags/生成/" style="font-size: 10px;">生成</a> <a href="/tags/笔记/" style="font-size: 20px;">笔记</a> <a href="/tags/统计学习/" style="font-size: 16px;">统计学习</a> <a href="/tags/调参/" style="font-size: 12px;">调参</a> <a href="/tags/跨域/" style="font-size: 10px;">跨域</a> <a href="/tags/踩坑日志/" style="font-size: 10px;">踩坑日志</a> <a href="/tags/逻辑斯谛回归/" style="font-size: 10px;">逻辑斯谛回归</a> <a href="/tags/配置/" style="font-size: 10px;">配置</a> <a href="/tags/风格迁移/" style="font-size: 10px;">风格迁移</a>
+       <a href="/tags/Adam/" style="font-size: 10px;">Adam</a> <a href="/tags/BGD/" style="font-size: 10px;">BGD</a> <a href="/tags/Cassandra/" style="font-size: 12px;">Cassandra</a> <a href="/tags/Druid/" style="font-size: 16px;">Druid</a> <a href="/tags/JVM/" style="font-size: 10px;">JVM</a> <a href="/tags/Java/" style="font-size: 10px;">Java</a> <a href="/tags/LCS/" style="font-size: 10px;">LCS</a> <a href="/tags/Momentum/" style="font-size: 10px;">Momentum</a> <a href="/tags/MySQL/" style="font-size: 10px;">MySQL</a> <a href="/tags/NOSQL/" style="font-size: 12px;">NOSQL</a> <a href="/tags/SGD/" style="font-size: 10px;">SGD</a> <a href="/tags/Spring-Boot/" style="font-size: 10px;">Spring Boot</a> <a href="/tags/Sytle-Transfer/" style="font-size: 10px;">Sytle Transfer</a> <a href="/tags/Weight-initialization/" style="font-size: 10px;">Weight initialization</a> <a href="/tags/algorithms/" style="font-size: 10px;">algorithms</a> <a href="/tags/bash/" style="font-size: 10px;">bash</a> <a href="/tags/dynamic-programming/" style="font-size: 10px;">dynamic programming</a> <a href="/tags/hexo/" style="font-size: 10px;">hexo</a> <a href="/tags/k-邻近法/" style="font-size: 12px;">k 邻近法</a> <a href="/tags/knn/" style="font-size: 12px;">knn</a> <a href="/tags/linux/" style="font-size: 10px;">linux</a> <a href="/tags/macOS/" style="font-size: 10px;">macOS</a> <a href="/tags/utf8/" style="font-size: 10px;">utf8</a> <a href="/tags/utf8mb4/" style="font-size: 10px;">utf8mb4</a> <a href="/tags/内存模型/" style="font-size: 10px;">内存模型</a> <a href="/tags/分布式/" style="font-size: 18px;">分布式</a> <a href="/tags/多线程/" style="font-size: 10px;">多线程</a> <a href="/tags/实时计算/" style="font-size: 16px;">实时计算</a> <a href="/tags/异常处理/" style="font-size: 10px;">异常处理</a> <a href="/tags/异常表/" style="font-size: 10px;">异常表</a> <a href="/tags/感知机/" style="font-size: 10px;">感知机</a> <a href="/tags/最大熵模型/" style="font-size: 10px;">最大熵模型</a> <a href="/tags/朴素贝叶斯/" style="font-size: 10px;">朴素贝叶斯</a> <a href="/tags/机器学习/" style="font-size: 16px;">机器学习</a> <a href="/tags/杂/" style="font-size: 10px;">杂</a> <a href="/tags/梯度下降/" style="font-size: 10px;">梯度下降</a> <a href="/tags/深度学习/" style="font-size: 14px;">深度学习</a> <a href="/tags/源码分析/" style="font-size: 10px;">源码分析</a> <a href="/tags/生成/" style="font-size: 10px;">生成</a> <a href="/tags/笔记/" style="font-size: 20px;">笔记</a> <a href="/tags/统计学习/" style="font-size: 16px;">统计学习</a> <a href="/tags/编码/" style="font-size: 10px;">编码</a> <a href="/tags/调参/" style="font-size: 12px;">调参</a> <a href="/tags/跨域/" style="font-size: 10px;">跨域</a> <a href="/tags/踩坑日志/" style="font-size: 10px;">踩坑日志</a> <a href="/tags/逻辑斯谛回归/" style="font-size: 10px;">逻辑斯谛回归</a> <a href="/tags/配置/" style="font-size: 10px;">配置</a> <a href="/tags/风格迁移/" style="font-size: 10px;">风格迁移</a>
     </div>
   </div>
 
@@ -442,8 +443,12 @@
 		
 
 		<p class="copyright">
-		Powered by <a href="http://hexo.io" target="_blank" title="hexo">hexo</a> and Theme by <a href="https://github.com/wuchong/jacman" target="_blank" title="Jacman">Jacman</a> © <span id="busuanzi_container_site_pv">
-    Viewed <span id="busuanzi_value_site_pv"></span> times
+		Powered by <a href="http://hexo.io" target="_blank" title="hexo">hexo</a> and Theme by <a href="https://github.com/wuchong/jacman" target="_blank" title="Jacman">Jacman</a> © 
+<span id="busuanzi_container_site_pv">
+  &nbsp<i class="fa fa-eye"></i> <span id="busuanzi_value_site_pv"><i class="fa fa-spinner fa-spin"></i></span>
+</span>
+<span id="busuanzi_container_site_uv">
+  &nbsp<i class="fa fa-user"></i> <span id="busuanzi_value_site_uv"><i class="fa fa-spinner fa-spin"></i></span>
 </span>
 2018 
 		
