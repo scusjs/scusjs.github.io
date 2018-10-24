@@ -19,13 +19,13 @@
 <meta property="og:site_name" content="Liexing&#39;s Blog">
 <meta property="og:description" content="k 近邻法（knn）是一种基本的分类与回归方法。这里只讨论分类问题。knn 分类可以简单理解为，找到距离输入实例最近的 k 个训练数据集中的实例点，其中多数属于某个类，则新输入的实例也属于某个类。 knn 算法根据上述描述，其算法表示为： $$y=\arg \max \limits_{cj} \sum \limits{xi \in N{k}(x)} I(y_i = c_j),\quad i=1,2">
 <meta property="og:locale" content="zh-CN">
-<meta property="og:image" content="http://7xl6z1.com1.z0.glb.clouddn.com/static/images/statistical-learning-method/1478078547.jpg">
-<meta property="og:image" content="http://7xl6z1.com1.z0.glb.clouddn.com/static/images/statistical-learning-method/1478081508.jpg">
+<meta property="og:image" content="http://cdn.liexing.top/static/images/statistical-learning-method/1478078547.jpg">
+<meta property="og:image" content="http://cdn.liexing.top/static/images/statistical-learning-method/1478081508.jpg">
 <meta property="og:updated_time" content="2017-02-27T11:34:45.000Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="统计学习方法（笔记）-k 近邻法">
 <meta name="twitter:description" content="k 近邻法（knn）是一种基本的分类与回归方法。这里只讨论分类问题。knn 分类可以简单理解为，找到距离输入实例最近的 k 个训练数据集中的实例点，其中多数属于某个类，则新输入的实例也属于某个类。 knn 算法根据上述描述，其算法表示为： $$y=\arg \max \limits_{cj} \sum \limits{xi \in N{k}(x)} I(y_i = c_j),\quad i=1,2">
-<meta name="twitter:image" content="http://7xl6z1.com1.z0.glb.clouddn.com/static/images/statistical-learning-method/1478078547.jpg">
+<meta name="twitter:image" content="http://cdn.liexing.top/static/images/statistical-learning-method/1478078547.jpg">
 <meta name="twitter:creator" content="@scusjs">
 
     
@@ -118,13 +118,13 @@
 <p>显然，k 近邻法没有显示的学习过程。</p>
 <h1 id="knn-模型"><a href="#knn-模型" class="headerlink" title="knn 模型"></a>knn 模型</h1><p>knn 实际使用的模型对应于对特征空间的划分。模型由三个要素——距离度量、k 值的选择和分类策略规则决定。当上面三要素与训练集确定后，对于任意输入实例，所属的类别唯一地确定。</p>
 <p>相当于在特征空间中划分一些子空间，判断新输入落入哪个子空间中即可。knn 中，k 为1叫做最近邻。这时候对每个训练集实例点划分一个区域（单元），如图：</p>
-<img title="k近邻法的模型对应特征空间的一个划分" alt="k近邻法的模型对应特征空间的一个划分" src="http://7xl6z1.com1.z0.glb.clouddn.com/static/images/statistical-learning-method/1478078547.jpg">
+<img title="k近邻法的模型对应特征空间的一个划分" alt="k近邻法的模型对应特征空间的一个划分" src="http://cdn.liexing.top/static/images/statistical-learning-method/1478078547.jpg">
 <p>对于 knn，距离度量是一个比较关键的因素，一般使用欧式距离，也可能使用其他距离。对于两点$x_i,x_j\in \mathcal{X}$，其距离定义为：</p>
 <p>$$L_p(x_i,x<em>j)=(\sum \limits</em>{l=1}^n |x_i^{(l)}-x_j^{(l)}|^p)^{\frac{1}{p}}$$</p>
 <p>这里，$p\geq 1$，p=1 时叫做曼哈顿距离，p=2 时叫做欧式距离，$p=\infty$时，为求各个坐标距离的最大值：</p>
 <p>$$L_{\infty}(x_i,x_j)=\max \limits_l|x_i^{(l)}-x_j^{(l)}|$$</p>
 <p>不同的距离度量所确定的最近邻点是不同的。如图：</p>
-<img title="L_p距离间的关系" alt="L_p距离间的关系" src="http://7xl6z1.com1.z0.glb.clouddn.com/static/images/statistical-learning-method/1478081508.jpg">
+<img title="L_p距离间的关系" alt="L_p距离间的关系" src="http://cdn.liexing.top/static/images/statistical-learning-method/1478081508.jpg">
 <p>其次，k 值的选择对结果影响也很大。k 较小时，近似误差小，但是估算误差大，噪声对其影响大，模型复杂，容易过拟合；k 较大时，可减小估算误差，但是近似误差大，模型变得简单。在应用时，取较小 k 的值，通过交叉验证来选取合适的值。</p>
 <p>knn 的分类策略往往是多数表决，其等价于经验风险最小化。</p>
 <h1 id="kd-树"><a href="#kd-树" class="headerlink" title="kd 树"></a>kd 树</h1><p>knn 最简单的实现是线性扫描，但是其开销巨大，不可取。</p>
@@ -195,14 +195,14 @@
         <div id="donate_guide" class="donate_bar center hidden">
             
 
-            <a href="http://7xl6z1.com1.z0.glb.clouddn.com/static/images/theme/reward_wechat.jpg" title="用微信扫一扫哦~" class="fancybox" rel="article0">
-                <img src="http://7xl6z1.com1.z0.glb.clouddn.com/static/images/theme/reward_wechat.jpg" title="微信打赏 Donate" height="190px" width="auto"/>
+            <a href="http://cdn.liexing.top/static/images/theme/reward_wechat.jpg" title="用微信扫一扫哦~" class="fancybox" rel="article0">
+                <img src="http://cdn.liexing.top/static/images/theme/reward_wechat.jpg" title="微信打赏 Donate" height="190px" width="auto"/>
             </a>
             
             &nbsp;&nbsp;
 
-            <a href="http://7xl6z1.com1.z0.glb.clouddn.com/static/images/theme/reward_alipay.jpg" title="用支付宝扫一扫即可~" class="fancybox" rel="article0">
-                <img src="http://7xl6z1.com1.z0.glb.clouddn.com/static/images/theme/reward_alipay.jpg" title="支付宝打赏 Donate" height="190px" width="auto"/>
+            <a href="http://cdn.liexing.top/static/images/theme/reward_alipay.jpg" title="用支付宝扫一扫即可~" class="fancybox" rel="article0">
+                <img src="http://cdn.liexing.top/static/images/theme/reward_alipay.jpg" title="支付宝打赏 Donate" height="190px" width="auto"/>
             </a>
 
             <span class="donate_txt">
@@ -469,7 +469,7 @@
 <script src="/js/jquery.imagesloaded.min.js"></script>
 <script src="/js/gallery.js"></script>
 <script src="/js/jquery.qrcode-0.12.0.min.js"></script>
-<script async src="//dn-lbstatics.qbox.me/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+<script async src="//busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script>
 <script async src="/js/ones.js"></script>
 
 <script type="text/javascript">

@@ -19,12 +19,12 @@
 <meta property="og:site_name" content="Liexing&#39;s Blog">
 <meta property="og:description" content="Indexing Service 是 Druid 的一个核心组件，用来对数据进行索引，控制Druid的段的产生以及销毁。">
 <meta property="og:locale" content="zh-CN">
-<meta property="og:image" content="http://7xl6z1.com1.z0.glb.clouddn.com/static/images/14605158741221.png">
+<meta property="og:image" content="http://cdn.liexing.top/static/images/14605158741221.png">
 <meta property="og:updated_time" content="2017-02-27T11:34:45.000Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="Druid Indexing Service（索引服务）">
 <meta name="twitter:description" content="Indexing Service 是 Druid 的一个核心组件，用来对数据进行索引，控制Druid的段的产生以及销毁。">
-<meta name="twitter:image" content="http://7xl6z1.com1.z0.glb.clouddn.com/static/images/14605158741221.png">
+<meta name="twitter:image" content="http://cdn.liexing.top/static/images/14605158741221.png">
 <meta name="twitter:creator" content="@scusjs">
 
     
@@ -113,7 +113,7 @@
         <p>索引服务是一种用来运行索引相关任务的高可用、分布式的服务。索引服务任务创建或者销毁Druid的段。其架构类似主奴机制。</p>
 <p>索引服务由三个主要部件组成：peon运行单个的任务，Middle Manager组件管理peon，overlord组件控制任务向Middle Manager的分配。Middle Manager和Peon通常运行在同一个节点，Overlord和Middle Manager能运行在相同节点或者多个节点上。</p>
 <p>索引服务的示意图如下：</p>
-<img title="Druid" alt="Druid" src="http://7xl6z1.com1.z0.glb.clouddn.com/static/images/14605158741221.png">
+<img title="Druid" alt="Druid" src="http://cdn.liexing.top/static/images/14605158741221.png">
 <h2 id="Overlord节点"><a href="#Overlord节点" class="headerlink" title="Overlord节点"></a>Overlord节点</h2><p>Overlord节点负责接收任务，负责任务的分配，对任务加锁，向调用者返回任务状态。Overlord有两种模式：本地模式或者远程模式。其中本地模式是默认模式。在本地模式下Overlord也负责创建Peon来执行任务，所有的Middle Manager和Peon的配置此时也应当被提供，这种模式一般用于普通的工作流。远程模式中，Overlord和Middle Manager运行在不同的进程中，也可以在不同服务器上运行，如果想让索引服务成为Druid索引的单一端点，推荐使用这种模式。</p>
 <p>可以通过向Overlor节点以POST请求提交JSON对象的方式提交任务：</p>
 <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">http://&lt;OVERLORD_IP&gt;:&lt;port&gt;/druid/indexer/v1/task</span><br></pre></td></tr></table></figure>
@@ -193,14 +193,14 @@
         <div id="donate_guide" class="donate_bar center hidden">
             
 
-            <a href="http://7xl6z1.com1.z0.glb.clouddn.com/static/images/theme/reward_wechat.jpg" title="用微信扫一扫哦~" class="fancybox" rel="article0">
-                <img src="http://7xl6z1.com1.z0.glb.clouddn.com/static/images/theme/reward_wechat.jpg" title="微信打赏 Donate" height="190px" width="auto"/>
+            <a href="http://cdn.liexing.top/static/images/theme/reward_wechat.jpg" title="用微信扫一扫哦~" class="fancybox" rel="article0">
+                <img src="http://cdn.liexing.top/static/images/theme/reward_wechat.jpg" title="微信打赏 Donate" height="190px" width="auto"/>
             </a>
             
             &nbsp;&nbsp;
 
-            <a href="http://7xl6z1.com1.z0.glb.clouddn.com/static/images/theme/reward_alipay.jpg" title="用支付宝扫一扫即可~" class="fancybox" rel="article0">
-                <img src="http://7xl6z1.com1.z0.glb.clouddn.com/static/images/theme/reward_alipay.jpg" title="支付宝打赏 Donate" height="190px" width="auto"/>
+            <a href="http://cdn.liexing.top/static/images/theme/reward_alipay.jpg" title="用支付宝扫一扫即可~" class="fancybox" rel="article0">
+                <img src="http://cdn.liexing.top/static/images/theme/reward_alipay.jpg" title="支付宝打赏 Donate" height="190px" width="auto"/>
             </a>
 
             <span class="donate_txt">
@@ -467,7 +467,7 @@
 <script src="/js/jquery.imagesloaded.min.js"></script>
 <script src="/js/gallery.js"></script>
 <script src="/js/jquery.qrcode-0.12.0.min.js"></script>
-<script async src="//dn-lbstatics.qbox.me/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+<script async src="//busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script>
 <script async src="/js/ones.js"></script>
 
 <script type="text/javascript">

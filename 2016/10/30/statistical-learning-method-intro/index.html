@@ -19,13 +19,13 @@
 <meta property="og:site_name" content="Liexing&#39;s Blog">
 <meta property="og:description" content="统计学习统计学习是关于计算机基于数据构建概率统计模型并运用模型对数据进行预测与分析的一门学科，也称为统计机器学习。即数据--&amp;gt;模型--&amp;gt;预测。 统计学习的对象是数据。从数据出发，提取数据的特征，抽象出数据的模型，发现数据中的知识，又回到对数据的分析和预测中。其目的是对数据的预测与分析。 统计学习分为：监督学习（supervised learning）、非监督学习（unsupervise">
 <meta property="og:locale" content="zh-CN">
-<meta property="og:image" content="http://7xl6z1.com1.z0.glb.clouddn.com/static/images/statistical-learning-method/1477841307.png">
-<meta property="og:image" content="http://7xl6z1.com1.z0.glb.clouddn.com/static/images/statistical-learning-method/1477882667.jpg">
+<meta property="og:image" content="http://cdn.liexing.top/static/images/statistical-learning-method/1477841307.png">
+<meta property="og:image" content="http://cdn.liexing.top/static/images/statistical-learning-method/1477882667.jpg">
 <meta property="og:updated_time" content="2017-02-27T11:34:45.000Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="统计学习方法（笔记）-概论">
 <meta name="twitter:description" content="统计学习统计学习是关于计算机基于数据构建概率统计模型并运用模型对数据进行预测与分析的一门学科，也称为统计机器学习。即数据--&amp;gt;模型--&amp;gt;预测。 统计学习的对象是数据。从数据出发，提取数据的特征，抽象出数据的模型，发现数据中的知识，又回到对数据的分析和预测中。其目的是对数据的预测与分析。 统计学习分为：监督学习（supervised learning）、非监督学习（unsupervise">
-<meta name="twitter:image" content="http://7xl6z1.com1.z0.glb.clouddn.com/static/images/statistical-learning-method/1477841307.png">
+<meta name="twitter:image" content="http://cdn.liexing.top/static/images/statistical-learning-method/1477841307.png">
 <meta name="twitter:creator" content="@scusjs">
 
     
@@ -118,7 +118,7 @@
 <h1 id="监督学习"><a href="#监督学习" class="headerlink" title="监督学习"></a>监督学习</h1><p>即使用已有类别的数据训练模型。<code>训练数据--&gt;模型--&gt;测试数据</code></p>
 <p>统计学习假设数据存在一定的统计规律，X 和 Y 具有联合概率分布的假设就是监督学习关于数据的基本假设。</p>
 <p>监督学习的目的在于学习一个由输入到输出的映射。</p>
-<img alt="监督学习问题" src="http://7xl6z1.com1.z0.glb.clouddn.com/static/images/statistical-learning-method/1477841307.png">
+<img alt="监督学习问题" src="http://cdn.liexing.top/static/images/statistical-learning-method/1477841307.png">
 <h1 id="统计学习的三要素"><a href="#统计学习的三要素" class="headerlink" title="统计学习的三要素"></a>统计学习的三要素</h1><h2 id="模型"><a href="#模型" class="headerlink" title="模型"></a>模型</h2><p>模型就是所有学习的条件概率分布或决策函数。</p>
 <p>假设空间可以定义为参数向量决定的函数族：<br>$$F=\lbrace f|Y=f_\theta(X),\theta \in R^n\rbrace$$</p>
 <p>也可以表示未参数向量决定的条件概率分布族：<br>$$F=\lbrace P|P_\theta(Y|X), \theta \in R^n \rbrace$$</p>
@@ -151,7 +151,7 @@
 <h2 id="算法"><a href="#算法" class="headerlink" title="算法"></a>算法</h2><p>算法是学习模型的具体计算方法。统计学习问题归结为最优化问题，统计学习的算法成为求解最优化问题的算法。</p>
 <h1 id="模型评估与模型选择"><a href="#模型评估与模型选择" class="headerlink" title="模型评估与模型选择"></a>模型评估与模型选择</h1><p>统计学习的目的是使学到的模型不仅对已知数据而且对位置数据都有很好的预测能力。当损失函数给定时，基于损失函数的模型的训练误差和测试误差就成为学习方法评估的标准。<code>注意：统计学习方法具体采用的损失函数未必是评估时使用的损失函数。</code>。测试误差小的方法具有更好的预测性。将学习方法对未知数据的预测能力称为泛化能力。</p>
 <p>过拟合通常是因为参数过多导致的。即模型越复杂，越容易发生过拟合。过拟合对训练样本的误差小，但是对测试样本的误差大。</p>
-<img title="训练误差与测试误差和模型复杂度的关系" alt="训练误差与测试误差和模型复杂度的关系" src="http://7xl6z1.com1.z0.glb.clouddn.com/static/images/statistical-learning-method/1477882667.jpg">
+<img title="训练误差与测试误差和模型复杂度的关系" alt="训练误差与测试误差和模型复杂度的关系" src="http://cdn.liexing.top/static/images/statistical-learning-method/1477882667.jpg">
 <h1 id="正则化"><a href="#正则化" class="headerlink" title="正则化"></a>正则化</h1><p>正则化有如下形式：</p>
 <p>$$\min<em>{\mathcal{f\in F}} \frac {1}{N}\sum</em>{i=1}^N L(y_i,f(x_i)) + \lambda J(f)$$</p>
 <p>其中第一项为经验风险，第二项为正则化项。正则化项可以取不同的形式，如 $L_1$ 范数或者 $L_2$ 范数。</p>
@@ -231,14 +231,14 @@
         <div id="donate_guide" class="donate_bar center hidden">
             
 
-            <a href="http://7xl6z1.com1.z0.glb.clouddn.com/static/images/theme/reward_wechat.jpg" title="用微信扫一扫哦~" class="fancybox" rel="article0">
-                <img src="http://7xl6z1.com1.z0.glb.clouddn.com/static/images/theme/reward_wechat.jpg" title="微信打赏 Donate" height="190px" width="auto"/>
+            <a href="http://cdn.liexing.top/static/images/theme/reward_wechat.jpg" title="用微信扫一扫哦~" class="fancybox" rel="article0">
+                <img src="http://cdn.liexing.top/static/images/theme/reward_wechat.jpg" title="微信打赏 Donate" height="190px" width="auto"/>
             </a>
             
             &nbsp;&nbsp;
 
-            <a href="http://7xl6z1.com1.z0.glb.clouddn.com/static/images/theme/reward_alipay.jpg" title="用支付宝扫一扫即可~" class="fancybox" rel="article0">
-                <img src="http://7xl6z1.com1.z0.glb.clouddn.com/static/images/theme/reward_alipay.jpg" title="支付宝打赏 Donate" height="190px" width="auto"/>
+            <a href="http://cdn.liexing.top/static/images/theme/reward_alipay.jpg" title="用支付宝扫一扫即可~" class="fancybox" rel="article0">
+                <img src="http://cdn.liexing.top/static/images/theme/reward_alipay.jpg" title="支付宝打赏 Donate" height="190px" width="auto"/>
             </a>
 
             <span class="donate_txt">
@@ -505,7 +505,7 @@
 <script src="/js/jquery.imagesloaded.min.js"></script>
 <script src="/js/gallery.js"></script>
 <script src="/js/jquery.qrcode-0.12.0.min.js"></script>
-<script async src="//dn-lbstatics.qbox.me/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+<script async src="//busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script>
 <script async src="/js/ones.js"></script>
 
 <script type="text/javascript">

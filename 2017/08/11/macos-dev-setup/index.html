@@ -19,15 +19,15 @@
 <meta property="og:site_name" content="Liexing&#39;s Blog">
 <meta property="og:description" content="某人心心念念的rmbp终于到手了，然而我还在杭州没法帮忙各种配置，这里就写一份教程好了，自己拿去照着撸吧（￣︶￣）↗  ps. 毕竟你的是高大上的17带bar rmbp。。。然而，bar的操作我都！不！知！道！ 大概介绍 macOS 的一些基本操作以及常见的软件、开发环境的搭建。 基本操作介绍 17的触摸板应该是二段的按压，意思就是分为轻按和重按，按到底会响两次，轻按表示单击，重按表示双击。但是也">
 <meta property="og:locale" content="zh-CN">
-<meta property="og:image" content="http://7xl6z1.com1.z0.glb.clouddn.com/static/images/macos-dev-setup/1502459911.jpg">
-<meta property="og:image" content="http://7xl6z1.com1.z0.glb.clouddn.com/static/images/macos-dev-setup/1502460257.jpg">
-<meta property="og:image" content="http://7xl6z1.com1.z0.glb.clouddn.com/static/images/macos-dev-setup/1502463526.png">
-<meta property="og:image" content="http://7xl6z1.com1.z0.glb.clouddn.com/static/images/macos-dev-setup/1502469911.jpg">
+<meta property="og:image" content="http://cdn.liexing.top/static/images/macos-dev-setup/1502459911.jpg">
+<meta property="og:image" content="http://cdn.liexing.top/static/images/macos-dev-setup/1502460257.jpg">
+<meta property="og:image" content="http://cdn.liexing.top/static/images/macos-dev-setup/1502463526.png">
+<meta property="og:image" content="http://cdn.liexing.top/static/images/macos-dev-setup/1502469911.jpg">
 <meta property="og:updated_time" content="2017-09-17T07:15:47.000Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="macOS 开发配置">
 <meta name="twitter:description" content="某人心心念念的rmbp终于到手了，然而我还在杭州没法帮忙各种配置，这里就写一份教程好了，自己拿去照着撸吧（￣︶￣）↗  ps. 毕竟你的是高大上的17带bar rmbp。。。然而，bar的操作我都！不！知！道！ 大概介绍 macOS 的一些基本操作以及常见的软件、开发环境的搭建。 基本操作介绍 17的触摸板应该是二段的按压，意思就是分为轻按和重按，按到底会响两次，轻按表示单击，重按表示双击。但是也">
-<meta name="twitter:image" content="http://7xl6z1.com1.z0.glb.clouddn.com/static/images/macos-dev-setup/1502459911.jpg">
+<meta name="twitter:image" content="http://cdn.liexing.top/static/images/macos-dev-setup/1502459911.jpg">
 <meta name="twitter:creator" content="@scusjs">
 
     
@@ -158,9 +158,9 @@
 <h2 id="系统基本介绍"><a href="#系统基本介绍" class="headerlink" title="系统基本介绍"></a>系统基本介绍</h2><h3 id="一些介绍"><a href="#一些介绍" class="headerlink" title="一些介绍"></a>一些介绍</h3><ol>
 <li><p>首先 macOS 是基于 Unix 的发行版，所以文件结构、命令上，都和 *nix 系统非常像（但是非常多坑）。</p>
 </li>
-<li><p>点击 Dock 上的 Finder（即 macOS 的资源管理器）<img src="http://7xl6z1.com1.z0.glb.clouddn.com/static/images/macos-dev-setup/1502459911.jpg">，可以看到左边有一栏，里面有个应用程序（/Applications），应用程序放在这里的。然后 macOS 中，用户目录是<code>/Users/username</code>，而不是<code>/home/username</code>，这个需要注意。激活 Finder 的情况下，屏幕左上角会有一排菜单，这个菜单针对每个软件可能不同。一般软件的设置都是<code>软件名-偏好设置</code>中，或者使用<code>⌘+,</code>快捷键打开软件的偏好设置。在显示中是一些显示的选项，对于 Finder 可以打开显示标签页、路径、状态等</p>
+<li><p>点击 Dock 上的 Finder（即 macOS 的资源管理器）<img src="http://cdn.liexing.top/static/images/macos-dev-setup/1502459911.jpg">，可以看到左边有一栏，里面有个应用程序（/Applications），应用程序放在这里的。然后 macOS 中，用户目录是<code>/Users/username</code>，而不是<code>/home/username</code>，这个需要注意。激活 Finder 的情况下，屏幕左上角会有一排菜单，这个菜单针对每个软件可能不同。一般软件的设置都是<code>软件名-偏好设置</code>中，或者使用<code>⌘+,</code>快捷键打开软件的偏好设置。在显示中是一些显示的选项，对于 Finder 可以打开显示标签页、路径、状态等</p>
 </li>
-<li><p>如果前面触摸板中打开了 Launchpad 的手势，捏拢拇指与其他三个手指即可打开 Launchpad，或者点击 Dock 中的小火箭图标<img src="http://7xl6z1.com1.z0.glb.clouddn.com/static/images/macos-dev-setup/1502460257.jpg">，则能看到所有安装的应用程序，可以两个手指轻扫翻页。</p>
+<li><p>如果前面触摸板中打开了 Launchpad 的手势，捏拢拇指与其他三个手指即可打开 Launchpad，或者点击 Dock 中的小火箭图标<img src="http://cdn.liexing.top/static/images/macos-dev-setup/1502460257.jpg">，则能看到所有安装的应用程序，可以两个手指轻扫翻页。</p>
 </li>
 </ol>
 <h3 id="安装软件"><a href="#安装软件" class="headerlink" title="安装软件"></a>安装软件</h3><ol>
@@ -182,10 +182,10 @@
 <p>然后可以选择<a href="https://github.com/oh-my-fish/oh-my-fish/blob/master/docs/Themes.md" target="_blank" rel="noopener">主题</a>，我用的 ocean，这么安装：</p>
 <figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">omf install ocean</span><br><span class="line">omf theme ocean</span><br></pre></td></tr></table></figure>
 <p>当然也可以安装其他主题，去上面那个链接选选。。安装好后长这样：</p>
-<img title="Ocean主题" alt="Ocean主题" src="http://7xl6z1.com1.z0.glb.clouddn.com/static/images/macos-dev-setup/1502463526.png">
+<img title="Ocean主题" alt="Ocean主题" src="http://cdn.liexing.top/static/images/macos-dev-setup/1502463526.png">
 <h3 id="ShadowsocksX"><a href="#ShadowsocksX" class="headerlink" title="ShadowsocksX"></a>ShadowsocksX</h3><p><a href="https://github.com/shadowsocks/ShadowsocksX-NG/releases" target="_blank" rel="noopener">ShadowsocksX</a>这个就不多说了。。。</p>
 <h3 id="Karabiner-Elements"><a href="#Karabiner-Elements" class="headerlink" title="Karabiner-Elements"></a>Karabiner-Elements</h3><p><a href="https://github.com/tekezo/Karabiner-Elements" target="_blank" rel="noopener">Karabiner-Elements</a> 是一个修改键位的软件，建议用它把 <code>caps lock</code>和<code>control</code>位置替换。因为大小写锁定占据了更好的位置，而 <code>control</code> 是更加频繁使用的一个按键，调换后更方便。</p>
-<img title="Karabiner-Elements" alt="Karabiner-Elements" src="http://7xl6z1.com1.z0.glb.clouddn.com/static/images/macos-dev-setup/1502469911.jpg">
+<img title="Karabiner-Elements" alt="Karabiner-Elements" src="http://cdn.liexing.top/static/images/macos-dev-setup/1502469911.jpg">
 <h3 id="其他软件"><a href="#其他软件" class="headerlink" title="其他软件"></a>其他软件</h3><p><a href="https://www.jetbrains.com/idea/download/" target="_blank" rel="noopener">IntelliJ IDEA</a>(不过强烈建议通过<a href="https://www.jetbrains.com/toolbox/app/?fromMenu" target="_blank" rel="noopener">JetBrains Toolbox</a> 安装)、<br><a href="https://go.microsoft.com/fwlink/p/?LinkID=511647" target="_blank" rel="noopener">Office 365</a>、<br><a href="http://pinyin.sogou.com/mac/" target="_blank" rel="noopener">搜狗输入法</a>、<br><a href="http://mac.xunlei.com/" target="_blank" rel="noopener">迅雷</a>、<br><a href="https://www.alfredapp.com/" target="_blank" rel="noopener">Alfred</a>（<a href="http://www.alfredworkflow.com" target="_blank" rel="noopener">这里</a>有一堆工作流工具）、<br><a href="http://bjango.com/" target="_blank" rel="noopener">iStat</a>、<br><a href="http://mac.guanjia.qq.com/" target="_blank" rel="noopener">腾讯电脑管家</a>、<br><a href="http://im.qq.com/macqq/" target="_blank" rel="noopener">QQ</a>、<br><a href="https://mac.weixin.qq.com/" target="_blank" rel="noopener">微信</a></p>
 <h2 id="其他参考"><a href="#其他参考" class="headerlink" title="其他参考"></a>其他参考</h2><ol>
 <li><a href="https://github.com/hzlzh/Best-App" target="_blank" rel="noopener">收集&amp;推荐优秀的 Apps/硬件/技巧/周边等</a></li>
@@ -257,14 +257,14 @@
         <div id="donate_guide" class="donate_bar center hidden">
             
 
-            <a href="http://7xl6z1.com1.z0.glb.clouddn.com/static/images/theme/reward_wechat.jpg" title="用微信扫一扫哦~" class="fancybox" rel="article0">
-                <img src="http://7xl6z1.com1.z0.glb.clouddn.com/static/images/theme/reward_wechat.jpg" title="微信打赏 Donate" height="190px" width="auto"/>
+            <a href="http://cdn.liexing.top/static/images/theme/reward_wechat.jpg" title="用微信扫一扫哦~" class="fancybox" rel="article0">
+                <img src="http://cdn.liexing.top/static/images/theme/reward_wechat.jpg" title="微信打赏 Donate" height="190px" width="auto"/>
             </a>
             
             &nbsp;&nbsp;
 
-            <a href="http://7xl6z1.com1.z0.glb.clouddn.com/static/images/theme/reward_alipay.jpg" title="用支付宝扫一扫即可~" class="fancybox" rel="article0">
-                <img src="http://7xl6z1.com1.z0.glb.clouddn.com/static/images/theme/reward_alipay.jpg" title="支付宝打赏 Donate" height="190px" width="auto"/>
+            <a href="http://cdn.liexing.top/static/images/theme/reward_alipay.jpg" title="用支付宝扫一扫即可~" class="fancybox" rel="article0">
+                <img src="http://cdn.liexing.top/static/images/theme/reward_alipay.jpg" title="支付宝打赏 Donate" height="190px" width="auto"/>
             </a>
 
             <span class="donate_txt">
@@ -531,7 +531,7 @@
 <script src="/js/jquery.imagesloaded.min.js"></script>
 <script src="/js/gallery.js"></script>
 <script src="/js/jquery.qrcode-0.12.0.min.js"></script>
-<script async src="//dn-lbstatics.qbox.me/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+<script async src="//busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script>
 <script async src="/js/ones.js"></script>
 
 <script type="text/javascript">

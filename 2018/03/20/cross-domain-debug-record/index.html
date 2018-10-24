@@ -19,16 +19,16 @@
 <meta property="og:site_name" content="Liexing&#39;s Blog">
 <meta property="og:description" content="关于 CORS 踩的一些坑，以及介绍了一些Spring中CORS相关的代码">
 <meta property="og:locale" content="zh-CN">
-<meta property="og:image" content="http://7xl6z1.com1.z0.glb.clouddn.com/static/images/cross-domain-debug-record/1521556978.jpg">
-<meta property="og:image" content="http://7xl6z1.com1.z0.glb.clouddn.com/static/images/cross-domain-debug-record/1521557592.png">
-<meta property="og:image" content="http://7xl6z1.com1.z0.glb.clouddn.com/static/images/cross-domain-debug-record/1521558256.jpg">
-<meta property="og:image" content="http://7xl6z1.com1.z0.glb.clouddn.com/static/images/cross-domain-debug-record/1521558645.jpg">
-<meta property="og:image" content="http://7xl6z1.com1.z0.glb.clouddn.com/static/images/cross-domain-debug-record/1521558994.jpg">
-<meta property="og:updated_time" content="2018-03-20T15:41:36.387Z">
+<meta property="og:image" content="http://cdn.liexing.top/static/images/cross-domain-debug-record/1521556978.jpg">
+<meta property="og:image" content="http://cdn.liexing.top/static/images/cross-domain-debug-record/1521557592.png">
+<meta property="og:image" content="http://cdn.liexing.top/static/images/cross-domain-debug-record/1521558256.jpg">
+<meta property="og:image" content="http://cdn.liexing.top/static/images/cross-domain-debug-record/1521558645.jpg">
+<meta property="og:image" content="http://cdn.liexing.top/static/images/cross-domain-debug-record/1521558994.jpg">
+<meta property="og:updated_time" content="2018-03-20T15:41:36.000Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="跨域访问踩坑日志">
 <meta name="twitter:description" content="关于 CORS 踩的一些坑，以及介绍了一些Spring中CORS相关的代码">
-<meta name="twitter:image" content="http://7xl6z1.com1.z0.glb.clouddn.com/static/images/cross-domain-debug-record/1521556978.jpg">
+<meta name="twitter:image" content="http://cdn.liexing.top/static/images/cross-domain-debug-record/1521556978.jpg">
 <meta name="twitter:creator" content="@scusjs">
 
     
@@ -128,13 +128,13 @@
 </blockquote>
 <p>这是第一个坑，当然这是我自己的问题，因为之前写PHP时候，为了方便，直接在通过Nginx代理中加上一个<code>Access-Control-Allow-Origin</code>头部，而 Spring Boot 对于 CORS 是按照标准来的，这里后面会说。</p>
 <h2 id="浏览器对CORS的操作"><a href="#浏览器对CORS的操作" class="headerlink" title="浏览器对CORS的操作"></a>浏览器对CORS的操作</h2><p>前面说了，浏览器在跨域访问时，会自动加上一个<code>Origin</code>头部来标注来源，这也是后端识别跨域访问的判定标准。而我在写 js 时（嗯我就是前端渣，不然咋会掉坑），域名没有加上协议，即 <code>https://</code>或者<code>//</code>，尽管浏览器给了我提示，然而我瞎了，而且还认为是浏览器 bug 换了一堆浏览器。</p>
-<img title="浏览器对于协议缺失的报错" alt="浏览器对于协议缺失的报错" width="600" src="http://7xl6z1.com1.z0.glb.clouddn.com/static/images/cross-domain-debug-record/1521556978.jpg">
+<img title="浏览器对于协议缺失的报错" alt="浏览器对于协议缺失的报错" width="600" src="http://cdn.liexing.top/static/images/cross-domain-debug-record/1521556978.jpg">
 <h2 id="Postman-的坑"><a href="#Postman-的坑" class="headerlink" title="Postman 的坑"></a>Postman 的坑</h2><p>这下来了让我当时无比懵逼的一个坑了，就是我的 Postman 是 app 版本（Mac）的，我室友的是 Chrome 的应用版，而Chrome 应用版本的Postman在请求时，会加上一个<code>Origin</code>字段，而 app 版的不会，因此这也算为啥我室友电脑上没事╭(╯^╰)╮</p>
-<img title="Chrome应用版postman" alt="Chrome应用版postman" width="600" src="http://7xl6z1.com1.z0.glb.clouddn.com/static/images/cross-domain-debug-record/1521557592.png">
-<img title="app版postman" alt="app应用版postman" width="600" src="http://7xl6z1.com1.z0.glb.clouddn.com/static/images/cross-domain-debug-record/1521558256.jpg">
+<img title="Chrome应用版postman" alt="Chrome应用版postman" width="600" src="http://cdn.liexing.top/static/images/cross-domain-debug-record/1521557592.png">
+<img title="app版postman" alt="app应用版postman" width="600" src="http://cdn.liexing.top/static/images/cross-domain-debug-record/1521558256.jpg">
 <p>从上面两个图可以看出，不同版本的 postman 发送的请求头部会有不同。</p>
-<h2 id="Spring中CORS相关操作"><a href="#Spring中CORS相关操作" class="headerlink" title="Spring中CORS相关操作"></a>Spring中CORS相关操作</h2><p>Spring 中，检查是否是CORS只是看<code>Origin</code>头部，即完全按照W3C标准。Spring 通过<code>org.springframework.web.cors</code>中的<code>CorsUtils.isCorsRequest</code>来判断，如下图。<br><img title="Spring中判断CORS" alt="Spring中判断CORS" width="600" src="http://7xl6z1.com1.z0.glb.clouddn.com/static/images/cross-domain-debug-record/1521558645.jpg"></p>
-<p>对于 CORS 的各种操作，会在<code>org.springframework.web.cors</code>中进行，比如在<code>org.springframework.web.cors.reactive</code>中的<code>DefaultCorsProcessor。handleInternal</code>对 CORS 请求的返回进行各种校验并且添加头部操作，如下图。<br><img title="Spring中添加CORS头" alt="Spring中添加CORS头" width="600" src="http://7xl6z1.com1.z0.glb.clouddn.com/static/images/cross-domain-debug-record/1521558994.jpg"></p>
+<h2 id="Spring中CORS相关操作"><a href="#Spring中CORS相关操作" class="headerlink" title="Spring中CORS相关操作"></a>Spring中CORS相关操作</h2><p>Spring 中，检查是否是CORS只是看<code>Origin</code>头部，即完全按照W3C标准。Spring 通过<code>org.springframework.web.cors</code>中的<code>CorsUtils.isCorsRequest</code>来判断，如下图。<br><img title="Spring中判断CORS" alt="Spring中判断CORS" width="600" src="http://cdn.liexing.top/static/images/cross-domain-debug-record/1521558645.jpg"></p>
+<p>对于 CORS 的各种操作，会在<code>org.springframework.web.cors</code>中进行，比如在<code>org.springframework.web.cors.reactive</code>中的<code>DefaultCorsProcessor。handleInternal</code>对 CORS 请求的返回进行各种校验并且添加头部操作，如下图。<br><img title="Spring中添加CORS头" alt="Spring中添加CORS头" width="600" src="http://cdn.liexing.top/static/images/cross-domain-debug-record/1521558994.jpg"></p>
 <p>anyway，总结一下这次的坑，首先是自己懒没看CORS详细的规范，以及习惯性的自己用错了都加上跨域的头部；其次是自己傻ajax写错了，导致一直以为是后端代码的问题；最后是postman太坑，室友的电脑上正常我的电脑错误，导致我懵逼了半天。嗯就这样。</p>
 
     </div>
@@ -199,14 +199,14 @@
         <div id="donate_guide" class="donate_bar center hidden">
             
 
-            <a href="http://7xl6z1.com1.z0.glb.clouddn.com/static/images/theme/reward_wechat.jpg" title="用微信扫一扫哦~" class="fancybox" rel="article0">
-                <img src="http://7xl6z1.com1.z0.glb.clouddn.com/static/images/theme/reward_wechat.jpg" title="微信打赏 Donate" height="190px" width="auto"/>
+            <a href="http://cdn.liexing.top/static/images/theme/reward_wechat.jpg" title="用微信扫一扫哦~" class="fancybox" rel="article0">
+                <img src="http://cdn.liexing.top/static/images/theme/reward_wechat.jpg" title="微信打赏 Donate" height="190px" width="auto"/>
             </a>
             
             &nbsp;&nbsp;
 
-            <a href="http://7xl6z1.com1.z0.glb.clouddn.com/static/images/theme/reward_alipay.jpg" title="用支付宝扫一扫即可~" class="fancybox" rel="article0">
-                <img src="http://7xl6z1.com1.z0.glb.clouddn.com/static/images/theme/reward_alipay.jpg" title="支付宝打赏 Donate" height="190px" width="auto"/>
+            <a href="http://cdn.liexing.top/static/images/theme/reward_alipay.jpg" title="用支付宝扫一扫即可~" class="fancybox" rel="article0">
+                <img src="http://cdn.liexing.top/static/images/theme/reward_alipay.jpg" title="支付宝打赏 Donate" height="190px" width="auto"/>
             </a>
 
             <span class="donate_txt">
@@ -473,7 +473,7 @@
 <script src="/js/jquery.imagesloaded.min.js"></script>
 <script src="/js/gallery.js"></script>
 <script src="/js/jquery.qrcode-0.12.0.min.js"></script>
-<script async src="//dn-lbstatics.qbox.me/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+<script async src="//busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script>
 <script async src="/js/ones.js"></script>
 
 <script type="text/javascript">

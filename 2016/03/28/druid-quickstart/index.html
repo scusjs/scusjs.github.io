@@ -19,13 +19,13 @@
 <meta property="og:site_name" content="Liexing&#39;s Blog">
 <meta property="og:description" content="Druid Quickstart笔记。Druid是一个用于大数据实时查询和分析的高容错、高性能开源分布式系统，旨在快速处理大规模的数据，并能够实现快速查询和分析。">
 <meta property="og:locale" content="zh-CN">
-<meta property="og:image" content="http://7xl6z1.com1.z0.glb.clouddn.com/static/images/14591361559273.jpg">
-<meta property="og:image" content="http://7xl6z1.com1.z0.glb.clouddn.com/static/images/14591373994615.jpg">
+<meta property="og:image" content="http://cdn.liexing.top/static/images/14591361559273.jpg">
+<meta property="og:image" content="http://cdn.liexing.top/static/images/14591373994615.jpg">
 <meta property="og:updated_time" content="2017-02-27T11:34:45.000Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="Druid Quickstart">
 <meta name="twitter:description" content="Druid Quickstart笔记。Druid是一个用于大数据实时查询和分析的高容错、高性能开源分布式系统，旨在快速处理大规模的数据，并能够实现快速查询和分析。">
-<meta name="twitter:image" content="http://7xl6z1.com1.z0.glb.clouddn.com/static/images/14591361559273.jpg">
+<meta name="twitter:image" content="http://cdn.liexing.top/static/images/14591361559273.jpg">
 <meta name="twitter:creator" content="@scusjs">
 
     
@@ -122,13 +122,13 @@
 <blockquote>
 <p>早期的Druid有读立的Realtime节点，它们从Kafka或者Rabbit拉回数据，本地索引这些数据，并且周期性的分为数据段再发送给Historical节点。这种方式相当简单并且易于扩展。但是这将导致让Kafka有高可用性变得相当困难，因为高层的消费者没有提供扩展复制者组的功能，也会导致当有很多节点时管理相当困难，因为每一个节点都需要独立的配置文件。因此使用replication，从kafka拉回数据，并且推送到druid。<a href="https://groups.google.com/forum/#!searchin/druid-development/fangjin$20yang$20%22thoughts%22/druid-development/aRMmNHQGdhI/muBGl0Xi_wgJ" target="_blank" rel="noopener">参考这里</a></p>
 </blockquote>
-<p>druid简单的架构图如下，该图展示了查询、数据流是如何通过Druid的：<br><img title="Druid架构图" alt="Druid架构图" src="http://7xl6z1.com1.z0.glb.clouddn.com/static/images/14591361559273.jpg"><br>所有的节点都以对等无共享集群或者热插拔故障转移节点的方式运行，来保证高可用性。此外，这个系统还包含三个依赖组件：</p>
+<p>druid简单的架构图如下，该图展示了查询、数据流是如何通过Druid的：<br><img title="Druid架构图" alt="Druid架构图" src="http://cdn.liexing.top/static/images/14591361559273.jpg"><br>所有的节点都以对等无共享集群或者热插拔故障转移节点的方式运行，来保证高可用性。此外，这个系统还包含三个依赖组件：</p>
 <ul>
 <li>ZooKeeper集群，负责集群服务发现和维持当前数据拓扑</li>
 <li>元数据存储实例（metadata storage instance），用于对应用于系统的数据段的元数据维护</li>
 <li>Deep Storage LOB（Large Object）存储/文件系统，存储数据段</li>
 </ul>
-<p>下图演示集群的管理层，表示了某些节点和依赖组件是怎么通过追踪和交换元数据来帮助管理集群的。<br><img title="Druid管理层" alt="Druid管理层" src="http://7xl6z1.com1.z0.glb.clouddn.com/static/images/14591373994615.jpg"></p>
+<p>下图演示集群的管理层，表示了某些节点和依赖组件是怎么通过追踪和交换元数据来帮助管理集群的。<br><img title="Druid管理层" alt="Druid管理层" src="http://cdn.liexing.top/static/images/14591373994615.jpg"></p>
 <h2 id="环境要求"><a href="#环境要求" class="headerlink" title="环境要求"></a>环境要求</h2><ul>
 <li>Java 7 or higher</li>
 <li>Linux, Mac OS X, or other Unix-like OS (Windows is not supported)</li>
@@ -231,14 +231,14 @@
         <div id="donate_guide" class="donate_bar center hidden">
             
 
-            <a href="http://7xl6z1.com1.z0.glb.clouddn.com/static/images/theme/reward_wechat.jpg" title="用微信扫一扫哦~" class="fancybox" rel="article0">
-                <img src="http://7xl6z1.com1.z0.glb.clouddn.com/static/images/theme/reward_wechat.jpg" title="微信打赏 Donate" height="190px" width="auto"/>
+            <a href="http://cdn.liexing.top/static/images/theme/reward_wechat.jpg" title="用微信扫一扫哦~" class="fancybox" rel="article0">
+                <img src="http://cdn.liexing.top/static/images/theme/reward_wechat.jpg" title="微信打赏 Donate" height="190px" width="auto"/>
             </a>
             
             &nbsp;&nbsp;
 
-            <a href="http://7xl6z1.com1.z0.glb.clouddn.com/static/images/theme/reward_alipay.jpg" title="用支付宝扫一扫即可~" class="fancybox" rel="article0">
-                <img src="http://7xl6z1.com1.z0.glb.clouddn.com/static/images/theme/reward_alipay.jpg" title="支付宝打赏 Donate" height="190px" width="auto"/>
+            <a href="http://cdn.liexing.top/static/images/theme/reward_alipay.jpg" title="用支付宝扫一扫即可~" class="fancybox" rel="article0">
+                <img src="http://cdn.liexing.top/static/images/theme/reward_alipay.jpg" title="支付宝打赏 Donate" height="190px" width="auto"/>
             </a>
 
             <span class="donate_txt">
@@ -505,7 +505,7 @@
 <script src="/js/jquery.imagesloaded.min.js"></script>
 <script src="/js/gallery.js"></script>
 <script src="/js/jquery.qrcode-0.12.0.min.js"></script>
-<script async src="//dn-lbstatics.qbox.me/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+<script async src="//busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script>
 <script async src="/js/ones.js"></script>
 
 <script type="text/javascript">

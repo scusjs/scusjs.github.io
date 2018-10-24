@@ -19,12 +19,12 @@
 <meta property="og:site_name" content="Liexing&#39;s Blog">
 <meta property="og:description" content="逻辑斯谛回归（Logistic regression）是统计学习中的经典分类方法，最大熵是概率模型学习的一个准则，将其推广到分类问题得到最大熵模型。逻辑斯谛回归模型与最大熵模型都是属于对数线性模型。 逻辑斯谛回归模型逻辑斯谛分布的分布函数和密度函数如下： $$F(x) = P(X &amp;lt;= x) = \frac{1}{1+e^{-(x - \mu) / \gamma}}$$ $$f(x) = F">
 <meta property="og:locale" content="zh-CN">
-<meta property="og:image" content="http://7xl6z1.com1.z0.glb.clouddn.com/static/images/statistical-learning-method/1499954622.jpg">
+<meta property="og:image" content="http://cdn.liexing.top/static/images/statistical-learning-method/1499954622.jpg">
 <meta property="og:updated_time" content="2017-07-13T14:06:14.000Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="统计学习方法（笔记）-逻辑斯谛回归与最大熵模型">
 <meta name="twitter:description" content="逻辑斯谛回归（Logistic regression）是统计学习中的经典分类方法，最大熵是概率模型学习的一个准则，将其推广到分类问题得到最大熵模型。逻辑斯谛回归模型与最大熵模型都是属于对数线性模型。 逻辑斯谛回归模型逻辑斯谛分布的分布函数和密度函数如下： $$F(x) = P(X &amp;lt;= x) = \frac{1}{1+e^{-(x - \mu) / \gamma}}$$ $$f(x) = F">
-<meta name="twitter:image" content="http://7xl6z1.com1.z0.glb.clouddn.com/static/images/statistical-learning-method/1499954622.jpg">
+<meta name="twitter:image" content="http://cdn.liexing.top/static/images/statistical-learning-method/1499954622.jpg">
 <meta name="twitter:creator" content="@scusjs">
 
     
@@ -115,7 +115,7 @@
 <p>$$F(x) = P(X &lt;= x) = \frac{1}{1+e^{-(x - \mu) / \gamma}}$$</p>
 <p>$$f(x) = F’(x) = \frac{e^{-(x-\mu) / \gamma}}{\gamma (1+e^{-(x-\mu) / \gamma})^2}$$</p>
 <p>其中$\mu$为位置参数；$\gamma &gt; 0$为形状参数，值越小，分布越集中于$\mu$附近。其分布的密度函数与分布函数如图：</p>
-<img title="逻辑斯谛分布的密度函数与分布函数" alt="逻辑斯谛分布的密度函数与分布函数" src="http://7xl6z1.com1.z0.glb.clouddn.com/static/images/statistical-learning-method/1499954622.jpg">
+<img title="逻辑斯谛分布的密度函数与分布函数" alt="逻辑斯谛分布的密度函数与分布函数" src="http://cdn.liexing.top/static/images/statistical-learning-method/1499954622.jpg">
 <p>二项逻辑斯谛回归模型是如下的条件概率分布：</p>
 <p>$$P(Y=1|x) = \frac{exp(w \cdot x + b)}{1+ exp(w \cdot x + b)}$$<br>$$P(Y=0|x) = \frac{1}{1+ exp(w \cdot x + b)}$$</p>
 <p>逻辑斯谛回归模型是指，输出$Y=1$的对数几率，其是由输入$x$的线性函数表示的模型。可以用极大似然估计法估计模型参数，从而得到逻辑斯谛回归模型。学习过程通常采用的方法是梯度下降法及拟牛顿法。</p>
@@ -188,14 +188,14 @@
         <div id="donate_guide" class="donate_bar center hidden">
             
 
-            <a href="http://7xl6z1.com1.z0.glb.clouddn.com/static/images/theme/reward_wechat.jpg" title="用微信扫一扫哦~" class="fancybox" rel="article0">
-                <img src="http://7xl6z1.com1.z0.glb.clouddn.com/static/images/theme/reward_wechat.jpg" title="微信打赏 Donate" height="190px" width="auto"/>
+            <a href="http://cdn.liexing.top/static/images/theme/reward_wechat.jpg" title="用微信扫一扫哦~" class="fancybox" rel="article0">
+                <img src="http://cdn.liexing.top/static/images/theme/reward_wechat.jpg" title="微信打赏 Donate" height="190px" width="auto"/>
             </a>
             
             &nbsp;&nbsp;
 
-            <a href="http://7xl6z1.com1.z0.glb.clouddn.com/static/images/theme/reward_alipay.jpg" title="用支付宝扫一扫即可~" class="fancybox" rel="article0">
-                <img src="http://7xl6z1.com1.z0.glb.clouddn.com/static/images/theme/reward_alipay.jpg" title="支付宝打赏 Donate" height="190px" width="auto"/>
+            <a href="http://cdn.liexing.top/static/images/theme/reward_alipay.jpg" title="用支付宝扫一扫即可~" class="fancybox" rel="article0">
+                <img src="http://cdn.liexing.top/static/images/theme/reward_alipay.jpg" title="支付宝打赏 Donate" height="190px" width="auto"/>
             </a>
 
             <span class="donate_txt">
@@ -462,7 +462,7 @@
 <script src="/js/jquery.imagesloaded.min.js"></script>
 <script src="/js/gallery.js"></script>
 <script src="/js/jquery.qrcode-0.12.0.min.js"></script>
-<script async src="//dn-lbstatics.qbox.me/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+<script async src="//busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script>
 <script async src="/js/ones.js"></script>
 
 <script type="text/javascript">

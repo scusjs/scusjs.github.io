@@ -19,13 +19,13 @@
 <meta property="og:site_name" content="Liexing&#39;s Blog">
 <meta property="og:description" content="Java内存模型，即 Java Memory Model（JMM），定义了 Java 虚拟机在计算机内存的工作方式。现在的 Java 内存模型主要源于1.5版本。 缓存与一致性在计算机中，不同硬件的处理速度不同，往往有几个数量级的差距。比如 CPU 的处理速度往往高于内存数个数量级。因此计算机体系结构中引入了告诉缓存（Cache）放在内存和处理器之间作为缓冲。将 CPU 可能将要访问的数据先放在缓">
 <meta property="og:locale" content="zh-CN">
-<meta property="og:image" content="http://7xl6z1.com1.z0.glb.clouddn.com/static/images/java-memory-model/1501516073.png">
-<meta property="og:image" content="http://7xl6z1.com1.z0.glb.clouddn.com/static/images/java-memory-model/1501516897.png">
-<meta property="og:updated_time" content="2018-07-26T16:29:05.915Z">
+<meta property="og:image" content="http://cdn.liexing.top/static/images/java-memory-model/1501516073.png">
+<meta property="og:image" content="http://cdn.liexing.top/static/images/java-memory-model/1501516897.png">
+<meta property="og:updated_time" content="2018-07-26T16:29:05.000Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="Java 内存模型">
 <meta name="twitter:description" content="Java内存模型，即 Java Memory Model（JMM），定义了 Java 虚拟机在计算机内存的工作方式。现在的 Java 内存模型主要源于1.5版本。 缓存与一致性在计算机中，不同硬件的处理速度不同，往往有几个数量级的差距。比如 CPU 的处理速度往往高于内存数个数量级。因此计算机体系结构中引入了告诉缓存（Cache）放在内存和处理器之间作为缓冲。将 CPU 可能将要访问的数据先放在缓">
-<meta name="twitter:image" content="http://7xl6z1.com1.z0.glb.clouddn.com/static/images/java-memory-model/1501516073.png">
+<meta name="twitter:image" content="http://cdn.liexing.top/static/images/java-memory-model/1501516073.png">
 <meta name="twitter:creator" content="@scusjs">
 
     
@@ -113,11 +113,11 @@
         
         <p>Java内存模型，即 Java Memory Model（JMM），定义了 Java 虚拟机在计算机内存的工作方式。现在的 Java 内存模型主要源于1.5版本。</p>
 <h1 id="缓存与一致性"><a href="#缓存与一致性" class="headerlink" title="缓存与一致性"></a>缓存与一致性</h1><p>在计算机中，不同硬件的处理速度不同，往往有几个数量级的差距。比如 CPU 的处理速度往往高于内存数个数量级。因此计算机体系结构中引入了告诉缓存（Cache）放在内存和处理器之间作为缓冲。将 CPU 可能将要访问的数据先放在缓存中，因为访问缓存的速度远远高于直接访问内存，因此能加速运算。</p>
-<img title="高速缓存" alt="高速缓存" src="http://7xl6z1.com1.z0.glb.clouddn.com/static/images/java-memory-model/1501516073.png">
+<img title="高速缓存" alt="高速缓存" src="http://cdn.liexing.top/static/images/java-memory-model/1501516073.png">
 <p>虽然高速缓存解决了 CPU 和内存之间的速度问题，但是引入了另一个问题：缓存一致性。在多处理系统中，每一个处理器都有自己独立的缓存，但是整个系统共享一个内存，因此需要保证每个 CPU 读写的数据一致。常见的一致性协议有 MSI、MESI、MOSI以及 Dragon Protocol 等。</p>
 <p> JMM 中定义的内存访问操作与计算机的高速缓存访问是类似的。</p>
 <h1 id="JMM"><a href="#JMM" class="headerlink" title="JMM"></a>JMM</h1><p> JMM 定义了程序中各个变量的访问规则。JMM 规定，所有的变量都存储在主内存中，但是每个线程还会有自己的工作内存，其中保存该线程使用到的变量副本，并且线程对内存的操作必须在工作线程中进行，不能直接访问主内存变量。如图所示：</p>
-<img title="JMM" alt="JMM" src="http://7xl6z1.com1.z0.glb.clouddn.com/static/images/java-memory-model/1501516897.png">
+<img title="JMM" alt="JMM" src="http://cdn.liexing.top/static/images/java-memory-model/1501516897.png">
 <p>在命令式编程中，线程之间的通信机制有两种：共享内存和消息传递。在共享内存的模型中，线程之间通过共享内存中的一个公共状态来进行通信。在消息传递模型中，通过显示的发送消息来通信。Java线程之间的通信采用的是过共享内存模型，即 JMM。</p>
 <p>线程之间的通信必须要经历将要发送的消息通过共享变量的方式写入主内存，再被其他线程读取的过程。</p>
 <h2 id="内存间交互操作"><a href="#内存间交互操作" class="headerlink" title="内存间交互操作"></a>内存间交互操作</h2><p>为了保证其他线程读取的是最新写入的数据，因此 Java 内存模型定义了如下几种操作：</p>
@@ -214,14 +214,14 @@
         <div id="donate_guide" class="donate_bar center hidden">
             
 
-            <a href="http://7xl6z1.com1.z0.glb.clouddn.com/static/images/theme/reward_wechat.jpg" title="用微信扫一扫哦~" class="fancybox" rel="article0">
-                <img src="http://7xl6z1.com1.z0.glb.clouddn.com/static/images/theme/reward_wechat.jpg" title="微信打赏 Donate" height="190px" width="auto"/>
+            <a href="http://cdn.liexing.top/static/images/theme/reward_wechat.jpg" title="用微信扫一扫哦~" class="fancybox" rel="article0">
+                <img src="http://cdn.liexing.top/static/images/theme/reward_wechat.jpg" title="微信打赏 Donate" height="190px" width="auto"/>
             </a>
             
             &nbsp;&nbsp;
 
-            <a href="http://7xl6z1.com1.z0.glb.clouddn.com/static/images/theme/reward_alipay.jpg" title="用支付宝扫一扫即可~" class="fancybox" rel="article0">
-                <img src="http://7xl6z1.com1.z0.glb.clouddn.com/static/images/theme/reward_alipay.jpg" title="支付宝打赏 Donate" height="190px" width="auto"/>
+            <a href="http://cdn.liexing.top/static/images/theme/reward_alipay.jpg" title="用支付宝扫一扫即可~" class="fancybox" rel="article0">
+                <img src="http://cdn.liexing.top/static/images/theme/reward_alipay.jpg" title="支付宝打赏 Donate" height="190px" width="auto"/>
             </a>
 
             <span class="donate_txt">
@@ -488,7 +488,7 @@
 <script src="/js/jquery.imagesloaded.min.js"></script>
 <script src="/js/gallery.js"></script>
 <script src="/js/jquery.qrcode-0.12.0.min.js"></script>
-<script async src="//dn-lbstatics.qbox.me/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+<script async src="//busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script>
 <script async src="/js/ones.js"></script>
 
 <script type="text/javascript">

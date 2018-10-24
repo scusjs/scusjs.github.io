@@ -19,16 +19,16 @@
 <meta property="og:site_name" content="Liexing&#39;s Blog">
 <meta property="og:description" content="使用Hadoop往Druid读入数据时，可以不用开启Indexing服务，而且执行一个单独的hadoop indexer命令行命令即可。这个命令调用了io.druid.cli.Main类的main方法，并且通过Ariline解析命令。">
 <meta property="og:locale" content="zh-CN">
-<meta property="og:image" content="http://7xl6z1.com1.z0.glb.clouddn.com/static/images/14660495146766.jpg">
-<meta property="og:image" content="http://7xl6z1.com1.z0.glb.clouddn.com/static/images/14660552155689.jpg">
-<meta property="og:image" content="http://7xl6z1.com1.z0.glb.clouddn.com/static/images/14660645246444.jpg">
-<meta property="og:image" content="http://7xl6z1.com1.z0.glb.clouddn.com/static/images/14660646182984.jpg">
-<meta property="og:image" content="http://7xl6z1.com1.z0.glb.clouddn.com/static/images/14660703876691.jpg">
+<meta property="og:image" content="http://cdn.liexing.top/static/images/14660495146766.jpg">
+<meta property="og:image" content="http://cdn.liexing.top/static/images/14660552155689.jpg">
+<meta property="og:image" content="http://cdn.liexing.top/static/images/14660645246444.jpg">
+<meta property="og:image" content="http://cdn.liexing.top/static/images/14660646182984.jpg">
+<meta property="og:image" content="http://cdn.liexing.top/static/images/14660703876691.jpg">
 <meta property="og:updated_time" content="2017-02-27T11:34:45.000Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="Druid Command Line Hadoop Indexer启动流程">
 <meta name="twitter:description" content="使用Hadoop往Druid读入数据时，可以不用开启Indexing服务，而且执行一个单独的hadoop indexer命令行命令即可。这个命令调用了io.druid.cli.Main类的main方法，并且通过Ariline解析命令。">
-<meta name="twitter:image" content="http://7xl6z1.com1.z0.glb.clouddn.com/static/images/14660495146766.jpg">
+<meta name="twitter:image" content="http://cdn.liexing.top/static/images/14660495146766.jpg">
 <meta name="twitter:creator" content="@scusjs">
 
     
@@ -116,17 +116,17 @@
         
         <p>首先找到启动的主类<code>io.druid.cli.Main</code>。在Main中，使用<a href="https://github.com/airlift/airline" target="_blank" rel="noopener">Airline</a>包来解析命令。</p>
 <p>如图，可知Druid接收的启动命令分为五组，分别是server、example、tools、index、internal。</p>
-<img title="Druid启动命令分组" alt="Druid启动命令分组" src="http://7xl6z1.com1.z0.glb.clouddn.com/static/images/14660495146766.jpg">
+<img title="Druid启动命令分组" alt="Druid启动命令分组" src="http://cdn.liexing.top/static/images/14660495146766.jpg">
 <p>这里分析index命令组，详细用法可见<a href="http://druid.io/docs/latest/ingestion/command-line-hadoop-indexer.html" target="_blank" rel="noopener">官方文档</a>。由代码81行可知该命令组调用了CliHadoopIndexer类。</p>
-<p>该类接收参数：<br><img title="Druid_CliHadoopIndexer" alt="Druid_CliHadoopIndexer" src="http://7xl6z1.com1.z0.glb.clouddn.com/static/images/14660552155689.jpg"></p>
+<p>该类接收参数：<br><img title="Druid_CliHadoopIndexer" alt="Druid_CliHadoopIndexer" src="http://cdn.liexing.top/static/images/14660552155689.jpg"></p>
 <p>官方文档中启动命令为：<br><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">java -Xmx256m -Duser.timezone=UTC -Dfile.encoding=UTF-8 -classpath lib/*:&lt;hadoop_config_dir&gt; io.druid.cli.Main index hadoop &lt;spec_file&gt;</span><br></pre></td></tr></table></figure></p>
 <p>其中<code>spec_file</code>即为argumentSpec。</p>
-<p>接着程序执行run方法。先设定Hadoop版本，然后通过注入的<code>extensionsConfig</code>设置扩展信息。接着将所有的需要的驱动包路径放入driverURLs，不含Hadoop的包位置放入nonHadoopURLS，扩展包的路径放入extensionURLs:<br><img title="extensionURLs" alt="extensionURLs" src="http://7xl6z1.com1.z0.glb.clouddn.com/static/images/14660645246444.jpg"></p>
+<p>接着程序执行run方法。先设定Hadoop版本，然后通过注入的<code>extensionsConfig</code>设置扩展信息。接着将所有的需要的驱动包路径放入driverURLs，不含Hadoop的包位置放入nonHadoopURLS，扩展包的路径放入extensionURLs:<br><img title="extensionURLs" alt="extensionURLs" src="http://cdn.liexing.top/static/images/14660645246444.jpg"></p>
 <p>然后借助URLClassLoader来载入driverURLs：</p>
 <figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">final</span> URLClassLoader loader = <span class="keyword">new</span> URLClassLoader(driverURLs.toArray(<span class="keyword">new</span> URL[driverURLs.size()]), <span class="keyword">null</span>);</span><br><span class="line">Thread.currentThread().setContextClassLoader(loader);</span><br></pre></td></tr></table></figure>
-<p>之后将nonHadoopURLs和extensionURLs合并为jobUrls，并且设置为<code>druid.hadoop.internal.classpath</code>属性：<br><img title="jobUrls" alt="jobUrls" src="http://7xl6z1.com1.z0.glb.clouddn.com/static/images/14660646182984.jpg"></p>
+<p>之后将nonHadoopURLs和extensionURLs合并为jobUrls，并且设置为<code>druid.hadoop.internal.classpath</code>属性：<br><img title="jobUrls" alt="jobUrls" src="http://cdn.liexing.top/static/images/14660646182984.jpg"></p>
 <p>之后，重新调用main方法，并设置执行internal命令组的hadoop-indexer命令，即<code>CliInternalHadoopIndexer</code>类，并提交job到Hadoop。</p>
-<img title="recall_main" alt="recall_main" src="http://7xl6z1.com1.z0.glb.clouddn.com/static/images/14660703876691.jpg">
+<img title="recall_main" alt="recall_main" src="http://cdn.liexing.top/static/images/14660703876691.jpg">
 
     </div>
     
@@ -190,14 +190,14 @@
         <div id="donate_guide" class="donate_bar center hidden">
             
 
-            <a href="http://7xl6z1.com1.z0.glb.clouddn.com/static/images/theme/reward_wechat.jpg" title="用微信扫一扫哦~" class="fancybox" rel="article0">
-                <img src="http://7xl6z1.com1.z0.glb.clouddn.com/static/images/theme/reward_wechat.jpg" title="微信打赏 Donate" height="190px" width="auto"/>
+            <a href="http://cdn.liexing.top/static/images/theme/reward_wechat.jpg" title="用微信扫一扫哦~" class="fancybox" rel="article0">
+                <img src="http://cdn.liexing.top/static/images/theme/reward_wechat.jpg" title="微信打赏 Donate" height="190px" width="auto"/>
             </a>
             
             &nbsp;&nbsp;
 
-            <a href="http://7xl6z1.com1.z0.glb.clouddn.com/static/images/theme/reward_alipay.jpg" title="用支付宝扫一扫即可~" class="fancybox" rel="article0">
-                <img src="http://7xl6z1.com1.z0.glb.clouddn.com/static/images/theme/reward_alipay.jpg" title="支付宝打赏 Donate" height="190px" width="auto"/>
+            <a href="http://cdn.liexing.top/static/images/theme/reward_alipay.jpg" title="用支付宝扫一扫即可~" class="fancybox" rel="article0">
+                <img src="http://cdn.liexing.top/static/images/theme/reward_alipay.jpg" title="支付宝打赏 Donate" height="190px" width="auto"/>
             </a>
 
             <span class="donate_txt">
@@ -464,7 +464,7 @@
 <script src="/js/jquery.imagesloaded.min.js"></script>
 <script src="/js/gallery.js"></script>
 <script src="/js/jquery.qrcode-0.12.0.min.js"></script>
-<script async src="//dn-lbstatics.qbox.me/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+<script async src="//busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script>
 <script async src="/js/ones.js"></script>
 
 <script type="text/javascript">
