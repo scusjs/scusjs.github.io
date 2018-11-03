@@ -307,6 +307,32 @@
 
     
   <url>
+    <loc>http://blog.liexing.me/2016/04/25/druid-querying/</loc>
+    <lastmod>2017-02-27T11:34:45.000Z</lastmod>
+    <data>
+        <display>
+        <title>Druid Querying</title>
+        <pubTime>2016-04-25T08:42:33.000Z</pubTime>
+        
+        <tag>笔记</tag>
+         
+        <tag>分布式</tag>
+         
+        <tag>Druid</tag>
+         
+        <tag>实时计算</tag>
+         
+         
+           
+             
+              <breadCrumb title="Druid" url="http://blog.liexing.me/categories/Druid/"/>
+          
+        </display>
+    </data>
+    </url>
+
+    
+  <url>
     <loc>http://blog.liexing.me/2016/01/05/longest-common-subsequence/</loc>
     <lastmod>2017-02-27T11:34:45.000Z</lastmod>
     <data>
@@ -324,30 +350,6 @@
            
              
               <breadCrumb title="算法" url="http://blog.liexing.me/categories/%E7%AE%97%E6%B3%95/"/>
-          
-        </display>
-    </data>
-    </url>
-
-    
-  <url>
-    <loc>http://blog.liexing.me/2016/04/15/druid-indexing-service/</loc>
-    <lastmod>2017-02-27T11:34:45.000Z</lastmod>
-    <data>
-        <display>
-        <title>Druid Indexing Service（索引服务）</title>
-        <pubTime>2016-04-15T02:47:47.000Z</pubTime>
-        
-        <tag>分布式</tag>
-         
-        <tag>Druid</tag>
-         
-        <tag>实时计算</tag>
-         
-         
-           
-             
-              <breadCrumb title="Druid" url="http://blog.liexing.me/categories/Druid/"/>
           
         </display>
     </data>
@@ -501,15 +503,13 @@
 
     
   <url>
-    <loc>http://blog.liexing.me/2016/04/25/druid-querying/</loc>
+    <loc>http://blog.liexing.me/2016/04/15/druid-indexing-service/</loc>
     <lastmod>2017-02-27T11:34:45.000Z</lastmod>
     <data>
         <display>
-        <title>Druid Querying</title>
-        <pubTime>2016-04-25T08:42:33.000Z</pubTime>
+        <title>Druid Indexing Service（索引服务）</title>
+        <pubTime>2016-04-15T02:47:47.000Z</pubTime>
         
-        <tag>笔记</tag>
-         
         <tag>分布式</tag>
          
         <tag>Druid</tag>
@@ -579,32 +579,6 @@
 
     
   <url>
-    <loc>http://blog.liexing.me/2016/11/03/statistical-learning-method-naive-bayes/</loc>
-    <lastmod>2017-02-27T11:34:45.000Z</lastmod>
-    <data>
-        <display>
-        <title>统计学习方法（笔记）-朴素贝叶斯法</title>
-        <pubTime>2016-11-03T12:52:47.000Z</pubTime>
-        
-        <tag>笔记</tag>
-         
-        <tag>统计学习</tag>
-         
-        <tag>机器学习</tag>
-         
-        <tag>朴素贝叶斯</tag>
-         
-         
-           
-             
-              <breadCrumb title="统计学习" url="http://blog.liexing.me/categories/%E7%BB%9F%E8%AE%A1%E5%AD%A6%E4%B9%A0/"/>
-          
-        </display>
-    </data>
-    </url>
-
-    
-  <url>
     <loc>http://blog.liexing.me/2016/03/28/druid-quickstart/</loc>
     <lastmod>2017-02-27T11:34:45.000Z</lastmod>
     <data>
@@ -643,6 +617,32 @@
         <tag>机器学习</tag>
          
         <tag>感知机</tag>
+         
+         
+           
+             
+              <breadCrumb title="统计学习" url="http://blog.liexing.me/categories/%E7%BB%9F%E8%AE%A1%E5%AD%A6%E4%B9%A0/"/>
+          
+        </display>
+    </data>
+    </url>
+
+    
+  <url>
+    <loc>http://blog.liexing.me/2016/11/03/statistical-learning-method-naive-bayes/</loc>
+    <lastmod>2017-02-27T11:34:45.000Z</lastmod>
+    <data>
+        <display>
+        <title>统计学习方法（笔记）-朴素贝叶斯法</title>
+        <pubTime>2016-11-03T12:52:47.000Z</pubTime>
+        
+        <tag>笔记</tag>
+         
+        <tag>统计学习</tag>
+         
+        <tag>机器学习</tag>
+         
+        <tag>朴素贝叶斯</tag>
          
          
            
