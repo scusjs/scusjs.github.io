@@ -93,7 +93,7 @@
   </url>
   
   <url>
-    <loc>http://blog.liexing.me/2016/05/19/druid-indexing-service-process-analysis/</loc>
+    <loc>http://blog.liexing.me/2016/04/15/druid-indexing-service/</loc>
     
     <lastmod>2017-02-27T11:34:45.000Z</lastmod>
     
@@ -107,7 +107,7 @@
   </url>
   
   <url>
-    <loc>http://blog.liexing.me/2016/04/15/druid-indexing-service/</loc>
+    <loc>http://blog.liexing.me/2016/05/19/druid-indexing-service-process-analysis/</loc>
     
     <lastmod>2017-02-27T11:34:45.000Z</lastmod>
     
@@ -121,14 +121,14 @@
   </url>
   
   <url>
-    <loc>http://blog.liexing.me/2015/09/01/oh-my-hexo/</loc>
+    <loc>http://blog.liexing.me/2016/09/08/cassandra-architecture/</loc>
     
     <lastmod>2017-02-27T11:34:45.000Z</lastmod>
     
   </url>
   
   <url>
-    <loc>http://blog.liexing.me/2016/09/08/cassandra-architecture/</loc>
+    <loc>http://blog.liexing.me/2015/09/01/oh-my-hexo/</loc>
     
     <lastmod>2017-02-27T11:34:45.000Z</lastmod>
     
@@ -163,13 +163,6 @@
   </url>
   
   <url>
-    <loc>http://blog.liexing.me/2016/03/28/druid-quickstart/</loc>
-    
-    <lastmod>2017-02-27T11:34:45.000Z</lastmod>
-    
-  </url>
-  
-  <url>
     <loc>http://blog.liexing.me/2016/11/02/statistical-learning-method-knn/</loc>
     
     <lastmod>2017-02-27T11:34:45.000Z</lastmod>
@@ -177,7 +170,7 @@
   </url>
   
   <url>
-    <loc>http://blog.liexing.me/2016/11/03/statistical-learning-method-naive-bayes/</loc>
+    <loc>http://blog.liexing.me/2016/03/28/druid-quickstart/</loc>
     
     <lastmod>2017-02-27T11:34:45.000Z</lastmod>
     
@@ -185,6 +178,13 @@
   
   <url>
     <loc>http://blog.liexing.me/2016/11/01/statistical-learning-method-perceptron/</loc>
+    
+    <lastmod>2017-02-27T11:34:45.000Z</lastmod>
+    
+  </url>
+  
+  <url>
+    <loc>http://blog.liexing.me/2016/11/03/statistical-learning-method-naive-bayes/</loc>
     
     <lastmod>2017-02-27T11:34:45.000Z</lastmod>
     
