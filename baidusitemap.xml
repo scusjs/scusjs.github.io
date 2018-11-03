@@ -307,20 +307,20 @@
 
     
   <url>
-    <loc>http://blog.liexing.me/2016/04/25/druid-querying/</loc>
+    <loc>http://blog.liexing.me/2016/05/19/druid-indexing-service-process-analysis/</loc>
     <lastmod>2017-02-27T11:34:45.000Z</lastmod>
     <data>
         <display>
-        <title>Druid Querying</title>
-        <pubTime>2016-04-25T08:42:33.000Z</pubTime>
+        <title>Druid Indexing Service过程分析</title>
+        <pubTime>2016-05-19T10:21:48.000Z</pubTime>
         
-        <tag>笔记</tag>
-         
         <tag>分布式</tag>
          
         <tag>Druid</tag>
          
         <tag>实时计算</tag>
+         
+        <tag>源码分析</tag>
          
          
            
@@ -357,20 +357,18 @@
 
     
   <url>
-    <loc>http://blog.liexing.me/2016/05/19/druid-indexing-service-process-analysis/</loc>
+    <loc>http://blog.liexing.me/2016/04/15/druid-indexing-service/</loc>
     <lastmod>2017-02-27T11:34:45.000Z</lastmod>
     <data>
         <display>
-        <title>Druid Indexing Service过程分析</title>
-        <pubTime>2016-05-19T10:21:48.000Z</pubTime>
+        <title>Druid Indexing Service（索引服务）</title>
+        <pubTime>2016-04-15T02:47:47.000Z</pubTime>
         
         <tag>分布式</tag>
          
         <tag>Druid</tag>
          
         <tag>实时计算</tag>
-         
-        <tag>源码分析</tag>
          
          
            
@@ -503,13 +501,15 @@
 
     
   <url>
-    <loc>http://blog.liexing.me/2016/04/15/druid-indexing-service/</loc>
+    <loc>http://blog.liexing.me/2016/04/25/druid-querying/</loc>
     <lastmod>2017-02-27T11:34:45.000Z</lastmod>
     <data>
         <display>
-        <title>Druid Indexing Service（索引服务）</title>
-        <pubTime>2016-04-15T02:47:47.000Z</pubTime>
+        <title>Druid Querying</title>
+        <pubTime>2016-04-25T08:42:33.000Z</pubTime>
         
+        <tag>笔记</tag>
+         
         <tag>分布式</tag>
          
         <tag>Druid</tag>
@@ -551,6 +551,30 @@
 
     
   <url>
+    <loc>http://blog.liexing.me/2016/03/28/druid-quickstart/</loc>
+    <lastmod>2017-02-27T11:34:45.000Z</lastmod>
+    <data>
+        <display>
+        <title>Druid Quickstart</title>
+        <pubTime>2016-03-28T10:14:36.000Z</pubTime>
+        
+        <tag>分布式</tag>
+         
+        <tag>Druid</tag>
+         
+        <tag>实时计算</tag>
+         
+         
+           
+             
+              <breadCrumb title="Druid" url="http://blog.liexing.me/categories/Druid/"/>
+          
+        </display>
+    </data>
+    </url>
+
+    
+  <url>
     <loc>http://blog.liexing.me/2016/11/02/statistical-learning-method-knn/</loc>
     <lastmod>2017-02-27T11:34:45.000Z</lastmod>
     <data>
@@ -579,23 +603,25 @@
 
     
   <url>
-    <loc>http://blog.liexing.me/2016/03/28/druid-quickstart/</loc>
+    <loc>http://blog.liexing.me/2016/11/03/statistical-learning-method-naive-bayes/</loc>
     <lastmod>2017-02-27T11:34:45.000Z</lastmod>
     <data>
         <display>
-        <title>Druid Quickstart</title>
-        <pubTime>2016-03-28T10:14:36.000Z</pubTime>
+        <title>统计学习方法（笔记）-朴素贝叶斯法</title>
+        <pubTime>2016-11-03T12:52:47.000Z</pubTime>
         
-        <tag>分布式</tag>
+        <tag>笔记</tag>
          
-        <tag>Druid</tag>
+        <tag>统计学习</tag>
          
-        <tag>实时计算</tag>
+        <tag>机器学习</tag>
+         
+        <tag>朴素贝叶斯</tag>
          
          
            
              
-              <breadCrumb title="Druid" url="http://blog.liexing.me/categories/Druid/"/>
+              <breadCrumb title="统计学习" url="http://blog.liexing.me/categories/%E7%BB%9F%E8%AE%A1%E5%AD%A6%E4%B9%A0/"/>
           
         </display>
     </data>
@@ -617,32 +643,6 @@
         <tag>机器学习</tag>
          
         <tag>感知机</tag>
-         
-         
-           
-             
-              <breadCrumb title="统计学习" url="http://blog.liexing.me/categories/%E7%BB%9F%E8%AE%A1%E5%AD%A6%E4%B9%A0/"/>
-          
-        </display>
-    </data>
-    </url>
-
-    
-  <url>
-    <loc>http://blog.liexing.me/2016/11/03/statistical-learning-method-naive-bayes/</loc>
-    <lastmod>2017-02-27T11:34:45.000Z</lastmod>
-    <data>
-        <display>
-        <title>统计学习方法（笔记）-朴素贝叶斯法</title>
-        <pubTime>2016-11-03T12:52:47.000Z</pubTime>
-        
-        <tag>笔记</tag>
-         
-        <tag>统计学习</tag>
-         
-        <tag>机器学习</tag>
-         
-        <tag>朴素贝叶斯</tag>
          
          
            
