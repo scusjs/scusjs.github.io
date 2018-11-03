@@ -405,6 +405,26 @@
 
     
   <url>
+    <loc>http://blog.liexing.me/2015/09/01/oh-my-hexo/</loc>
+    <lastmod>2017-02-27T11:34:45.000Z</lastmod>
+    <data>
+        <display>
+        <title>Oh My Hexo</title>
+        <pubTime>2015-08-31T17:04:30.000Z</pubTime>
+        
+        <tag>hexo</tag>
+         
+         
+           
+             
+              <breadCrumb title="建站相关" url="http://blog.liexing.me/categories/%E5%BB%BA%E7%AB%99%E7%9B%B8%E5%85%B3/"/>
+          
+        </display>
+    </data>
+    </url>
+
+    
+  <url>
     <loc>http://blog.liexing.me/2016/09/08/cassandra-architecture/</loc>
     <lastmod>2017-02-27T11:34:45.000Z</lastmod>
     <data>
@@ -424,26 +444,6 @@
            
              
               <breadCrumb title="Cassandra" url="http://blog.liexing.me/categories/Cassandra/"/>
-          
-        </display>
-    </data>
-    </url>
-
-    
-  <url>
-    <loc>http://blog.liexing.me/2015/09/01/oh-my-hexo/</loc>
-    <lastmod>2017-02-27T11:34:45.000Z</lastmod>
-    <data>
-        <display>
-        <title>Oh My Hexo</title>
-        <pubTime>2015-08-31T17:04:30.000Z</pubTime>
-        
-        <tag>hexo</tag>
-         
-         
-           
-             
-              <breadCrumb title="建站相关" url="http://blog.liexing.me/categories/%E5%BB%BA%E7%AB%99%E7%9B%B8%E5%85%B3/"/>
           
         </display>
     </data>
@@ -603,32 +603,6 @@
 
     
   <url>
-    <loc>http://blog.liexing.me/2016/11/01/statistical-learning-method-perceptron/</loc>
-    <lastmod>2017-02-27T11:34:45.000Z</lastmod>
-    <data>
-        <display>
-        <title>统计学习方法（笔记）-感知机</title>
-        <pubTime>2016-11-01T01:54:35.000Z</pubTime>
-        
-        <tag>笔记</tag>
-         
-        <tag>统计学习</tag>
-         
-        <tag>机器学习</tag>
-         
-        <tag>感知机</tag>
-         
-         
-           
-             
-              <breadCrumb title="统计学习" url="http://blog.liexing.me/categories/%E7%BB%9F%E8%AE%A1%E5%AD%A6%E4%B9%A0/"/>
-          
-        </display>
-    </data>
-    </url>
-
-    
-  <url>
     <loc>http://blog.liexing.me/2016/11/03/statistical-learning-method-naive-bayes/</loc>
     <lastmod>2017-02-27T11:34:45.000Z</lastmod>
     <data>
@@ -643,6 +617,32 @@
         <tag>机器学习</tag>
          
         <tag>朴素贝叶斯</tag>
+         
+         
+           
+             
+              <breadCrumb title="统计学习" url="http://blog.liexing.me/categories/%E7%BB%9F%E8%AE%A1%E5%AD%A6%E4%B9%A0/"/>
+          
+        </display>
+    </data>
+    </url>
+
+    
+  <url>
+    <loc>http://blog.liexing.me/2016/11/01/statistical-learning-method-perceptron/</loc>
+    <lastmod>2017-02-27T11:34:45.000Z</lastmod>
+    <data>
+        <display>
+        <title>统计学习方法（笔记）-感知机</title>
+        <pubTime>2016-11-01T01:54:35.000Z</pubTime>
+        
+        <tag>笔记</tag>
+         
+        <tag>统计学习</tag>
+         
+        <tag>机器学习</tag>
+         
+        <tag>感知机</tag>
          
          
            
