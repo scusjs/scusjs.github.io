@@ -14,7 +14,7 @@
     <meta name="description" content="blog.liexing.me">
 <meta property="og:type" content="website">
 <meta property="og:title" content="Liexing&#39;s Blog">
-<meta property="og:url" content="http://blog.liexing.me/page/3/index.html">
+<meta property="og:url" content="http://blog.liexing.me/page/4/index.html">
 <meta property="og:site_name" content="Liexing&#39;s Blog">
 <meta property="og:description" content="blog.liexing.me">
 <meta property="og:locale" content="zh-CN">
@@ -81,203 +81,15 @@
   
 <section class="post" itemscope itemprop="blogitem">
   
-    <a href="/2016/09/08/cassandra-architecture/" title="Cassandra 架构" itemprop="url">
+    <a href="/2015/09/01/oh-my-hexo/" title="Oh My Hexo" itemprop="url">
   
-    <h1 itemprop="name">Cassandra 架构</h1>
+    <h1 itemprop="name">Oh My Hexo</h1>
     
      
-      <p itemprop="description" >描述Cassandra的主要技术架构，以及读写的流程和内部实现方式。</p>
-      
-    
-    <time datetime="2016-09-08T07:54:29.000Z" itemprop="datePublished">2016-09-08</time>
-  </a>
-</section>
-
-
-
-
-
-
-  
-<section class="post" itemscope itemprop="blogitem">
-  
-    <a href="/2016/08/25/cassandra-architecture-in-brief/" title="Cassandra 架构简述" itemprop="url">
-  
-    <h1 itemprop="name">Cassandra 架构简述</h1>
-    
-     
-           <p itemprop="description" >Cassandra被设计来在多个节点中处理大量的数据负载，并且没有单点故障。它的架构建立在认为系统能够并且可能发生故障的基础上。
-节点使用gossip这个点对点的算法来在集群中交换自身和其他节点的状态信息。
-每个节点上，顺序追加的commit log文件，捕获节点的写入动作来确保</p>
+           <p itemprop="description" >之前一直用着默认终端跑着 bash shell，直到遇到了 zsh，用着 oh-my-zsh，简直见到新天地。Hexo 也给了我一样的感觉，之前博客用过 wp，用过 emlog，也折腾过各种各样的三方博客，要么太死要么折腾起来没完，最后改代码发现写博客反而没太大意思的节奏=。=。</p>
         
     
-    <time datetime="2016-08-25T13:25:01.000Z" itemprop="datePublished">2016-08-25</time>
-  </a>
-</section>
-
-
-
-
-
-
-  
-<section class="post" itemscope itemprop="blogitem">
-  
-    <a href="/2016/06/16/druid-command-line-hadoop-indexer/" title="Druid Command Line Hadoop Indexer启动流程" itemprop="url">
-  
-    <h1 itemprop="name">Druid Command Line Hadoop Indexer启动流程</h1>
-    
-     
-      <p itemprop="description" >使用Hadoop往Druid读入数据时，可以不用开启Indexing服务，而且执行一个单独的hadoop indexer命令行命令即可。这个命令调用了io.druid.cli.Main类的main方法，并且通过Ariline解析命令。</p>
-      
-    
-    <time datetime="2016-06-16T09:23:16.000Z" itemprop="datePublished">2016-06-16</time>
-  </a>
-</section>
-
-
-
-
-
-
-  
-<section class="post" itemscope itemprop="blogitem">
-  
-    <a href="/2016/05/19/druid-indexing-service-process-analysis/" title="Druid Indexing Service过程分析" itemprop="url">
-  
-    <h1 itemprop="name">Druid Indexing Service过程分析</h1>
-    
-     
-      <p itemprop="description" >对Indexing Task提交到Overlord后的执行过程进行简单的源码分析</p>
-      
-    
-    <time datetime="2016-05-19T10:21:48.000Z" itemprop="datePublished">2016-05-19</time>
-  </a>
-</section>
-
-
-
-
-
-
-  
-<section class="post" itemscope itemprop="blogitem">
-  
-    <a href="/2016/04/25/druid-querying/" title="Druid Querying" itemprop="url">
-  
-    <h1 itemprop="name">Druid Querying</h1>
-    
-     
-           <p itemprop="description" >Druid的查询都通过向可查询节点（Broker、Historcal或者Realtime）发送HTTP REST风格的请求来获得结果。请求使用JSON格式，通常发送到Broker节点。
-Druid的查询分为三类：
-
-聚合查询（Aggregation Queries）
-
-
-Time</p>
-        
-    
-    <time datetime="2016-04-25T08:42:33.000Z" itemprop="datePublished">2016-04-25</time>
-  </a>
-</section>
-
-
-
-
-
-
-  
-<section class="post" itemscope itemprop="blogitem">
-  
-    <a href="/2016/04/21/auto-ssh-to-server/" title="SSH 自动连接脚本" itemprop="url">
-  
-    <h1 itemprop="name">SSH 自动连接脚本</h1>
-    
-     
-      <p itemprop="description" >在不支持免密登录的跳转机上通过expect自动连接主机</p>
-      
-    
-    <time datetime="2016-04-21T07:50:30.000Z" itemprop="datePublished">2016-04-21</time>
-  </a>
-</section>
-
-
-
-
-
-
-  
-<section class="post" itemscope itemprop="blogitem">
-  
-    <a href="/2016/04/20/reindex-between-different-druid-use-and-metadatastorage/" title="使用不同Metadata Storage的Druid集群间转移DataSource" itemprop="url">
-  
-    <h1 itemprop="name">使用不同Metadata Storage的Druid集群间转移DataSource</h1>
-    
-     
-           <p itemprop="description" >在Druid中读取已有的数据比较简单，有很多方法可以使用，详见这里。但是如果不同的Druid集群使用了不同的Metadata Storage，迁移任务首先回去找datasource下的segments，但是由于旧的Druid集群把相关信息保存在其他地方，这将会导致找不到Segme</p>
-        
-    
-    <time datetime="2016-04-20T10:19:58.000Z" itemprop="datePublished">2016-04-20</time>
-  </a>
-</section>
-
-
-
-
-
-
-  
-<section class="post" itemscope itemprop="blogitem">
-  
-    <a href="/2016/04/15/druid-indexing-service/" title="Druid Indexing Service（索引服务）" itemprop="url">
-  
-    <h1 itemprop="name">Druid Indexing Service（索引服务）</h1>
-    
-     
-      <p itemprop="description" >Indexing Service 是 Druid 的一个核心组件，用来对数据进行索引，控制Druid的段的产生以及销毁。</p>
-      
-    
-    <time datetime="2016-04-15T02:47:47.000Z" itemprop="datePublished">2016-04-15</time>
-  </a>
-</section>
-
-
-
-
-
-
-  
-<section class="post" itemscope itemprop="blogitem">
-  
-    <a href="/2016/03/28/druid-quickstart/" title="Druid Quickstart" itemprop="url">
-  
-    <h1 itemprop="name">Druid Quickstart</h1>
-    
-     
-      <p itemprop="description" >Druid Quickstart笔记。Druid是一个用于大数据实时查询和分析的高容错、高性能开源分布式系统，旨在快速处理大规模的数据，并能够实现快速查询和分析。</p>
-      
-    
-    <time datetime="2016-03-28T10:14:36.000Z" itemprop="datePublished">2016-03-28</time>
-  </a>
-</section>
-
-
-
-
-
-
-  
-<section class="post" itemscope itemprop="blogitem">
-  
-    <a href="/2016/01/05/longest-common-subsequence/" title="最长公共子序列问题" itemprop="url">
-  
-    <h1 itemprop="name">最长公共子序列问题</h1>
-    
-     
-      <p itemprop="description" >通过给定序列求最长公共子序列。使用动态规划求解。</p>
-      
-    
-    <time datetime="2016-01-05T09:35:23.000Z" itemprop="datePublished">2016-01-05</time>
+    <time datetime="2015-08-31T17:04:30.000Z" itemprop="datePublished">2015-09-01</time>
   </a>
 </section>
 
@@ -288,7 +100,7 @@ Time</p>
 
 
   <nav id="page-nav" class="clearfix unexpand">
-    <a class="extend prev" rel="prev" href="/page/2/"><span></span>Prev</a><a class="page-number" href="/">1</a><a class="page-number" href="/page/2/">2</a><span class="page-number current">3</span><a class="page-number" href="/page/4/">4</a><a class="extend next" rel="next" href="/page/4/">Next<span></span></a>
+    <a class="extend prev" rel="prev" href="/page/3/"><span></span>Prev</a><a class="page-number" href="/">1</a><a class="page-number" href="/page/2/">2</a><a class="page-number" href="/page/3/">3</a><span class="page-number current">4</span>
   </nav>
 
 </div>

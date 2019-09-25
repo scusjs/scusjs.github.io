@@ -2,23 +2,30 @@
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
   
   <url>
-    <loc>http://blog.liexing.me/2019/07/07/Tibetan-Self-driving-Travel-Notes-3/</loc>
+    <loc>http://blog.liexing.me/2019/09/01/Tibetan-Self-driving-Travel-Notes-4/</loc>
     
-    <lastmod>2019-07-30T15:35:18.004Z</lastmod>
+    <lastmod>2019-09-25T16:04:56.015Z</lastmod>
     
   </url>
   
   <url>
-    <loc>http://blog.liexing.me/2019/07/07/Tibetan-Self-driving-Travel-Notes-2/</loc>
+    <loc>http://blog.liexing.me/2019/07/07/Tibetan-Self-driving-Travel-Notes-3/</loc>
     
-    <lastmod>2019-07-07T14:26:24.580Z</lastmod>
+    <lastmod>2019-09-01T07:04:13.501Z</lastmod>
     
   </url>
   
   <url>
     <loc>http://blog.liexing.me/2019/06/23/Tibetan-Self-driving-Travel-Notes/</loc>
     
-    <lastmod>2019-07-07T08:29:23.559Z</lastmod>
+    <lastmod>2019-09-01T07:04:09.120Z</lastmod>
+    
+  </url>
+  
+  <url>
+    <loc>http://blog.liexing.me/2019/07/07/Tibetan-Self-driving-Travel-Notes-2/</loc>
+    
+    <lastmod>2019-09-01T07:04:07.726Z</lastmod>
     
   </url>
   
@@ -107,6 +114,27 @@
   </url>
   
   <url>
+    <loc>http://blog.liexing.me/2015/09/01/oh-my-hexo/</loc>
+    
+    <lastmod>2017-02-27T11:34:45.000Z</lastmod>
+    
+  </url>
+  
+  <url>
+    <loc>http://blog.liexing.me/2016/04/21/auto-ssh-to-server/</loc>
+    
+    <lastmod>2017-02-27T11:34:45.000Z</lastmod>
+    
+  </url>
+  
+  <url>
+    <loc>http://blog.liexing.me/2016/01/05/longest-common-subsequence/</loc>
+    
+    <lastmod>2017-02-27T11:34:45.000Z</lastmod>
+    
+  </url>
+  
+  <url>
     <loc>http://blog.liexing.me/2016/08/25/cassandra-architecture-in-brief/</loc>
     
     <lastmod>2017-02-27T11:34:45.000Z</lastmod>
@@ -121,20 +149,6 @@
   </url>
   
   <url>
-    <loc>http://blog.liexing.me/tags/index.html</loc>
-    
-    <lastmod>2017-02-27T11:34:45.000Z</lastmod>
-    
-  </url>
-  
-  <url>
-    <loc>http://blog.liexing.me/2016/04/21/auto-ssh-to-server/</loc>
-    
-    <lastmod>2017-02-27T11:34:45.000Z</lastmod>
-    
-  </url>
-  
-  <url>
     <loc>http://blog.liexing.me/2016/06/16/druid-command-line-hadoop-indexer/</loc>
     
     <lastmod>2017-02-27T11:34:45.000Z</lastmod>
@@ -142,21 +156,7 @@
   </url>
   
   <url>
-    <loc>http://blog.liexing.me/2015/09/01/oh-my-hexo/</loc>
-    
-    <lastmod>2017-02-27T11:34:45.000Z</lastmod>
-    
-  </url>
-  
-  <url>
     <loc>http://blog.liexing.me/2016/05/19/druid-indexing-service-process-analysis/</loc>
-    
-    <lastmod>2017-02-27T11:34:45.000Z</lastmod>
-    
-  </url>
-  
-  <url>
-    <loc>http://blog.liexing.me/2016/04/15/druid-indexing-service/</loc>
     
     <lastmod>2017-02-27T11:34:45.000Z</lastmod>
     
@@ -177,7 +177,7 @@
   </url>
   
   <url>
-    <loc>http://blog.liexing.me/2016/10/30/statistical-learning-method-intro/</loc>
+    <loc>http://blog.liexing.me/2016/04/25/druid-querying/</loc>
     
     <lastmod>2017-02-27T11:34:45.000Z</lastmod>
     
@@ -198,6 +198,13 @@
   </url>
   
   <url>
+    <loc>http://blog.liexing.me/2016/10/30/statistical-learning-method-intro/</loc>
+    
+    <lastmod>2017-02-27T11:34:45.000Z</lastmod>
+    
+  </url>
+  
+  <url>
     <loc>http://blog.liexing.me/2016/11/03/statistical-learning-method-naive-bayes/</loc>
     
     <lastmod>2017-02-27T11:34:45.000Z</lastmod>
@@ -206,13 +213,6 @@
   
   <url>
     <loc>http://blog.liexing.me/2016/11/01/statistical-learning-method-perceptron/</loc>
-    
-    <lastmod>2017-02-27T11:34:45.000Z</lastmod>
-    
-  </url>
-  
-  <url>
-    <loc>http://blog.liexing.me/2016/04/25/druid-querying/</loc>
     
     <lastmod>2017-02-27T11:34:45.000Z</lastmod>
     
@@ -233,7 +233,14 @@
   </url>
   
   <url>
-    <loc>http://blog.liexing.me/2016/01/05/longest-common-subsequence/</loc>
+    <loc>http://blog.liexing.me/2016/04/15/druid-indexing-service/</loc>
+    
+    <lastmod>2017-02-27T11:34:45.000Z</lastmod>
+    
+  </url>
+  
+  <url>
+    <loc>http://blog.liexing.me/tags/index.html</loc>
     
     <lastmod>2017-02-27T11:34:45.000Z</lastmod>
     
