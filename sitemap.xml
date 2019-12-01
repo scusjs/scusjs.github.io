@@ -2,30 +2,37 @@
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
   
   <url>
-    <loc>http://blog.liexing.me/2019/09/01/Tibetan-Self-driving-Travel-Notes-4/</loc>
+    <loc>http://blog.liexing.me/2019/12/01/Tibetan-Self-driving-Travel-Notes-5/</loc>
     
-    <lastmod>2019-09-25T16:04:56.015Z</lastmod>
-    
-  </url>
-  
-  <url>
-    <loc>http://blog.liexing.me/2019/07/07/Tibetan-Self-driving-Travel-Notes-3/</loc>
-    
-    <lastmod>2019-09-01T07:04:13.501Z</lastmod>
+    <lastmod>2019-12-01T12:44:12.609Z</lastmod>
     
   </url>
   
   <url>
     <loc>http://blog.liexing.me/2019/06/23/Tibetan-Self-driving-Travel-Notes/</loc>
     
-    <lastmod>2019-09-01T07:04:09.120Z</lastmod>
+    <lastmod>2019-12-01T10:40:08.388Z</lastmod>
     
   </url>
   
   <url>
     <loc>http://blog.liexing.me/2019/07/07/Tibetan-Self-driving-Travel-Notes-2/</loc>
     
-    <lastmod>2019-09-01T07:04:07.726Z</lastmod>
+    <lastmod>2019-12-01T10:40:07.330Z</lastmod>
+    
+  </url>
+  
+  <url>
+    <loc>http://blog.liexing.me/2019/07/07/Tibetan-Self-driving-Travel-Notes-3/</loc>
+    
+    <lastmod>2019-12-01T10:40:05.682Z</lastmod>
+    
+  </url>
+  
+  <url>
+    <loc>http://blog.liexing.me/2019/09/01/Tibetan-Self-driving-Travel-Notes-4/</loc>
+    
+    <lastmod>2019-12-01T10:40:04.575Z</lastmod>
     
   </url>
   
@@ -114,7 +121,7 @@
   </url>
   
   <url>
-    <loc>http://blog.liexing.me/2015/09/01/oh-my-hexo/</loc>
+    <loc>http://blog.liexing.me/tags/index.html</loc>
     
     <lastmod>2017-02-27T11:34:45.000Z</lastmod>
     
@@ -135,20 +142,6 @@
   </url>
   
   <url>
-    <loc>http://blog.liexing.me/2016/08/25/cassandra-architecture-in-brief/</loc>
-    
-    <lastmod>2017-02-27T11:34:45.000Z</lastmod>
-    
-  </url>
-  
-  <url>
-    <loc>http://blog.liexing.me/2016/09/08/cassandra-architecture/</loc>
-    
-    <lastmod>2017-02-27T11:34:45.000Z</lastmod>
-    
-  </url>
-  
-  <url>
     <loc>http://blog.liexing.me/2016/06/16/druid-command-line-hadoop-indexer/</loc>
     
     <lastmod>2017-02-27T11:34:45.000Z</lastmod>
@@ -156,14 +149,21 @@
   </url>
   
   <url>
-    <loc>http://blog.liexing.me/2016/05/19/druid-indexing-service-process-analysis/</loc>
+    <loc>http://blog.liexing.me/2015/09/01/oh-my-hexo/</loc>
     
     <lastmod>2017-02-27T11:34:45.000Z</lastmod>
     
   </url>
   
   <url>
-    <loc>http://blog.liexing.me/2016/04/20/reindex-between-different-druid-use-and-metadatastorage/</loc>
+    <loc>http://blog.liexing.me/2016/04/15/druid-indexing-service/</loc>
+    
+    <lastmod>2017-02-27T11:34:45.000Z</lastmod>
+    
+  </url>
+  
+  <url>
+    <loc>http://blog.liexing.me/2016/08/25/cassandra-architecture-in-brief/</loc>
     
     <lastmod>2017-02-27T11:34:45.000Z</lastmod>
     
@@ -177,21 +177,14 @@
   </url>
   
   <url>
-    <loc>http://blog.liexing.me/2016/04/25/druid-querying/</loc>
+    <loc>http://blog.liexing.me/2016/04/20/reindex-between-different-druid-use-and-metadatastorage/</loc>
     
     <lastmod>2017-02-27T11:34:45.000Z</lastmod>
     
   </url>
   
   <url>
-    <loc>http://blog.liexing.me/2016/11/02/statistical-learning-method-knn/</loc>
-    
-    <lastmod>2017-02-27T11:34:45.000Z</lastmod>
-    
-  </url>
-  
-  <url>
-    <loc>http://blog.liexing.me/2016/03/28/druid-quickstart/</loc>
+    <loc>http://blog.liexing.me/2016/05/19/druid-indexing-service-process-analysis/</loc>
     
     <lastmod>2017-02-27T11:34:45.000Z</lastmod>
     
@@ -212,7 +205,28 @@
   </url>
   
   <url>
+    <loc>http://blog.liexing.me/2016/11/02/statistical-learning-method-knn/</loc>
+    
+    <lastmod>2017-02-27T11:34:45.000Z</lastmod>
+    
+  </url>
+  
+  <url>
     <loc>http://blog.liexing.me/2016/11/01/statistical-learning-method-perceptron/</loc>
+    
+    <lastmod>2017-02-27T11:34:45.000Z</lastmod>
+    
+  </url>
+  
+  <url>
+    <loc>http://blog.liexing.me/2016/04/25/druid-querying/</loc>
+    
+    <lastmod>2017-02-27T11:34:45.000Z</lastmod>
+    
+  </url>
+  
+  <url>
+    <loc>http://blog.liexing.me/2016/09/08/cassandra-architecture/</loc>
     
     <lastmod>2017-02-27T11:34:45.000Z</lastmod>
     
@@ -233,14 +247,7 @@
   </url>
   
   <url>
-    <loc>http://blog.liexing.me/2016/04/15/druid-indexing-service/</loc>
-    
-    <lastmod>2017-02-27T11:34:45.000Z</lastmod>
-    
-  </url>
-  
-  <url>
-    <loc>http://blog.liexing.me/tags/index.html</loc>
+    <loc>http://blog.liexing.me/2016/03/28/druid-quickstart/</loc>
     
     <lastmod>2017-02-27T11:34:45.000Z</lastmod>
     
