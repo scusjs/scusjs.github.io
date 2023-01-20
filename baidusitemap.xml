@@ -9,15 +9,7 @@
     <lastmod>2023-01-20</lastmod>
   </url>
   <url>
-    <loc>http://blog.liexing.me/2018/03/20/cross-domain-debug-record/</loc>
-    <lastmod>2023-01-20</lastmod>
-  </url>
-  <url>
     <loc>http://blog.liexing.me/2019/09/01/Tibetan-Self-driving-Travel-Notes-4/</loc>
-    <lastmod>2023-01-20</lastmod>
-  </url>
-  <url>
-    <loc>http://blog.liexing.me/2017/12/20/art-generation-with-neural-style-transfer/</loc>
     <lastmod>2023-01-20</lastmod>
   </url>
   <url>
@@ -25,11 +17,11 @@
     <lastmod>2023-01-20</lastmod>
   </url>
   <url>
-    <loc>http://blog.liexing.me/2017/11/16/optimizing-gradient-descent/</loc>
+    <loc>http://blog.liexing.me/2017/12/20/art-generation-with-neural-style-transfer/</loc>
     <lastmod>2023-01-20</lastmod>
   </url>
   <url>
-    <loc>http://blog.liexing.me/2016/11/03/statistical-learning-method-naive-bayes/</loc>
+    <loc>http://blog.liexing.me/2018/03/20/cross-domain-debug-record/</loc>
     <lastmod>2023-01-20</lastmod>
   </url>
   <url>
@@ -37,15 +29,19 @@
     <lastmod>2023-01-20</lastmod>
   </url>
   <url>
+    <loc>http://blog.liexing.me/2017/11/16/optimizing-gradient-descent/</loc>
+    <lastmod>2023-01-20</lastmod>
+  </url>
+  <url>
     <loc>http://blog.liexing.me/2016/04/20/reindex-between-different-druid-use-and-metadatastorage/</loc>
     <lastmod>2023-01-20</lastmod>
   </url>
   <url>
-    <loc>http://blog.liexing.me/2017/07/13/statistical-learning-method-logistic-regression-maximum-entropy-model/</loc>
+    <loc>http://blog.liexing.me/2016/11/03/statistical-learning-method-naive-bayes/</loc>
     <lastmod>2023-01-20</lastmod>
   </url>
   <url>
-    <loc>http://blog.liexing.me/2016/11/02/statistical-learning-method-knn/</loc>
+    <loc>http://blog.liexing.me/2016/04/15/druid-indexing-service/</loc>
     <lastmod>2023-01-20</lastmod>
   </url>
   <url>
@@ -57,15 +53,11 @@
     <lastmod>2023-01-20</lastmod>
   </url>
   <url>
-    <loc>http://blog.liexing.me/2016/04/15/druid-indexing-service/</loc>
+    <loc>http://blog.liexing.me/2016/11/02/statistical-learning-method-knn/</loc>
     <lastmod>2023-01-20</lastmod>
   </url>
   <url>
-    <loc>http://blog.liexing.me/2015/09/01/oh-my-hexo/</loc>
-    <lastmod>2023-01-20</lastmod>
-  </url>
-  <url>
-    <loc>http://blog.liexing.me/2016/04/25/druid-querying/</loc>
+    <loc>http://blog.liexing.me/2017/07/13/statistical-learning-method-logistic-regression-maximum-entropy-model/</loc>
     <lastmod>2023-01-20</lastmod>
   </url>
   <url>
@@ -73,15 +65,23 @@
     <lastmod>2023-01-20</lastmod>
   </url>
   <url>
+    <loc>http://blog.liexing.me/2016/04/25/druid-querying/</loc>
+    <lastmod>2023-01-20</lastmod>
+  </url>
+  <url>
     <loc>http://blog.liexing.me/2017/07/31/java-memory-model/</loc>
     <lastmod>2023-01-20</lastmod>
   </url>
   <url>
-    <loc>http://blog.liexing.me/2017/10/24/deep-learning-weight-initialization/</loc>
+    <loc>http://blog.liexing.me/2015/09/01/oh-my-hexo/</loc>
     <lastmod>2023-01-20</lastmod>
   </url>
   <url>
     <loc>http://blog.liexing.me/2019/07/07/Tibetan-Self-driving-Travel-Notes-2/</loc>
+    <lastmod>2023-01-20</lastmod>
+  </url>
+  <url>
+    <loc>http://blog.liexing.me/2017/10/24/deep-learning-weight-initialization/</loc>
     <lastmod>2023-01-20</lastmod>
   </url>
   <url>
@@ -97,7 +97,7 @@
     <lastmod>2023-01-20</lastmod>
   </url>
   <url>
-    <loc>http://blog.liexing.me/2016/10/30/statistical-learning-method-intro/</loc>
+    <loc>http://blog.liexing.me/2016/03/28/druid-quickstart/</loc>
     <lastmod>2023-01-20</lastmod>
   </url>
   <url>
@@ -105,15 +105,11 @@
     <lastmod>2023-01-20</lastmod>
   </url>
   <url>
+    <loc>http://blog.liexing.me/2016/10/30/statistical-learning-method-intro/</loc>
+    <lastmod>2023-01-20</lastmod>
+  </url>
+  <url>
     <loc>http://blog.liexing.me/2016/11/01/statistical-learning-method-perceptron/</loc>
-    <lastmod>2023-01-20</lastmod>
-  </url>
-  <url>
-    <loc>http://blog.liexing.me/2016/03/28/druid-quickstart/</loc>
-    <lastmod>2023-01-20</lastmod>
-  </url>
-  <url>
-    <loc>http://blog.liexing.me/2017/09/17/java-exception-table/</loc>
     <lastmod>2023-01-20</lastmod>
   </url>
   <url>
@@ -122,6 +118,10 @@
   </url>
   <url>
     <loc>http://blog.liexing.me/2016/06/16/druid-command-line-hadoop-indexer/</loc>
+    <lastmod>2023-01-20</lastmod>
+  </url>
+  <url>
+    <loc>http://blog.liexing.me/2017/09/17/java-exception-table/</loc>
     <lastmod>2023-01-20</lastmod>
   </url>
   <url>

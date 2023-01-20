@@ -1,7 +1,7 @@
 
  <!DOCTYPE HTML>
 <html lang="zh-CN">
-<head><meta name="generator" content="Hexo 3.9.0">
+<head>
   <meta charset="UTF-8">
   
     <title>统计学习方法（笔记）-k 近邻法 | Liexing&#39;s Blog</title>
@@ -11,20 +11,24 @@
     
 
     
-    <meta name="description" content="k 近邻法（knn）是一种基本的分类与回归方法。这里只讨论分类问题。knn 分类可以简单理解为，找到距离输入实例最近的 k 个训练数据集中的实例点，其中多数属于某个类，则新输入的实例也属于某个类。 knn 算法根据上述描述，其算法表示为： $$y=\arg \max \limits_{c_j} \sum \limits_{x_i \in N_{k}(x)} I(y_i = c_j),\quad i">
-<meta name="keywords" content="笔记,统计学习,机器学习,k 邻近法,knn">
+    <meta name="description" content="k 近邻法（knn）是一种基本的分类与回归方法。这里只讨论分类问题。knn 分类可以简单理解为，找到距离输入实例最近的 k 个训练数据集中的实例点，其中多数属于某个类，则新输入的实例也属于某个类。 knn 算法根据上述描述，其算法表示为： $$y&#x3D;\arg \max \limits_{c_j} \sum \limits_{x_i \in N_{k}(x)} I(y_i &#x3D; c_">
 <meta property="og:type" content="article">
 <meta property="og:title" content="统计学习方法（笔记）-k 近邻法">
 <meta property="og:url" content="http://blog.liexing.me/2016/11/02/statistical-learning-method-knn/index.html">
 <meta property="og:site_name" content="Liexing&#39;s Blog">
-<meta property="og:description" content="k 近邻法（knn）是一种基本的分类与回归方法。这里只讨论分类问题。knn 分类可以简单理解为，找到距离输入实例最近的 k 个训练数据集中的实例点，其中多数属于某个类，则新输入的实例也属于某个类。 knn 算法根据上述描述，其算法表示为： $$y=\arg \max \limits_{c_j} \sum \limits_{x_i \in N_{k}(x)} I(y_i = c_j),\quad i">
-<meta property="og:locale" content="zh-CN">
+<meta property="og:description" content="k 近邻法（knn）是一种基本的分类与回归方法。这里只讨论分类问题。knn 分类可以简单理解为，找到距离输入实例最近的 k 个训练数据集中的实例点，其中多数属于某个类，则新输入的实例也属于某个类。 knn 算法根据上述描述，其算法表示为： $$y&#x3D;\arg \max \limits_{c_j} \sum \limits_{x_i \in N_{k}(x)} I(y_i &#x3D; c_">
+<meta property="og:locale" content="zh_CN">
 <meta property="og:image" content="http://blog.liexing.me/images/statistical-learning-method/1478078547.jpg">
 <meta property="og:image" content="http://blog.liexing.me/images/statistical-learning-method/1478081508.jpg">
-<meta property="og:updated_time" content="2023-01-20T15:04:29.746Z">
+<meta property="article:published_time" content="2016-11-02T08:55:58.000Z">
+<meta property="article:modified_time" content="2023-01-20T15:04:29.746Z">
+<meta property="article:author" content="liexing">
+<meta property="article:tag" content="笔记">
+<meta property="article:tag" content="统计学习">
+<meta property="article:tag" content="机器学习">
+<meta property="article:tag" content="k 邻近法">
+<meta property="article:tag" content="knn">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:title" content="统计学习方法（笔记）-k 近邻法">
-<meta name="twitter:description" content="k 近邻法（knn）是一种基本的分类与回归方法。这里只讨论分类问题。knn 分类可以简单理解为，找到距离输入实例最近的 k 个训练数据集中的实例点，其中多数属于某个类，则新输入的实例也属于某个类。 knn 算法根据上述描述，其算法表示为： $$y=\arg \max \limits_{c_j} \sum \limits_{x_i \in N_{k}(x)} I(y_i = c_j),\quad i">
 <meta name="twitter:image" content="http://blog.liexing.me/images/statistical-learning-method/1478078547.jpg">
 <meta name="twitter:creator" content="@scusjs">
 
@@ -39,9 +43,11 @@
     <link rel="apple-touch-icon-precomposed" href="/img/favicon.jpg">
     
     <link rel="stylesheet" href="//cdn.bootcss.com/font-awesome/4.3.0/css/font-awesome.min.css">
-    <link rel="stylesheet" href="/css/style.css">
-</head>
-</html>
+    
+<link rel="stylesheet" href="/css/style.css">
+
+<meta name="generator" content="Hexo 6.3.0"></head>
+
   <body>
     <header>
       
@@ -107,23 +113,27 @@
         <div id="toc" class="toc-article">
             <strong class="toc-title">文章目录</strong>
         
-            <ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link" href="#knn-算法"><span class="toc-number">1.</span> <span class="toc-text">knn 算法</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#knn-模型"><span class="toc-number">2.</span> <span class="toc-text">knn 模型</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#kd-树"><span class="toc-number">3.</span> <span class="toc-text">kd 树</span></a></li></ol>
+            <ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link" href="#knn-%E7%AE%97%E6%B3%95"><span class="toc-number">1.</span> <span class="toc-text">knn 算法</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#knn-%E6%A8%A1%E5%9E%8B"><span class="toc-number">2.</span> <span class="toc-text">knn 模型</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#kd-%E6%A0%91"><span class="toc-number">3.</span> <span class="toc-text">kd 树</span></a></li></ol>
         
         </div>
         
         <p>k 近邻法（knn）是一种基本的分类与回归方法。这里只讨论分类问题。knn 分类可以简单理解为，找到距离输入实例最近的 k 个训练数据集中的实例点，其中多数属于某个类，则新输入的实例也属于某个类。</p>
 <h1 id="knn-算法"><a href="#knn-算法" class="headerlink" title="knn 算法"></a>knn 算法</h1><p>根据上述描述，其算法表示为：</p>
-<p>$$y=\arg \max \limits_{c_j} \sum \limits_{x_i \in N_{k}(x)} I(y_i = c_j),\quad i=1,2,…,N;j=1,2,…,K$$</p>
-<p>其中，$N_{k}(x)$表示涵盖训练集 T 中与 x 最邻近的 k 个点的邻域。I 为指示函数，当$y_i=c_j$时为1，否则为0。</p>
+<p>$$y&#x3D;\arg \max \limits_{c_j} \sum \limits_{x_i \in N_{k}(x)} I(y_i &#x3D; c_j),\quad i&#x3D;1,2,…,N;j&#x3D;1,2,…,K$$</p>
+<p>其中，$N_{k}(x)$表示涵盖训练集 T 中与 x 最邻近的 k 个点的邻域。I 为指示函数，当$y_i&#x3D;c_j$时为1，否则为0。</p>
 <p>显然，k 近邻法没有显示的学习过程。</p>
 <h1 id="knn-模型"><a href="#knn-模型" class="headerlink" title="knn 模型"></a>knn 模型</h1><p>knn 实际使用的模型对应于对特征空间的划分。模型由三个要素——距离度量、k 值的选择和分类策略规则决定。当上面三要素与训练集确定后，对于任意输入实例，所属的类别唯一地确定。</p>
 <p>相当于在特征空间中划分一些子空间，判断新输入落入哪个子空间中即可。knn 中，k 为1叫做最近邻。这时候对每个训练集实例点划分一个区域（单元），如图：</p>
-<p><img src="/images/statistical-learning-method/1478078547.jpg" title="k近邻法的模型对应特征空间的一个划分" alt="k近邻法的模型对应特征空间的一个划分"><br>对于 knn，距离度量是一个比较关键的因素，一般使用欧式距离，也可能使用其他距离。对于两点$x_i,x_j\in \mathcal{X}$，其距离定义为：</p>
-<p>$$L_p(x_i,x_j)=(\sum \limits_{l=1}^n |x_i^{(l)}-x_j^{(l)}|^p)^{\frac{1}{p}}$$</p>
-<p>这里，$p\geq 1$，p=1 时叫做曼哈顿距离，p=2 时叫做欧式距离，$p=\infty$时，为求各个坐标距离的最大值：</p>
-<p>$$L_{\infty}(x_i,x_j)=\max \limits_l|x_i^{(l)}-x_j^{(l)}|$$</p>
+<img src="/images/statistical-learning-method/1478078547.jpg"  title="k近邻法的模型对应特征空间的一个划分" alt="k近邻法的模型对应特征空间的一个划分"/>
+对于 knn，距离度量是一个比较关键的因素，一般使用欧式距离，也可能使用其他距离。对于两点$x_i,x_j\in \mathcal{X}$，其距离定义为：
+
+<p>$$L_p(x_i,x_j)&#x3D;(\sum \limits_{l&#x3D;1}^n |x_i^{(l)}-x_j^{(l)}|^p)^{\frac{1}{p}}$$</p>
+<p>这里，$p\geq 1$，p&#x3D;1 时叫做曼哈顿距离，p&#x3D;2 时叫做欧式距离，$p&#x3D;\infty$时，为求各个坐标距离的最大值：</p>
+<p>$$L_{\infty}(x_i,x_j)&#x3D;\max \limits_l|x_i^{(l)}-x_j^{(l)}|$$</p>
 <p>不同的距离度量所确定的最近邻点是不同的。如图：</p>
-<p><img src="/images/statistical-learning-method/1478081508.jpg" title="L_p距离间的关系" alt="L_p距离间的关系"><br>其次，k 值的选择对结果影响也很大。k 较小时，近似误差小，但是估算误差大，噪声对其影响大，模型复杂，容易过拟合；k 较大时，可减小估算误差，但是近似误差大，模型变得简单。在应用时，取较小 k 的值，通过交叉验证来选取合适的值。</p>
+<img src="/images/statistical-learning-method/1478081508.jpg"  title="L_p距离间的关系" alt="L_p距离间的关系"/>
+其次，k 值的选择对结果影响也很大。k 较小时，近似误差小，但是估算误差大，噪声对其影响大，模型复杂，容易过拟合；k 较大时，可减小估算误差，但是近似误差大，模型变得简单。在应用时，取较小 k 的值，通过交叉验证来选取合适的值。
+
 <p>knn 的分类策略往往是多数表决，其等价于经验风险最小化。</p>
 <h1 id="kd-树"><a href="#kd-树" class="headerlink" title="kd 树"></a>kd 树</h1><p>knn 最简单的实现是线性扫描，但是其开销巨大，不可取。</p>
 <p>kd 树是一种对 k 维空间中的实例点进行存储以便对其进行快速检索的二叉树形数据结构。</p>
@@ -238,7 +248,7 @@
 
 <div class="article-categories">
   <span></span>
-  <a class="article-category-link" href="/categories/统计学习/">统计学习</a>
+  <a class="article-category-link" href="/categories/%E7%BB%9F%E8%AE%A1%E5%AD%A6%E4%B9%A0/">统计学习</a>
 </div>
 
 
@@ -289,7 +299,7 @@
 
 <section id="comments" class="comment">
   <div id="disqus_thread">
-    <noscript>Please enable JavaScript to view the <a href="//disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
+    <noscript>Please enable JavaScript to view the <a target="_blank" rel="noopener" href="//disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
   </div>
 </section>
 
@@ -300,7 +310,7 @@
   <div id="toc" class="toc-aside">
   <strong class="toc-title">文章目录</strong>
  
- <ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link" href="#knn-算法"><span class="toc-number">1.</span> <span class="toc-text">knn 算法</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#knn-模型"><span class="toc-number">2.</span> <span class="toc-text">knn 模型</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#kd-树"><span class="toc-number">3.</span> <span class="toc-text">kd 树</span></a></li></ol>
+ <ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link" href="#knn-%E7%AE%97%E6%B3%95"><span class="toc-number">1.</span> <span class="toc-text">knn 算法</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#knn-%E6%A8%A1%E5%9E%8B"><span class="toc-number">2.</span> <span class="toc-text">knn 模型</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#kd-%E6%A0%91"><span class="toc-number">3.</span> <span class="toc-text">kd 树</span></a></li></ol>
  
   </div>
 
@@ -395,7 +405,7 @@
   <div class="tagcloudlist">
     <p class="asidetitle">标签云</p>
     <div class="tagcloudlist clearfix">
-       <a href="/tags/Adam/" style="font-size: 10px;">Adam</a> <a href="/tags/BGD/" style="font-size: 10px;">BGD</a> <a href="/tags/Cassandra/" style="font-size: 11.67px;">Cassandra</a> <a href="/tags/Druid/" style="font-size: 16.67px;">Druid</a> <a href="/tags/JVM/" style="font-size: 10px;">JVM</a> <a href="/tags/Java/" style="font-size: 10px;">Java</a> <a href="/tags/LCS/" style="font-size: 10px;">LCS</a> <a href="/tags/Momentum/" style="font-size: 10px;">Momentum</a> <a href="/tags/MySQL/" style="font-size: 10px;">MySQL</a> <a href="/tags/NOSQL/" style="font-size: 11.67px;">NOSQL</a> <a href="/tags/SGD/" style="font-size: 10px;">SGD</a> <a href="/tags/Spring-Boot/" style="font-size: 10px;">Spring Boot</a> <a href="/tags/Sytle-Transfer/" style="font-size: 10px;">Sytle Transfer</a> <a href="/tags/Weight-initialization/" style="font-size: 10px;">Weight initialization</a> <a href="/tags/algorithms/" style="font-size: 10px;">algorithms</a> <a href="/tags/bash/" style="font-size: 10px;">bash</a> <a href="/tags/dynamic-programming/" style="font-size: 10px;">dynamic programming</a> <a href="/tags/hexo/" style="font-size: 10px;">hexo</a> <a href="/tags/java/" style="font-size: 10px;">java</a> <a href="/tags/k-邻近法/" style="font-size: 11.67px;">k 邻近法</a> <a href="/tags/knn/" style="font-size: 11.67px;">knn</a> <a href="/tags/linux/" style="font-size: 10px;">linux</a> <a href="/tags/macOS/" style="font-size: 10px;">macOS</a> <a href="/tags/parallelStream/" style="font-size: 10px;">parallelStream</a> <a href="/tags/quicklist/" style="font-size: 10px;">quicklist</a> <a href="/tags/redis/" style="font-size: 10px;">redis</a> <a href="/tags/stream/" style="font-size: 10px;">stream</a> <a href="/tags/utf8/" style="font-size: 10px;">utf8</a> <a href="/tags/utf8mb4/" style="font-size: 10px;">utf8mb4</a> <a href="/tags/ziplist/" style="font-size: 10px;">ziplist</a> <a href="/tags/内存模型/" style="font-size: 10px;">内存模型</a> <a href="/tags/分布式/" style="font-size: 18.33px;">分布式</a> <a href="/tags/多线程/" style="font-size: 10px;">多线程</a> <a href="/tags/实时计算/" style="font-size: 16.67px;">实时计算</a> <a href="/tags/异常处理/" style="font-size: 10px;">异常处理</a> <a href="/tags/异常表/" style="font-size: 10px;">异常表</a> <a href="/tags/感知机/" style="font-size: 10px;">感知机</a> <a href="/tags/数据结构/" style="font-size: 10px;">数据结构</a> <a href="/tags/最大熵模型/" style="font-size: 10px;">最大熵模型</a> <a href="/tags/朴素贝叶斯/" style="font-size: 10px;">朴素贝叶斯</a> <a href="/tags/机器学习/" style="font-size: 16.67px;">机器学习</a> <a href="/tags/杂/" style="font-size: 16.67px;">杂</a> <a href="/tags/梯度下降/" style="font-size: 10px;">梯度下降</a> <a href="/tags/深度学习/" style="font-size: 13.33px;">深度学习</a> <a href="/tags/源码分析/" style="font-size: 10px;">源码分析</a> <a href="/tags/生成/" style="font-size: 10px;">生成</a> <a href="/tags/生活/" style="font-size: 15px;">生活</a> <a href="/tags/笔记/" style="font-size: 20px;">笔记</a> <a href="/tags/统计学习/" style="font-size: 16.67px;">统计学习</a> <a href="/tags/编码/" style="font-size: 10px;">编码</a> <a href="/tags/自驾/" style="font-size: 15px;">自驾</a> <a href="/tags/调参/" style="font-size: 11.67px;">调参</a> <a href="/tags/跨域/" style="font-size: 10px;">跨域</a> <a href="/tags/踩坑日志/" style="font-size: 10px;">踩坑日志</a> <a href="/tags/逻辑斯谛回归/" style="font-size: 10px;">逻辑斯谛回归</a> <a href="/tags/配置/" style="font-size: 10px;">配置</a> <a href="/tags/风格迁移/" style="font-size: 10px;">风格迁移</a>
+       <a href="/tags/Adam/" style="font-size: 10px;">Adam</a> <a href="/tags/BGD/" style="font-size: 10px;">BGD</a> <a href="/tags/Cassandra/" style="font-size: 11.67px;">Cassandra</a> <a href="/tags/Druid/" style="font-size: 16.67px;">Druid</a> <a href="/tags/JVM/" style="font-size: 10px;">JVM</a> <a href="/tags/Java/" style="font-size: 10px;">Java</a> <a href="/tags/LCS/" style="font-size: 10px;">LCS</a> <a href="/tags/Momentum/" style="font-size: 10px;">Momentum</a> <a href="/tags/MySQL/" style="font-size: 10px;">MySQL</a> <a href="/tags/NOSQL/" style="font-size: 11.67px;">NOSQL</a> <a href="/tags/SGD/" style="font-size: 10px;">SGD</a> <a href="/tags/Spring-Boot/" style="font-size: 10px;">Spring Boot</a> <a href="/tags/Sytle-Transfer/" style="font-size: 10px;">Sytle Transfer</a> <a href="/tags/Weight-initialization/" style="font-size: 10px;">Weight initialization</a> <a href="/tags/algorithms/" style="font-size: 10px;">algorithms</a> <a href="/tags/bash/" style="font-size: 10px;">bash</a> <a href="/tags/dynamic-programming/" style="font-size: 10px;">dynamic programming</a> <a href="/tags/hexo/" style="font-size: 10px;">hexo</a> <a href="/tags/java/" style="font-size: 10px;">java</a> <a href="/tags/k-%E9%82%BB%E8%BF%91%E6%B3%95/" style="font-size: 11.67px;">k 邻近法</a> <a href="/tags/knn/" style="font-size: 11.67px;">knn</a> <a href="/tags/linux/" style="font-size: 10px;">linux</a> <a href="/tags/macOS/" style="font-size: 10px;">macOS</a> <a href="/tags/parallelStream/" style="font-size: 10px;">parallelStream</a> <a href="/tags/quicklist/" style="font-size: 10px;">quicklist</a> <a href="/tags/redis/" style="font-size: 10px;">redis</a> <a href="/tags/stream/" style="font-size: 10px;">stream</a> <a href="/tags/utf8/" style="font-size: 10px;">utf8</a> <a href="/tags/utf8mb4/" style="font-size: 10px;">utf8mb4</a> <a href="/tags/ziplist/" style="font-size: 10px;">ziplist</a> <a href="/tags/%E5%86%85%E5%AD%98%E6%A8%A1%E5%9E%8B/" style="font-size: 10px;">内存模型</a> <a href="/tags/%E5%88%86%E5%B8%83%E5%BC%8F/" style="font-size: 18.33px;">分布式</a> <a href="/tags/%E5%A4%9A%E7%BA%BF%E7%A8%8B/" style="font-size: 10px;">多线程</a> <a href="/tags/%E5%AE%9E%E6%97%B6%E8%AE%A1%E7%AE%97/" style="font-size: 16.67px;">实时计算</a> <a href="/tags/%E5%BC%82%E5%B8%B8%E5%A4%84%E7%90%86/" style="font-size: 10px;">异常处理</a> <a href="/tags/%E5%BC%82%E5%B8%B8%E8%A1%A8/" style="font-size: 10px;">异常表</a> <a href="/tags/%E6%84%9F%E7%9F%A5%E6%9C%BA/" style="font-size: 10px;">感知机</a> <a href="/tags/%E6%95%B0%E6%8D%AE%E7%BB%93%E6%9E%84/" style="font-size: 10px;">数据结构</a> <a href="/tags/%E6%9C%80%E5%A4%A7%E7%86%B5%E6%A8%A1%E5%9E%8B/" style="font-size: 10px;">最大熵模型</a> <a href="/tags/%E6%9C%B4%E7%B4%A0%E8%B4%9D%E5%8F%B6%E6%96%AF/" style="font-size: 10px;">朴素贝叶斯</a> <a href="/tags/%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0/" style="font-size: 16.67px;">机器学习</a> <a href="/tags/%E6%9D%82/" style="font-size: 16.67px;">杂</a> <a href="/tags/%E6%A2%AF%E5%BA%A6%E4%B8%8B%E9%99%8D/" style="font-size: 10px;">梯度下降</a> <a href="/tags/%E6%B7%B1%E5%BA%A6%E5%AD%A6%E4%B9%A0/" style="font-size: 13.33px;">深度学习</a> <a href="/tags/%E6%BA%90%E7%A0%81%E5%88%86%E6%9E%90/" style="font-size: 10px;">源码分析</a> <a href="/tags/%E7%94%9F%E6%88%90/" style="font-size: 10px;">生成</a> <a href="/tags/%E7%94%9F%E6%B4%BB/" style="font-size: 15px;">生活</a> <a href="/tags/%E7%AC%94%E8%AE%B0/" style="font-size: 20px;">笔记</a> <a href="/tags/%E7%BB%9F%E8%AE%A1%E5%AD%A6%E4%B9%A0/" style="font-size: 16.67px;">统计学习</a> <a href="/tags/%E7%BC%96%E7%A0%81/" style="font-size: 10px;">编码</a> <a href="/tags/%E8%87%AA%E9%A9%BE/" style="font-size: 15px;">自驾</a> <a href="/tags/%E8%B0%83%E5%8F%82/" style="font-size: 11.67px;">调参</a> <a href="/tags/%E8%B7%A8%E5%9F%9F/" style="font-size: 10px;">跨域</a> <a href="/tags/%E8%B8%A9%E5%9D%91%E6%97%A5%E5%BF%97/" style="font-size: 10px;">踩坑日志</a> <a href="/tags/%E9%80%BB%E8%BE%91%E6%96%AF%E8%B0%9B%E5%9B%9E%E5%BD%92/" style="font-size: 10px;">逻辑斯谛回归</a> <a href="/tags/%E9%85%8D%E7%BD%AE/" style="font-size: 10px;">配置</a> <a href="/tags/%E9%A3%8E%E6%A0%BC%E8%BF%81%E7%A7%BB/" style="font-size: 10px;">风格迁移</a>
     </div>
   </div>
 

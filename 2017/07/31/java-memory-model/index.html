@@ -1,7 +1,7 @@
 
  <!DOCTYPE HTML>
 <html lang="zh-CN">
-<head><meta name="generator" content="Hexo 3.9.0">
+<head>
   <meta charset="UTF-8">
   
     <title>Java 内存模型 | Liexing&#39;s Blog</title>
@@ -12,19 +12,21 @@
 
     
     <meta name="description" content="Java内存模型，即 Java Memory Model（JMM），定义了 Java 虚拟机在计算机内存的工作方式。现在的 Java 内存模型主要源于1.5版本。 缓存与一致性在计算机中，不同硬件的处理速度不同，往往有几个数量级的差距。比如 CPU 的处理速度往往高于内存数个数量级。因此计算机体系结构中引入了告诉缓存（Cache）放在内存和处理器之间作为缓冲。将 CPU 可能将要访问的数据先放在缓">
-<meta name="keywords" content="Java,内存模型,多线程">
 <meta property="og:type" content="article">
 <meta property="og:title" content="Java 内存模型">
 <meta property="og:url" content="http://blog.liexing.me/2017/07/31/java-memory-model/index.html">
 <meta property="og:site_name" content="Liexing&#39;s Blog">
 <meta property="og:description" content="Java内存模型，即 Java Memory Model（JMM），定义了 Java 虚拟机在计算机内存的工作方式。现在的 Java 内存模型主要源于1.5版本。 缓存与一致性在计算机中，不同硬件的处理速度不同，往往有几个数量级的差距。比如 CPU 的处理速度往往高于内存数个数量级。因此计算机体系结构中引入了告诉缓存（Cache）放在内存和处理器之间作为缓冲。将 CPU 可能将要访问的数据先放在缓">
-<meta property="og:locale" content="zh-CN">
+<meta property="og:locale" content="zh_CN">
 <meta property="og:image" content="http://blog.liexing.me/images/java-memory-model/1501516073.png">
 <meta property="og:image" content="http://blog.liexing.me/images/java-memory-model/1501516897.png">
-<meta property="og:updated_time" content="2023-01-20T15:04:29.745Z">
+<meta property="article:published_time" content="2017-07-31T15:15:12.000Z">
+<meta property="article:modified_time" content="2023-01-20T15:04:29.745Z">
+<meta property="article:author" content="liexing">
+<meta property="article:tag" content="Java">
+<meta property="article:tag" content="内存模型">
+<meta property="article:tag" content="多线程">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:title" content="Java 内存模型">
-<meta name="twitter:description" content="Java内存模型，即 Java Memory Model（JMM），定义了 Java 虚拟机在计算机内存的工作方式。现在的 Java 内存模型主要源于1.5版本。 缓存与一致性在计算机中，不同硬件的处理速度不同，往往有几个数量级的差距。比如 CPU 的处理速度往往高于内存数个数量级。因此计算机体系结构中引入了告诉缓存（Cache）放在内存和处理器之间作为缓冲。将 CPU 可能将要访问的数据先放在缓">
 <meta name="twitter:image" content="http://blog.liexing.me/images/java-memory-model/1501516073.png">
 <meta name="twitter:creator" content="@scusjs">
 
@@ -39,9 +41,11 @@
     <link rel="apple-touch-icon-precomposed" href="/img/favicon.jpg">
     
     <link rel="stylesheet" href="//cdn.bootcss.com/font-awesome/4.3.0/css/font-awesome.min.css">
-    <link rel="stylesheet" href="/css/style.css">
-</head>
-</html>
+    
+<link rel="stylesheet" href="/css/style.css">
+
+<meta name="generator" content="Hexo 6.3.0"></head>
+
   <body>
     <header>
       
@@ -107,16 +111,20 @@
         <div id="toc" class="toc-article">
             <strong class="toc-title">文章目录</strong>
         
-            <ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link" href="#缓存与一致性"><span class="toc-number">1.</span> <span class="toc-text">缓存与一致性</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#JMM"><span class="toc-number">2.</span> <span class="toc-text">JMM</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#内存间交互操作"><span class="toc-number">2.1.</span> <span class="toc-text">内存间交互操作</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#Happens-before"><span class="toc-number">2.2.</span> <span class="toc-text">Happens-before</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#指令重排序"><span class="toc-number">2.3.</span> <span class="toc-text">指令重排序</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#数据依耐性"><span class="toc-number">2.3.1.</span> <span class="toc-text">数据依耐性</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#as-if-serial"><span class="toc-number">2.3.2.</span> <span class="toc-text">as-if-serial</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#内存屏障"><span class="toc-number">2.3.3.</span> <span class="toc-text">内存屏障</span></a></li></ol></li></ol></li></ol>
+            <ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link" href="#%E7%BC%93%E5%AD%98%E4%B8%8E%E4%B8%80%E8%87%B4%E6%80%A7"><span class="toc-number">1.</span> <span class="toc-text">缓存与一致性</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#JMM"><span class="toc-number">2.</span> <span class="toc-text">JMM</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#%E5%86%85%E5%AD%98%E9%97%B4%E4%BA%A4%E4%BA%92%E6%93%8D%E4%BD%9C"><span class="toc-number">2.1.</span> <span class="toc-text">内存间交互操作</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#Happens-before"><span class="toc-number">2.2.</span> <span class="toc-text">Happens-before</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E6%8C%87%E4%BB%A4%E9%87%8D%E6%8E%92%E5%BA%8F"><span class="toc-number">2.3.</span> <span class="toc-text">指令重排序</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#%E6%95%B0%E6%8D%AE%E4%BE%9D%E8%80%90%E6%80%A7"><span class="toc-number">2.3.1.</span> <span class="toc-text">数据依耐性</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#as-if-serial"><span class="toc-number">2.3.2.</span> <span class="toc-text">as-if-serial</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E5%86%85%E5%AD%98%E5%B1%8F%E9%9A%9C"><span class="toc-number">2.3.3.</span> <span class="toc-text">内存屏障</span></a></li></ol></li></ol></li></ol>
         
         </div>
         
         <p>Java内存模型，即 Java Memory Model（JMM），定义了 Java 虚拟机在计算机内存的工作方式。现在的 Java 内存模型主要源于1.5版本。</p>
 <h1 id="缓存与一致性"><a href="#缓存与一致性" class="headerlink" title="缓存与一致性"></a>缓存与一致性</h1><p>在计算机中，不同硬件的处理速度不同，往往有几个数量级的差距。比如 CPU 的处理速度往往高于内存数个数量级。因此计算机体系结构中引入了告诉缓存（Cache）放在内存和处理器之间作为缓冲。将 CPU 可能将要访问的数据先放在缓存中，因为访问缓存的速度远远高于直接访问内存，因此能加速运算。</p>
-<p><img src="/images/java-memory-model/1501516073.png" title="高速缓存" alt="高速缓存"><br>虽然高速缓存解决了 CPU 和内存之间的速度问题，但是引入了另一个问题：缓存一致性。在多处理系统中，每一个处理器都有自己独立的缓存，但是整个系统共享一个内存，因此需要保证每个 CPU 读写的数据一致。常见的一致性协议有 MSI、MESI、MOSI以及 Dragon Protocol 等。</p>
+<img src="/images/java-memory-model/1501516073.png"  title="高速缓存" alt="高速缓存"/>
+虽然高速缓存解决了 CPU 和内存之间的速度问题，但是引入了另一个问题：缓存一致性。在多处理系统中，每一个处理器都有自己独立的缓存，但是整个系统共享一个内存，因此需要保证每个 CPU 读写的数据一致。常见的一致性协议有 MSI、MESI、MOSI以及 Dragon Protocol 等。
+
 <p> JMM 中定义的内存访问操作与计算机的高速缓存访问是类似的。</p>
 <h1 id="JMM"><a href="#JMM" class="headerlink" title="JMM"></a>JMM</h1><p> JMM 定义了程序中各个变量的访问规则。JMM 规定，所有的变量都存储在主内存中，但是每个线程还会有自己的工作内存，其中保存该线程使用到的变量副本，并且线程对内存的操作必须在工作线程中进行，不能直接访问主内存变量。如图所示：</p>
-<p><img src="/images/java-memory-model/1501516897.png" title="JMM内存模型" alt="JMM内存模型"><br>在命令式编程中，线程之间的通信机制有两种：共享内存和消息传递。在共享内存的模型中，线程之间通过共享内存中的一个公共状态来进行通信。在消息传递模型中，通过显示的发送消息来通信。Java线程之间的通信采用的是过共享内存模型，即 JMM。</p>
+<img src="/images/java-memory-model/1501516897.png"  title="JMM内存模型" alt="JMM内存模型"/> 
+在命令式编程中，线程之间的通信机制有两种：共享内存和消息传递。在共享内存的模型中，线程之间通过共享内存中的一个公共状态来进行通信。在消息传递模型中，通过显示的发送消息来通信。Java线程之间的通信采用的是过共享内存模型，即 JMM。
+
 <p>线程之间的通信必须要经历将要发送的消息通过共享变量的方式写入主内存，再被其他线程读取的过程。</p>
 <h2 id="内存间交互操作"><a href="#内存间交互操作" class="headerlink" title="内存间交互操作"></a>内存间交互操作</h2><p>为了保证其他线程读取的是最新写入的数据，因此 Java 内存模型定义了如下几种操作：</p>
 <ol>
@@ -308,7 +316,7 @@
 
 <section id="comments" class="comment">
   <div id="disqus_thread">
-    <noscript>Please enable JavaScript to view the <a href="//disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
+    <noscript>Please enable JavaScript to view the <a target="_blank" rel="noopener" href="//disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
   </div>
 </section>
 
@@ -319,7 +327,7 @@
   <div id="toc" class="toc-aside">
   <strong class="toc-title">文章目录</strong>
  
- <ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link" href="#缓存与一致性"><span class="toc-number">1.</span> <span class="toc-text">缓存与一致性</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#JMM"><span class="toc-number">2.</span> <span class="toc-text">JMM</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#内存间交互操作"><span class="toc-number">2.1.</span> <span class="toc-text">内存间交互操作</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#Happens-before"><span class="toc-number">2.2.</span> <span class="toc-text">Happens-before</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#指令重排序"><span class="toc-number">2.3.</span> <span class="toc-text">指令重排序</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#数据依耐性"><span class="toc-number">2.3.1.</span> <span class="toc-text">数据依耐性</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#as-if-serial"><span class="toc-number">2.3.2.</span> <span class="toc-text">as-if-serial</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#内存屏障"><span class="toc-number">2.3.3.</span> <span class="toc-text">内存屏障</span></a></li></ol></li></ol></li></ol>
+ <ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link" href="#%E7%BC%93%E5%AD%98%E4%B8%8E%E4%B8%80%E8%87%B4%E6%80%A7"><span class="toc-number">1.</span> <span class="toc-text">缓存与一致性</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#JMM"><span class="toc-number">2.</span> <span class="toc-text">JMM</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#%E5%86%85%E5%AD%98%E9%97%B4%E4%BA%A4%E4%BA%92%E6%93%8D%E4%BD%9C"><span class="toc-number">2.1.</span> <span class="toc-text">内存间交互操作</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#Happens-before"><span class="toc-number">2.2.</span> <span class="toc-text">Happens-before</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E6%8C%87%E4%BB%A4%E9%87%8D%E6%8E%92%E5%BA%8F"><span class="toc-number">2.3.</span> <span class="toc-text">指令重排序</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#%E6%95%B0%E6%8D%AE%E4%BE%9D%E8%80%90%E6%80%A7"><span class="toc-number">2.3.1.</span> <span class="toc-text">数据依耐性</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#as-if-serial"><span class="toc-number">2.3.2.</span> <span class="toc-text">as-if-serial</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E5%86%85%E5%AD%98%E5%B1%8F%E9%9A%9C"><span class="toc-number">2.3.3.</span> <span class="toc-text">内存屏障</span></a></li></ol></li></ol></li></ol>
  
   </div>
 
@@ -414,7 +422,7 @@
   <div class="tagcloudlist">
     <p class="asidetitle">标签云</p>
     <div class="tagcloudlist clearfix">
-       <a href="/tags/Adam/" style="font-size: 10px;">Adam</a> <a href="/tags/BGD/" style="font-size: 10px;">BGD</a> <a href="/tags/Cassandra/" style="font-size: 11.67px;">Cassandra</a> <a href="/tags/Druid/" style="font-size: 16.67px;">Druid</a> <a href="/tags/JVM/" style="font-size: 10px;">JVM</a> <a href="/tags/Java/" style="font-size: 10px;">Java</a> <a href="/tags/LCS/" style="font-size: 10px;">LCS</a> <a href="/tags/Momentum/" style="font-size: 10px;">Momentum</a> <a href="/tags/MySQL/" style="font-size: 10px;">MySQL</a> <a href="/tags/NOSQL/" style="font-size: 11.67px;">NOSQL</a> <a href="/tags/SGD/" style="font-size: 10px;">SGD</a> <a href="/tags/Spring-Boot/" style="font-size: 10px;">Spring Boot</a> <a href="/tags/Sytle-Transfer/" style="font-size: 10px;">Sytle Transfer</a> <a href="/tags/Weight-initialization/" style="font-size: 10px;">Weight initialization</a> <a href="/tags/algorithms/" style="font-size: 10px;">algorithms</a> <a href="/tags/bash/" style="font-size: 10px;">bash</a> <a href="/tags/dynamic-programming/" style="font-size: 10px;">dynamic programming</a> <a href="/tags/hexo/" style="font-size: 10px;">hexo</a> <a href="/tags/java/" style="font-size: 10px;">java</a> <a href="/tags/k-邻近法/" style="font-size: 11.67px;">k 邻近法</a> <a href="/tags/knn/" style="font-size: 11.67px;">knn</a> <a href="/tags/linux/" style="font-size: 10px;">linux</a> <a href="/tags/macOS/" style="font-size: 10px;">macOS</a> <a href="/tags/parallelStream/" style="font-size: 10px;">parallelStream</a> <a href="/tags/quicklist/" style="font-size: 10px;">quicklist</a> <a href="/tags/redis/" style="font-size: 10px;">redis</a> <a href="/tags/stream/" style="font-size: 10px;">stream</a> <a href="/tags/utf8/" style="font-size: 10px;">utf8</a> <a href="/tags/utf8mb4/" style="font-size: 10px;">utf8mb4</a> <a href="/tags/ziplist/" style="font-size: 10px;">ziplist</a> <a href="/tags/内存模型/" style="font-size: 10px;">内存模型</a> <a href="/tags/分布式/" style="font-size: 18.33px;">分布式</a> <a href="/tags/多线程/" style="font-size: 10px;">多线程</a> <a href="/tags/实时计算/" style="font-size: 16.67px;">实时计算</a> <a href="/tags/异常处理/" style="font-size: 10px;">异常处理</a> <a href="/tags/异常表/" style="font-size: 10px;">异常表</a> <a href="/tags/感知机/" style="font-size: 10px;">感知机</a> <a href="/tags/数据结构/" style="font-size: 10px;">数据结构</a> <a href="/tags/最大熵模型/" style="font-size: 10px;">最大熵模型</a> <a href="/tags/朴素贝叶斯/" style="font-size: 10px;">朴素贝叶斯</a> <a href="/tags/机器学习/" style="font-size: 16.67px;">机器学习</a> <a href="/tags/杂/" style="font-size: 16.67px;">杂</a> <a href="/tags/梯度下降/" style="font-size: 10px;">梯度下降</a> <a href="/tags/深度学习/" style="font-size: 13.33px;">深度学习</a> <a href="/tags/源码分析/" style="font-size: 10px;">源码分析</a> <a href="/tags/生成/" style="font-size: 10px;">生成</a> <a href="/tags/生活/" style="font-size: 15px;">生活</a> <a href="/tags/笔记/" style="font-size: 20px;">笔记</a> <a href="/tags/统计学习/" style="font-size: 16.67px;">统计学习</a> <a href="/tags/编码/" style="font-size: 10px;">编码</a> <a href="/tags/自驾/" style="font-size: 15px;">自驾</a> <a href="/tags/调参/" style="font-size: 11.67px;">调参</a> <a href="/tags/跨域/" style="font-size: 10px;">跨域</a> <a href="/tags/踩坑日志/" style="font-size: 10px;">踩坑日志</a> <a href="/tags/逻辑斯谛回归/" style="font-size: 10px;">逻辑斯谛回归</a> <a href="/tags/配置/" style="font-size: 10px;">配置</a> <a href="/tags/风格迁移/" style="font-size: 10px;">风格迁移</a>
+       <a href="/tags/Adam/" style="font-size: 10px;">Adam</a> <a href="/tags/BGD/" style="font-size: 10px;">BGD</a> <a href="/tags/Cassandra/" style="font-size: 11.67px;">Cassandra</a> <a href="/tags/Druid/" style="font-size: 16.67px;">Druid</a> <a href="/tags/JVM/" style="font-size: 10px;">JVM</a> <a href="/tags/Java/" style="font-size: 10px;">Java</a> <a href="/tags/LCS/" style="font-size: 10px;">LCS</a> <a href="/tags/Momentum/" style="font-size: 10px;">Momentum</a> <a href="/tags/MySQL/" style="font-size: 10px;">MySQL</a> <a href="/tags/NOSQL/" style="font-size: 11.67px;">NOSQL</a> <a href="/tags/SGD/" style="font-size: 10px;">SGD</a> <a href="/tags/Spring-Boot/" style="font-size: 10px;">Spring Boot</a> <a href="/tags/Sytle-Transfer/" style="font-size: 10px;">Sytle Transfer</a> <a href="/tags/Weight-initialization/" style="font-size: 10px;">Weight initialization</a> <a href="/tags/algorithms/" style="font-size: 10px;">algorithms</a> <a href="/tags/bash/" style="font-size: 10px;">bash</a> <a href="/tags/dynamic-programming/" style="font-size: 10px;">dynamic programming</a> <a href="/tags/hexo/" style="font-size: 10px;">hexo</a> <a href="/tags/java/" style="font-size: 10px;">java</a> <a href="/tags/k-%E9%82%BB%E8%BF%91%E6%B3%95/" style="font-size: 11.67px;">k 邻近法</a> <a href="/tags/knn/" style="font-size: 11.67px;">knn</a> <a href="/tags/linux/" style="font-size: 10px;">linux</a> <a href="/tags/macOS/" style="font-size: 10px;">macOS</a> <a href="/tags/parallelStream/" style="font-size: 10px;">parallelStream</a> <a href="/tags/quicklist/" style="font-size: 10px;">quicklist</a> <a href="/tags/redis/" style="font-size: 10px;">redis</a> <a href="/tags/stream/" style="font-size: 10px;">stream</a> <a href="/tags/utf8/" style="font-size: 10px;">utf8</a> <a href="/tags/utf8mb4/" style="font-size: 10px;">utf8mb4</a> <a href="/tags/ziplist/" style="font-size: 10px;">ziplist</a> <a href="/tags/%E5%86%85%E5%AD%98%E6%A8%A1%E5%9E%8B/" style="font-size: 10px;">内存模型</a> <a href="/tags/%E5%88%86%E5%B8%83%E5%BC%8F/" style="font-size: 18.33px;">分布式</a> <a href="/tags/%E5%A4%9A%E7%BA%BF%E7%A8%8B/" style="font-size: 10px;">多线程</a> <a href="/tags/%E5%AE%9E%E6%97%B6%E8%AE%A1%E7%AE%97/" style="font-size: 16.67px;">实时计算</a> <a href="/tags/%E5%BC%82%E5%B8%B8%E5%A4%84%E7%90%86/" style="font-size: 10px;">异常处理</a> <a href="/tags/%E5%BC%82%E5%B8%B8%E8%A1%A8/" style="font-size: 10px;">异常表</a> <a href="/tags/%E6%84%9F%E7%9F%A5%E6%9C%BA/" style="font-size: 10px;">感知机</a> <a href="/tags/%E6%95%B0%E6%8D%AE%E7%BB%93%E6%9E%84/" style="font-size: 10px;">数据结构</a> <a href="/tags/%E6%9C%80%E5%A4%A7%E7%86%B5%E6%A8%A1%E5%9E%8B/" style="font-size: 10px;">最大熵模型</a> <a href="/tags/%E6%9C%B4%E7%B4%A0%E8%B4%9D%E5%8F%B6%E6%96%AF/" style="font-size: 10px;">朴素贝叶斯</a> <a href="/tags/%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0/" style="font-size: 16.67px;">机器学习</a> <a href="/tags/%E6%9D%82/" style="font-size: 16.67px;">杂</a> <a href="/tags/%E6%A2%AF%E5%BA%A6%E4%B8%8B%E9%99%8D/" style="font-size: 10px;">梯度下降</a> <a href="/tags/%E6%B7%B1%E5%BA%A6%E5%AD%A6%E4%B9%A0/" style="font-size: 13.33px;">深度学习</a> <a href="/tags/%E6%BA%90%E7%A0%81%E5%88%86%E6%9E%90/" style="font-size: 10px;">源码分析</a> <a href="/tags/%E7%94%9F%E6%88%90/" style="font-size: 10px;">生成</a> <a href="/tags/%E7%94%9F%E6%B4%BB/" style="font-size: 15px;">生活</a> <a href="/tags/%E7%AC%94%E8%AE%B0/" style="font-size: 20px;">笔记</a> <a href="/tags/%E7%BB%9F%E8%AE%A1%E5%AD%A6%E4%B9%A0/" style="font-size: 16.67px;">统计学习</a> <a href="/tags/%E7%BC%96%E7%A0%81/" style="font-size: 10px;">编码</a> <a href="/tags/%E8%87%AA%E9%A9%BE/" style="font-size: 15px;">自驾</a> <a href="/tags/%E8%B0%83%E5%8F%82/" style="font-size: 11.67px;">调参</a> <a href="/tags/%E8%B7%A8%E5%9F%9F/" style="font-size: 10px;">跨域</a> <a href="/tags/%E8%B8%A9%E5%9D%91%E6%97%A5%E5%BF%97/" style="font-size: 10px;">踩坑日志</a> <a href="/tags/%E9%80%BB%E8%BE%91%E6%96%AF%E8%B0%9B%E5%9B%9E%E5%BD%92/" style="font-size: 10px;">逻辑斯谛回归</a> <a href="/tags/%E9%85%8D%E7%BD%AE/" style="font-size: 10px;">配置</a> <a href="/tags/%E9%A3%8E%E6%A0%BC%E8%BF%81%E7%A7%BB/" style="font-size: 10px;">风格迁移</a>
     </div>
   </div>
 

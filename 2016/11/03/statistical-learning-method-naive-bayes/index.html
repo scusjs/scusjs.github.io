@@ -1,7 +1,7 @@
 
  <!DOCTYPE HTML>
 <html lang="zh-CN">
-<head><meta name="generator" content="Hexo 3.9.0">
+<head>
   <meta charset="UTF-8">
   
     <title>统计学习方法（笔记）-朴素贝叶斯法 | Liexing&#39;s Blog</title>
@@ -11,18 +11,21 @@
     
 
     
-    <meta name="description" content="朴素贝叶斯（naïve Bayes）法是基于被也是定力与特征条件独立假设的分布方法。首先对于训练数据集，基于特征条件独立假设学习输入输出的联合概率分布，然后对于给定的输入，利用贝叶斯定理求出后验概率最大的输出。 朴素贝叶斯法的学习与分类朴素贝叶斯法是典型的生成学习方法。利用训练数据学习$P(X|Y)$和$P(Y)$的估计，得到联合概率分布 $$P(X,Y) = P(X)P(X|Y)$$ 概率估计方">
-<meta name="keywords" content="笔记,统计学习,机器学习,朴素贝叶斯">
+    <meta name="description" content="朴素贝叶斯（naïve Bayes）法是基于被也是定力与特征条件独立假设的分布方法。首先对于训练数据集，基于特征条件独立假设学习输入输出的联合概率分布，然后对于给定的输入，利用贝叶斯定理求出后验概率最大的输出。 朴素贝叶斯法的学习与分类朴素贝叶斯法是典型的生成学习方法。利用训练数据学习$P(X|Y)$和$P(Y)$的估计，得到联合概率分布 $$P(X,Y) &#x3D; P(X)P(X|Y)$$">
 <meta property="og:type" content="article">
 <meta property="og:title" content="统计学习方法（笔记）-朴素贝叶斯法">
 <meta property="og:url" content="http://blog.liexing.me/2016/11/03/statistical-learning-method-naive-bayes/index.html">
 <meta property="og:site_name" content="Liexing&#39;s Blog">
-<meta property="og:description" content="朴素贝叶斯（naïve Bayes）法是基于被也是定力与特征条件独立假设的分布方法。首先对于训练数据集，基于特征条件独立假设学习输入输出的联合概率分布，然后对于给定的输入，利用贝叶斯定理求出后验概率最大的输出。 朴素贝叶斯法的学习与分类朴素贝叶斯法是典型的生成学习方法。利用训练数据学习$P(X|Y)$和$P(Y)$的估计，得到联合概率分布 $$P(X,Y) = P(X)P(X|Y)$$ 概率估计方">
-<meta property="og:locale" content="zh-CN">
-<meta property="og:updated_time" content="2023-01-20T15:04:29.747Z">
+<meta property="og:description" content="朴素贝叶斯（naïve Bayes）法是基于被也是定力与特征条件独立假设的分布方法。首先对于训练数据集，基于特征条件独立假设学习输入输出的联合概率分布，然后对于给定的输入，利用贝叶斯定理求出后验概率最大的输出。 朴素贝叶斯法的学习与分类朴素贝叶斯法是典型的生成学习方法。利用训练数据学习$P(X|Y)$和$P(Y)$的估计，得到联合概率分布 $$P(X,Y) &#x3D; P(X)P(X|Y)$$">
+<meta property="og:locale" content="zh_CN">
+<meta property="article:published_time" content="2016-11-03T12:52:47.000Z">
+<meta property="article:modified_time" content="2023-01-20T15:04:29.747Z">
+<meta property="article:author" content="liexing">
+<meta property="article:tag" content="笔记">
+<meta property="article:tag" content="统计学习">
+<meta property="article:tag" content="机器学习">
+<meta property="article:tag" content="朴素贝叶斯">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:title" content="统计学习方法（笔记）-朴素贝叶斯法">
-<meta name="twitter:description" content="朴素贝叶斯（naïve Bayes）法是基于被也是定力与特征条件独立假设的分布方法。首先对于训练数据集，基于特征条件独立假设学习输入输出的联合概率分布，然后对于给定的输入，利用贝叶斯定理求出后验概率最大的输出。 朴素贝叶斯法的学习与分类朴素贝叶斯法是典型的生成学习方法。利用训练数据学习$P(X|Y)$和$P(Y)$的估计，得到联合概率分布 $$P(X,Y) = P(X)P(X|Y)$$ 概率估计方">
 <meta name="twitter:creator" content="@scusjs">
 
     
@@ -36,9 +39,11 @@
     <link rel="apple-touch-icon-precomposed" href="/img/favicon.jpg">
     
     <link rel="stylesheet" href="//cdn.bootcss.com/font-awesome/4.3.0/css/font-awesome.min.css">
-    <link rel="stylesheet" href="/css/style.css">
-</head>
-</html>
+    
+<link rel="stylesheet" href="/css/style.css">
+
+<meta name="generator" content="Hexo 6.3.0"></head>
+
   <body>
     <header>
       
@@ -104,28 +109,28 @@
         <div id="toc" class="toc-article">
             <strong class="toc-title">文章目录</strong>
         
-            <ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link" href="#朴素贝叶斯法的学习与分类"><span class="toc-number">1.</span> <span class="toc-text">朴素贝叶斯法的学习与分类</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#朴素贝叶斯法的参数估计"><span class="toc-number">2.</span> <span class="toc-text">朴素贝叶斯法的参数估计</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#极大似然估计"><span class="toc-number">2.1.</span> <span class="toc-text">极大似然估计</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#贝叶斯估计"><span class="toc-number">2.2.</span> <span class="toc-text">贝叶斯估计</span></a></li></ol></li></ol>
+            <ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link" href="#%E6%9C%B4%E7%B4%A0%E8%B4%9D%E5%8F%B6%E6%96%AF%E6%B3%95%E7%9A%84%E5%AD%A6%E4%B9%A0%E4%B8%8E%E5%88%86%E7%B1%BB"><span class="toc-number">1.</span> <span class="toc-text">朴素贝叶斯法的学习与分类</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#%E6%9C%B4%E7%B4%A0%E8%B4%9D%E5%8F%B6%E6%96%AF%E6%B3%95%E7%9A%84%E5%8F%82%E6%95%B0%E4%BC%B0%E8%AE%A1"><span class="toc-number">2.</span> <span class="toc-text">朴素贝叶斯法的参数估计</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#%E6%9E%81%E5%A4%A7%E4%BC%BC%E7%84%B6%E4%BC%B0%E8%AE%A1"><span class="toc-number">2.1.</span> <span class="toc-text">极大似然估计</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E8%B4%9D%E5%8F%B6%E6%96%AF%E4%BC%B0%E8%AE%A1"><span class="toc-number">2.2.</span> <span class="toc-text">贝叶斯估计</span></a></li></ol></li></ol>
         
         </div>
         
         <p>朴素贝叶斯（naïve Bayes）法是基于被也是定力与特征条件独立假设的分布方法。首先对于训练数据集，基于特征条件独立假设学习输入输出的联合概率分布，然后对于给定的输入，利用贝叶斯定理求出后验概率最大的输出。</p>
 <h1 id="朴素贝叶斯法的学习与分类"><a href="#朴素贝叶斯法的学习与分类" class="headerlink" title="朴素贝叶斯法的学习与分类"></a>朴素贝叶斯法的学习与分类</h1><p>朴素贝叶斯法是典型的生成学习方法。利用训练数据学习$P(X|Y)$和$P(Y)$的估计，得到联合概率分布</p>
-<p>$$P(X,Y) = P(X)P(X|Y)$$</p>
+<p>$$P(X,Y) &#x3D; P(X)P(X|Y)$$</p>
 <p>概率估计方法可以是极大似然估计或者贝叶斯估计。</p>
 <p>朴素贝叶斯法的基本假设使条件独立性。</p>
-<p>$$P(X=x|Y=c_k)=P(X^{(1)}=x^{(1)},…,X^{(n)}=x^{(n)}|Y=c_k)\\ =\prod \limits_{j=1}^nP(X^{(j)}=x^{(j)}|Y=c_k)$$</p>
+<p>$$P(X&#x3D;x|Y&#x3D;c_k)&#x3D;P(X^{(1)}&#x3D;x^{(1)},…,X^{(n)}&#x3D;x^{(n)}|Y&#x3D;c_k)\\ &#x3D;\prod \limits_{j&#x3D;1}^nP(X^{(j)}&#x3D;x^{(j)}|Y&#x3D;c_k)$$</p>
 <p>条件独立假设使朴素贝叶斯法变得简单，但是有时候会牺牲一定的分类准确率。</p>
 <p>朴素贝叶斯法利用贝叶斯定理与学到的联合概率模型进行分类预测，将输入的 x 分到后验概率最大的类 y：</p>
-<p>$$y=\arg \max _{c_k}P(Y=c_k)\prod \limits_{j=1}^nP(X^{(j)}=x^{(j)}|Y=c_k)$$</p>
+<p>$$y&#x3D;\arg \max <em>{c_k}P(Y&#x3D;c_k)\prod \limits</em>{j&#x3D;1}^nP(X^{(j)}&#x3D;x^{(j)}|Y&#x3D;c_k)$$</p>
 <p>后验概率最大等价于0-1函数损失时的期望风险最小化。</p>
-<h1 id="朴素贝叶斯法的参数估计"><a href="#朴素贝叶斯法的参数估计" class="headerlink" title="朴素贝叶斯法的参数估计"></a>朴素贝叶斯法的参数估计</h1><p>在朴素贝叶斯法中，学习即估计$P(Y=c_k)$和$P(X^{(j)}=x^{(j)}|Y=c_k)$</p>
-<h2 id="极大似然估计"><a href="#极大似然估计" class="headerlink" title="极大似然估计"></a>极大似然估计</h2><p>先验概率$P(Y=c_k)$的极大似然估计是：</p>
-<p>$$P(Y=c_k)=\frac{\sum \limits_{i=1}^NI(y_i=c_k)}{N},\quad k=1,2,…,K$$</p>
+<h1 id="朴素贝叶斯法的参数估计"><a href="#朴素贝叶斯法的参数估计" class="headerlink" title="朴素贝叶斯法的参数估计"></a>朴素贝叶斯法的参数估计</h1><p>在朴素贝叶斯法中，学习即估计$P(Y&#x3D;c_k)$和$P(X^{(j)}&#x3D;x^{(j)}|Y&#x3D;c_k)$</p>
+<h2 id="极大似然估计"><a href="#极大似然估计" class="headerlink" title="极大似然估计"></a>极大似然估计</h2><p>先验概率$P(Y&#x3D;c_k)$的极大似然估计是：</p>
+<p>$$P(Y&#x3D;c_k)&#x3D;\frac{\sum \limits_{i&#x3D;1}^NI(y_i&#x3D;c_k)}{N},\quad k&#x3D;1,2,…,K$$</p>
 <p>设第 j 个特征$x^{(j)}$可能取值集合为${a_{j1},a_{j2},…,a_{jS_j} }$，则条件概率为：</p>
-<p>$$P(X^{(j)}=a_{jl}|Y=c_k)=\frac{\sum \limits_{i=1}^NI(x_i^{(j)}=a_{jl},y_i=c_k)}{\sum \limits_{i=1}^NI(y_i=c_k)}\ j=1,2,…,n;\quad l=1,2,…S;\quad k=1,2,…,K$$</p>
+<p>$$P(X^{(j)}&#x3D;a_{jl}|Y&#x3D;c_k)&#x3D;\frac{\sum \limits_{i&#x3D;1}^NI(x_i^{(j)}&#x3D;a_{jl},y_i&#x3D;c_k)}{\sum \limits_{i&#x3D;1}^NI(y_i&#x3D;c_k)}\ j&#x3D;1,2,…,n;\quad l&#x3D;1,2,…S;\quad k&#x3D;1,2,…,K$$</p>
 <h2 id="贝叶斯估计"><a href="#贝叶斯估计" class="headerlink" title="贝叶斯估计"></a>贝叶斯估计</h2><p>极大似然估计可能会出现估计的概率值为 0 的情况，这会影响到后验概率的计算结果。可以使用贝叶斯估计来解决这一问题。贝叶斯估计即加入一个系数防止0情况出现。</p>
-<p>$$P_\lambda(Y=c_k)=\frac{\sum \limits_{i=1}^NI(y_i=c_k)+\lambda}{N+K\lambda},\quad k=1,2,…,K$$</p>
-<p>$$P_\lambda(X^{(j)}=a_{jl}|Y=c_k)=\frac{\sum \limits_{i=1}^NI(x_i^{(j)}=a_{jl},y_i=c_k)+\lambda}{\sum \limits_{i=1}^NI(y_i=c_k)+S_j\lambda}\ j=1,2,…,n;\quad l=1,2,…S;\quad k=1,2,…,K$$</p>
+<p>$$P_\lambda(Y&#x3D;c_k)&#x3D;\frac{\sum \limits_{i&#x3D;1}^NI(y_i&#x3D;c_k)+\lambda}{N+K\lambda},\quad k&#x3D;1,2,…,K$$</p>
+<p>$$P_\lambda(X^{(j)}&#x3D;a_{jl}|Y&#x3D;c_k)&#x3D;\frac{\sum \limits_{i&#x3D;1}^NI(x_i^{(j)}&#x3D;a_{jl},y_i&#x3D;c_k)+\lambda}{\sum \limits_{i&#x3D;1}^NI(y_i&#x3D;c_k)+S_j\lambda}\ j&#x3D;1,2,…,n;\quad l&#x3D;1,2,…S;\quad k&#x3D;1,2,…,K$$</p>
 <p>上面两式中，$\lambda\geq0$，当取1时，称为拉普拉斯平滑。</p>
 
     </div>
@@ -235,7 +240,7 @@
 
 <div class="article-categories">
   <span></span>
-  <a class="article-category-link" href="/categories/统计学习/">统计学习</a>
+  <a class="article-category-link" href="/categories/%E7%BB%9F%E8%AE%A1%E5%AD%A6%E4%B9%A0/">统计学习</a>
 </div>
 
 
@@ -286,7 +291,7 @@
 
 <section id="comments" class="comment">
   <div id="disqus_thread">
-    <noscript>Please enable JavaScript to view the <a href="//disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
+    <noscript>Please enable JavaScript to view the <a target="_blank" rel="noopener" href="//disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
   </div>
 </section>
 
@@ -297,7 +302,7 @@
   <div id="toc" class="toc-aside">
   <strong class="toc-title">文章目录</strong>
  
- <ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link" href="#朴素贝叶斯法的学习与分类"><span class="toc-number">1.</span> <span class="toc-text">朴素贝叶斯法的学习与分类</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#朴素贝叶斯法的参数估计"><span class="toc-number">2.</span> <span class="toc-text">朴素贝叶斯法的参数估计</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#极大似然估计"><span class="toc-number">2.1.</span> <span class="toc-text">极大似然估计</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#贝叶斯估计"><span class="toc-number">2.2.</span> <span class="toc-text">贝叶斯估计</span></a></li></ol></li></ol>
+ <ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link" href="#%E6%9C%B4%E7%B4%A0%E8%B4%9D%E5%8F%B6%E6%96%AF%E6%B3%95%E7%9A%84%E5%AD%A6%E4%B9%A0%E4%B8%8E%E5%88%86%E7%B1%BB"><span class="toc-number">1.</span> <span class="toc-text">朴素贝叶斯法的学习与分类</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#%E6%9C%B4%E7%B4%A0%E8%B4%9D%E5%8F%B6%E6%96%AF%E6%B3%95%E7%9A%84%E5%8F%82%E6%95%B0%E4%BC%B0%E8%AE%A1"><span class="toc-number">2.</span> <span class="toc-text">朴素贝叶斯法的参数估计</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#%E6%9E%81%E5%A4%A7%E4%BC%BC%E7%84%B6%E4%BC%B0%E8%AE%A1"><span class="toc-number">2.1.</span> <span class="toc-text">极大似然估计</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E8%B4%9D%E5%8F%B6%E6%96%AF%E4%BC%B0%E8%AE%A1"><span class="toc-number">2.2.</span> <span class="toc-text">贝叶斯估计</span></a></li></ol></li></ol>
  
   </div>
 
@@ -392,7 +397,7 @@
   <div class="tagcloudlist">
     <p class="asidetitle">标签云</p>
     <div class="tagcloudlist clearfix">
-       <a href="/tags/Adam/" style="font-size: 10px;">Adam</a> <a href="/tags/BGD/" style="font-size: 10px;">BGD</a> <a href="/tags/Cassandra/" style="font-size: 11.67px;">Cassandra</a> <a href="/tags/Druid/" style="font-size: 16.67px;">Druid</a> <a href="/tags/JVM/" style="font-size: 10px;">JVM</a> <a href="/tags/Java/" style="font-size: 10px;">Java</a> <a href="/tags/LCS/" style="font-size: 10px;">LCS</a> <a href="/tags/Momentum/" style="font-size: 10px;">Momentum</a> <a href="/tags/MySQL/" style="font-size: 10px;">MySQL</a> <a href="/tags/NOSQL/" style="font-size: 11.67px;">NOSQL</a> <a href="/tags/SGD/" style="font-size: 10px;">SGD</a> <a href="/tags/Spring-Boot/" style="font-size: 10px;">Spring Boot</a> <a href="/tags/Sytle-Transfer/" style="font-size: 10px;">Sytle Transfer</a> <a href="/tags/Weight-initialization/" style="font-size: 10px;">Weight initialization</a> <a href="/tags/algorithms/" style="font-size: 10px;">algorithms</a> <a href="/tags/bash/" style="font-size: 10px;">bash</a> <a href="/tags/dynamic-programming/" style="font-size: 10px;">dynamic programming</a> <a href="/tags/hexo/" style="font-size: 10px;">hexo</a> <a href="/tags/java/" style="font-size: 10px;">java</a> <a href="/tags/k-邻近法/" style="font-size: 11.67px;">k 邻近法</a> <a href="/tags/knn/" style="font-size: 11.67px;">knn</a> <a href="/tags/linux/" style="font-size: 10px;">linux</a> <a href="/tags/macOS/" style="font-size: 10px;">macOS</a> <a href="/tags/parallelStream/" style="font-size: 10px;">parallelStream</a> <a href="/tags/quicklist/" style="font-size: 10px;">quicklist</a> <a href="/tags/redis/" style="font-size: 10px;">redis</a> <a href="/tags/stream/" style="font-size: 10px;">stream</a> <a href="/tags/utf8/" style="font-size: 10px;">utf8</a> <a href="/tags/utf8mb4/" style="font-size: 10px;">utf8mb4</a> <a href="/tags/ziplist/" style="font-size: 10px;">ziplist</a> <a href="/tags/内存模型/" style="font-size: 10px;">内存模型</a> <a href="/tags/分布式/" style="font-size: 18.33px;">分布式</a> <a href="/tags/多线程/" style="font-size: 10px;">多线程</a> <a href="/tags/实时计算/" style="font-size: 16.67px;">实时计算</a> <a href="/tags/异常处理/" style="font-size: 10px;">异常处理</a> <a href="/tags/异常表/" style="font-size: 10px;">异常表</a> <a href="/tags/感知机/" style="font-size: 10px;">感知机</a> <a href="/tags/数据结构/" style="font-size: 10px;">数据结构</a> <a href="/tags/最大熵模型/" style="font-size: 10px;">最大熵模型</a> <a href="/tags/朴素贝叶斯/" style="font-size: 10px;">朴素贝叶斯</a> <a href="/tags/机器学习/" style="font-size: 16.67px;">机器学习</a> <a href="/tags/杂/" style="font-size: 16.67px;">杂</a> <a href="/tags/梯度下降/" style="font-size: 10px;">梯度下降</a> <a href="/tags/深度学习/" style="font-size: 13.33px;">深度学习</a> <a href="/tags/源码分析/" style="font-size: 10px;">源码分析</a> <a href="/tags/生成/" style="font-size: 10px;">生成</a> <a href="/tags/生活/" style="font-size: 15px;">生活</a> <a href="/tags/笔记/" style="font-size: 20px;">笔记</a> <a href="/tags/统计学习/" style="font-size: 16.67px;">统计学习</a> <a href="/tags/编码/" style="font-size: 10px;">编码</a> <a href="/tags/自驾/" style="font-size: 15px;">自驾</a> <a href="/tags/调参/" style="font-size: 11.67px;">调参</a> <a href="/tags/跨域/" style="font-size: 10px;">跨域</a> <a href="/tags/踩坑日志/" style="font-size: 10px;">踩坑日志</a> <a href="/tags/逻辑斯谛回归/" style="font-size: 10px;">逻辑斯谛回归</a> <a href="/tags/配置/" style="font-size: 10px;">配置</a> <a href="/tags/风格迁移/" style="font-size: 10px;">风格迁移</a>
+       <a href="/tags/Adam/" style="font-size: 10px;">Adam</a> <a href="/tags/BGD/" style="font-size: 10px;">BGD</a> <a href="/tags/Cassandra/" style="font-size: 11.67px;">Cassandra</a> <a href="/tags/Druid/" style="font-size: 16.67px;">Druid</a> <a href="/tags/JVM/" style="font-size: 10px;">JVM</a> <a href="/tags/Java/" style="font-size: 10px;">Java</a> <a href="/tags/LCS/" style="font-size: 10px;">LCS</a> <a href="/tags/Momentum/" style="font-size: 10px;">Momentum</a> <a href="/tags/MySQL/" style="font-size: 10px;">MySQL</a> <a href="/tags/NOSQL/" style="font-size: 11.67px;">NOSQL</a> <a href="/tags/SGD/" style="font-size: 10px;">SGD</a> <a href="/tags/Spring-Boot/" style="font-size: 10px;">Spring Boot</a> <a href="/tags/Sytle-Transfer/" style="font-size: 10px;">Sytle Transfer</a> <a href="/tags/Weight-initialization/" style="font-size: 10px;">Weight initialization</a> <a href="/tags/algorithms/" style="font-size: 10px;">algorithms</a> <a href="/tags/bash/" style="font-size: 10px;">bash</a> <a href="/tags/dynamic-programming/" style="font-size: 10px;">dynamic programming</a> <a href="/tags/hexo/" style="font-size: 10px;">hexo</a> <a href="/tags/java/" style="font-size: 10px;">java</a> <a href="/tags/k-%E9%82%BB%E8%BF%91%E6%B3%95/" style="font-size: 11.67px;">k 邻近法</a> <a href="/tags/knn/" style="font-size: 11.67px;">knn</a> <a href="/tags/linux/" style="font-size: 10px;">linux</a> <a href="/tags/macOS/" style="font-size: 10px;">macOS</a> <a href="/tags/parallelStream/" style="font-size: 10px;">parallelStream</a> <a href="/tags/quicklist/" style="font-size: 10px;">quicklist</a> <a href="/tags/redis/" style="font-size: 10px;">redis</a> <a href="/tags/stream/" style="font-size: 10px;">stream</a> <a href="/tags/utf8/" style="font-size: 10px;">utf8</a> <a href="/tags/utf8mb4/" style="font-size: 10px;">utf8mb4</a> <a href="/tags/ziplist/" style="font-size: 10px;">ziplist</a> <a href="/tags/%E5%86%85%E5%AD%98%E6%A8%A1%E5%9E%8B/" style="font-size: 10px;">内存模型</a> <a href="/tags/%E5%88%86%E5%B8%83%E5%BC%8F/" style="font-size: 18.33px;">分布式</a> <a href="/tags/%E5%A4%9A%E7%BA%BF%E7%A8%8B/" style="font-size: 10px;">多线程</a> <a href="/tags/%E5%AE%9E%E6%97%B6%E8%AE%A1%E7%AE%97/" style="font-size: 16.67px;">实时计算</a> <a href="/tags/%E5%BC%82%E5%B8%B8%E5%A4%84%E7%90%86/" style="font-size: 10px;">异常处理</a> <a href="/tags/%E5%BC%82%E5%B8%B8%E8%A1%A8/" style="font-size: 10px;">异常表</a> <a href="/tags/%E6%84%9F%E7%9F%A5%E6%9C%BA/" style="font-size: 10px;">感知机</a> <a href="/tags/%E6%95%B0%E6%8D%AE%E7%BB%93%E6%9E%84/" style="font-size: 10px;">数据结构</a> <a href="/tags/%E6%9C%80%E5%A4%A7%E7%86%B5%E6%A8%A1%E5%9E%8B/" style="font-size: 10px;">最大熵模型</a> <a href="/tags/%E6%9C%B4%E7%B4%A0%E8%B4%9D%E5%8F%B6%E6%96%AF/" style="font-size: 10px;">朴素贝叶斯</a> <a href="/tags/%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0/" style="font-size: 16.67px;">机器学习</a> <a href="/tags/%E6%9D%82/" style="font-size: 16.67px;">杂</a> <a href="/tags/%E6%A2%AF%E5%BA%A6%E4%B8%8B%E9%99%8D/" style="font-size: 10px;">梯度下降</a> <a href="/tags/%E6%B7%B1%E5%BA%A6%E5%AD%A6%E4%B9%A0/" style="font-size: 13.33px;">深度学习</a> <a href="/tags/%E6%BA%90%E7%A0%81%E5%88%86%E6%9E%90/" style="font-size: 10px;">源码分析</a> <a href="/tags/%E7%94%9F%E6%88%90/" style="font-size: 10px;">生成</a> <a href="/tags/%E7%94%9F%E6%B4%BB/" style="font-size: 15px;">生活</a> <a href="/tags/%E7%AC%94%E8%AE%B0/" style="font-size: 20px;">笔记</a> <a href="/tags/%E7%BB%9F%E8%AE%A1%E5%AD%A6%E4%B9%A0/" style="font-size: 16.67px;">统计学习</a> <a href="/tags/%E7%BC%96%E7%A0%81/" style="font-size: 10px;">编码</a> <a href="/tags/%E8%87%AA%E9%A9%BE/" style="font-size: 15px;">自驾</a> <a href="/tags/%E8%B0%83%E5%8F%82/" style="font-size: 11.67px;">调参</a> <a href="/tags/%E8%B7%A8%E5%9F%9F/" style="font-size: 10px;">跨域</a> <a href="/tags/%E8%B8%A9%E5%9D%91%E6%97%A5%E5%BF%97/" style="font-size: 10px;">踩坑日志</a> <a href="/tags/%E9%80%BB%E8%BE%91%E6%96%AF%E8%B0%9B%E5%9B%9E%E5%BD%92/" style="font-size: 10px;">逻辑斯谛回归</a> <a href="/tags/%E9%85%8D%E7%BD%AE/" style="font-size: 10px;">配置</a> <a href="/tags/%E9%A3%8E%E6%A0%BC%E8%BF%81%E7%A7%BB/" style="font-size: 10px;">风格迁移</a>
     </div>
   </div>
 

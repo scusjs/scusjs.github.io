@@ -1,7 +1,7 @@
 
  <!DOCTYPE HTML>
 <html lang="zh-CN">
-<head><meta name="generator" content="Hexo 3.9.0">
+<head>
   <meta charset="UTF-8">
   
     <title>Druid Indexing Service（索引服务） | Liexing&#39;s Blog</title>
@@ -12,18 +12,20 @@
 
     
     <meta name="description" content="Indexing Service 是 Druid 的一个核心组件，用来对数据进行索引，控制Druid的段的产生以及销毁。">
-<meta name="keywords" content="分布式,Druid,实时计算">
 <meta property="og:type" content="article">
 <meta property="og:title" content="Druid Indexing Service（索引服务）">
 <meta property="og:url" content="http://blog.liexing.me/2016/04/15/druid-indexing-service/index.html">
 <meta property="og:site_name" content="Liexing&#39;s Blog">
 <meta property="og:description" content="Indexing Service 是 Druid 的一个核心组件，用来对数据进行索引，控制Druid的段的产生以及销毁。">
-<meta property="og:locale" content="zh-CN">
+<meta property="og:locale" content="zh_CN">
 <meta property="og:image" content="http://blog.liexing.me/images/druid-indexing-service/14605158741221.png">
-<meta property="og:updated_time" content="2023-01-20T15:04:29.746Z">
+<meta property="article:published_time" content="2016-04-15T02:47:47.000Z">
+<meta property="article:modified_time" content="2023-01-20T15:04:29.746Z">
+<meta property="article:author" content="liexing">
+<meta property="article:tag" content="分布式">
+<meta property="article:tag" content="Druid">
+<meta property="article:tag" content="实时计算">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:title" content="Druid Indexing Service（索引服务）">
-<meta name="twitter:description" content="Indexing Service 是 Druid 的一个核心组件，用来对数据进行索引，控制Druid的段的产生以及销毁。">
 <meta name="twitter:image" content="http://blog.liexing.me/images/druid-indexing-service/14605158741221.png">
 <meta name="twitter:creator" content="@scusjs">
 
@@ -38,9 +40,11 @@
     <link rel="apple-touch-icon-precomposed" href="/img/favicon.jpg">
     
     <link rel="stylesheet" href="//cdn.bootcss.com/font-awesome/4.3.0/css/font-awesome.min.css">
-    <link rel="stylesheet" href="/css/style.css">
-</head>
-</html>
+    
+<link rel="stylesheet" href="/css/style.css">
+
+<meta name="generator" content="Hexo 6.3.0"></head>
+
   <body>
     <header>
       
@@ -106,30 +110,37 @@
         <div id="toc" class="toc-article">
             <strong class="toc-title">文章目录</strong>
         
-            <ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#Overlord节点"><span class="toc-number">1.</span> <span class="toc-text">Overlord节点</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#Middle-Manger"><span class="toc-number">2.</span> <span class="toc-text">Middle Manger</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#Peon"><span class="toc-number">3.</span> <span class="toc-text">Peon</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#HTTP-端"><span class="toc-number">4.</span> <span class="toc-text">HTTP 端</span></a></li></ol>
+            <ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#Middle-Manger"><span class="toc-number">1.</span> <span class="toc-text">Middle Manger</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#Peon"><span class="toc-number">2.</span> <span class="toc-text">Peon</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#HTTP-%E7%AB%AF"><span class="toc-number">3.</span> <span class="toc-text">HTTP 端</span></a></li></ol>
         
         </div>
         
         <p>索引服务是一种用来运行索引相关任务的高可用、分布式的服务。索引服务任务创建或者销毁Druid的段。其架构类似主奴机制。</p>
 <p>索引服务由三个主要部件组成：peon运行单个的任务，Middle Manager组件管理peon，overlord组件控制任务向Middle Manager的分配。Middle Manager和Peon通常运行在同一个节点，Overlord和Middle Manager能运行在相同节点或者多个节点上。</p>
 <p>索引服务的示意图如下：</p>
-<p><img src="/images/druid-indexing-service/14605158741221.png" title="Druid_Indexing_Service" alt="Druid_Indexing_Service"></p>
-<h2 id="Overlord节点"><a href="#Overlord节点" class="headerlink" title="Overlord节点"></a>Overlord节点</h2><p>Overlord节点负责接收任务，负责任务的分配，对任务加锁，向调用者返回任务状态。Overlord有两种模式：本地模式或者远程模式。其中本地模式是默认模式。在本地模式下Overlord也负责创建Peon来执行任务，所有的Middle Manager和Peon的配置此时也应当被提供，这种模式一般用于普通的工作流。远程模式中，Overlord和Middle Manager运行在不同的进程中，也可以在不同服务器上运行，如果想让索引服务成为Druid索引的单一端点，推荐使用这种模式。</p>
+<img src="/images/druid-indexing-service/14605158741221.png"  title="Druid_Indexing_Service" alt="Druid_Indexing_Service"/>
+## Overlord节点
+
+<p>Overlord节点负责接收任务，负责任务的分配，对任务加锁，向调用者返回任务状态。Overlord有两种模式：本地模式或者远程模式。其中本地模式是默认模式。在本地模式下Overlord也负责创建Peon来执行任务，所有的Middle Manager和Peon的配置此时也应当被提供，这种模式一般用于普通的工作流。远程模式中，Overlord和Middle Manager运行在不同的进程中，也可以在不同服务器上运行，如果想让索引服务成为Druid索引的单一端点，推荐使用这种模式。</p>
 <p>可以通过向Overlor节点以POST请求提交JSON对象的方式提交任务：</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">http://&lt;OVERLORD_IP&gt;:&lt;port&gt;/druid/indexer/v1/task</span><br></pre></td></tr></table></figure>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">http://&lt;OVERLORD_IP&gt;:&lt;port&gt;/druid/indexer/v1/task</span><br></pre></td></tr></table></figure>
+
 <p>这将会返回提交的任务id。任务也能通过POST请求来关闭：</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">http://&lt;OVERLORD_IP&gt;:&lt;port&gt;/druid/indexer/v1/task/&#123;taskId&#125;/status</span><br></pre></td></tr></table></figure>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">http://&lt;OVERLORD_IP&gt;:&lt;port&gt;/druid/indexer/v1/task/&#123;taskId&#125;/status</span><br></pre></td></tr></table></figure>
+
 <p>或者通过GET请求来查询状态：</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">http://&lt;OVERLORD_IP&gt;:&lt;port&gt;/druid/indexer/v1/task/&#123;taskId&#125;/segments</span><br></pre></td></tr></table></figure>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">http://&lt;OVERLORD_IP&gt;:&lt;port&gt;/druid/indexer/v1/task/&#123;taskId&#125;/segments</span><br></pre></td></tr></table></figure>
 <p>可以在浏览器中访问</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">http://&lt;OVERLORD_IP&gt;:&lt;port&gt;/console.html</span><br></pre></td></tr></table></figure>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">http://&lt;OVERLORD_IP&gt;:&lt;port&gt;/console.html</span><br></pre></td></tr></table></figure>
+
 <p>来查看任务一些信息。</p>
 <h2 id="Middle-Manger"><a href="#Middle-Manger" class="headerlink" title="Middle Manger"></a>Middle Manger</h2><p>Middle Manger是执行提交任务的工作节点。Middle Manger向运行在独立JVM的Peon发送任务。独立开JVM是因为资源问题与日志隔离。每一个Peon一次只能执行一个任务。一个Middle Manger可以有多个Peon。</p>
 <p>通过<code>io.druid.cli.Main server middleManager</code>来启动Middle Manager。</p>
 <h2 id="Peon"><a href="#Peon" class="headerlink" title="Peon"></a>Peon</h2><p>Peon在独立的JVM中执行单个任务。MiddleManager负责创建Peon来执行任务。Peon很少单独运行。</p>
-<p>除了开发目的，很少独立的运行Peon。通过<code>io.druid.cli.Main internal peon &lt;task_file&gt; &lt;status_file&gt;</code>来独立执行。其中task_file包含了任务的JSON对象。status_file表示在那里输出任务的状态。</p>
+<p>除了开发目的，很少独立的运行Peon。通过<code>io.druid.cli.Main internal peon &lt;task_file&gt; &lt;status_file&gt; </code>来独立执行。其中task_file包含了任务的JSON对象。status_file表示在那里输出任务的状态。</p>
 <h2 id="HTTP-端"><a href="#HTTP-端" class="headerlink" title="HTTP 端"></a>HTTP 端</h2><p>可以通过HTTP的GET请求<code>http://&lt;NODE_IP&gt;:&lt;port&gt;/status</code>来获取一些节点的信息，包括版本、载入的扩展、内存使用、总内存数等，比如：</p>
-<figure class="highlight json"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br></pre></td><td class="code"><pre><span class="line">&#123;</span><br><span class="line">    <span class="attr">"version"</span>: <span class="string">"0.9.0-rc3"</span>,</span><br><span class="line">    <span class="attr">"modules"</span>: [</span><br><span class="line">        &#123;</span><br><span class="line">            <span class="attr">"name"</span>: <span class="string">"io.druid.data.input.avro.AvroExtensionsModule"</span>,</span><br><span class="line">            <span class="attr">"artifact"</span>: <span class="string">"druid-avro-extensions"</span>,</span><br><span class="line">            <span class="attr">"version"</span>: <span class="string">"0.9.1-SNAPSHOT"</span></span><br><span class="line">        &#125;</span><br><span class="line">    ],</span><br><span class="line">    <span class="attr">"memory"</span>: &#123;</span><br><span class="line">        <span class="attr">"maxMemory"</span>: <span class="number">67108864</span>,</span><br><span class="line">        <span class="attr">"totalMemory"</span>: <span class="number">67108864</span>,</span><br><span class="line">        <span class="attr">"freeMemory"</span>: <span class="number">32278264</span>,</span><br><span class="line">        <span class="attr">"usedMemory"</span>: <span class="number">34830600</span></span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<figure class="highlight json"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br></pre></td><td class="code"><pre><span class="line"><span class="punctuation">&#123;</span></span><br><span class="line">    <span class="attr">&quot;version&quot;</span><span class="punctuation">:</span> <span class="string">&quot;0.9.0-rc3&quot;</span><span class="punctuation">,</span></span><br><span class="line">    <span class="attr">&quot;modules&quot;</span><span class="punctuation">:</span> <span class="punctuation">[</span></span><br><span class="line">        <span class="punctuation">&#123;</span></span><br><span class="line">            <span class="attr">&quot;name&quot;</span><span class="punctuation">:</span> <span class="string">&quot;io.druid.data.input.avro.AvroExtensionsModule&quot;</span><span class="punctuation">,</span></span><br><span class="line">            <span class="attr">&quot;artifact&quot;</span><span class="punctuation">:</span> <span class="string">&quot;druid-avro-extensions&quot;</span><span class="punctuation">,</span></span><br><span class="line">            <span class="attr">&quot;version&quot;</span><span class="punctuation">:</span> <span class="string">&quot;0.9.1-SNAPSHOT&quot;</span></span><br><span class="line">        <span class="punctuation">&#125;</span></span><br><span class="line">    <span class="punctuation">]</span><span class="punctuation">,</span></span><br><span class="line">    <span class="attr">&quot;memory&quot;</span><span class="punctuation">:</span> <span class="punctuation">&#123;</span></span><br><span class="line">        <span class="attr">&quot;maxMemory&quot;</span><span class="punctuation">:</span> <span class="number">67108864</span><span class="punctuation">,</span></span><br><span class="line">        <span class="attr">&quot;totalMemory&quot;</span><span class="punctuation">:</span> <span class="number">67108864</span><span class="punctuation">,</span></span><br><span class="line">        <span class="attr">&quot;freeMemory&quot;</span><span class="punctuation">:</span> <span class="number">32278264</span><span class="punctuation">,</span></span><br><span class="line">        <span class="attr">&quot;usedMemory&quot;</span><span class="punctuation">:</span> <span class="number">34830600</span></span><br><span class="line">    <span class="punctuation">&#125;</span></span><br><span class="line"><span class="punctuation">&#125;</span></span><br></pre></td></tr></table></figure>
+
+
 
     </div>
     
@@ -289,7 +300,7 @@
 
 <section id="comments" class="comment">
   <div id="disqus_thread">
-    <noscript>Please enable JavaScript to view the <a href="//disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
+    <noscript>Please enable JavaScript to view the <a target="_blank" rel="noopener" href="//disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
   </div>
 </section>
 
@@ -300,7 +311,7 @@
   <div id="toc" class="toc-aside">
   <strong class="toc-title">文章目录</strong>
  
- <ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#Overlord节点"><span class="toc-number">1.</span> <span class="toc-text">Overlord节点</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#Middle-Manger"><span class="toc-number">2.</span> <span class="toc-text">Middle Manger</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#Peon"><span class="toc-number">3.</span> <span class="toc-text">Peon</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#HTTP-端"><span class="toc-number">4.</span> <span class="toc-text">HTTP 端</span></a></li></ol>
+ <ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#Middle-Manger"><span class="toc-number">1.</span> <span class="toc-text">Middle Manger</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#Peon"><span class="toc-number">2.</span> <span class="toc-text">Peon</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#HTTP-%E7%AB%AF"><span class="toc-number">3.</span> <span class="toc-text">HTTP 端</span></a></li></ol>
  
   </div>
 
@@ -395,7 +406,7 @@
   <div class="tagcloudlist">
     <p class="asidetitle">标签云</p>
     <div class="tagcloudlist clearfix">
-       <a href="/tags/Adam/" style="font-size: 10px;">Adam</a> <a href="/tags/BGD/" style="font-size: 10px;">BGD</a> <a href="/tags/Cassandra/" style="font-size: 11.67px;">Cassandra</a> <a href="/tags/Druid/" style="font-size: 16.67px;">Druid</a> <a href="/tags/JVM/" style="font-size: 10px;">JVM</a> <a href="/tags/Java/" style="font-size: 10px;">Java</a> <a href="/tags/LCS/" style="font-size: 10px;">LCS</a> <a href="/tags/Momentum/" style="font-size: 10px;">Momentum</a> <a href="/tags/MySQL/" style="font-size: 10px;">MySQL</a> <a href="/tags/NOSQL/" style="font-size: 11.67px;">NOSQL</a> <a href="/tags/SGD/" style="font-size: 10px;">SGD</a> <a href="/tags/Spring-Boot/" style="font-size: 10px;">Spring Boot</a> <a href="/tags/Sytle-Transfer/" style="font-size: 10px;">Sytle Transfer</a> <a href="/tags/Weight-initialization/" style="font-size: 10px;">Weight initialization</a> <a href="/tags/algorithms/" style="font-size: 10px;">algorithms</a> <a href="/tags/bash/" style="font-size: 10px;">bash</a> <a href="/tags/dynamic-programming/" style="font-size: 10px;">dynamic programming</a> <a href="/tags/hexo/" style="font-size: 10px;">hexo</a> <a href="/tags/java/" style="font-size: 10px;">java</a> <a href="/tags/k-邻近法/" style="font-size: 11.67px;">k 邻近法</a> <a href="/tags/knn/" style="font-size: 11.67px;">knn</a> <a href="/tags/linux/" style="font-size: 10px;">linux</a> <a href="/tags/macOS/" style="font-size: 10px;">macOS</a> <a href="/tags/parallelStream/" style="font-size: 10px;">parallelStream</a> <a href="/tags/quicklist/" style="font-size: 10px;">quicklist</a> <a href="/tags/redis/" style="font-size: 10px;">redis</a> <a href="/tags/stream/" style="font-size: 10px;">stream</a> <a href="/tags/utf8/" style="font-size: 10px;">utf8</a> <a href="/tags/utf8mb4/" style="font-size: 10px;">utf8mb4</a> <a href="/tags/ziplist/" style="font-size: 10px;">ziplist</a> <a href="/tags/内存模型/" style="font-size: 10px;">内存模型</a> <a href="/tags/分布式/" style="font-size: 18.33px;">分布式</a> <a href="/tags/多线程/" style="font-size: 10px;">多线程</a> <a href="/tags/实时计算/" style="font-size: 16.67px;">实时计算</a> <a href="/tags/异常处理/" style="font-size: 10px;">异常处理</a> <a href="/tags/异常表/" style="font-size: 10px;">异常表</a> <a href="/tags/感知机/" style="font-size: 10px;">感知机</a> <a href="/tags/数据结构/" style="font-size: 10px;">数据结构</a> <a href="/tags/最大熵模型/" style="font-size: 10px;">最大熵模型</a> <a href="/tags/朴素贝叶斯/" style="font-size: 10px;">朴素贝叶斯</a> <a href="/tags/机器学习/" style="font-size: 16.67px;">机器学习</a> <a href="/tags/杂/" style="font-size: 16.67px;">杂</a> <a href="/tags/梯度下降/" style="font-size: 10px;">梯度下降</a> <a href="/tags/深度学习/" style="font-size: 13.33px;">深度学习</a> <a href="/tags/源码分析/" style="font-size: 10px;">源码分析</a> <a href="/tags/生成/" style="font-size: 10px;">生成</a> <a href="/tags/生活/" style="font-size: 15px;">生活</a> <a href="/tags/笔记/" style="font-size: 20px;">笔记</a> <a href="/tags/统计学习/" style="font-size: 16.67px;">统计学习</a> <a href="/tags/编码/" style="font-size: 10px;">编码</a> <a href="/tags/自驾/" style="font-size: 15px;">自驾</a> <a href="/tags/调参/" style="font-size: 11.67px;">调参</a> <a href="/tags/跨域/" style="font-size: 10px;">跨域</a> <a href="/tags/踩坑日志/" style="font-size: 10px;">踩坑日志</a> <a href="/tags/逻辑斯谛回归/" style="font-size: 10px;">逻辑斯谛回归</a> <a href="/tags/配置/" style="font-size: 10px;">配置</a> <a href="/tags/风格迁移/" style="font-size: 10px;">风格迁移</a>
+       <a href="/tags/Adam/" style="font-size: 10px;">Adam</a> <a href="/tags/BGD/" style="font-size: 10px;">BGD</a> <a href="/tags/Cassandra/" style="font-size: 11.67px;">Cassandra</a> <a href="/tags/Druid/" style="font-size: 16.67px;">Druid</a> <a href="/tags/JVM/" style="font-size: 10px;">JVM</a> <a href="/tags/Java/" style="font-size: 10px;">Java</a> <a href="/tags/LCS/" style="font-size: 10px;">LCS</a> <a href="/tags/Momentum/" style="font-size: 10px;">Momentum</a> <a href="/tags/MySQL/" style="font-size: 10px;">MySQL</a> <a href="/tags/NOSQL/" style="font-size: 11.67px;">NOSQL</a> <a href="/tags/SGD/" style="font-size: 10px;">SGD</a> <a href="/tags/Spring-Boot/" style="font-size: 10px;">Spring Boot</a> <a href="/tags/Sytle-Transfer/" style="font-size: 10px;">Sytle Transfer</a> <a href="/tags/Weight-initialization/" style="font-size: 10px;">Weight initialization</a> <a href="/tags/algorithms/" style="font-size: 10px;">algorithms</a> <a href="/tags/bash/" style="font-size: 10px;">bash</a> <a href="/tags/dynamic-programming/" style="font-size: 10px;">dynamic programming</a> <a href="/tags/hexo/" style="font-size: 10px;">hexo</a> <a href="/tags/java/" style="font-size: 10px;">java</a> <a href="/tags/k-%E9%82%BB%E8%BF%91%E6%B3%95/" style="font-size: 11.67px;">k 邻近法</a> <a href="/tags/knn/" style="font-size: 11.67px;">knn</a> <a href="/tags/linux/" style="font-size: 10px;">linux</a> <a href="/tags/macOS/" style="font-size: 10px;">macOS</a> <a href="/tags/parallelStream/" style="font-size: 10px;">parallelStream</a> <a href="/tags/quicklist/" style="font-size: 10px;">quicklist</a> <a href="/tags/redis/" style="font-size: 10px;">redis</a> <a href="/tags/stream/" style="font-size: 10px;">stream</a> <a href="/tags/utf8/" style="font-size: 10px;">utf8</a> <a href="/tags/utf8mb4/" style="font-size: 10px;">utf8mb4</a> <a href="/tags/ziplist/" style="font-size: 10px;">ziplist</a> <a href="/tags/%E5%86%85%E5%AD%98%E6%A8%A1%E5%9E%8B/" style="font-size: 10px;">内存模型</a> <a href="/tags/%E5%88%86%E5%B8%83%E5%BC%8F/" style="font-size: 18.33px;">分布式</a> <a href="/tags/%E5%A4%9A%E7%BA%BF%E7%A8%8B/" style="font-size: 10px;">多线程</a> <a href="/tags/%E5%AE%9E%E6%97%B6%E8%AE%A1%E7%AE%97/" style="font-size: 16.67px;">实时计算</a> <a href="/tags/%E5%BC%82%E5%B8%B8%E5%A4%84%E7%90%86/" style="font-size: 10px;">异常处理</a> <a href="/tags/%E5%BC%82%E5%B8%B8%E8%A1%A8/" style="font-size: 10px;">异常表</a> <a href="/tags/%E6%84%9F%E7%9F%A5%E6%9C%BA/" style="font-size: 10px;">感知机</a> <a href="/tags/%E6%95%B0%E6%8D%AE%E7%BB%93%E6%9E%84/" style="font-size: 10px;">数据结构</a> <a href="/tags/%E6%9C%80%E5%A4%A7%E7%86%B5%E6%A8%A1%E5%9E%8B/" style="font-size: 10px;">最大熵模型</a> <a href="/tags/%E6%9C%B4%E7%B4%A0%E8%B4%9D%E5%8F%B6%E6%96%AF/" style="font-size: 10px;">朴素贝叶斯</a> <a href="/tags/%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0/" style="font-size: 16.67px;">机器学习</a> <a href="/tags/%E6%9D%82/" style="font-size: 16.67px;">杂</a> <a href="/tags/%E6%A2%AF%E5%BA%A6%E4%B8%8B%E9%99%8D/" style="font-size: 10px;">梯度下降</a> <a href="/tags/%E6%B7%B1%E5%BA%A6%E5%AD%A6%E4%B9%A0/" style="font-size: 13.33px;">深度学习</a> <a href="/tags/%E6%BA%90%E7%A0%81%E5%88%86%E6%9E%90/" style="font-size: 10px;">源码分析</a> <a href="/tags/%E7%94%9F%E6%88%90/" style="font-size: 10px;">生成</a> <a href="/tags/%E7%94%9F%E6%B4%BB/" style="font-size: 15px;">生活</a> <a href="/tags/%E7%AC%94%E8%AE%B0/" style="font-size: 20px;">笔记</a> <a href="/tags/%E7%BB%9F%E8%AE%A1%E5%AD%A6%E4%B9%A0/" style="font-size: 16.67px;">统计学习</a> <a href="/tags/%E7%BC%96%E7%A0%81/" style="font-size: 10px;">编码</a> <a href="/tags/%E8%87%AA%E9%A9%BE/" style="font-size: 15px;">自驾</a> <a href="/tags/%E8%B0%83%E5%8F%82/" style="font-size: 11.67px;">调参</a> <a href="/tags/%E8%B7%A8%E5%9F%9F/" style="font-size: 10px;">跨域</a> <a href="/tags/%E8%B8%A9%E5%9D%91%E6%97%A5%E5%BF%97/" style="font-size: 10px;">踩坑日志</a> <a href="/tags/%E9%80%BB%E8%BE%91%E6%96%AF%E8%B0%9B%E5%9B%9E%E5%BD%92/" style="font-size: 10px;">逻辑斯谛回归</a> <a href="/tags/%E9%85%8D%E7%BD%AE/" style="font-size: 10px;">配置</a> <a href="/tags/%E9%A3%8E%E6%A0%BC%E8%BF%81%E7%A7%BB/" style="font-size: 10px;">风格迁移</a>
     </div>
   </div>
 

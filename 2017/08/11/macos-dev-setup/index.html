@@ -1,7 +1,7 @@
 
  <!DOCTYPE HTML>
 <html lang="zh-CN">
-<head><meta name="generator" content="Hexo 3.9.0">
+<head>
   <meta charset="UTF-8">
   
     <title>macOS 开发配置 | Liexing&#39;s Blog</title>
@@ -12,21 +12,22 @@
 
     
     <meta name="description" content="某人心心念念的rmbp终于到手了，然而我还在杭州没法帮忙各种配置，这里就写一份教程好了，自己拿去照着撸吧（￣︶￣）↗  ps. 毕竟你的是高大上的17带bar rmbp。。。然而，bar的操作我都！不！知！道！ 大概介绍 macOS 的一些基本操作以及常见的软件、开发环境的搭建。 基本操作介绍 17的触摸板应该是二段的按压，意思就是分为轻按和重按，按到底会响两次，轻按表示单击，重按表示双击。但是也">
-<meta name="keywords" content="macOS,配置">
 <meta property="og:type" content="article">
 <meta property="og:title" content="macOS 开发配置">
 <meta property="og:url" content="http://blog.liexing.me/2017/08/11/macos-dev-setup/index.html">
 <meta property="og:site_name" content="Liexing&#39;s Blog">
 <meta property="og:description" content="某人心心念念的rmbp终于到手了，然而我还在杭州没法帮忙各种配置，这里就写一份教程好了，自己拿去照着撸吧（￣︶￣）↗  ps. 毕竟你的是高大上的17带bar rmbp。。。然而，bar的操作我都！不！知！道！ 大概介绍 macOS 的一些基本操作以及常见的软件、开发环境的搭建。 基本操作介绍 17的触摸板应该是二段的按压，意思就是分为轻按和重按，按到底会响两次，轻按表示单击，重按表示双击。但是也">
-<meta property="og:locale" content="zh-CN">
+<meta property="og:locale" content="zh_CN">
 <meta property="og:image" content="http://blog.liexing.me/images/macos-dev-setup/1502459911.jpg">
 <meta property="og:image" content="http://blog.liexing.me/images/macos-dev-setup/1502460257.jpg">
 <meta property="og:image" content="http://blog.liexing.me/images/macos-dev-setup/1502463526.png">
 <meta property="og:image" content="http://blog.liexing.me/images/macos-dev-setup/1502469911.jpg">
-<meta property="og:updated_time" content="2023-01-20T15:04:29.746Z">
+<meta property="article:published_time" content="2017-08-11T15:49:22.000Z">
+<meta property="article:modified_time" content="2023-01-20T15:04:29.746Z">
+<meta property="article:author" content="liexing">
+<meta property="article:tag" content="macOS">
+<meta property="article:tag" content="配置">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:title" content="macOS 开发配置">
-<meta name="twitter:description" content="某人心心念念的rmbp终于到手了，然而我还在杭州没法帮忙各种配置，这里就写一份教程好了，自己拿去照着撸吧（￣︶￣）↗  ps. 毕竟你的是高大上的17带bar rmbp。。。然而，bar的操作我都！不！知！道！ 大概介绍 macOS 的一些基本操作以及常见的软件、开发环境的搭建。 基本操作介绍 17的触摸板应该是二段的按压，意思就是分为轻按和重按，按到底会响两次，轻按表示单击，重按表示双击。但是也">
 <meta name="twitter:image" content="http://blog.liexing.me/images/macos-dev-setup/1502459911.jpg">
 <meta name="twitter:creator" content="@scusjs">
 
@@ -41,9 +42,11 @@
     <link rel="apple-touch-icon-precomposed" href="/img/favicon.jpg">
     
     <link rel="stylesheet" href="//cdn.bootcss.com/font-awesome/4.3.0/css/font-awesome.min.css">
-    <link rel="stylesheet" href="/css/style.css">
-</head>
-</html>
+    
+<link rel="stylesheet" href="/css/style.css">
+
+<meta name="generator" content="Hexo 6.3.0"></head>
+
   <body>
     <header>
       
@@ -109,7 +112,7 @@
         <div id="toc" class="toc-article">
             <strong class="toc-title">文章目录</strong>
         
-            <ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#基本操作介绍"><span class="toc-number">1.</span> <span class="toc-text">基本操作介绍</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#系统基本配置"><span class="toc-number">2.</span> <span class="toc-text">系统基本配置</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#系统基本介绍"><span class="toc-number">3.</span> <span class="toc-text">系统基本介绍</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#一些介绍"><span class="toc-number">3.1.</span> <span class="toc-text">一些介绍</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#安装软件"><span class="toc-number">3.2.</span> <span class="toc-text">安装软件</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#软件"><span class="toc-number">4.</span> <span class="toc-text">软件</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#iTerm2"><span class="toc-number">4.1.</span> <span class="toc-text">iTerm2</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#Homebrew"><span class="toc-number">4.2.</span> <span class="toc-text">Homebrew</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#Cask"><span class="toc-number">4.2.1.</span> <span class="toc-text">Cask</span></a></li></ol></li><li class="toc-item toc-level-3"><a class="toc-link" href="#fish"><span class="toc-number">4.3.</span> <span class="toc-text">fish</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#ShadowsocksX"><span class="toc-number">4.4.</span> <span class="toc-text">ShadowsocksX</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#Karabiner-Elements"><span class="toc-number">4.5.</span> <span class="toc-text">Karabiner-Elements</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#其他软件"><span class="toc-number">4.6.</span> <span class="toc-text">其他软件</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#其他参考"><span class="toc-number">5.</span> <span class="toc-text">其他参考</span></a></li></ol>
+            <ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#%E5%9F%BA%E6%9C%AC%E6%93%8D%E4%BD%9C%E4%BB%8B%E7%BB%8D"><span class="toc-number">1.</span> <span class="toc-text">基本操作介绍</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E7%B3%BB%E7%BB%9F%E5%9F%BA%E6%9C%AC%E9%85%8D%E7%BD%AE"><span class="toc-number">2.</span> <span class="toc-text">系统基本配置</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E7%B3%BB%E7%BB%9F%E5%9F%BA%E6%9C%AC%E4%BB%8B%E7%BB%8D"><span class="toc-number">3.</span> <span class="toc-text">系统基本介绍</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#%E4%B8%80%E4%BA%9B%E4%BB%8B%E7%BB%8D"><span class="toc-number">3.1.</span> <span class="toc-text">一些介绍</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E8%BD%AF%E4%BB%B6"><span class="toc-number">4.</span> <span class="toc-text">软件</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#iTerm2"><span class="toc-number">4.1.</span> <span class="toc-text">iTerm2</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#Homebrew"><span class="toc-number">4.2.</span> <span class="toc-text">Homebrew</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#Cask"><span class="toc-number">4.2.1.</span> <span class="toc-text">Cask</span></a></li></ol></li><li class="toc-item toc-level-3"><a class="toc-link" href="#fish"><span class="toc-number">4.3.</span> <span class="toc-text">fish</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#ShadowsocksX"><span class="toc-number">4.4.</span> <span class="toc-text">ShadowsocksX</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#Karabiner-Elements"><span class="toc-number">4.5.</span> <span class="toc-text">Karabiner-Elements</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E5%85%B6%E4%BB%96%E8%BD%AF%E4%BB%B6"><span class="toc-number">4.6.</span> <span class="toc-text">其他软件</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E5%85%B6%E4%BB%96%E5%8F%82%E8%80%83"><span class="toc-number">5.</span> <span class="toc-text">其他参考</span></a></li></ol>
         
         </div>
         
@@ -117,9 +120,8 @@
 <p>ps. 毕竟你的是高大上的17带bar rmbp。。。然而，bar的操作我都！不！知！道！</p>
 <p>大概介绍 macOS 的一些基本操作以及常见的软件、开发环境的搭建。</p>
 <h2 id="基本操作介绍"><a href="#基本操作介绍" class="headerlink" title="基本操作介绍"></a>基本操作介绍</h2><ol>
-<li>17的触摸板应该是二段的按压，意思就是分为轻按和重按，按到底会响两次，轻按表示单击，重按表示双击。但是也可以配置成双指按表示双击；</li>
-</ol>
-<ol start="2">
+<li><p>17的触摸板应该是二段的按压，意思就是分为轻按和重按，按到底会响两次，轻按表示单击，重按表示双击。但是也可以配置成双指按表示双击；</p>
+</li>
 <li><p>键盘键位，Mac的键位和Windows的不太一样，没有<code>Win</code>那个图标，取而代之的是<code>command</code>（长这样：<code>⌘</code>）但是功能差不多；<code>alt</code>又叫做<code>option</code>（一些地方画成<code>⌥</code>）；退格、<code>del</code>合并为<code>delete</code>；<code>Shift</code>画成<code>⇧</code>，<code>control</code>画成<code>⌃</code>，大小写锁定画成<code>⇪</code></p>
 </li>
 <li><p>一些常用的快捷键：</p>
@@ -128,7 +130,7 @@
 <li>截屏，默认的截屏快捷键有两种：<code>⌘+shift+control+4</code>（区域截图到剪切板），<code>⌘+shift+control+3</code>（全屏截图到剪切板），<code>⌘+shift+4</code>（区域截图到桌面），<code>⌘+shift+3</code>（全屏截图到桌面）</li>
 <li>复制：<code>⌘+c</code>，粘贴：<code>⌘+v</code>，全选：<code>⌘+a</code></li>
 <li>输入法切换：<code>control+空格</code>（选择上一个输入法），<code>control+option+空格</code>（选择下一个输入法）</li>
-<li>其他自己看<a href="https://support.apple.com/zh-cn/HT201236" target="_blank" rel="noopener">官方的文档</a></li>
+<li>其他自己看<a target="_blank" rel="noopener" href="https://support.apple.com/zh-cn/HT201236">官方的文档</a></li>
 </ol>
 </blockquote>
 </li>
@@ -158,43 +160,54 @@
 <h2 id="系统基本介绍"><a href="#系统基本介绍" class="headerlink" title="系统基本介绍"></a>系统基本介绍</h2><h3 id="一些介绍"><a href="#一些介绍" class="headerlink" title="一些介绍"></a>一些介绍</h3><ol>
 <li><p>首先 macOS 是基于 Unix 的发行版，所以文件结构、命令上，都和 *nix 系统非常像（但是非常多坑）。</p>
 </li>
-<li><p>点击 Dock 上的 Finder（即 macOS 的资源管理器），可以看到左边有一栏，里面有个应用程序（/Applications），应用程序放在这里的。</p>
+<li><p>点击 Dock 上的 Finder（即 macOS 的资源管理器），可以看到左边有一栏，里面有个应用程序（&#x2F;Applications），应用程序放在这里的。</p>
 </li>
 </ol>
-<p><img src="/images/macos-dev-setup/1502459911.jpg" title alt><br>然后 macOS 中，用户目录是<code>/Users/username</code>，而不是<code>/home/username</code>，这个需要注意。激活 Finder 的情况下，屏幕左上角会有一排菜单，这个菜单针对每个软件可能不同。一般软件的设置都是<code>软件名-偏好设置</code>中，或者使用<code>⌘+,</code>快捷键打开软件的偏好设置。在显示中是一些显示的选项，对于 Finder 可以打开显示标签页、路径、状态等</p>
+<img src="/images/macos-dev-setup/1502459911.jpg"  title="" alt=""/>
+然后 macOS 中，用户目录是`/Users/username`，而不是`/home/username`，这个需要注意。激活 Finder 的情况下，屏幕左上角会有一排菜单，这个菜单针对每个软件可能不同。一般软件的设置都是`软件名-偏好设置`中，或者使用`⌘+,`快捷键打开软件的偏好设置。在显示中是一些显示的选项，对于 Finder 可以打开显示标签页、路径、状态等
+
 <ol start="3">
 <li>如果前面触摸板中打开了 Launchpad 的手势，捏拢拇指与其他三个手指即可打开 Launchpad，或者点击 Dock 中的小火箭图标，则能看到所有安装的应用程序，可以两个手指轻扫翻页。</li>
 </ol>
-<p><img src="/images/macos-dev-setup/1502460257.jpg" title alt></p>
-<h3 id="安装软件"><a href="#安装软件" class="headerlink" title="安装软件"></a>安装软件</h3><ol>
-<li>App Store 下载。App Store 中直接下载即可；</li>
-<li>第三方下载安装。下载下来的软件一般是 dmg 格式的或者无格式（解压后）的。dmg 和 exe 类似，打开后，里面一般有个软件图标和一个 Application 文件夹，直接把软件图标拖到 Application 即可。或者直接把下载的无格式（如果是压缩文件，打开即可解压）拖到 Application 即可。</li>
-</ol>
-<h2 id="软件"><a href="#软件" class="headerlink" title="软件"></a>软件</h2><h3 id="iTerm2"><a href="#iTerm2" class="headerlink" title="iTerm2"></a>iTerm2</h3><p> Mac 上传说中最强大的终端工具，主页戳<a href="https://www.iterm2.com/" target="_blank" rel="noopener">这里</a>。建议把 iTerm2 固定到 Docker，方便打开，双指点按 iTerm 图标-选项-在 Docker 中固定。</p>
-<h3 id="Homebrew"><a href="#Homebrew" class="headerlink" title="Homebrew"></a>Homebrew</h3><p>一个包管理工具，在终端（iTerm）中输入下面语句即可安装。其官网为：<a href="https://brew.sh/" target="_blank" rel="noopener">点这里</a></p>
-<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">/usr/bin/ruby -e <span class="string">"<span class="variable">$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/master/install)</span>"</span></span><br></pre></td></tr></table></figure>
+<img src="/images/macos-dev-setup/1502460257.jpg"  title="" alt=""/>
+### 安装软件
+1. App Store 下载。App Store 中直接下载即可；
+2. 第三方下载安装。下载下来的软件一般是 dmg 格式的或者无格式（解压后）的。dmg 和 exe 类似，打开后，里面一般有个软件图标和一个 Application 文件夹，直接把软件图标拖到 Application 即可。或者直接把下载的无格式（如果是压缩文件，打开即可解压）拖到 Application 即可。
+
+<h2 id="软件"><a href="#软件" class="headerlink" title="软件"></a>软件</h2><h3 id="iTerm2"><a href="#iTerm2" class="headerlink" title="iTerm2"></a>iTerm2</h3><p> Mac 上传说中最强大的终端工具，主页戳<a target="_blank" rel="noopener" href="https://www.iterm2.com/">这里</a>。建议把 iTerm2 固定到 Docker，方便打开，双指点按 iTerm 图标-选项-在 Docker 中固定。</p>
+<h3 id="Homebrew"><a href="#Homebrew" class="headerlink" title="Homebrew"></a>Homebrew</h3><p>一个包管理工具，在终端（iTerm）中输入下面语句即可安装。其官网为：<a target="_blank" rel="noopener" href="https://brew.sh/">点这里</a></p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">/usr/bin/ruby -e <span class="string">&quot;<span class="subst">$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/master/install)</span>&quot;</span></span><br></pre></td></tr></table></figure>
+
 <p><code>brew upgrade</code>更新软件包，然后<code>brew install 软件名</code>即可安装一些软件。</p>
-<h4 id="Cask"><a href="#Cask" class="headerlink" title="Cask"></a>Cask</h4><p><a href="https://caskroom.github.io/" target="_blank" rel="noopener">Homebrew-Cask</a>是 Homebrew 的扩展，用以安装其他一些软件，可以用于安装其他一些软件以前需要使用<code>brew cask</code>来使用 Cask，现在直接使用 Cask 的 tap 即可：</p>
+<h4 id="Cask"><a href="#Cask" class="headerlink" title="Cask"></a>Cask</h4><p><a target="_blank" rel="noopener" href="https://caskroom.github.io/">Homebrew-Cask</a>是 Homebrew 的扩展，用以安装其他一些软件，可以用于安装其他一些软件以前需要使用<code>brew cask</code>来使用 Cask，现在直接使用 Cask 的 tap 即可：</p>
 <figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">brew install caskroom/cask/google-chrome <span class="comment">#安装chrome</span></span><br><span class="line">brew install caskroom/cask/java <span class="comment"># 安装java</span></span><br><span class="line">brew install caskroom/cask/visual-studio-code<span class="comment">#安装 vs code</span></span><br><span class="line">brew install caskroom/cask/iina<span class="comment">#安装iina，一个非常棒的视频播放器</span></span><br><span class="line">brew install maven <span class="comment">#安装maven</span></span><br><span class="line">brew install you-get youtube-dl <span class="comment">#安装两个视频下载工具</span></span><br><span class="line">brew install vim <span class="comment">#用 brew 管理 vim，能升级到更新版</span></span><br></pre></td></tr></table></figure>
+
 <h3 id="fish"><a href="#fish" class="headerlink" title="fish"></a>fish</h3><p>90后用的 shell~其他常用的还有 zsh。使用 brew 安装即可：</p>
 <figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">brew install fish</span><br></pre></td></tr></table></figure>
+
 <p>然后切换默认的 shell 为 fish：</p>
-<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">chsh -s /usr/<span class="built_in">local</span>/bin/fish</span><br></pre></td></tr></table></figure>
-<p>安装好后，还有个方便的 fish 管理工具：<a href="http://git.io/oh-my-fish" target="_blank" rel="noopener">oh my fish</a>，安装命令：</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">chsh -s /usr/local/bin/fish</span><br></pre></td></tr></table></figure>
+
+<p>安装好后，还有个方便的 fish 管理工具：<a target="_blank" rel="noopener" href="http://git.io/oh-my-fish">oh my fish</a>，安装命令：</p>
 <figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">curl -L https://get.oh-my.fish | fish</span><br></pre></td></tr></table></figure>
-<p>然后可以选择<a href="https://github.com/oh-my-fish/oh-my-fish/blob/master/docs/Themes.md" target="_blank" rel="noopener">主题</a>，我用的 ocean，这么安装：</p>
+
+<p>然后可以选择<a target="_blank" rel="noopener" href="https://github.com/oh-my-fish/oh-my-fish/blob/master/docs/Themes.md">主题</a>，我用的 ocean，这么安装：</p>
 <figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">omf install ocean</span><br><span class="line">omf theme ocean</span><br></pre></td></tr></table></figure>
+
 <p>当然也可以安装其他主题，去上面那个链接选选。。安装好后长这样：</p>
-<p><img src="/images/macos-dev-setup/1502463526.png" title="Ocean主题" alt="Ocean主题"></p>
-<h3 id="ShadowsocksX"><a href="#ShadowsocksX" class="headerlink" title="ShadowsocksX"></a>ShadowsocksX</h3><p><a href="https://github.com/shadowsocks/ShadowsocksX-NG/releases" target="_blank" rel="noopener">ShadowsocksX</a>这个就不多说了。。。</p>
-<h3 id="Karabiner-Elements"><a href="#Karabiner-Elements" class="headerlink" title="Karabiner-Elements"></a>Karabiner-Elements</h3><p><a href="https://github.com/tekezo/Karabiner-Elements" target="_blank" rel="noopener">Karabiner-Elements</a> 是一个修改键位的软件，建议用它把 <code>caps lock</code>和<code>control</code>位置替换。因为大小写锁定占据了更好的位置，而 <code>control</code> 是更加频繁使用的一个按键，调换后更方便。</p>
-<p><img src="/images/macos-dev-setup/1502469911.jpg" title="Karabiner-Elements" alt="Karabiner-Elements"></p>
-<h3 id="其他软件"><a href="#其他软件" class="headerlink" title="其他软件"></a>其他软件</h3><p><a href="https://www.jetbrains.com/idea/download/" target="_blank" rel="noopener">IntelliJ IDEA</a>(不过强烈建议通过<a href="https://www.jetbrains.com/toolbox/app/?fromMenu" target="_blank" rel="noopener">JetBrains Toolbox</a> 安装)、<br><a href="https://go.microsoft.com/fwlink/p/?LinkID=511647" target="_blank" rel="noopener">Office 365</a>、<br><a href="http://pinyin.sogou.com/mac/" target="_blank" rel="noopener">搜狗输入法</a>、<br><a href="http://mac.xunlei.com/" target="_blank" rel="noopener">迅雷</a>、<br><a href="https://www.alfredapp.com/" target="_blank" rel="noopener">Alfred</a>（<a href="http://www.alfredworkflow.com" target="_blank" rel="noopener">这里</a>有一堆工作流工具）、<br><a href="http://bjango.com/" target="_blank" rel="noopener">iStat</a>、<br><a href="http://mac.guanjia.qq.com/" target="_blank" rel="noopener">腾讯电脑管家</a>、<br><a href="http://im.qq.com/macqq/" target="_blank" rel="noopener">QQ</a>、<br><a href="https://mac.weixin.qq.com/" target="_blank" rel="noopener">微信</a></p>
+<img src="/images/macos-dev-setup/1502463526.png"  title="Ocean主题" alt="Ocean主题"/>
+
+
+<h3 id="ShadowsocksX"><a href="#ShadowsocksX" class="headerlink" title="ShadowsocksX"></a>ShadowsocksX</h3><p><a target="_blank" rel="noopener" href="https://github.com/shadowsocks/ShadowsocksX-NG/releases">ShadowsocksX</a>这个就不多说了。。。</p>
+<h3 id="Karabiner-Elements"><a href="#Karabiner-Elements" class="headerlink" title="Karabiner-Elements"></a>Karabiner-Elements</h3><p><a target="_blank" rel="noopener" href="https://github.com/tekezo/Karabiner-Elements">Karabiner-Elements</a> 是一个修改键位的软件，建议用它把 <code>caps lock</code>和<code>control</code>位置替换。因为大小写锁定占据了更好的位置，而 <code>control</code> 是更加频繁使用的一个按键，调换后更方便。</p>
+<img src="/images/macos-dev-setup/1502469911.jpg"  title="Karabiner-Elements" alt="Karabiner-Elements"/>
+
+<h3 id="其他软件"><a href="#其他软件" class="headerlink" title="其他软件"></a>其他软件</h3><p><a target="_blank" rel="noopener" href="https://www.jetbrains.com/idea/download/">IntelliJ IDEA</a>(不过强烈建议通过<a target="_blank" rel="noopener" href="https://www.jetbrains.com/toolbox/app/?fromMenu">JetBrains Toolbox</a> 安装)、<br><a target="_blank" rel="noopener" href="https://go.microsoft.com/fwlink/p/?LinkID=511647">Office 365</a>、<br><a target="_blank" rel="noopener" href="http://pinyin.sogou.com/mac/">搜狗输入法</a>、<br><a target="_blank" rel="noopener" href="http://mac.xunlei.com/">迅雷</a>、<br><a target="_blank" rel="noopener" href="https://www.alfredapp.com/">Alfred</a>（<a target="_blank" rel="noopener" href="http://www.alfredworkflow.com/">这里</a>有一堆工作流工具）、<br><a target="_blank" rel="noopener" href="http://bjango.com/">iStat</a>、<br><a target="_blank" rel="noopener" href="http://mac.guanjia.qq.com/">腾讯电脑管家</a>、<br><a target="_blank" rel="noopener" href="http://im.qq.com/macqq/">QQ</a>、<br><a target="_blank" rel="noopener" href="https://mac.weixin.qq.com/">微信</a></p>
 <h2 id="其他参考"><a href="#其他参考" class="headerlink" title="其他参考"></a>其他参考</h2><ol>
-<li><a href="https://github.com/hzlzh/Best-App" target="_blank" rel="noopener">收集&amp;推荐优秀的 Apps/硬件/技巧/周边等</a></li>
-<li><a href="https://wsgzao.github.io/post/mac/" target="_blank" rel="noopener">Mac新手入门以及常用软件推荐</a></li>
-<li><a href="http://xialeizhou.com/2019/06/23/%E9%AB%98%E6%95%88macbook%E5%B7%A5%E4%BD%9C%E7%8E%AF%E5%A2%83%E9%85%8D%E7%BD%AE/" target="_blank" rel="noopener">高效macbook工作环境配置</a></li>
-<li><a href="https://www.gitbook.com/book/aaaaaashu/mac-dev-setup/details" target="_blank" rel="noopener">Mac 开发配置手册</a></li>
+<li><a target="_blank" rel="noopener" href="https://github.com/hzlzh/Best-App">收集&amp;推荐优秀的 Apps&#x2F;硬件&#x2F;技巧&#x2F;周边等</a></li>
+<li><a target="_blank" rel="noopener" href="https://wsgzao.github.io/post/mac/">Mac新手入门以及常用软件推荐</a></li>
+<li><a target="_blank" rel="noopener" href="http://xialeizhou.com/2019/06/23/%E9%AB%98%E6%95%88macbook%E5%B7%A5%E4%BD%9C%E7%8E%AF%E5%A2%83%E9%85%8D%E7%BD%AE/">高效macbook工作环境配置</a></li>
+<li><a target="_blank" rel="noopener" href="https://www.gitbook.com/book/aaaaaashu/mac-dev-setup/details">Mac 开发配置手册</a></li>
 </ol>
 <p>自己折腾去吧~╰(￣▽￣)╭</p>
 
@@ -305,7 +318,7 @@
 
 <div class="article-categories">
   <span></span>
-  <a class="article-category-link" href="/categories/杂/">杂</a>
+  <a class="article-category-link" href="/categories/%E6%9D%82/">杂</a>
 </div>
 
 
@@ -356,7 +369,7 @@
 
 <section id="comments" class="comment">
   <div id="disqus_thread">
-    <noscript>Please enable JavaScript to view the <a href="//disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
+    <noscript>Please enable JavaScript to view the <a target="_blank" rel="noopener" href="//disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
   </div>
 </section>
 
@@ -367,7 +380,7 @@
   <div id="toc" class="toc-aside">
   <strong class="toc-title">文章目录</strong>
  
- <ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#基本操作介绍"><span class="toc-number">1.</span> <span class="toc-text">基本操作介绍</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#系统基本配置"><span class="toc-number">2.</span> <span class="toc-text">系统基本配置</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#系统基本介绍"><span class="toc-number">3.</span> <span class="toc-text">系统基本介绍</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#一些介绍"><span class="toc-number">3.1.</span> <span class="toc-text">一些介绍</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#安装软件"><span class="toc-number">3.2.</span> <span class="toc-text">安装软件</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#软件"><span class="toc-number">4.</span> <span class="toc-text">软件</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#iTerm2"><span class="toc-number">4.1.</span> <span class="toc-text">iTerm2</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#Homebrew"><span class="toc-number">4.2.</span> <span class="toc-text">Homebrew</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#Cask"><span class="toc-number">4.2.1.</span> <span class="toc-text">Cask</span></a></li></ol></li><li class="toc-item toc-level-3"><a class="toc-link" href="#fish"><span class="toc-number">4.3.</span> <span class="toc-text">fish</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#ShadowsocksX"><span class="toc-number">4.4.</span> <span class="toc-text">ShadowsocksX</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#Karabiner-Elements"><span class="toc-number">4.5.</span> <span class="toc-text">Karabiner-Elements</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#其他软件"><span class="toc-number">4.6.</span> <span class="toc-text">其他软件</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#其他参考"><span class="toc-number">5.</span> <span class="toc-text">其他参考</span></a></li></ol>
+ <ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#%E5%9F%BA%E6%9C%AC%E6%93%8D%E4%BD%9C%E4%BB%8B%E7%BB%8D"><span class="toc-number">1.</span> <span class="toc-text">基本操作介绍</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E7%B3%BB%E7%BB%9F%E5%9F%BA%E6%9C%AC%E9%85%8D%E7%BD%AE"><span class="toc-number">2.</span> <span class="toc-text">系统基本配置</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E7%B3%BB%E7%BB%9F%E5%9F%BA%E6%9C%AC%E4%BB%8B%E7%BB%8D"><span class="toc-number">3.</span> <span class="toc-text">系统基本介绍</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#%E4%B8%80%E4%BA%9B%E4%BB%8B%E7%BB%8D"><span class="toc-number">3.1.</span> <span class="toc-text">一些介绍</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E8%BD%AF%E4%BB%B6"><span class="toc-number">4.</span> <span class="toc-text">软件</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#iTerm2"><span class="toc-number">4.1.</span> <span class="toc-text">iTerm2</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#Homebrew"><span class="toc-number">4.2.</span> <span class="toc-text">Homebrew</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#Cask"><span class="toc-number">4.2.1.</span> <span class="toc-text">Cask</span></a></li></ol></li><li class="toc-item toc-level-3"><a class="toc-link" href="#fish"><span class="toc-number">4.3.</span> <span class="toc-text">fish</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#ShadowsocksX"><span class="toc-number">4.4.</span> <span class="toc-text">ShadowsocksX</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#Karabiner-Elements"><span class="toc-number">4.5.</span> <span class="toc-text">Karabiner-Elements</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E5%85%B6%E4%BB%96%E8%BD%AF%E4%BB%B6"><span class="toc-number">4.6.</span> <span class="toc-text">其他软件</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E5%85%B6%E4%BB%96%E5%8F%82%E8%80%83"><span class="toc-number">5.</span> <span class="toc-text">其他参考</span></a></li></ol>
  
   </div>
 
@@ -462,7 +475,7 @@
   <div class="tagcloudlist">
     <p class="asidetitle">标签云</p>
     <div class="tagcloudlist clearfix">
-       <a href="/tags/Adam/" style="font-size: 10px;">Adam</a> <a href="/tags/BGD/" style="font-size: 10px;">BGD</a> <a href="/tags/Cassandra/" style="font-size: 11.67px;">Cassandra</a> <a href="/tags/Druid/" style="font-size: 16.67px;">Druid</a> <a href="/tags/JVM/" style="font-size: 10px;">JVM</a> <a href="/tags/Java/" style="font-size: 10px;">Java</a> <a href="/tags/LCS/" style="font-size: 10px;">LCS</a> <a href="/tags/Momentum/" style="font-size: 10px;">Momentum</a> <a href="/tags/MySQL/" style="font-size: 10px;">MySQL</a> <a href="/tags/NOSQL/" style="font-size: 11.67px;">NOSQL</a> <a href="/tags/SGD/" style="font-size: 10px;">SGD</a> <a href="/tags/Spring-Boot/" style="font-size: 10px;">Spring Boot</a> <a href="/tags/Sytle-Transfer/" style="font-size: 10px;">Sytle Transfer</a> <a href="/tags/Weight-initialization/" style="font-size: 10px;">Weight initialization</a> <a href="/tags/algorithms/" style="font-size: 10px;">algorithms</a> <a href="/tags/bash/" style="font-size: 10px;">bash</a> <a href="/tags/dynamic-programming/" style="font-size: 10px;">dynamic programming</a> <a href="/tags/hexo/" style="font-size: 10px;">hexo</a> <a href="/tags/java/" style="font-size: 10px;">java</a> <a href="/tags/k-邻近法/" style="font-size: 11.67px;">k 邻近法</a> <a href="/tags/knn/" style="font-size: 11.67px;">knn</a> <a href="/tags/linux/" style="font-size: 10px;">linux</a> <a href="/tags/macOS/" style="font-size: 10px;">macOS</a> <a href="/tags/parallelStream/" style="font-size: 10px;">parallelStream</a> <a href="/tags/quicklist/" style="font-size: 10px;">quicklist</a> <a href="/tags/redis/" style="font-size: 10px;">redis</a> <a href="/tags/stream/" style="font-size: 10px;">stream</a> <a href="/tags/utf8/" style="font-size: 10px;">utf8</a> <a href="/tags/utf8mb4/" style="font-size: 10px;">utf8mb4</a> <a href="/tags/ziplist/" style="font-size: 10px;">ziplist</a> <a href="/tags/内存模型/" style="font-size: 10px;">内存模型</a> <a href="/tags/分布式/" style="font-size: 18.33px;">分布式</a> <a href="/tags/多线程/" style="font-size: 10px;">多线程</a> <a href="/tags/实时计算/" style="font-size: 16.67px;">实时计算</a> <a href="/tags/异常处理/" style="font-size: 10px;">异常处理</a> <a href="/tags/异常表/" style="font-size: 10px;">异常表</a> <a href="/tags/感知机/" style="font-size: 10px;">感知机</a> <a href="/tags/数据结构/" style="font-size: 10px;">数据结构</a> <a href="/tags/最大熵模型/" style="font-size: 10px;">最大熵模型</a> <a href="/tags/朴素贝叶斯/" style="font-size: 10px;">朴素贝叶斯</a> <a href="/tags/机器学习/" style="font-size: 16.67px;">机器学习</a> <a href="/tags/杂/" style="font-size: 16.67px;">杂</a> <a href="/tags/梯度下降/" style="font-size: 10px;">梯度下降</a> <a href="/tags/深度学习/" style="font-size: 13.33px;">深度学习</a> <a href="/tags/源码分析/" style="font-size: 10px;">源码分析</a> <a href="/tags/生成/" style="font-size: 10px;">生成</a> <a href="/tags/生活/" style="font-size: 15px;">生活</a> <a href="/tags/笔记/" style="font-size: 20px;">笔记</a> <a href="/tags/统计学习/" style="font-size: 16.67px;">统计学习</a> <a href="/tags/编码/" style="font-size: 10px;">编码</a> <a href="/tags/自驾/" style="font-size: 15px;">自驾</a> <a href="/tags/调参/" style="font-size: 11.67px;">调参</a> <a href="/tags/跨域/" style="font-size: 10px;">跨域</a> <a href="/tags/踩坑日志/" style="font-size: 10px;">踩坑日志</a> <a href="/tags/逻辑斯谛回归/" style="font-size: 10px;">逻辑斯谛回归</a> <a href="/tags/配置/" style="font-size: 10px;">配置</a> <a href="/tags/风格迁移/" style="font-size: 10px;">风格迁移</a>
+       <a href="/tags/Adam/" style="font-size: 10px;">Adam</a> <a href="/tags/BGD/" style="font-size: 10px;">BGD</a> <a href="/tags/Cassandra/" style="font-size: 11.67px;">Cassandra</a> <a href="/tags/Druid/" style="font-size: 16.67px;">Druid</a> <a href="/tags/JVM/" style="font-size: 10px;">JVM</a> <a href="/tags/Java/" style="font-size: 10px;">Java</a> <a href="/tags/LCS/" style="font-size: 10px;">LCS</a> <a href="/tags/Momentum/" style="font-size: 10px;">Momentum</a> <a href="/tags/MySQL/" style="font-size: 10px;">MySQL</a> <a href="/tags/NOSQL/" style="font-size: 11.67px;">NOSQL</a> <a href="/tags/SGD/" style="font-size: 10px;">SGD</a> <a href="/tags/Spring-Boot/" style="font-size: 10px;">Spring Boot</a> <a href="/tags/Sytle-Transfer/" style="font-size: 10px;">Sytle Transfer</a> <a href="/tags/Weight-initialization/" style="font-size: 10px;">Weight initialization</a> <a href="/tags/algorithms/" style="font-size: 10px;">algorithms</a> <a href="/tags/bash/" style="font-size: 10px;">bash</a> <a href="/tags/dynamic-programming/" style="font-size: 10px;">dynamic programming</a> <a href="/tags/hexo/" style="font-size: 10px;">hexo</a> <a href="/tags/java/" style="font-size: 10px;">java</a> <a href="/tags/k-%E9%82%BB%E8%BF%91%E6%B3%95/" style="font-size: 11.67px;">k 邻近法</a> <a href="/tags/knn/" style="font-size: 11.67px;">knn</a> <a href="/tags/linux/" style="font-size: 10px;">linux</a> <a href="/tags/macOS/" style="font-size: 10px;">macOS</a> <a href="/tags/parallelStream/" style="font-size: 10px;">parallelStream</a> <a href="/tags/quicklist/" style="font-size: 10px;">quicklist</a> <a href="/tags/redis/" style="font-size: 10px;">redis</a> <a href="/tags/stream/" style="font-size: 10px;">stream</a> <a href="/tags/utf8/" style="font-size: 10px;">utf8</a> <a href="/tags/utf8mb4/" style="font-size: 10px;">utf8mb4</a> <a href="/tags/ziplist/" style="font-size: 10px;">ziplist</a> <a href="/tags/%E5%86%85%E5%AD%98%E6%A8%A1%E5%9E%8B/" style="font-size: 10px;">内存模型</a> <a href="/tags/%E5%88%86%E5%B8%83%E5%BC%8F/" style="font-size: 18.33px;">分布式</a> <a href="/tags/%E5%A4%9A%E7%BA%BF%E7%A8%8B/" style="font-size: 10px;">多线程</a> <a href="/tags/%E5%AE%9E%E6%97%B6%E8%AE%A1%E7%AE%97/" style="font-size: 16.67px;">实时计算</a> <a href="/tags/%E5%BC%82%E5%B8%B8%E5%A4%84%E7%90%86/" style="font-size: 10px;">异常处理</a> <a href="/tags/%E5%BC%82%E5%B8%B8%E8%A1%A8/" style="font-size: 10px;">异常表</a> <a href="/tags/%E6%84%9F%E7%9F%A5%E6%9C%BA/" style="font-size: 10px;">感知机</a> <a href="/tags/%E6%95%B0%E6%8D%AE%E7%BB%93%E6%9E%84/" style="font-size: 10px;">数据结构</a> <a href="/tags/%E6%9C%80%E5%A4%A7%E7%86%B5%E6%A8%A1%E5%9E%8B/" style="font-size: 10px;">最大熵模型</a> <a href="/tags/%E6%9C%B4%E7%B4%A0%E8%B4%9D%E5%8F%B6%E6%96%AF/" style="font-size: 10px;">朴素贝叶斯</a> <a href="/tags/%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0/" style="font-size: 16.67px;">机器学习</a> <a href="/tags/%E6%9D%82/" style="font-size: 16.67px;">杂</a> <a href="/tags/%E6%A2%AF%E5%BA%A6%E4%B8%8B%E9%99%8D/" style="font-size: 10px;">梯度下降</a> <a href="/tags/%E6%B7%B1%E5%BA%A6%E5%AD%A6%E4%B9%A0/" style="font-size: 13.33px;">深度学习</a> <a href="/tags/%E6%BA%90%E7%A0%81%E5%88%86%E6%9E%90/" style="font-size: 10px;">源码分析</a> <a href="/tags/%E7%94%9F%E6%88%90/" style="font-size: 10px;">生成</a> <a href="/tags/%E7%94%9F%E6%B4%BB/" style="font-size: 15px;">生活</a> <a href="/tags/%E7%AC%94%E8%AE%B0/" style="font-size: 20px;">笔记</a> <a href="/tags/%E7%BB%9F%E8%AE%A1%E5%AD%A6%E4%B9%A0/" style="font-size: 16.67px;">统计学习</a> <a href="/tags/%E7%BC%96%E7%A0%81/" style="font-size: 10px;">编码</a> <a href="/tags/%E8%87%AA%E9%A9%BE/" style="font-size: 15px;">自驾</a> <a href="/tags/%E8%B0%83%E5%8F%82/" style="font-size: 11.67px;">调参</a> <a href="/tags/%E8%B7%A8%E5%9F%9F/" style="font-size: 10px;">跨域</a> <a href="/tags/%E8%B8%A9%E5%9D%91%E6%97%A5%E5%BF%97/" style="font-size: 10px;">踩坑日志</a> <a href="/tags/%E9%80%BB%E8%BE%91%E6%96%AF%E8%B0%9B%E5%9B%9E%E5%BD%92/" style="font-size: 10px;">逻辑斯谛回归</a> <a href="/tags/%E9%85%8D%E7%BD%AE/" style="font-size: 10px;">配置</a> <a href="/tags/%E9%A3%8E%E6%A0%BC%E8%BF%81%E7%A7%BB/" style="font-size: 10px;">风格迁移</a>
     </div>
   </div>
 
