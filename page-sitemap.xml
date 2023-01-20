@@ -10,7 +10,16 @@
     
     
     <url>
-        <loc>http://blog.liexing.me/categories/</loc>
+        <loc>http://blog.liexing.me/search/</loc>
+        <lastmod>2023-01-20T06:38:11.533Z</lastmod>
+        <changefreq>weekly</changefreq>
+        <priority>0.8</priority>
+    </url>
+    
+    
+    
+    <url>
+        <loc>http://blog.liexing.me/about/</loc>
         <lastmod>2023-01-20T06:38:11.533Z</lastmod>
         <changefreq>weekly</changefreq>
         <priority>0.8</priority>
@@ -28,16 +37,7 @@
     
     
     <url>
-        <loc>http://blog.liexing.me/search/</loc>
-        <lastmod>2023-01-20T06:38:11.533Z</lastmod>
-        <changefreq>weekly</changefreq>
-        <priority>0.8</priority>
-    </url>
-    
-    
-    
-    <url>
-        <loc>http://blog.liexing.me/about/</loc>
+        <loc>http://blog.liexing.me/categories/</loc>
         <lastmod>2023-01-20T06:38:11.533Z</lastmod>
         <changefreq>weekly</changefreq>
         <priority>0.8</priority>
