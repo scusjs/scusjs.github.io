@@ -1,0 +1,274 @@
+<?xml version="1.0" encoding="UTF-8"?><?xml-stylesheet type="text/xsl" href="sitemap.xsl"?>
+<urlset xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:image="http://www.google.com/schemas/sitemap-image/1.1" xsi:schemaLocation="http://www.sitemaps.org/schemas/sitemap/0.9 http://www.sitemaps.org/schemas/sitemap/0.9/sitemap.xsd" xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
+    <url>
+        <loc>http://blog.liexing.me</loc>
+        <changefreq>daily</changefreq>
+        <priority>1</priority>
+    </url>
+
+    <url>
+        <loc>http://blog.liexing.me/2019/06/23/Tibetan-Self-driving-Travel-Notes/</loc>
+        <lastmod>2023-01-20T15:09:30.498Z</lastmod>
+        <changefreq>weekly</changefreq>
+        <priority>0.6</priority>
+
+    </url>
+
+    <url>
+        <loc>http://blog.liexing.me/2019/12/01/Tibetan-Self-driving-Travel-Notes-5/</loc>
+        <lastmod>2023-01-20T15:07:36.858Z</lastmod>
+        <changefreq>weekly</changefreq>
+        <priority>0.6</priority>
+
+    </url>
+
+    <url>
+        <loc>http://blog.liexing.me/2017/11/10/a-letter-to-18/</loc>
+        <lastmod>2023-01-20T15:04:29.748Z</lastmod>
+        <changefreq>weekly</changefreq>
+        <priority>0.6</priority>
+
+    </url>
+
+    <url>
+        <loc>http://blog.liexing.me/2019/09/01/Tibetan-Self-driving-Travel-Notes-4/</loc>
+        <lastmod>2023-01-20T15:04:29.748Z</lastmod>
+        <changefreq>weekly</changefreq>
+        <priority>0.6</priority>
+
+    </url>
+
+    <url>
+        <loc>http://blog.liexing.me/2017/12/20/art-generation-with-neural-style-transfer/</loc>
+        <lastmod>2023-01-20T15:04:29.748Z</lastmod>
+        <changefreq>weekly</changefreq>
+        <priority>0.6</priority>
+
+    </url>
+
+    <url>
+        <loc>http://blog.liexing.me/2018/03/20/cross-domain-debug-record/</loc>
+        <lastmod>2023-01-20T15:04:29.748Z</lastmod>
+        <changefreq>weekly</changefreq>
+        <priority>0.6</priority>
+
+    </url>
+
+    <url>
+        <loc>http://blog.liexing.me/2016/08/25/cassandra-architecture-in-brief/</loc>
+        <lastmod>2023-01-20T15:04:29.747Z</lastmod>
+        <changefreq>weekly</changefreq>
+        <priority>0.6</priority>
+
+    </url>
+
+    <url>
+        <loc>http://blog.liexing.me/2016/04/20/reindex-between-different-druid-use-and-metadatastorage/</loc>
+        <lastmod>2023-01-20T15:04:29.747Z</lastmod>
+        <changefreq>weekly</changefreq>
+        <priority>0.6</priority>
+
+    </url>
+
+    <url>
+        <loc>http://blog.liexing.me/2017/11/16/optimizing-gradient-descent/</loc>
+        <lastmod>2023-01-20T15:04:29.747Z</lastmod>
+        <changefreq>weekly</changefreq>
+        <priority>0.6</priority>
+
+    </url>
+
+    <url>
+        <loc>http://blog.liexing.me/2016/11/03/statistical-learning-method-naive-bayes/</loc>
+        <lastmod>2023-01-20T15:04:29.747Z</lastmod>
+        <changefreq>weekly</changefreq>
+        <priority>0.6</priority>
+
+    </url>
+
+    <url>
+        <loc>http://blog.liexing.me/2016/04/15/druid-indexing-service/</loc>
+        <lastmod>2023-01-20T15:04:29.746Z</lastmod>
+        <changefreq>weekly</changefreq>
+        <priority>0.6</priority>
+
+    </url>
+
+    <url>
+        <loc>http://blog.liexing.me/2017/08/11/macos-dev-setup/</loc>
+        <lastmod>2023-01-20T15:04:29.746Z</lastmod>
+        <changefreq>weekly</changefreq>
+        <priority>0.6</priority>
+
+    </url>
+
+    <url>
+        <loc>http://blog.liexing.me/2018/11/03/parallelstream-trap/</loc>
+        <lastmod>2023-01-20T15:04:29.746Z</lastmod>
+        <changefreq>weekly</changefreq>
+        <priority>0.6</priority>
+
+    </url>
+
+    <url>
+        <loc>http://blog.liexing.me/2016/11/02/statistical-learning-method-knn/</loc>
+        <lastmod>2023-01-20T15:04:29.746Z</lastmod>
+        <changefreq>weekly</changefreq>
+        <priority>0.6</priority>
+
+    </url>
+
+    <url>
+        <loc>http://blog.liexing.me/2017/07/13/statistical-learning-method-logistic-regression-maximum-entropy-model/</loc>
+        <lastmod>2023-01-20T15:04:29.746Z</lastmod>
+        <changefreq>weekly</changefreq>
+        <priority>0.6</priority>
+
+    </url>
+
+    <url>
+        <loc>http://blog.liexing.me/2016/04/21/auto-ssh-to-server/</loc>
+        <lastmod>2023-01-20T15:04:29.745Z</lastmod>
+        <changefreq>weekly</changefreq>
+        <priority>0.6</priority>
+
+    </url>
+
+    <url>
+        <loc>http://blog.liexing.me/2016/04/25/druid-querying/</loc>
+        <lastmod>2023-01-20T15:04:29.745Z</lastmod>
+        <changefreq>weekly</changefreq>
+        <priority>0.6</priority>
+
+    </url>
+
+    <url>
+        <loc>http://blog.liexing.me/2017/07/31/java-memory-model/</loc>
+        <lastmod>2023-01-20T15:04:29.745Z</lastmod>
+        <changefreq>weekly</changefreq>
+        <priority>0.6</priority>
+
+    </url>
+
+    <url>
+        <loc>http://blog.liexing.me/2015/09/01/oh-my-hexo/</loc>
+        <lastmod>2023-01-20T15:04:29.745Z</lastmod>
+        <changefreq>weekly</changefreq>
+        <priority>0.6</priority>
+
+    </url>
+
+    <url>
+        <loc>http://blog.liexing.me/2019/07/07/Tibetan-Self-driving-Travel-Notes-2/</loc>
+        <lastmod>2023-01-20T15:04:29.744Z</lastmod>
+        <changefreq>weekly</changefreq>
+        <priority>0.6</priority>
+
+    </url>
+
+    <url>
+        <loc>http://blog.liexing.me/2016/01/05/longest-common-subsequence/</loc>
+        <lastmod>2023-01-20T15:04:29.744Z</lastmod>
+        <changefreq>weekly</changefreq>
+        <priority>0.6</priority>
+
+    </url>
+
+    <url>
+        <loc>http://blog.liexing.me/2017/10/24/deep-learning-weight-initialization/</loc>
+        <lastmod>2023-01-20T15:04:29.744Z</lastmod>
+        <changefreq>weekly</changefreq>
+        <priority>0.6</priority>
+
+    </url>
+
+    <url>
+        <loc>http://blog.liexing.me/2018/07/27/mysql-utf8/</loc>
+        <lastmod>2023-01-20T15:04:29.744Z</lastmod>
+        <changefreq>weekly</changefreq>
+        <priority>0.6</priority>
+
+    </url>
+
+    <url>
+        <loc>http://blog.liexing.me/2016/05/19/druid-indexing-service-process-analysis/</loc>
+        <lastmod>2023-01-20T15:04:29.744Z</lastmod>
+        <changefreq>weekly</changefreq>
+        <priority>0.6</priority>
+
+    </url>
+
+    <url>
+        <loc>http://blog.liexing.me/2016/03/28/druid-quickstart/</loc>
+        <lastmod>2023-01-20T15:04:29.743Z</lastmod>
+        <changefreq>weekly</changefreq>
+        <priority>0.6</priority>
+
+    </url>
+
+    <url>
+        <loc>http://blog.liexing.me/2016/11/07/statistical-learning-method-decision-tree/</loc>
+        <lastmod>2023-01-20T15:04:29.743Z</lastmod>
+        <changefreq>weekly</changefreq>
+        <priority>0.6</priority>
+
+    </url>
+
+    <url>
+        <loc>http://blog.liexing.me/2016/10/30/statistical-learning-method-intro/</loc>
+        <lastmod>2023-01-20T15:04:29.743Z</lastmod>
+        <changefreq>weekly</changefreq>
+        <priority>0.6</priority>
+
+    </url>
+
+    <url>
+        <loc>http://blog.liexing.me/2016/11/01/statistical-learning-method-perceptron/</loc>
+        <lastmod>2023-01-20T15:04:29.743Z</lastmod>
+        <changefreq>weekly</changefreq>
+        <priority>0.6</priority>
+
+    </url>
+
+    <url>
+        <loc>http://blog.liexing.me/2019/07/07/Tibetan-Self-driving-Travel-Notes-3/</loc>
+        <lastmod>2023-01-20T15:04:29.742Z</lastmod>
+        <changefreq>weekly</changefreq>
+        <priority>0.6</priority>
+
+    </url>
+
+    <url>
+        <loc>http://blog.liexing.me/2016/06/16/druid-command-line-hadoop-indexer/</loc>
+        <lastmod>2023-01-20T15:04:29.742Z</lastmod>
+        <changefreq>weekly</changefreq>
+        <priority>0.6</priority>
+
+    </url>
+
+    <url>
+        <loc>http://blog.liexing.me/2017/09/17/java-exception-table/</loc>
+        <lastmod>2023-01-20T15:04:29.742Z</lastmod>
+        <changefreq>weekly</changefreq>
+        <priority>0.6</priority>
+
+    </url>
+
+    <url>
+        <loc>http://blog.liexing.me/2019/12/28/from-ziplist-linkedlist-to-quicklist/</loc>
+        <lastmod>2023-01-20T15:04:29.741Z</lastmod>
+        <changefreq>weekly</changefreq>
+        <priority>0.6</priority>
+
+    </url>
+
+    <url>
+        <loc>http://blog.liexing.me/2016/09/08/cassandra-architecture/</loc>
+        <lastmod>2023-01-20T15:04:29.740Z</lastmod>
+        <changefreq>weekly</changefreq>
+        <priority>0.6</priority>
+
+    </url>
+
+</urlset>
+<!-- XML Sitemap generated by Hexo SEO Friendly Sitemap Generator -->

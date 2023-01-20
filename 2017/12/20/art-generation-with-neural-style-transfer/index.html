@@ -1,0 +1,743 @@
+
+ <!DOCTYPE HTML>
+<html lang="zh-CN">
+<head><meta name="generator" content="Hexo 3.9.0">
+  <meta charset="UTF-8">
+  
+    <title>风格迁移-生成图片 | Liexing&#39;s Blog</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1,user-scalable=no">
+    
+    <meta name="author" content="liexing">
+    
+
+    
+    <meta name="description" content="画由心生,境为意造 —— 白居易  去年《你的名字》火了之后，某 APP 发布了一个风格迁移的滤镜，随后朋友圈火了一把动画风的图片秀。当时就像玩玩风格迁移，然后这个拖延症一直至今，前几天看吴恩达的深度学习课程，突然想起这个坑。我也不知道在忙到爆炸的毕设中期前哪来的勇气这么浪去玩其他(￣.￣)  风格迁移简介风格迁移（Style Transfer）是深度学习非常好玩的一个应用，它可以从一张图片获得">
+<meta name="keywords" content="深度学习,风格迁移,生成,Sytle Transfer">
+<meta property="og:type" content="article">
+<meta property="og:title" content="风格迁移-生成图片">
+<meta property="og:url" content="http://blog.liexing.me/2017/12/20/art-generation-with-neural-style-transfer/index.html">
+<meta property="og:site_name" content="Liexing&#39;s Blog">
+<meta property="og:description" content="画由心生,境为意造 —— 白居易  去年《你的名字》火了之后，某 APP 发布了一个风格迁移的滤镜，随后朋友圈火了一把动画风的图片秀。当时就像玩玩风格迁移，然后这个拖延症一直至今，前几天看吴恩达的深度学习课程，突然想起这个坑。我也不知道在忙到爆炸的毕设中期前哪来的勇气这么浪去玩其他(￣.￣)  风格迁移简介风格迁移（Style Transfer）是深度学习非常好玩的一个应用，它可以从一张图片获得">
+<meta property="og:locale" content="zh-CN">
+<meta property="og:image" content="http://blog.liexing.me/images/art-generation-with-neural-style-transfer/1513782703.jpeg">
+<meta property="og:image" content="http://blog.liexing.me/images/art-generation-with-neural-style-transfer/1513783405.jpg">
+<meta property="og:image" content="http://blog.liexing.me/images/art-generation-with-neural-style-transfer/1513783877.jpg">
+<meta property="og:image" content="http://blog.liexing.me/images/art-generation-with-neural-style-transfer/1513784174.jpg">
+<meta property="og:image" content="http://blog.liexing.me/images/art-generation-with-neural-style-transfer/1513785216.jpg">
+<meta property="og:image" content="http://blog.liexing.me/images/art-generation-with-neural-style-transfer/1513785348.jpg">
+<meta property="og:image" content="http://blog.liexing.me/images/art-generation-with-neural-style-transfer/1513823427.jpg">
+<meta property="og:image" content="http://blog.liexing.me/images/art-generation-with-neural-style-transfer/1513824608.jpg">
+<meta property="og:image" content="http://blog.liexing.me/images/art-generation-with-neural-style-transfer/1513825726.jpg">
+<meta property="og:image" content="http://blog.liexing.me/images/art-generation-with-neural-style-transfer/1513826175.jpg">
+<meta property="og:image" content="http://blog.liexing.me/images/art-generation-with-neural-style-transfer/1513826560.jpg">
+<meta property="og:image" content="http://blog.liexing.me/images/art-generation-with-neural-style-transfer/1513826974.jpg">
+<meta property="og:updated_time" content="2023-01-20T15:04:29.748Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="风格迁移-生成图片">
+<meta name="twitter:description" content="画由心生,境为意造 —— 白居易  去年《你的名字》火了之后，某 APP 发布了一个风格迁移的滤镜，随后朋友圈火了一把动画风的图片秀。当时就像玩玩风格迁移，然后这个拖延症一直至今，前几天看吴恩达的深度学习课程，突然想起这个坑。我也不知道在忙到爆炸的毕设中期前哪来的勇气这么浪去玩其他(￣.￣)  风格迁移简介风格迁移（Style Transfer）是深度学习非常好玩的一个应用，它可以从一张图片获得">
+<meta name="twitter:image" content="http://blog.liexing.me/images/art-generation-with-neural-style-transfer/1513782703.jpeg">
+<meta name="twitter:creator" content="@scusjs">
+
+    
+    <link rel="alternative" href="/atom.xml" title="Liexing&#39;s Blog" type="application/atom+xml">
+    
+    
+    <link rel="icon" href="/img/favicon.ico">
+    
+    
+    <link rel="apple-touch-icon" href="/img/favicon.jpg">
+    <link rel="apple-touch-icon-precomposed" href="/img/favicon.jpg">
+    
+    <link rel="stylesheet" href="//cdn.bootcss.com/font-awesome/4.3.0/css/font-awesome.min.css">
+    <link rel="stylesheet" href="/css/style.css">
+</head>
+</html>
+  <body>
+    <header>
+      
+<div>
+		
+			<div id="imglogo">
+				<a href="/"><img src="/img/logo.png" alt="Liexing&#39;s Blog" title="Liexing&#39;s Blog"/></a>
+			</div>
+			
+			<div id="textlogo">
+				<h1 class="site-name"><a href="/" title="Liexing&#39;s Blog">Liexing&#39;s Blog</a></h1>
+				<h2 class="blog-motto"><span id="ones">不疯魔，不成佛</span></h2>
+			</div>
+			<div class="navbar"><a class="navbutton navmobile" href="#" title="菜单">
+			</a></div>
+			<nav class="animated">
+				<ul>
+					<ul>
+					 
+						<li><a href="/">主页 | Home</a></li>
+					
+						<li><a href="/archives">归档 | Archives</a></li>
+					
+						<li><a href="/about">简介 | About</a></li>
+					
+					<li>
+ 					
+					<form class="search" action="/search/index.html" method="get" accept-charset="utf-8">
+						<label>Search</label>
+						<input type="search" id="search" autocomplete="off" name="q" maxlength="20" placeholder="搜索" />
+					</form>
+					
+					</li>
+				</ul>
+			</nav>			
+</div>
+
+    </header>
+    <div id="container">
+      <div id="main" class="post" itemscope itemprop="blogPost">
+    
+    <article itemprop="articleBody"> 
+        <header class="article-info clearfix">
+  <h1 itemprop="name">
+    
+      <a href="/2017/12/20/art-generation-with-neural-style-transfer/" title="风格迁移-生成图片" itemprop="url">风格迁移-生成图片</a>
+  </h1>
+  <p class="article-author">By
+       
+		<a href="/about" title="liexing" target="_blank" itemprop="author">liexing</a>
+		
+  <p class="article-time">
+    <time datetime="2017-12-20T14:58:58.000Z" itemprop="datePublished"> 发表于 2017-12-20</time>
+<span id="busuanzi_container_page_pv">
+  &nbsp<i class="fa fa-eye"></i> <span id="busuanzi_value_page_pv"><i class="fa fa-spinner fa-spin"></i></span>
+</span>
+    
+  </p>
+</header>
+
+    <div class="article-content">
+        
+        <div id="toc" class="toc-article">
+            <strong class="toc-title">文章目录</strong>
+        
+            <ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link" href="#风格迁移简介"><span class="toc-number">1.</span> <span class="toc-text">风格迁移简介</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#卷积神经网络中学习到了什么"><span class="toc-number">2.</span> <span class="toc-text">卷积神经网络中学习到了什么</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#风格迁移模型"><span class="toc-number">3.</span> <span class="toc-text">风格迁移模型</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#损失函数"><span class="toc-number">4.</span> <span class="toc-text">损失函数</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#内容损失函数"><span class="toc-number">4.1.</span> <span class="toc-text">内容损失函数</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#风格损失函数"><span class="toc-number">4.2.</span> <span class="toc-text">风格损失函数</span></a></li></ol></li><li class="toc-item toc-level-1"><a class="toc-link" href="#模型示例"><span class="toc-number">5.</span> <span class="toc-text">模型示例</span></a></li></ol>
+        
+        </div>
+        
+        <blockquote>
+<p>画由心生,境为意造 —— 白居易</p>
+</blockquote>
+<p>去年《你的名字》火了之后，某 APP 发布了一个风格迁移的滤镜，随后朋友圈火了一把动画风的图片秀。当时就像玩玩风格迁移，然后这个拖延症一直至今，前几天看吴恩达的深度学习课程，突然想起这个坑。我也不知道在忙到爆炸的毕设中期前哪来的勇气这么浪去玩其他(￣.￣)</p>
+<p><img src="/images/art-generation-with-neural-style-transfer/1513782703.jpeg" width="600" title="你的名字" alt="你的名字"></p>
+<h1 id="风格迁移简介"><a href="#风格迁移简介" class="headerlink" title="风格迁移简介"></a>风格迁移简介</h1><p>风格迁移（Style Transfer）是深度学习非常好玩的一个应用，它可以从一张图片获得风格，另一张图片或得内容，再合成为一张新的图片，比如：</p>
+<p><img src="/images/art-generation-with-neural-style-transfer/1513783405.jpg" width="600" title="sytle-transfer" alt="sytle-transfer"><br>左上角是需要的内容图片，右上角是想要学习的风格图片，想要学习、生成下面的新图片。</p>
+<h1 id="卷积神经网络中学习到了什么"><a href="#卷积神经网络中学习到了什么" class="headerlink" title="卷积神经网络中学习到了什么"></a>卷积神经网络中学习到了什么</h1><p>对于图片分类，我们一般使用卷积神经网络获取图片信息，最终输出类别，比如下图中的网络，其实就是一层层的堆积卷积层和池化层，最后加几个全连接层：</p>
+<p><img src="/images/art-generation-with-neural-style-transfer/1513783877.jpg" title="cnn" alt="cnn"><br>我们常说，在深度神经网络中，浅层的神经元拟合简单的信息，深层的拟合更复杂的信息。那么在 CNN 中，每层卷积核分别在什么情况下激活呢？下图是上面的网络，每层卷积核激活时候的输入输入：</p>
+<p><img src="/images/art-generation-with-neural-style-transfer/1513784174.jpg" title="activate" alt="activate"><br>可以看出，浅层的核只是拟合简单的线条，越是深层拟合的东西越复杂（可以想象卷积核移动的时候，浅层往往只关注局部的信息，而越是深层，对于输入图像关注的范围越大）。</p>
+<p>在我们的生成迁移模型中，将会使用预训练好的 CNN 网络模型，来提取图形特征与内容，使用越深的网络获取到的特征越高层，因此选用较浅的层将会更加像素级的趋近输入图片，越深则越在内容上趋近。</p>
+<h1 id="风格迁移模型"><a href="#风格迁移模型" class="headerlink" title="风格迁移模型"></a>风格迁移模型</h1><p>最早期的风格<a href="https://arxiv.org/pdf/1508.06576v2.pdf" target="_blank" rel="noopener">迁移模型</a>非常缓慢，因为它把图片的生成过程当做一个“训练”过程，将风格图片和内容图片作为输入，生成最后的新图片，每生成一张图片都相当于训练一个模型。模型图如下：</p>
+<p><img src="/images/art-generation-with-neural-style-transfer/1513785216.jpg" title="a-neural-algorithm-of-artistic-style" alt="a-neural-algorithm-of-artistic-style"></p>
+<p>因此我们需要加快风格迁移的速度，需要把其当做一个“生成”或者“执行”的过程，即<a href="https://arxiv.org/pdf/1603.08155v1.pdf" target="_blank" rel="noopener">快速风格迁移</a>，该模型图如下：</p>
+<p><img src="/images/art-generation-with-neural-style-transfer/1513785348.jpg" title="real-time-stype-transfer" alt="real-time-stype-transfer"><br>首先随机生成一张图片 G，然后通过前面提到的网络选择出某特征层l，将内容图片和风格图片通过同样的方式得到某个特征层，再按照下面的方法得到损失函数进而通过反向传播修改 G。可以简化为如图所示：</p>
+<p><img src="/images/art-generation-with-neural-style-transfer/1513823427.jpg" title="real-time-stype-transfer-v2" alt="real-time-stype-transfer-v2"><br>蓝色箭头为前向运算，红色箭头为反向运算，三个 Network 其实是同一个。</p>
+<h1 id="损失函数"><a href="#损失函数" class="headerlink" title="损失函数"></a>损失函数</h1><p>训练机器学习模型，需要定义损失函数。从上面对风格迁移模型的描述可以看出，模型的损失由两部分来定义：内容损失与风格损失，即：</p>
+<p>$$J(G) = \alpha J_{Content}(C,G) + \beta J_{Style}(S,G)$$</p>
+<p>其中，C(Content)表示内容图片，S(Style)表示风格图片，G(Generate)即第一项表示内容的损失，第二项表示风格的损失。</p>
+<h2 id="内容损失函数"><a href="#内容损失函数" class="headerlink" title="内容损失函数"></a>内容损失函数</h2><p>那么如何来计算内容损失函数$\alpha J_{Content}(C,G)$呢？</p>
+<p>首先应该使用一个预训练好的卷积神经网络模型，比如 VGG19，然后选择 l 层的激活来计算生成图片 G 和内容图片 C 的相似性，即计算 $a^{[l](C)}$ 和 $a^{[l](G)}$之间的相似度。这两个值越相似，那么 G 和 C 的内容就越相似。</p>
+<p>$$J_{Content}(C,G) = \frac{1}{2} \lVert a^{[l](C)} - a^{[l](G)} \rVert^2$$</p>
+<h2 id="风格损失函数"><a href="#风格损失函数" class="headerlink" title="风格损失函数"></a>风格损失函数</h2><p>首先我们需要定义什么是风格。风格就是 l 层中不同通道的激活值的相关性。因为不同通道的卷积核，对不同的特征敏感，那么如果多个通道同时激活，说明图中出现了某些关联的特征，即风格。例如对于某层（l层）激活值的维度为：$n_H, n_W, n_C$，$a^{[l]}_{i,j,k}$表示$(i,j,k)$上的激活值，$G^{[l](S)}$表示风格矩阵，它是一个$n^{[l]}_C \times n^{[l]}<em>C$维度的矩阵。$G^{[l](S)}</em>{kk’}$表示在 k 通道和 k’ 通道的关联性：</p>
+<p>$$G^{[l](S)}<em>{kk’} = \sum</em>{i=1}^{n_H^{[l]}} \sum_{j=1}^{n_w^{[l]}} a^{[l]}<em>{i,j,k} a^{[l]}</em>{i,j,k’}$$</p>
+<p>进而，风格损失函数可以定义为：</p>
+<p>$$J_{Stype}^{[l]}(S,G) = \frac{1}{2n_H^{[l]}n_W^{[l]}n_C^{[l]}} \sum_k \sum_{k’}\lVert G^{[l](S)}<em>{kk’} - G^{[l](G)}</em>{kk’} \rVert$$</p>
+<p>对多个层求风格损失并且累加，可以同时得到多层的风格相似性，往往效果更好：</p>
+<p>$$J_{Style}(S,G) = \sum_l \lambda^{[l]}J_{Stype}^{[l]}(S,G)$$</p>
+<h1 id="模型示例"><a href="#模型示例" class="headerlink" title="模型示例"></a>模型示例</h1><p>模型的代码具体见：<a href="https://github.com/keras-team/keras/blob/master/examples/neural_style_transfer.py" target="_blank" rel="noopener">Keras 官方 examples</a></p>
+<p>这里给出几个运行的例子（从左到右依次是 风格图、内容图、生成图）：</p>
+<p><img src="/images/art-generation-with-neural-style-transfer/1513824608.jpg" title="stype-transfer-demo-1" alt="stype-transfer-demo-1"><br><img src="/images/art-generation-with-neural-style-transfer/1513825726.jpg" title="stype-transfer-demo-2" alt="stype-transfer-demo-2"><br><img src="/images/art-generation-with-neural-style-transfer/1513826175.jpg" title="stype-transfer-demo-3" alt="stype-transfer-demo-3"><br><img src="/images/art-generation-with-neural-style-transfer/1513826560.jpg" title="stype-transfer-demo-4" alt="stype-transfer-demo-4"><br><img src="/images/art-generation-with-neural-style-transfer/1513826974.jpg" title="stype-transfer-demo-5" alt="stype-transfer-demo-5"></p>
+
+    </div>
+    
+        <!-- css -->
+        <style type="text/css">
+            .center {
+                text-align: center;
+            }
+            .hidden {
+                display: none;
+            }
+            .donate_bar a.btn_donate{
+                display: inline-block;
+                width: 82px;
+                height: 82px;
+                background: url("/images/theme/btn_reward.gif") no-repeat;
+                _background: url("/images/theme/btn_reward.gif") no-repeat;
+
+                <!-- http://7xl6z1.com1.z0.glb.clouddn.com/static/images/theme/btn_reward.gif
+                     因为本 hexo 生成的博客所用的 theme 的 a:hover 带动画效果，
+                     为了在让打赏按钮显示效果正常 而 添加了以下几行 css，
+                     嵌入其它博客时不一定要它们。 -->
+                -webkit-transition: background 0s;
+                -moz-transition: background 0s;
+                -o-transition: background 0s;
+                -ms-transition: background 0s;
+                transition: background 0s;
+                <!-- /让打赏按钮的效果显示正常 而 添加的几行 css 到此结束 -->
+            }
+
+            .donate_bar a.btn_donate:hover{ background-position: 0px -82px;}
+            .donate_bar .donate_txt {
+                display: block;
+                color: #9d9d9d;
+                font: 14px/2 "Microsoft Yahei";
+            }
+            .bold{ font-weight: bold; }
+            .border {
+                border-bottom: 2px solid #dbdbdb
+            }
+        </style>
+        <!-- /css -->
+
+        <!-- Donate Module -->
+        <div id="donate_module">
+
+        <!-- btn_donate & tips -->
+        <div class="border"><br></div><br><br>
+        <div id="donate_board" class="donate_bar center">
+            <a id="btn_donate" class="btn_donate" target="_self" href="javascript:;" title="Donate 打赏"></a>
+            <span class="donate_txt">
+                如果对你有帮助，可以赏我一杯咖啡~
+            </span>
+                
+            
+        </div>
+        <!-- /btn_donate & tips -->
+
+        <!-- donate guide -->
+        
+        <div id="donate_guide" class="donate_bar center hidden">
+            
+
+            <a href="/images/theme/reward_wechat.jpg" title="用微信扫一扫哦~" class="fancybox" rel="article0">
+                <img src="/images/theme/reward_wechat.jpg" title="微信打赏 Donate" height="190px" width="auto"/>
+            </a>
+            
+            &nbsp;&nbsp;
+
+            <a href="/images/theme/reward_alipay.jpg" title="用支付宝扫一扫即可~" class="fancybox" rel="article0">
+                <img src="/images/theme/reward_alipay.jpg" title="支付宝打赏 Donate" height="190px" width="auto"/>
+            </a>
+
+            <span class="donate_txt">
+                如果对你有帮助，可以赏我一杯咖啡~
+            </span>
+
+        </div>
+        <!-- /donate guide -->
+
+        <!-- donate script -->
+        <script type="text/javascript">
+            document.getElementById('btn_donate').onclick = function() {
+                $('#donate_board').addClass('hidden');
+            $('#donate_guide').removeClass('hidden');
+            }
+
+            function donate_on_web(){
+                $('#donate').submit();
+            }
+
+            var original_window_onload = window.onload;
+            window.onload = function () {
+                if (original_window_onload) {
+                    original_window_onload();
+                }
+                document.getElementById('donate_board_wdg').className = 'hidden';
+            }
+        </script>
+        <!-- /donate script -->
+    </div>
+    <!-- /Donate Module -->
+       
+		<footer class="article-footer clearfix">
+<div class="article-catetags">
+
+<div class="article-categories">
+  <span></span>
+  <a class="article-category-link" href="/categories/深度学习/">深度学习</a>
+</div>
+
+
+  <div class="article-tags">
+  
+  <span></span> <a href="/tags/深度学习/">深度学习</a><a href="/tags/风格迁移/">风格迁移</a><a href="/tags/生成/">生成</a><a href="/tags/Sytle-Transfer/">Sytle Transfer</a>
+  </div>
+
+</div>
+
+
+
+	<div class="article-share" id="share">
+	
+	  <div data-url="http://blog.liexing.me/2017/12/20/art-generation-with-neural-style-transfer/" data-title="风格迁移-生成图片 | Liexing&#39;s Blog" data-tsina="1915625641" class="share clearfix">
+	  </div>
+	
+	</div>
+
+
+</footer>
+
+   	       
+	</article>
+	
+<nav class="article-nav clearfix">
+ 
+ <div class="prev" >
+ <a href="/2018/03/20/cross-domain-debug-record/" title="跨域访问踩坑日志">
+  <strong>上一篇：</strong><br/>
+  <span>
+  跨域访问踩坑日志</span>
+</a>
+</div>
+
+
+<div class="next">
+<a href="/2017/11/16/optimizing-gradient-descent/"  title="调参工程学 - 梯度下降优化方法">
+ <strong>下一篇：</strong><br/> 
+ <span>调参工程学 - 梯度下降优化方法
+</span>
+</a>
+</div>
+
+</nav>
+
+	
+
+<section id="comments" class="comment">
+  <div id="disqus_thread">
+    <noscript>Please enable JavaScript to view the <a href="//disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
+  </div>
+</section>
+
+</div>  
+
+      <div class="openaside"><a class="navbutton" href="#" title="显示侧边栏"></a></div>
+
+  <div id="toc" class="toc-aside">
+  <strong class="toc-title">文章目录</strong>
+ 
+ <ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link" href="#风格迁移简介"><span class="toc-number">1.</span> <span class="toc-text">风格迁移简介</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#卷积神经网络中学习到了什么"><span class="toc-number">2.</span> <span class="toc-text">卷积神经网络中学习到了什么</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#风格迁移模型"><span class="toc-number">3.</span> <span class="toc-text">风格迁移模型</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#损失函数"><span class="toc-number">4.</span> <span class="toc-text">损失函数</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#内容损失函数"><span class="toc-number">4.1.</span> <span class="toc-text">内容损失函数</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#风格损失函数"><span class="toc-number">4.2.</span> <span class="toc-text">风格损失函数</span></a></li></ol></li><li class="toc-item toc-level-1"><a class="toc-link" href="#模型示例"><span class="toc-number">5.</span> <span class="toc-text">模型示例</span></a></li></ol>
+ 
+  </div>
+
+<div id="asidepart">
+<div class="closeaside"><a class="closebutton" href="#" title="隐藏侧边栏"></a></div>
+<aside class="clearfix">
+
+  
+<div class="github-card">
+<p class="asidetitle">Github 名片</p>
+<div class="github-card" data-github="scusjs" data-width="220" data-height="119" data-theme="medium">
+<script type="text/javascript" src="//cdn.jsdelivr.net/github-cards/latest/widget.js" ></script>
+</div>
+  </div>
+
+
+
+  
+<div class="categorieslist">
+    <p class="asidetitle">分类</p>
+        <ul>
+        
+          
+            <li><a href="/categories/Cassandra/" title="Cassandra">Cassandra<sup>2</sup></a></li>
+          
+        
+          
+            <li><a href="/categories/Druid/" title="Druid">Druid<sup>6</sup></a></li>
+          
+        
+          
+            <li><a href="/categories/Java/" title="Java">Java<sup>3</sup></a></li>
+          
+        
+          
+            <li><a href="/categories/Redis/" title="Redis">Redis<sup>1</sup></a></li>
+          
+        
+          
+            <li><a href="/categories/建站相关/" title="建站相关">建站相关<sup>1</sup></a></li>
+          
+        
+          
+            <li><a href="/categories/杂/" title="杂">杂<sup>7</sup></a></li>
+          
+        
+          
+            <li><a href="/categories/深度学习/" title="深度学习">深度学习<sup>3</sup></a></li>
+          
+        
+          
+            <li><a href="/categories/笔记/" title="笔记">笔记<sup>3</sup></a></li>
+          
+        
+          
+            <li><a href="/categories/算法/" title="算法">算法<sup>1</sup></a></li>
+          
+        
+          
+            <li><a href="/categories/统计学习/" title="统计学习">统计学习<sup>6</sup></a></li>
+          
+        
+        </ul>
+</div>
+
+
+
+  <div class="linkslist">
+  <p class="asidetitle">友情链接</p>
+    <ul>
+        
+          <li>
+            
+            	<a href="http://yaccc.github.io" target="_blank" title="">浮生若梦</a>
+            
+          </li>
+        
+          <li>
+            
+            	<a href="https://amaoamao.github.io" target="_blank" title="">mBoke</a>
+            
+          </li>
+        
+    </ul>
+</div>
+
+  <div class="rsspart">
+	<a href="/atom.xml" target="_blank" title="rss">RSS 订阅</a>
+</div>
+
+  
+  <div class="tagcloudlist">
+    <p class="asidetitle">标签云</p>
+    <div class="tagcloudlist clearfix">
+       <a href="/tags/Adam/" style="font-size: 10px;">Adam</a> <a href="/tags/BGD/" style="font-size: 10px;">BGD</a> <a href="/tags/Cassandra/" style="font-size: 11.67px;">Cassandra</a> <a href="/tags/Druid/" style="font-size: 16.67px;">Druid</a> <a href="/tags/JVM/" style="font-size: 10px;">JVM</a> <a href="/tags/Java/" style="font-size: 10px;">Java</a> <a href="/tags/LCS/" style="font-size: 10px;">LCS</a> <a href="/tags/Momentum/" style="font-size: 10px;">Momentum</a> <a href="/tags/MySQL/" style="font-size: 10px;">MySQL</a> <a href="/tags/NOSQL/" style="font-size: 11.67px;">NOSQL</a> <a href="/tags/SGD/" style="font-size: 10px;">SGD</a> <a href="/tags/Spring-Boot/" style="font-size: 10px;">Spring Boot</a> <a href="/tags/Sytle-Transfer/" style="font-size: 10px;">Sytle Transfer</a> <a href="/tags/Weight-initialization/" style="font-size: 10px;">Weight initialization</a> <a href="/tags/algorithms/" style="font-size: 10px;">algorithms</a> <a href="/tags/bash/" style="font-size: 10px;">bash</a> <a href="/tags/dynamic-programming/" style="font-size: 10px;">dynamic programming</a> <a href="/tags/hexo/" style="font-size: 10px;">hexo</a> <a href="/tags/java/" style="font-size: 10px;">java</a> <a href="/tags/k-邻近法/" style="font-size: 11.67px;">k 邻近法</a> <a href="/tags/knn/" style="font-size: 11.67px;">knn</a> <a href="/tags/linux/" style="font-size: 10px;">linux</a> <a href="/tags/macOS/" style="font-size: 10px;">macOS</a> <a href="/tags/parallelStream/" style="font-size: 10px;">parallelStream</a> <a href="/tags/quicklist/" style="font-size: 10px;">quicklist</a> <a href="/tags/redis/" style="font-size: 10px;">redis</a> <a href="/tags/stream/" style="font-size: 10px;">stream</a> <a href="/tags/utf8/" style="font-size: 10px;">utf8</a> <a href="/tags/utf8mb4/" style="font-size: 10px;">utf8mb4</a> <a href="/tags/ziplist/" style="font-size: 10px;">ziplist</a> <a href="/tags/内存模型/" style="font-size: 10px;">内存模型</a> <a href="/tags/分布式/" style="font-size: 18.33px;">分布式</a> <a href="/tags/多线程/" style="font-size: 10px;">多线程</a> <a href="/tags/实时计算/" style="font-size: 16.67px;">实时计算</a> <a href="/tags/异常处理/" style="font-size: 10px;">异常处理</a> <a href="/tags/异常表/" style="font-size: 10px;">异常表</a> <a href="/tags/感知机/" style="font-size: 10px;">感知机</a> <a href="/tags/数据结构/" style="font-size: 10px;">数据结构</a> <a href="/tags/最大熵模型/" style="font-size: 10px;">最大熵模型</a> <a href="/tags/朴素贝叶斯/" style="font-size: 10px;">朴素贝叶斯</a> <a href="/tags/机器学习/" style="font-size: 16.67px;">机器学习</a> <a href="/tags/杂/" style="font-size: 16.67px;">杂</a> <a href="/tags/梯度下降/" style="font-size: 10px;">梯度下降</a> <a href="/tags/深度学习/" style="font-size: 13.33px;">深度学习</a> <a href="/tags/源码分析/" style="font-size: 10px;">源码分析</a> <a href="/tags/生成/" style="font-size: 10px;">生成</a> <a href="/tags/生活/" style="font-size: 15px;">生活</a> <a href="/tags/笔记/" style="font-size: 20px;">笔记</a> <a href="/tags/统计学习/" style="font-size: 16.67px;">统计学习</a> <a href="/tags/编码/" style="font-size: 10px;">编码</a> <a href="/tags/自驾/" style="font-size: 15px;">自驾</a> <a href="/tags/调参/" style="font-size: 11.67px;">调参</a> <a href="/tags/跨域/" style="font-size: 10px;">跨域</a> <a href="/tags/踩坑日志/" style="font-size: 10px;">踩坑日志</a> <a href="/tags/逻辑斯谛回归/" style="font-size: 10px;">逻辑斯谛回归</a> <a href="/tags/配置/" style="font-size: 10px;">配置</a> <a href="/tags/风格迁移/" style="font-size: 10px;">风格迁移</a>
+    </div>
+  </div>
+
+
+  <div class="weiboshow">
+  <p class="asidetitle">新浪微博</p>
+    <iframe width="100%" height="119" class="share_self"  frameborder="0" scrolling="no" src="//widget.weibo.com/weiboshow/index.php?language=&width=0&height=119&fansRow=2&ptype=1&speed=0&skin=9&isTitle=1&noborder=1&isWeibo=0&isFans=0&uid=1915625641&verifier=00e07be0&dpc=1"></iframe>
+</div>
+
+
+</aside>
+</div>
+    </div>
+    <footer><div id="footer" >
+	
+	<div class="line">
+		<span></span>
+		<div class="author"></div>
+	</div>
+	
+	
+	<section class="info">
+		<p> Hello, I&#39;m Liexing in UCAS. <br/>
+			Stay hungry. Stay foolish.</p>
+	</section>
+	 
+	<div class="social-font" class="clearfix">
+		
+		<a href="http://weibo.com/scusjs" target="_blank" class="icon-weibo" title="微博"></a>
+		
+		
+		<a href="https://github.com/scusjs" target="_blank" class="icon-github" title="github"></a>
+		
+		
+		
+		<a href="https://twitter.com/scusjs" target="_blank" class="icon-twitter" title="twitter"></a>
+		
+		
+		
+		<a href="https://www.linkedin.com/in/shenjinsheng" target="_blank" class="icon-linkedin" title="linkedin"></a>
+		
+		
+		<a href="https://www.douban.com/people/58108093" target="_blank" class="icon-douban" title="豆瓣"></a>
+		
+		
+		<a href="http://www.zhihu.com/people/scusjs" target="_blank" class="icon-zhihu" title="知乎"></a>
+		
+		
+		
+		<a href="mailto:i@liexing.me" target="_blank" class="icon-email" title="Email Me"></a>
+		
+	</div>
+			
+		
+
+		<p class="copyright">
+		Powered by <a href="http://hexo.io" target="_blank" title="hexo">hexo</a> and Theme by <a href="https://github.com/wuchong/jacman" target="_blank" title="Jacman">Jacman</a> © 
+<span id="busuanzi_container_site_pv">
+  &nbsp<i class="fa fa-eye"></i> <span id="busuanzi_value_site_pv"><i class="fa fa-spinner fa-spin"></i></span>
+</span>
+<span id="busuanzi_container_site_uv">
+  &nbsp<i class="fa fa-user"></i> <span id="busuanzi_value_site_uv"><i class="fa fa-spinner fa-spin"></i></span>
+</span>
+2023 
+		
+		<a href="/about" target="_blank" title="liexing">liexing</a>
+		
+		
+		</p>
+</div>
+</footer>
+    <script src="/js/jquery-2.0.3.min.js"></script>
+<script src="/js/jquery.imagesloaded.min.js"></script>
+<script src="/js/gallery.js"></script>
+<script src="/js/jquery.qrcode-0.12.0.min.js"></script>
+<script async src="//busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+<script async src="/js/ones.js"></script>
+
+<script type="text/javascript">
+$(document).ready(function(){ 
+  $('.navbar').click(function(){
+    $('header nav').toggleClass('shownav');
+  });
+  var myWidth = 0;
+  function getSize(){
+    if( typeof( window.innerWidth ) == 'number' ) {
+      myWidth = window.innerWidth;
+    } else if( document.documentElement && document.documentElement.clientWidth) {
+      myWidth = document.documentElement.clientWidth;
+    };
+  };
+  var m = $('#main'),
+      a = $('#asidepart'),
+      c = $('.closeaside'),
+      o = $('.openaside');
+  c.click(function(){
+    a.addClass('fadeOut').css('display', 'none');
+    o.css('display', 'block').addClass('fadeIn');
+    m.addClass('moveMain');
+  });
+  o.click(function(){
+    o.css('display', 'none').removeClass('beforeFadeIn');
+    a.css('display', 'block').removeClass('fadeOut').addClass('fadeIn');      
+    m.removeClass('moveMain');
+  });
+  $(window).scroll(function(){
+    o.css("top",Math.max(80,260-$(this).scrollTop()));
+  });
+  
+  $(window).resize(function(){
+    getSize(); 
+    if (myWidth >= 1024) {
+      $('header nav').removeClass('shownav');
+    }else{
+      m.removeClass('moveMain');
+      a.css('display', 'block').removeClass('fadeOut');
+      o.css('display', 'none');
+      
+      $('#toc.toc-aside').css('display', 'none');
+        
+    }
+  });
+});
+</script>
+
+<script type="text/javascript">
+$(document).ready(function(){ 
+  var ai = $('.article-content>iframe'),
+      ae = $('.article-content>embed'),
+      t  = $('#toc'),
+      ta = $('#toc.toc-aside'),
+      o  = $('.openaside'),
+      c  = $('.closeaside');
+  if(ai.length>0){
+    ai.wrap('<div class="video-container" />');
+  };
+  if(ae.length>0){
+   ae.wrap('<div class="video-container" />');
+  };
+  c.click(function(){
+    ta.css('display', 'block').addClass('fadeIn');
+  });
+  o.click(function(){
+    ta.css('display', 'none');
+  });
+  $(window).scroll(function(){
+    ta.css("top",Math.max(140,320-$(this).scrollTop()));
+  });
+});
+</script>
+
+
+<script type="text/javascript">
+$(document).ready(function(){ 
+  var $this = $('.share'),
+      url = $this.attr('data-url'),
+      encodedUrl = encodeURIComponent(url),
+      title = $this.attr('data-title'),
+      tsina = $this.attr('data-tsina'),
+      description = $this.attr('description');
+  var html = [
+  '<div class="hoverqrcode clearfix"></div>',
+  '<a class="overlay" id="qrcode"></a>',
+  '<a href="https://www.facebook.com/sharer.php?u=' + encodedUrl + '" class="article-share-facebook" target="_blank" title="Facebook"></a>',
+  '<a href="https://twitter.com/intent/tweet?url=' + encodedUrl + '" class="article-share-twitter" target="_blank" title="Twitter"></a>',
+  '<a href="#qrcode" class="article-share-qrcode" title="微信"></a>',
+  '<a href="http://widget.renren.com/dialog/share?resourceUrl=' + encodedUrl + '&srcUrl=' + encodedUrl + '&title=' + title +'" class="article-share-renren" target="_blank" title="人人"></a>',
+  '<a href="http://service.weibo.com/share/share.php?title='+title+'&url='+encodedUrl +'&ralateUid='+ tsina +'&searchPic=true&style=number' +'" class="article-share-weibo" target="_blank" title="微博"></a>',
+  '<span title="Share to"></span>'
+  ].join('');
+  $this.append(html);
+
+  $('.hoverqrcode').hide();
+
+  var myWidth = 0;
+  function updatehoverqrcode(){
+    if( typeof( window.innerWidth ) == 'number' ) {
+      myWidth = window.innerWidth;
+    } else if( document.documentElement && document.documentElement.clientWidth) {
+      myWidth = document.documentElement.clientWidth;
+    };
+    var qrsize = myWidth > 1024 ? 200:100;
+    var options = {render: 'image', size: qrsize, fill: '#2ca6cb', text: url, radius: 0.5, quiet: 1};
+    var p = $('.article-share-qrcode').position();
+    $('.hoverqrcode').empty().css('width', qrsize).css('height', qrsize)
+                          .css('left', p.left-qrsize/2+20).css('top', p.top-qrsize-10)
+                          .qrcode(options);
+  };
+  $(window).resize(function(){
+    $('.hoverqrcode').hide();
+  });
+  $('.article-share-qrcode').click(function(){
+    updatehoverqrcode();
+    $('.hoverqrcode').toggle();
+  });
+  $('.article-share-qrcode').hover(function(){}, function(){
+      $('.hoverqrcode').hide();
+  });
+});   
+</script>
+
+
+
+
+<script type="text/javascript">
+
+var disqus_shortname = 'liexing';
+
+(function(){
+  var dsq = document.createElement('script');
+  dsq.type = 'text/javascript';
+  dsq.async = true;
+  dsq.src = '//' + disqus_shortname + '.disqus.com/embed.js';
+  (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+}());
+(function(){
+  var dsq = document.createElement('script');
+  dsq.type = 'text/javascript';
+  dsq.async = true;
+  dsq.src = '//' + disqus_shortname + '.disqus.com/count.js';
+  (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+}());
+</script>
+
+
+
+
+
+
+<link rel="stylesheet" href="/fancybox/jquery.fancybox.css" media="screen" type="text/css">
+<script src="/fancybox/jquery.fancybox.pack.js"></script>
+<script type="text/javascript">
+$(document).ready(function(){ 
+  $('.article-content').each(function(i){
+    $(this).find('img').each(function(){
+      if ($(this).parent().hasClass('fancybox')) return;
+      var alt = this.alt;
+      if (alt) $(this).after('<span class="caption">' + alt + '</span>');
+      $(this).wrap('<a href="' + this.src + '" title="' + alt + '" class="fancybox"></a>');
+    });
+    $(this).find('.fancybox').each(function(){
+      $(this).attr('rel', 'article' + i);
+    });
+  });
+  if($.fancybox){
+    $('.fancybox').fancybox();
+  }
+}); 
+</script>
+
+
+
+<!-- Analytics Begin -->
+
+
+
+<script>
+var _hmt = _hmt || [];
+(function() {
+  var hm = document.createElement("script");
+  hm.src = "//hm.baidu.com/hm.js?e6d1f421bbc9962127a50488f9ed37d1";
+  var s = document.getElementsByTagName("script")[0]; 
+  s.parentNode.insertBefore(hm, s);
+})();
+</script>
+
+
+
+<span style="display:none"><script src="https://s11.cnzz.com/z_stat.php?id=1256113107&web_id=1256113107" language="JavaScript"></script></span>
+
+
+<!-- Analytics End -->
+
+<!-- Totop Begin -->
+
+	<div id="totop">
+	<a title="返回顶部"><img src="/img/scrollup.png"/></a>
+	</div>
+	<script src="/js/totop.js"></script>
+
+<!-- Totop End -->
+
+<!-- MathJax Begin -->
+<!-- mathjax config similar to math.stackexchange -->
+
+<script type="text/x-mathjax-config">
+  MathJax.Hub.Config({
+    tex2jax: {
+      inlineMath: [ ['$','$'], ["\\(","\\)"] ],
+      processEscapes: true
+    }
+  });
+</script>
+
+<script type="text/x-mathjax-config">
+    MathJax.Hub.Config({
+      tex2jax: {
+        skipTags: ['script', 'noscript', 'style', 'textarea', 'pre', 'code']
+      }
+    });
+</script>
+
+<script type="text/x-mathjax-config">
+    MathJax.Hub.Queue(function() {
+        var all = MathJax.Hub.getAllJax(), i;
+        for(i=0; i < all.length; i += 1) {
+            all[i].SourceElement().parentNode.className += ' has-jax';
+        }
+    });
+</script>
+
+<script type="text/javascript" src="//cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML">
+</script>
+
+
+<!-- MathJax End -->
+
+<!-- Tiny_search Begin -->
+
+<!-- Tiny_search End -->
+
+  </body>
+</html>

@@ -1,0 +1,734 @@
+
+ <!DOCTYPE HTML>
+<html lang="zh-CN">
+<head><meta name="generator" content="Hexo 3.9.0">
+  <meta charset="UTF-8">
+  
+    <title>调参工程学 - Weight Initialization | Liexing&#39;s Blog</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1,user-scalable=no">
+    
+    <meta name="author" content="liexing">
+    
+
+    
+    <meta name="description" content="调参对深度学习的效果异常重要，甚至经常开玩笑说这是一门调参工程学。而 Weight Initialization 对模型收敛速度和模型质量有重要影响。  深度学习的参数深度学习的参数分为超参（hyper parameters）和普通参数。超参是模型开始训练前，人工指定的参数，比如网络的层数、每层的神经元数、学习速率以及正则项系数等。超参对模型的效果非常重要。而普通参数，就是通常的 W 以及 b。深">
+<meta name="keywords" content="深度学习,调参,Weight initialization">
+<meta property="og:type" content="article">
+<meta property="og:title" content="调参工程学 - Weight Initialization">
+<meta property="og:url" content="http://blog.liexing.me/2017/10/24/deep-learning-weight-initialization/index.html">
+<meta property="og:site_name" content="Liexing&#39;s Blog">
+<meta property="og:description" content="调参对深度学习的效果异常重要，甚至经常开玩笑说这是一门调参工程学。而 Weight Initialization 对模型收敛速度和模型质量有重要影响。  深度学习的参数深度学习的参数分为超参（hyper parameters）和普通参数。超参是模型开始训练前，人工指定的参数，比如网络的层数、每层的神经元数、学习速率以及正则项系数等。超参对模型的效果非常重要。而普通参数，就是通常的 W 以及 b。深">
+<meta property="og:locale" content="zh-CN">
+<meta property="og:image" content="http://blog.liexing.me/images/deep-learning-weight-initialization/1508852329.jpeg">
+<meta property="og:image" content="http://blog.liexing.me/images/deep-learning-weight-initialization/1508853389.jpg">
+<meta property="og:image" content="http://blog.liexing.me/images/deep-learning-weight-initialization/1508854477.jpg">
+<meta property="og:image" content="http://blog.liexing.me/images/deep-learning-weight-initialization/1508855349.jpg">
+<meta property="og:image" content="http://blog.liexing.me/images/deep-learning-weight-initialization/1508856194.jpeg">
+<meta property="og:image" content="http://blog.liexing.me/images/deep-learning-weight-initialization/1508856336.jpeg">
+<meta property="og:image" content="http://blog.liexing.me/images/deep-learning-weight-initialization/1508856493.jpeg">
+<meta property="og:image" content="http://blog.liexing.me/images/deep-learning-weight-initialization/1508856662.jpg">
+<meta property="og:image" content="http://blog.liexing.me/images/deep-learning-weight-initialization/1508856932.jpeg">
+<meta property="og:image" content="http://blog.liexing.me/images/deep-learning-weight-initialization/1508857325.jpeg">
+<meta property="og:image" content="http://blog.liexing.me/images/deep-learning-weight-initialization/1508856493.jpeg">
+<meta property="og:updated_time" content="2023-01-20T15:04:29.744Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="调参工程学 - Weight Initialization">
+<meta name="twitter:description" content="调参对深度学习的效果异常重要，甚至经常开玩笑说这是一门调参工程学。而 Weight Initialization 对模型收敛速度和模型质量有重要影响。  深度学习的参数深度学习的参数分为超参（hyper parameters）和普通参数。超参是模型开始训练前，人工指定的参数，比如网络的层数、每层的神经元数、学习速率以及正则项系数等。超参对模型的效果非常重要。而普通参数，就是通常的 W 以及 b。深">
+<meta name="twitter:image" content="http://blog.liexing.me/images/deep-learning-weight-initialization/1508852329.jpeg">
+<meta name="twitter:creator" content="@scusjs">
+
+    
+    <link rel="alternative" href="/atom.xml" title="Liexing&#39;s Blog" type="application/atom+xml">
+    
+    
+    <link rel="icon" href="/img/favicon.ico">
+    
+    
+    <link rel="apple-touch-icon" href="/img/favicon.jpg">
+    <link rel="apple-touch-icon-precomposed" href="/img/favicon.jpg">
+    
+    <link rel="stylesheet" href="//cdn.bootcss.com/font-awesome/4.3.0/css/font-awesome.min.css">
+    <link rel="stylesheet" href="/css/style.css">
+</head>
+</html>
+  <body>
+    <header>
+      
+<div>
+		
+			<div id="imglogo">
+				<a href="/"><img src="/img/logo.png" alt="Liexing&#39;s Blog" title="Liexing&#39;s Blog"/></a>
+			</div>
+			
+			<div id="textlogo">
+				<h1 class="site-name"><a href="/" title="Liexing&#39;s Blog">Liexing&#39;s Blog</a></h1>
+				<h2 class="blog-motto"><span id="ones">不疯魔，不成佛</span></h2>
+			</div>
+			<div class="navbar"><a class="navbutton navmobile" href="#" title="菜单">
+			</a></div>
+			<nav class="animated">
+				<ul>
+					<ul>
+					 
+						<li><a href="/">主页 | Home</a></li>
+					
+						<li><a href="/archives">归档 | Archives</a></li>
+					
+						<li><a href="/about">简介 | About</a></li>
+					
+					<li>
+ 					
+					<form class="search" action="/search/index.html" method="get" accept-charset="utf-8">
+						<label>Search</label>
+						<input type="search" id="search" autocomplete="off" name="q" maxlength="20" placeholder="搜索" />
+					</form>
+					
+					</li>
+				</ul>
+			</nav>			
+</div>
+
+    </header>
+    <div id="container">
+      <div id="main" class="post" itemscope itemprop="blogPost">
+    
+    <article itemprop="articleBody"> 
+        <header class="article-info clearfix">
+  <h1 itemprop="name">
+    
+      <a href="/2017/10/24/deep-learning-weight-initialization/" title="调参工程学 - Weight Initialization" itemprop="url">调参工程学 - Weight Initialization</a>
+  </h1>
+  <p class="article-author">By
+       
+		<a href="/about" title="liexing" target="_blank" itemprop="author">liexing</a>
+		
+  <p class="article-time">
+    <time datetime="2017-10-24T13:14:12.000Z" itemprop="datePublished"> 发表于 2017-10-24</time>
+<span id="busuanzi_container_page_pv">
+  &nbsp<i class="fa fa-eye"></i> <span id="busuanzi_value_page_pv"><i class="fa fa-spinner fa-spin"></i></span>
+</span>
+    
+  </p>
+</header>
+
+    <div class="article-content">
+        
+        <div id="toc" class="toc-article">
+            <strong class="toc-title">文章目录</strong>
+        
+            <ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link" href="#深度学习的参数"><span class="toc-number">1.</span> <span class="toc-text">深度学习的参数</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#初始化为0"><span class="toc-number">2.</span> <span class="toc-text">初始化为0</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#随机初始化"><span class="toc-number">3.</span> <span class="toc-text">随机初始化</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#Xavier-initialization"><span class="toc-number">4.</span> <span class="toc-text">Xavier initialization</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#He-initialization"><span class="toc-number">5.</span> <span class="toc-text">He initialization</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#Batch-Normalization-Layer"><span class="toc-number">6.</span> <span class="toc-text">Batch Normalization Layer</span></a></li></ol>
+        
+        </div>
+        
+        <p>调参对深度学习的效果异常重要，甚至经常开玩笑说这是一门调参工程学。而 Weight Initialization 对模型收敛速度和模型质量有重要影响。</p>
+<p><img src="/images/deep-learning-weight-initialization/1508852329.jpeg" width="500" title="Deep-Learning" alt="Deep-Learning"></p>
+<h1 id="深度学习的参数"><a href="#深度学习的参数" class="headerlink" title="深度学习的参数"></a>深度学习的参数</h1><p>深度学习的参数分为超参（hyper parameters）和普通参数。超参是模型开始训练前，人工指定的参数，比如网络的层数、每层的神经元数、学习速率以及正则项系数等。超参对模型的效果非常重要。而普通参数，就是通常的 W 以及 b。深度学习模型的本质过程就是对权重（W）进行更新。而在开始训练神经网络前，需要初始化 W 以及 b 的值，这个初始值会影响模型训练的收敛速度以及质量。本文主要讲解 W 的初始化。</p>
+<h1 id="初始化为0"><a href="#初始化为0" class="headerlink" title="初始化为0"></a>初始化为0</h1><p>如图所示一个简单的神经网络，有一个中间层，中间层有两个神经元。</p>
+<p><img src="/images/deep-learning-weight-initialization/1508853389.jpg" width="600" title alt><br>如果我们初始化权重： $W^{[1]}=\begin{bmatrix} 0&amp;0\\ 0&amp;0 \end{bmatrix}$或者任意上下神经元权重相同，由于对称性，通过激活函数得到的值相同，并且通过梯度下降，更新后的权重也相同。因此无论进行多少次迭代，二者的权重依然保持不变，这种情况下，多个隐藏单元就会没有意义。</p>
+<p><img src="/images/deep-learning-weight-initialization/1508854477.jpg" width="600" title="初始化为0的损失" alt="初始化为0的损失"><br>上图为一个初始化权重为0的神经网络的损失函数值变化，可以看出，损失值并没有变化。<br>通常来说，将权重都设置为0，意味着每层网络中的神经元都一样，等同于每层只有一个神经元，其效果并不会比线性分类器（如逻辑回归）好。</p>
+<h1 id="随机初始化"><a href="#随机初始化" class="headerlink" title="随机初始化"></a>随机初始化</h1><p>如果我们将权重初始化为随机数，比如：<code>np.random.randn(layers_dims[l], layers_dims[l - 1]) * 0.01</code></p>
+<p><img src="/images/deep-learning-weight-initialization/1508855349.jpg" width="600" title="随机初始化的损失" alt="随机初始化的损失"><br>可以看到，随着训练，损失值逐渐变小，但是最终的损失值依然比较高。但是随着层数的增加，会导致梯度消失。如果增大随机初始化的值，比如将0.01变为10，会发现依然会出现梯度消失，参数难以被继续更新。</p>
+<h1 id="Xavier-initialization"><a href="#Xavier-initialization" class="headerlink" title="Xavier initialization"></a>Xavier initialization</h1><p>上述问题可以使用Xavier initialization 解决。Xavier 初始化的基本思想是保持输入和输出的方差一致。即将随机初始化的值乘以缩放因子：$\sqrt{\frac{1}{layers_dims[l-1]}}$。也就是将参数初始化变为：<code>np.random.randn(layers_dims[l], layers_dims[l - 1]) * np.sqrt(1. / layers_dims[l - 1])</code></p>
+<p>Xavier初始化是在线性函数上推导得出的，它能够保持输出在很多层之后依然有着良好的分布，如图为使用 tanh 激活函数后的输出概率分布：<br><img src="/images/deep-learning-weight-initialization/1508856194.jpeg" width="600" title="Xavier初始化在tanh的输出概率分布" alt="Xavier初始化在tanh的输出概率分布"><br>但是其对于 ReLU 的效果并不好，如图：<br><img src="/images/deep-learning-weight-initialization/1508856336.jpeg" width="600" title="Xavier初始化在ReLU的输出概率分布" alt="Xavier初始化在ReLU的输出概率分布"></p>
+<h1 id="He-initialization"><a href="#He-initialization" class="headerlink" title="He initialization"></a>He initialization</h1><p>He 初始化可以解决上面在 ReLU 激活函数时 Xavier 效果不好的问题。其思想是：在ReLU网络中，假定每一层有一半的神经元被激活，另一半为0，所以，要保持方差不变，只需要在 Xavier 的基础上再除以2。即缩放因子变为：$\sqrt{\frac{2}{layers_dims[l-1]}}$，初始化代码为：<code>np.random.randn(layers_dims[l], layers_dims[l - 1]) * np.sqrt(2. / layers_dims[l - 1])</code></p>
+<p>其分布如下图，可见效果很好。<br><img src="/images/deep-learning-weight-initialization/1508856493.jpeg" width="600" title="He初始化在ReLU的输出概率分布" alt="He初始化在ReLU的输出概率分布"><br>其损失如图所示：<br><img src="/images/deep-learning-weight-initialization/1508856662.jpg" width="600" title="He初始化的损失" alt="He初始化的损失"></p>
+<h1 id="Batch-Normalization-Layer"><a href="#Batch-Normalization-Layer" class="headerlink" title="Batch Normalization Layer"></a>Batch Normalization Layer</h1><p>If you want it, just make it! 合理的参数初始化是为了避免梯度消失，有效的反向传播，需要进入激活函数的数值有一个合理的分布，以便于反向传播时计算梯度。其思想就是在线性变化和非线性激活函数之间，将数值做一次高斯归一化和线性变化。<br><img src="/images/deep-learning-weight-initialization/1508856932.jpeg" width="600" title="He初始化的损失" alt="He初始化的损失"><br>Batch Normalization中所有的操作都是平滑可导，因此可以有效的学习到参数$\gamma$，$\beta$。需要注意的是，训练时的$\gamma$，$\beta$由当前batch计算得出，而测试时$\gamma$，$\beta$使用训练时保存的均值。</p>
+<p>如图表示使用随机初始化的参数，ReLU 作为激活函数，未使用 Batch Normalization 时，每层激活函数的输出分布：</p>
+<p><img src="/images/deep-learning-weight-initialization/1508857325.jpeg" width="600" title="未使用BatchNormalization" alt="未使用BatchNormalization"><br>下图为使用 Batch Normalization 时，每层激活函数的输出分布：</p>
+<p><img src="/images/deep-learning-weight-initialization/1508856493.jpeg" width="600" title="使用BatchNormalization" alt="使用BatchNormalization"><br>可见，使用 Batch Normalization 非常有效。</p>
+<p>#参考资料</p>
+<ol>
+<li>Glorot X, Bengio Y. Understanding the difficulty of training deep feedforward neural networks[C]//Proceedings of the Thirteenth International Conference on Artificial Intelligence and Statistics. 2010: 249-256.</li>
+<li>He K, Zhang X, Ren S, et al. Delving deep into rectifiers: Surpassing human-level performance on imagenet classification[C]//Proceedings of the IEEE international conference on computer vision. 2015: 1026-1034.</li>
+<li>Ioffe S, Szegedy C. Batch normalization: accelerating deep network training by reducing internal covariate shift (2015)[J]. arXiv preprint arXiv:1502.03167, 1735-1780.</li>
+<li>Coursera, deep-neural-network</li>
+</ol>
+
+    </div>
+    
+        <!-- css -->
+        <style type="text/css">
+            .center {
+                text-align: center;
+            }
+            .hidden {
+                display: none;
+            }
+            .donate_bar a.btn_donate{
+                display: inline-block;
+                width: 82px;
+                height: 82px;
+                background: url("/images/theme/btn_reward.gif") no-repeat;
+                _background: url("/images/theme/btn_reward.gif") no-repeat;
+
+                <!-- http://7xl6z1.com1.z0.glb.clouddn.com/static/images/theme/btn_reward.gif
+                     因为本 hexo 生成的博客所用的 theme 的 a:hover 带动画效果，
+                     为了在让打赏按钮显示效果正常 而 添加了以下几行 css，
+                     嵌入其它博客时不一定要它们。 -->
+                -webkit-transition: background 0s;
+                -moz-transition: background 0s;
+                -o-transition: background 0s;
+                -ms-transition: background 0s;
+                transition: background 0s;
+                <!-- /让打赏按钮的效果显示正常 而 添加的几行 css 到此结束 -->
+            }
+
+            .donate_bar a.btn_donate:hover{ background-position: 0px -82px;}
+            .donate_bar .donate_txt {
+                display: block;
+                color: #9d9d9d;
+                font: 14px/2 "Microsoft Yahei";
+            }
+            .bold{ font-weight: bold; }
+            .border {
+                border-bottom: 2px solid #dbdbdb
+            }
+        </style>
+        <!-- /css -->
+
+        <!-- Donate Module -->
+        <div id="donate_module">
+
+        <!-- btn_donate & tips -->
+        <div class="border"><br></div><br><br>
+        <div id="donate_board" class="donate_bar center">
+            <a id="btn_donate" class="btn_donate" target="_self" href="javascript:;" title="Donate 打赏"></a>
+            <span class="donate_txt">
+                如果对你有帮助，可以赏我一杯咖啡~
+            </span>
+                
+            
+        </div>
+        <!-- /btn_donate & tips -->
+
+        <!-- donate guide -->
+        
+        <div id="donate_guide" class="donate_bar center hidden">
+            
+
+            <a href="/images/theme/reward_wechat.jpg" title="用微信扫一扫哦~" class="fancybox" rel="article0">
+                <img src="/images/theme/reward_wechat.jpg" title="微信打赏 Donate" height="190px" width="auto"/>
+            </a>
+            
+            &nbsp;&nbsp;
+
+            <a href="/images/theme/reward_alipay.jpg" title="用支付宝扫一扫即可~" class="fancybox" rel="article0">
+                <img src="/images/theme/reward_alipay.jpg" title="支付宝打赏 Donate" height="190px" width="auto"/>
+            </a>
+
+            <span class="donate_txt">
+                如果对你有帮助，可以赏我一杯咖啡~
+            </span>
+
+        </div>
+        <!-- /donate guide -->
+
+        <!-- donate script -->
+        <script type="text/javascript">
+            document.getElementById('btn_donate').onclick = function() {
+                $('#donate_board').addClass('hidden');
+            $('#donate_guide').removeClass('hidden');
+            }
+
+            function donate_on_web(){
+                $('#donate').submit();
+            }
+
+            var original_window_onload = window.onload;
+            window.onload = function () {
+                if (original_window_onload) {
+                    original_window_onload();
+                }
+                document.getElementById('donate_board_wdg').className = 'hidden';
+            }
+        </script>
+        <!-- /donate script -->
+    </div>
+    <!-- /Donate Module -->
+       
+		<footer class="article-footer clearfix">
+<div class="article-catetags">
+
+<div class="article-categories">
+  <span></span>
+  <a class="article-category-link" href="/categories/深度学习/">深度学习</a>
+</div>
+
+
+  <div class="article-tags">
+  
+  <span></span> <a href="/tags/深度学习/">深度学习</a><a href="/tags/调参/">调参</a><a href="/tags/Weight-initialization/">Weight initialization</a>
+  </div>
+
+</div>
+
+
+
+	<div class="article-share" id="share">
+	
+	  <div data-url="http://blog.liexing.me/2017/10/24/deep-learning-weight-initialization/" data-title="调参工程学 - Weight Initialization | Liexing&#39;s Blog" data-tsina="1915625641" class="share clearfix">
+	  </div>
+	
+	</div>
+
+
+</footer>
+
+   	       
+	</article>
+	
+<nav class="article-nav clearfix">
+ 
+ <div class="prev" >
+ <a href="/2017/11/10/a-letter-to-18/" title="写给18岁的自己">
+  <strong>上一篇：</strong><br/>
+  <span>
+  写给18岁的自己</span>
+</a>
+</div>
+
+
+<div class="next">
+<a href="/2017/09/17/java-exception-table/"  title="Java 异常表与异常处理原理">
+ <strong>下一篇：</strong><br/> 
+ <span>Java 异常表与异常处理原理
+</span>
+</a>
+</div>
+
+</nav>
+
+	
+
+<section id="comments" class="comment">
+  <div id="disqus_thread">
+    <noscript>Please enable JavaScript to view the <a href="//disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
+  </div>
+</section>
+
+</div>  
+
+      <div class="openaside"><a class="navbutton" href="#" title="显示侧边栏"></a></div>
+
+  <div id="toc" class="toc-aside">
+  <strong class="toc-title">文章目录</strong>
+ 
+ <ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link" href="#深度学习的参数"><span class="toc-number">1.</span> <span class="toc-text">深度学习的参数</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#初始化为0"><span class="toc-number">2.</span> <span class="toc-text">初始化为0</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#随机初始化"><span class="toc-number">3.</span> <span class="toc-text">随机初始化</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#Xavier-initialization"><span class="toc-number">4.</span> <span class="toc-text">Xavier initialization</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#He-initialization"><span class="toc-number">5.</span> <span class="toc-text">He initialization</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#Batch-Normalization-Layer"><span class="toc-number">6.</span> <span class="toc-text">Batch Normalization Layer</span></a></li></ol>
+ 
+  </div>
+
+<div id="asidepart">
+<div class="closeaside"><a class="closebutton" href="#" title="隐藏侧边栏"></a></div>
+<aside class="clearfix">
+
+  
+<div class="github-card">
+<p class="asidetitle">Github 名片</p>
+<div class="github-card" data-github="scusjs" data-width="220" data-height="119" data-theme="medium">
+<script type="text/javascript" src="//cdn.jsdelivr.net/github-cards/latest/widget.js" ></script>
+</div>
+  </div>
+
+
+
+  
+<div class="categorieslist">
+    <p class="asidetitle">分类</p>
+        <ul>
+        
+          
+            <li><a href="/categories/Cassandra/" title="Cassandra">Cassandra<sup>2</sup></a></li>
+          
+        
+          
+            <li><a href="/categories/Druid/" title="Druid">Druid<sup>6</sup></a></li>
+          
+        
+          
+            <li><a href="/categories/Java/" title="Java">Java<sup>3</sup></a></li>
+          
+        
+          
+            <li><a href="/categories/Redis/" title="Redis">Redis<sup>1</sup></a></li>
+          
+        
+          
+            <li><a href="/categories/建站相关/" title="建站相关">建站相关<sup>1</sup></a></li>
+          
+        
+          
+            <li><a href="/categories/杂/" title="杂">杂<sup>7</sup></a></li>
+          
+        
+          
+            <li><a href="/categories/深度学习/" title="深度学习">深度学习<sup>3</sup></a></li>
+          
+        
+          
+            <li><a href="/categories/笔记/" title="笔记">笔记<sup>3</sup></a></li>
+          
+        
+          
+            <li><a href="/categories/算法/" title="算法">算法<sup>1</sup></a></li>
+          
+        
+          
+            <li><a href="/categories/统计学习/" title="统计学习">统计学习<sup>6</sup></a></li>
+          
+        
+        </ul>
+</div>
+
+
+
+  <div class="linkslist">
+  <p class="asidetitle">友情链接</p>
+    <ul>
+        
+          <li>
+            
+            	<a href="http://yaccc.github.io" target="_blank" title="">浮生若梦</a>
+            
+          </li>
+        
+          <li>
+            
+            	<a href="https://amaoamao.github.io" target="_blank" title="">mBoke</a>
+            
+          </li>
+        
+    </ul>
+</div>
+
+  <div class="rsspart">
+	<a href="/atom.xml" target="_blank" title="rss">RSS 订阅</a>
+</div>
+
+  
+  <div class="tagcloudlist">
+    <p class="asidetitle">标签云</p>
+    <div class="tagcloudlist clearfix">
+       <a href="/tags/Adam/" style="font-size: 10px;">Adam</a> <a href="/tags/BGD/" style="font-size: 10px;">BGD</a> <a href="/tags/Cassandra/" style="font-size: 11.67px;">Cassandra</a> <a href="/tags/Druid/" style="font-size: 16.67px;">Druid</a> <a href="/tags/JVM/" style="font-size: 10px;">JVM</a> <a href="/tags/Java/" style="font-size: 10px;">Java</a> <a href="/tags/LCS/" style="font-size: 10px;">LCS</a> <a href="/tags/Momentum/" style="font-size: 10px;">Momentum</a> <a href="/tags/MySQL/" style="font-size: 10px;">MySQL</a> <a href="/tags/NOSQL/" style="font-size: 11.67px;">NOSQL</a> <a href="/tags/SGD/" style="font-size: 10px;">SGD</a> <a href="/tags/Spring-Boot/" style="font-size: 10px;">Spring Boot</a> <a href="/tags/Sytle-Transfer/" style="font-size: 10px;">Sytle Transfer</a> <a href="/tags/Weight-initialization/" style="font-size: 10px;">Weight initialization</a> <a href="/tags/algorithms/" style="font-size: 10px;">algorithms</a> <a href="/tags/bash/" style="font-size: 10px;">bash</a> <a href="/tags/dynamic-programming/" style="font-size: 10px;">dynamic programming</a> <a href="/tags/hexo/" style="font-size: 10px;">hexo</a> <a href="/tags/java/" style="font-size: 10px;">java</a> <a href="/tags/k-邻近法/" style="font-size: 11.67px;">k 邻近法</a> <a href="/tags/knn/" style="font-size: 11.67px;">knn</a> <a href="/tags/linux/" style="font-size: 10px;">linux</a> <a href="/tags/macOS/" style="font-size: 10px;">macOS</a> <a href="/tags/parallelStream/" style="font-size: 10px;">parallelStream</a> <a href="/tags/quicklist/" style="font-size: 10px;">quicklist</a> <a href="/tags/redis/" style="font-size: 10px;">redis</a> <a href="/tags/stream/" style="font-size: 10px;">stream</a> <a href="/tags/utf8/" style="font-size: 10px;">utf8</a> <a href="/tags/utf8mb4/" style="font-size: 10px;">utf8mb4</a> <a href="/tags/ziplist/" style="font-size: 10px;">ziplist</a> <a href="/tags/内存模型/" style="font-size: 10px;">内存模型</a> <a href="/tags/分布式/" style="font-size: 18.33px;">分布式</a> <a href="/tags/多线程/" style="font-size: 10px;">多线程</a> <a href="/tags/实时计算/" style="font-size: 16.67px;">实时计算</a> <a href="/tags/异常处理/" style="font-size: 10px;">异常处理</a> <a href="/tags/异常表/" style="font-size: 10px;">异常表</a> <a href="/tags/感知机/" style="font-size: 10px;">感知机</a> <a href="/tags/数据结构/" style="font-size: 10px;">数据结构</a> <a href="/tags/最大熵模型/" style="font-size: 10px;">最大熵模型</a> <a href="/tags/朴素贝叶斯/" style="font-size: 10px;">朴素贝叶斯</a> <a href="/tags/机器学习/" style="font-size: 16.67px;">机器学习</a> <a href="/tags/杂/" style="font-size: 16.67px;">杂</a> <a href="/tags/梯度下降/" style="font-size: 10px;">梯度下降</a> <a href="/tags/深度学习/" style="font-size: 13.33px;">深度学习</a> <a href="/tags/源码分析/" style="font-size: 10px;">源码分析</a> <a href="/tags/生成/" style="font-size: 10px;">生成</a> <a href="/tags/生活/" style="font-size: 15px;">生活</a> <a href="/tags/笔记/" style="font-size: 20px;">笔记</a> <a href="/tags/统计学习/" style="font-size: 16.67px;">统计学习</a> <a href="/tags/编码/" style="font-size: 10px;">编码</a> <a href="/tags/自驾/" style="font-size: 15px;">自驾</a> <a href="/tags/调参/" style="font-size: 11.67px;">调参</a> <a href="/tags/跨域/" style="font-size: 10px;">跨域</a> <a href="/tags/踩坑日志/" style="font-size: 10px;">踩坑日志</a> <a href="/tags/逻辑斯谛回归/" style="font-size: 10px;">逻辑斯谛回归</a> <a href="/tags/配置/" style="font-size: 10px;">配置</a> <a href="/tags/风格迁移/" style="font-size: 10px;">风格迁移</a>
+    </div>
+  </div>
+
+
+  <div class="weiboshow">
+  <p class="asidetitle">新浪微博</p>
+    <iframe width="100%" height="119" class="share_self"  frameborder="0" scrolling="no" src="//widget.weibo.com/weiboshow/index.php?language=&width=0&height=119&fansRow=2&ptype=1&speed=0&skin=9&isTitle=1&noborder=1&isWeibo=0&isFans=0&uid=1915625641&verifier=00e07be0&dpc=1"></iframe>
+</div>
+
+
+</aside>
+</div>
+    </div>
+    <footer><div id="footer" >
+	
+	<div class="line">
+		<span></span>
+		<div class="author"></div>
+	</div>
+	
+	
+	<section class="info">
+		<p> Hello, I&#39;m Liexing in UCAS. <br/>
+			Stay hungry. Stay foolish.</p>
+	</section>
+	 
+	<div class="social-font" class="clearfix">
+		
+		<a href="http://weibo.com/scusjs" target="_blank" class="icon-weibo" title="微博"></a>
+		
+		
+		<a href="https://github.com/scusjs" target="_blank" class="icon-github" title="github"></a>
+		
+		
+		
+		<a href="https://twitter.com/scusjs" target="_blank" class="icon-twitter" title="twitter"></a>
+		
+		
+		
+		<a href="https://www.linkedin.com/in/shenjinsheng" target="_blank" class="icon-linkedin" title="linkedin"></a>
+		
+		
+		<a href="https://www.douban.com/people/58108093" target="_blank" class="icon-douban" title="豆瓣"></a>
+		
+		
+		<a href="http://www.zhihu.com/people/scusjs" target="_blank" class="icon-zhihu" title="知乎"></a>
+		
+		
+		
+		<a href="mailto:i@liexing.me" target="_blank" class="icon-email" title="Email Me"></a>
+		
+	</div>
+			
+		
+
+		<p class="copyright">
+		Powered by <a href="http://hexo.io" target="_blank" title="hexo">hexo</a> and Theme by <a href="https://github.com/wuchong/jacman" target="_blank" title="Jacman">Jacman</a> © 
+<span id="busuanzi_container_site_pv">
+  &nbsp<i class="fa fa-eye"></i> <span id="busuanzi_value_site_pv"><i class="fa fa-spinner fa-spin"></i></span>
+</span>
+<span id="busuanzi_container_site_uv">
+  &nbsp<i class="fa fa-user"></i> <span id="busuanzi_value_site_uv"><i class="fa fa-spinner fa-spin"></i></span>
+</span>
+2023 
+		
+		<a href="/about" target="_blank" title="liexing">liexing</a>
+		
+		
+		</p>
+</div>
+</footer>
+    <script src="/js/jquery-2.0.3.min.js"></script>
+<script src="/js/jquery.imagesloaded.min.js"></script>
+<script src="/js/gallery.js"></script>
+<script src="/js/jquery.qrcode-0.12.0.min.js"></script>
+<script async src="//busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+<script async src="/js/ones.js"></script>
+
+<script type="text/javascript">
+$(document).ready(function(){ 
+  $('.navbar').click(function(){
+    $('header nav').toggleClass('shownav');
+  });
+  var myWidth = 0;
+  function getSize(){
+    if( typeof( window.innerWidth ) == 'number' ) {
+      myWidth = window.innerWidth;
+    } else if( document.documentElement && document.documentElement.clientWidth) {
+      myWidth = document.documentElement.clientWidth;
+    };
+  };
+  var m = $('#main'),
+      a = $('#asidepart'),
+      c = $('.closeaside'),
+      o = $('.openaside');
+  c.click(function(){
+    a.addClass('fadeOut').css('display', 'none');
+    o.css('display', 'block').addClass('fadeIn');
+    m.addClass('moveMain');
+  });
+  o.click(function(){
+    o.css('display', 'none').removeClass('beforeFadeIn');
+    a.css('display', 'block').removeClass('fadeOut').addClass('fadeIn');      
+    m.removeClass('moveMain');
+  });
+  $(window).scroll(function(){
+    o.css("top",Math.max(80,260-$(this).scrollTop()));
+  });
+  
+  $(window).resize(function(){
+    getSize(); 
+    if (myWidth >= 1024) {
+      $('header nav').removeClass('shownav');
+    }else{
+      m.removeClass('moveMain');
+      a.css('display', 'block').removeClass('fadeOut');
+      o.css('display', 'none');
+      
+      $('#toc.toc-aside').css('display', 'none');
+        
+    }
+  });
+});
+</script>
+
+<script type="text/javascript">
+$(document).ready(function(){ 
+  var ai = $('.article-content>iframe'),
+      ae = $('.article-content>embed'),
+      t  = $('#toc'),
+      ta = $('#toc.toc-aside'),
+      o  = $('.openaside'),
+      c  = $('.closeaside');
+  if(ai.length>0){
+    ai.wrap('<div class="video-container" />');
+  };
+  if(ae.length>0){
+   ae.wrap('<div class="video-container" />');
+  };
+  c.click(function(){
+    ta.css('display', 'block').addClass('fadeIn');
+  });
+  o.click(function(){
+    ta.css('display', 'none');
+  });
+  $(window).scroll(function(){
+    ta.css("top",Math.max(140,320-$(this).scrollTop()));
+  });
+});
+</script>
+
+
+<script type="text/javascript">
+$(document).ready(function(){ 
+  var $this = $('.share'),
+      url = $this.attr('data-url'),
+      encodedUrl = encodeURIComponent(url),
+      title = $this.attr('data-title'),
+      tsina = $this.attr('data-tsina'),
+      description = $this.attr('description');
+  var html = [
+  '<div class="hoverqrcode clearfix"></div>',
+  '<a class="overlay" id="qrcode"></a>',
+  '<a href="https://www.facebook.com/sharer.php?u=' + encodedUrl + '" class="article-share-facebook" target="_blank" title="Facebook"></a>',
+  '<a href="https://twitter.com/intent/tweet?url=' + encodedUrl + '" class="article-share-twitter" target="_blank" title="Twitter"></a>',
+  '<a href="#qrcode" class="article-share-qrcode" title="微信"></a>',
+  '<a href="http://widget.renren.com/dialog/share?resourceUrl=' + encodedUrl + '&srcUrl=' + encodedUrl + '&title=' + title +'" class="article-share-renren" target="_blank" title="人人"></a>',
+  '<a href="http://service.weibo.com/share/share.php?title='+title+'&url='+encodedUrl +'&ralateUid='+ tsina +'&searchPic=true&style=number' +'" class="article-share-weibo" target="_blank" title="微博"></a>',
+  '<span title="Share to"></span>'
+  ].join('');
+  $this.append(html);
+
+  $('.hoverqrcode').hide();
+
+  var myWidth = 0;
+  function updatehoverqrcode(){
+    if( typeof( window.innerWidth ) == 'number' ) {
+      myWidth = window.innerWidth;
+    } else if( document.documentElement && document.documentElement.clientWidth) {
+      myWidth = document.documentElement.clientWidth;
+    };
+    var qrsize = myWidth > 1024 ? 200:100;
+    var options = {render: 'image', size: qrsize, fill: '#2ca6cb', text: url, radius: 0.5, quiet: 1};
+    var p = $('.article-share-qrcode').position();
+    $('.hoverqrcode').empty().css('width', qrsize).css('height', qrsize)
+                          .css('left', p.left-qrsize/2+20).css('top', p.top-qrsize-10)
+                          .qrcode(options);
+  };
+  $(window).resize(function(){
+    $('.hoverqrcode').hide();
+  });
+  $('.article-share-qrcode').click(function(){
+    updatehoverqrcode();
+    $('.hoverqrcode').toggle();
+  });
+  $('.article-share-qrcode').hover(function(){}, function(){
+      $('.hoverqrcode').hide();
+  });
+});   
+</script>
+
+
+
+
+<script type="text/javascript">
+
+var disqus_shortname = 'liexing';
+
+(function(){
+  var dsq = document.createElement('script');
+  dsq.type = 'text/javascript';
+  dsq.async = true;
+  dsq.src = '//' + disqus_shortname + '.disqus.com/embed.js';
+  (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+}());
+(function(){
+  var dsq = document.createElement('script');
+  dsq.type = 'text/javascript';
+  dsq.async = true;
+  dsq.src = '//' + disqus_shortname + '.disqus.com/count.js';
+  (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+}());
+</script>
+
+
+
+
+
+
+<link rel="stylesheet" href="/fancybox/jquery.fancybox.css" media="screen" type="text/css">
+<script src="/fancybox/jquery.fancybox.pack.js"></script>
+<script type="text/javascript">
+$(document).ready(function(){ 
+  $('.article-content').each(function(i){
+    $(this).find('img').each(function(){
+      if ($(this).parent().hasClass('fancybox')) return;
+      var alt = this.alt;
+      if (alt) $(this).after('<span class="caption">' + alt + '</span>');
+      $(this).wrap('<a href="' + this.src + '" title="' + alt + '" class="fancybox"></a>');
+    });
+    $(this).find('.fancybox').each(function(){
+      $(this).attr('rel', 'article' + i);
+    });
+  });
+  if($.fancybox){
+    $('.fancybox').fancybox();
+  }
+}); 
+</script>
+
+
+
+<!-- Analytics Begin -->
+
+
+
+<script>
+var _hmt = _hmt || [];
+(function() {
+  var hm = document.createElement("script");
+  hm.src = "//hm.baidu.com/hm.js?e6d1f421bbc9962127a50488f9ed37d1";
+  var s = document.getElementsByTagName("script")[0]; 
+  s.parentNode.insertBefore(hm, s);
+})();
+</script>
+
+
+
+<span style="display:none"><script src="https://s11.cnzz.com/z_stat.php?id=1256113107&web_id=1256113107" language="JavaScript"></script></span>
+
+
+<!-- Analytics End -->
+
+<!-- Totop Begin -->
+
+	<div id="totop">
+	<a title="返回顶部"><img src="/img/scrollup.png"/></a>
+	</div>
+	<script src="/js/totop.js"></script>
+
+<!-- Totop End -->
+
+<!-- MathJax Begin -->
+<!-- mathjax config similar to math.stackexchange -->
+
+<script type="text/x-mathjax-config">
+  MathJax.Hub.Config({
+    tex2jax: {
+      inlineMath: [ ['$','$'], ["\\(","\\)"] ],
+      processEscapes: true
+    }
+  });
+</script>
+
+<script type="text/x-mathjax-config">
+    MathJax.Hub.Config({
+      tex2jax: {
+        skipTags: ['script', 'noscript', 'style', 'textarea', 'pre', 'code']
+      }
+    });
+</script>
+
+<script type="text/x-mathjax-config">
+    MathJax.Hub.Queue(function() {
+        var all = MathJax.Hub.getAllJax(), i;
+        for(i=0; i < all.length; i += 1) {
+            all[i].SourceElement().parentNode.className += ' has-jax';
+        }
+    });
+</script>
+
+<script type="text/javascript" src="//cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML">
+</script>
+
+
+<!-- MathJax End -->
+
+<!-- Tiny_search Begin -->
+
+<!-- Tiny_search End -->
+
+  </body>
+</html>
